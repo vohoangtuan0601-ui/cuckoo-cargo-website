@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Blog & Hướng Dẫn — Cuckoo Cargo</title>
+ <meta name="description" content="Hướng dẫn gửi hàng Mỹ về Việt Nam, mua hộ, tạo label nội địa, tips tiết kiệm phí ship." />
+ <link rel="stylesheet" href="assets/css/global.css" />
+ <link rel="stylesheet" href="assets/css/pages.css" />
+ <style>
+ .blog-hero {
+ background: var(--black); padding: 72px 24px 56px; text-align: center; position: relative; overflow: hidden;
+ }
+ .blog-hero::before {
+ content:''; position:absolute; inset:0;
+ background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(244,123,32,.18) 0%, transparent 70%);
+ pointer-events:none;
+ }
+ .blog-hero h1 { font-size: clamp(28px,4vw,48px); font-weight:900; color:var(--white); margin-bottom:12px; position:relative; }
+ .blog-hero h1 span { color:var(--orange); }
+ .blog-hero p { font-size:16px; color:rgba(255,255,255,.55); max-width:480px; margin:0 auto; line-height:1.7; position:relative; }
+
+ /* Filter tags */
+ .blog-filters { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:36px; }
+ .blog-filter {
+ padding:8px 18px; border-radius:20px; font-size:13px; font-weight:700; cursor:pointer;
+ border:1.5px solid var(--gray-border); background:var(--white); color:var(--text-muted);
+ transition:all .2s; font-family:inherit;
+ }
+ .blog-filter.active { background:var(--orange); border-color:var(--orange); color:#fff; }
+ .blog-filter:hover:not(.active) { border-color:var(--orange); color:var(--orange); }
+
+ /* Featured post */
+ .blog-featured {
+ border-radius:var(--radius-lg); overflow:hidden;
+ display:grid; grid-template-columns:1fr 1fr; gap:0;
+ border:1.5px solid var(--gray-border); margin-bottom:40px;
+ transition:box-shadow .2s; cursor:pointer;
+ }
+ .blog-featured:hover { box-shadow:var(--shadow-lg); }
+ @media(max-width:640px){ .blog-featured { grid-template-columns:1fr; } }
+ .blog-featured-img { min-height:260px; background:linear-gradient(135deg,#1a0a40,#F47B20); display:flex; align-items:center; justify-content:center; font-size:96px; }
+ .blog-featured-body { padding:36px 32px; display:flex; flex-direction:column; justify-content:center; }
+ .blog-featured-tag { font-size:11px; font-weight:800; color:var(--orange); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+ .blog-featured-title { font-size:22px; font-weight:900; line-height:1.35; margin-bottom:12px; }
+ .blog-featured-excerpt { font-size:14px; color:var(--text-muted); line-height:1.7; margin-bottom:16px; }
+ .blog-featured-meta { font-size:12px; color:var(--text-muted); display:flex; gap:16px; }
+
+ /* Blog grid */
+ .blog-main-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; }
+ @media(max-width:900px){ .blog-main-grid { grid-template-columns:1fr 1fr; } }
+ @media(max-width:560px){ .blog-main-grid { grid-template-columns:1fr; } }
+
+ .bl-card {
+ border-radius:var(--radius-md); border:1.5px solid var(--gray-border);
+ overflow:hidden; transition:transform .2s, box-shadow .2s; cursor:pointer;
+ display:flex; flex-direction:column;
+ }
+ .bl-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); }
+ .bl-card-img { height:170px; display:flex; align-items:center; justify-content:center; font-size:56px; }
+ .bl-card-body { padding:18px 18px 20px; flex:1; display:flex; flex-direction:column; }
+ .bl-card-tag { font-size:11px; font-weight:800; color:var(--orange); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+ .bl-card-title { font-size:15px; font-weight:800; line-height:1.4; margin-bottom:8px; flex:1; }
+ .bl-card-excerpt { font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:12px; }
+ .bl-card-meta { font-size:12px; color:var(--text-muted); display:flex; justify-content:space-between; }
+ .bl-card-read { font-size:13px; font-weight:700; color:var(--orange); margin-top:10px; display:flex; align-items:center; gap:4px; }
+
+ /* Sidebar */
+ .blog-layout { display:grid; grid-template-columns:1fr 300px; gap:40px; align-items:start; }
+ @media(max-width:900px){ .blog-layout { grid-template-columns:1fr; } }
+
+ .sidebar-card { border-radius:var(--radius-md); border:1.5px solid var(--gray-border); padding:22px; margin-bottom:20px; }
+ .sidebar-card h4 { font-size:16px; font-weight:800; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--gray-border); }
+
+ .popular-list { list-style:none; padding:0; margin:0; }
+ .popular-item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--gray-border); align-items:flex-start; cursor:pointer; }
+ .popular-item:last-child { border-bottom:none; }
+ .popular-num { font-size:20px; font-weight:900; color:var(--orange); flex-shrink:0; line-height:1; }
+ .popular-title { font-size:13px; font-weight:700; line-height:1.4; }
+ .popular-title:hover { color:var(--orange); }
+
+ .tag-cloud { display:flex; flex-wrap:wrap; gap:8px; }
+ .tag-chip { padding:6px 12px; border-radius:20px; background:var(--gray-light); font-size:12px; font-weight:700; cursor:pointer; transition:background .2s, color .2s; }
+ .tag-chip:hover { background:var(--orange); color:#fff; }
+
+ .newsletter-sidebar { background:var(--orange-bg); border-color:var(--orange-light); }
+ .newsletter-sidebar h4 { color:var(--orange); border-color:var(--orange-light); }
+
+ /* Article modal / reader */
+ .article-modal-overlay {
+ display:none; position:fixed; inset:0; background:rgba(0,0,0,.7);
+ z-index:9000; align-items:flex-start; justify-content:center; padding:20px; overflow-y:auto;
+ }
+ .article-modal-overlay.open { display:flex; }
+ .article-modal {
+ background:var(--white); border-radius:var(--radius-lg);
+ max-width:720px; width:100%; margin:auto;
+ animation: slideUp .3s ease;
+ }
+ @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+ .article-header { background:var(--black); padding:32px 36px; border-radius:var(--radius-lg) var(--radius-lg) 0 0; }
+ .article-tag { font-size:11px; font-weight:800; color:var(--orange); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+ .article-title { font-size:24px; font-weight:900; color:var(--white); line-height:1.35; margin-bottom:10px; }
+ .article-meta { font-size:13px; color:rgba(255,255,255,.45); display:flex; gap:16px; flex-wrap:wrap; }
+ .article-body { padding:32px 36px; font-size:15px; line-height:1.8; color:var(--text-primary); }
+ .article-body h3 { font-size:18px; font-weight:800; margin:24px 0 10px; }
+ .article-body p { margin-bottom:14px; }
+ .article-body ul { margin:0 0 14px 20px; }
+ .article-body ul li { margin-bottom:6px; }
+ .article-body .tip-box {
+ background:var(--orange-bg); border-left:4px solid var(--orange);
+ border-radius:0 10px 10px 0; padding:14px 18px; margin:16px 0; font-size:14px;
+ }
+ .article-footer { padding:20px 36px 32px; border-top:1px solid var(--gray-border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+ .btn-close-article {
+ padding:10px 20px; border-radius:10px; border:1.5px solid var(--gray-border);
+ background:transparent; cursor:pointer; font-size:14px; font-weight:700; font-family:inherit;
+ transition:border-color .2s;
+ }
+ .btn-close-article:hover { border-color:var(--orange); color:var(--orange); }
+ </style>
+ <link rel="stylesheet" href="assets/css/mobile.css" />
+</head>
+<body>
+
+<header id="cc-nav" class="cc-nav"></header>
+
+<!-- HERO -->
+<section class="blog-hero">
+ <div class="cc-hero-badge" style="position:relative;display:inline-flex;margin-bottom:16px;" data-vi=" Blog &amp; Hướng dẫn" data-en=" Blog &amp; Guides"> Blog &amp; Hướng dẫn</div>
+ <h1 data-vi="Kiến thức <span>gửi hàng Mỹ</span><br>từ A đến Z" data-en="Your guide to <span>US shipping</span><br>from A to Z">Kiến thức <span>gửi hàng Mỹ</span><br>từ A đến Z</h1>
+ <p data-vi="Hướng dẫn, tips tiết kiệm, quy định hải quan và kinh nghiệm gửi hàng từ đội ngũ Cuckoo Cargo" data-en="Shipping guides, money-saving tips, customs info and expertise from the Cuckoo Cargo team">Hướng dẫn, tips tiết kiệm, quy định hải quan và kinh nghiệm gửi hàng từ đội ngũ Cuckoo Cargo</p>
+</section>
+
+<section class="section">
+ <div class="container">
+
+ <!-- Filters -->
+ <div class="blog-filters">
+ <button class="blog-filter active" onclick="filterBlog('all',this)" data-vi=" Tất cả" data-en=" All"> Tất cả</button>
+ <button class="blog-filter" onclick="filterBlog('guide',this)" data-vi=" Hướng dẫn" data-en=" Guides"> Hướng dẫn</button>
+ <button class="blog-filter" onclick="filterBlog('tips',this)" data-vi=" Tips tiết kiệm" data-en=" Money tips"> Tips tiết kiệm</button>
+ <button class="blog-filter" onclick="filterBlog('customs',this)" data-vi=" Hải quan" data-en=" Customs"> Hải quan</button>
+ <button class="blog-filter" onclick="filterBlog('news',this)" data-vi=" Tin tức" data-en=" News"> Tin tức</button>
+ </div>
+
+ <div class="blog-layout">
+ <!-- MAIN CONTENT -->
+ <div>
+
+ <!-- Featured -->
+ <div class="blog-featured" data-cat="guide" onclick="openArticle('guide-mvv')">
+ <div class="blog-featured-img"></div>
+ <div class="blog-featured-body">
+ <div class="blog-featured-tag" data-vi=" Hướng dẫn" data-en=" Guide"> Hướng dẫn</div>
+ <div class="blog-featured-title" data-vi="Hướng dẫn gửi hàng từ Mỹ về Việt Nam — Từ A đến Z (2026)" data-en="Complete guide to shipping from US to Vietnam — A to Z (2026)">Hướng dẫn gửi hàng từ Mỹ về Việt Nam — Từ A đến Z (2026)</div>
+ <div class="blog-featured-excerpt" data-vi="Tất cả những gì bạn cần biết: cách đóng gói, khai báo hải quan, chọn dịch vụ phù hợp, giá cước và thời gian giao hàng. Cập nhật mới nhất 2026." data-en="Everything you need to know: packaging, customs declaration, choosing the right service, rates and delivery time. Updated for 2026.">Tất cả những gì bạn cần biết: cách đóng gói, khai báo hải quan, chọn dịch vụ phù hợp, giá cước và thời gian giao hàng. Cập nhật mới nhất 2026.</div>
+ <div class="blog-featured-meta">
+ <span> 01/06/2026</span>
+ <span data-vi="⏱ 8 phút đọc" data-en="⏱ 8 min read">⏱ 8 phút đọc</span>
+ <span data-vi=" 2.4k lượt xem" data-en=" 2.4k views"> 2.4k lượt xem</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- Grid -->
+ <div class="blog-main-grid" id="blog-grid">
+
+ <div class="bl-card" data-cat="tips" onclick="openArticle('tips-ship')">
+ <div class="bl-card-img" style="background:linear-gradient(135deg,#0F0F10,#22C55E);"></div>
+ <div class="bl-card-body">
+ <div class="bl-card-tag" data-vi=" Tips tiết kiệm" data-en=" Money tips"> Tips tiết kiệm</div>
+ <div class="bl-card-title" data-vi="7 cách tiết kiệm phí ship hàng Mỹ về Việt Nam" data-en="7 ways to save on US to Vietnam shipping costs">7 cách tiết kiệm phí ship hàng Mỹ về Việt Nam</div>
+ <div class="bl-card-excerpt" data-vi="Gộp đơn, chọn đúng dịch vụ, tối ưu kích thước... tiết kiệm đến 40% chi phí vận chuyển." data-en="Consolidate orders, choose the right service, optimize size... save up to 40% on shipping costs.">Gộp đơn, chọn đúng dịch vụ, tối ưu kích thước... tiết kiệm đến 40% chi phí vận chuyển.</div>
+ <div class="bl-card-meta"><span> 28/05/2026</span><span data-vi="⏱ 5 phút" data-en="⏱ 5 min">⏱ 5 phút</span></div>
+ <div class="bl-card-read" data-vi="Đọc tiếp →" data-en="Read more →">Đọc tiếp →</div>
+ </div>
+ </div>
+
+ <div class="bl-card" data-cat="customs" onclick="openArticle('customs-vn')">
+ <div class="bl-card-img" style="background:linear-gradient(135deg,#1a0a40,#4B5563);"></div>
+ <div class="bl-card-body">
+ <div class="bl-card-tag" data-vi=" Hải quan" data-en=" Customs"> Hải quan</div>
+ <div class="bl-card-title" data-vi="Quy định hải quan Việt Nam 2026 — Hàng hóa từ Mỹ" data-en="Vietnam Customs Regulations 2026 — Goods from the US">Quy định hải quan Việt Nam 2026 — Hàng hóa từ Mỹ</div>
+ <div class="bl-card-excerpt" data-vi="Miễn thuế bao nhiêu? Hàng nào bị cấm? Khai báo thế nào để không bị giữ hàng?" data-en="What's duty-free? What's prohibited? How to declare without getting packages held?">Miễn thuế bao nhiêu? Hàng nào bị cấm? Khai báo thế nào để không bị giữ hàng?</div>
+ <div class="bl-card-meta"><span> 20/05/2026</span><span data-vi="⏱ 6 phút" data-en="⏱ 6 min">⏱ 6 phút</span></div>
+ <div class="bl-card-read" data-vi="Đọc tiếp →" data-en="Read more →">Đọc tiếp →</div>
+ </div>
+ </div>
+
+ <div class="bl-card" data-cat="guide" onclick="openArticle('guide-label')">
+ <div class="bl-card-img" style="background:linear-gradient(135deg,#351C75,#F47B20);"></div>
+ <div class="bl-card-body">
+ <div class="bl-card-tag" data-vi=" Hướng dẫn" data-en=" Guide"> Hướng dẫn</div>
+ <div class="bl-card-title" data-vi="Label nội địa Mỹ — UPS, FedEx hay USPS? Chọn hãng nào?" data-en="US Domestic Label — UPS, FedEx or USPS? Which to choose?">Label nội địa Mỹ — UPS, FedEx hay USPS? Chọn hãng nào?</div>
+ <div class="bl-card-excerpt" data-vi="So sánh chi tiết UPS Ground, FedEx Home Delivery và USPS Priority Mail. Khi nào nên dùng hãng nào?" data-en="Detailed comparison of UPS Ground, FedEx Home Delivery and USPS Priority Mail. When to use each one?">So sánh chi tiết UPS Ground, FedEx Home Delivery và USPS Priority Mail. Khi nào nên dùng hãng nào?</div>
+ <div class="bl-card-meta"><span> 15/05/2026</span><span data-vi="⏱ 7 phút" data-en="⏱ 7 min">⏱ 7 phút</span></div>
+ <div class="bl-card-read" data-vi="Đọc tiếp →" data-en="Read more →">Đọc tiếp →</div>
+ </div>
+ </div>
+
+ <div class="bl-card" data-cat="tips" onclick="openArticle('tips-muaho')">
+ <div class="bl-card-img" style="background:linear-gradient(135deg,#0F0F10,#1877F2);"></div>
+ <div class="bl-card-body">
+ <div class="bl-card-tag" data-vi=" Tips tiết kiệm" data-en=" Money tips"> Tips tiết kiệm</div>
+ <div class="bl-card-title" data-vi="Mua hộ hàng Mỹ: Black Friday, Prime Day — Khi nào mua rẻ nhất?" data-en="US Personal Shopping: Black Friday, Prime Day — Best time to buy?">Mua hộ hàng Mỹ: Black Friday, Prime Day — Khi nào mua rẻ nhất?</div>
+ <div class="bl-card-excerpt" data-vi="Lịch sale Amazon, Walmart, Target 2026. Cách đặt trước để không bỏ lỡ deal tốt." data-en="Amazon, Walmart, Target 2026 sale calendar. How to pre-order so you never miss a deal.">Lịch sale Amazon, Walmart, Target 2026. Cách đặt trước để không bỏ lỡ deal tốt.</div>
+ <div class="bl-card-meta"><span> 10/05/2026</span><span data-vi="⏱ 4 phút" data-en="⏱ 4 min">⏱ 4 phút</span></div>
+ <div class="bl-card-read" data-vi="Đọc tiếp →" data-en="Read more →">Đọc tiếp →</div>
+ </div>
+ </div>
+
+ <div class="bl-card" data-cat="customs" onclick="openArticle('customs-ensure')">
+ <div class="bl-card-img" style="background:linear-gradient(135deg,#1a0a40,#22C55E);"></div>
+ <div class="bl-card-body">
+ <div class="bl-card-tag" data-vi=" Hải quan" data-en=" Customs"> Hải quan</div>
+ <div class="bl-card-title" data-vi="Mang sữa Ensure từ Mỹ về Việt Nam — Quy định và số lượng cho phép" data-en="Bringing Ensure from the US to Vietnam — Regulations and allowed quantity">Mang sữa Ensure từ Mỹ về Việt Nam — Quy định và số lượng cho phép</div>
+ <div class="bl-card-excerpt" data-vi="Bao nhiêu hộp Ensure được miễn thuế? Có cần khai báo không? Kinh nghiệm thực tế từ khách hàng Cuckoo Cargo." data-en="How many cans of Ensure are duty-free? Any declaration needed? Real experience from Cuckoo Cargo customers.">Bao nhiêu hộp Ensure được miễn thuế? Có cần khai báo không? Kinh nghiệm thực tế từ khách hàng Cuckoo Cargo.</div>
+ <div class="bl-card-meta"><span> 05/05/2026</span><span data-vi="⏱ 3 phút" data-en="⏱ 3 min">⏱ 3 phút</span></div>
+ <div class="bl-card-read" data-vi="Đọc tiếp →" data-en="Read more →">Đọc tiếp →</div>
+ </div>
+ </div>
+
+ <div class="bl-card" data-cat="news" onclick="openArticle('news-price')">
+ <div class="bl-card-img" style="background:linear-gradient(135deg,#F47B20,#D4650E);"></div>
+ <div class="bl-card-body">
+ <div class="bl-card-tag" data-vi=" Tin tức" data-en=" News"> Tin tức</div>
+ <div class="bl-card-title" data-vi="Cập nhật giá cước vận chuyển Mỹ – Việt tháng 06/2026" data-en="US–Vietnam Shipping Rate Update — June 2026">Cập nhật giá cước vận chuyển Mỹ – Việt tháng 06/2026</div>
+ <div class="bl-card-excerpt" data-vi="Giá cước mới nhất theo cân nặng và kích thước. Ưu đãi đặc biệt cho đơn trên 20 lbs trong tháng 6." data-en="Latest rates by weight and size. Special offer for orders over 20 lbs in June.">Giá cước mới nhất theo cân nặng và kích thước. Ưu đãi đặc biệt cho đơn trên 20 lbs trong tháng 6.</div>
+ <div class="bl-card-meta"><span> 01/06/2026</span><span data-vi="⏱ 2 phút" data-en="⏱ 2 min">⏱ 2 phút</span></div>
+ <div class="bl-card-read" data-vi="Đọc tiếp →" data-en="Read more →">Đọc tiếp →</div>
+ </div>
+ </div>
+
+ </div>
+ </div>
+
+ <!-- SIDEBAR -->
+ <div>
+ <div class="sidebar-card">
+ <h4 data-vi=" Bài đọc nhiều nhất" data-en=" Most read"> Bài đọc nhiều nhất</h4>
+ <ul class="popular-list">
+ <li class="popular-item" onclick="openArticle('guide-mvv')">
+ <div class="popular-num">1</div>
+ <div class="popular-title" data-vi="Hướng dẫn gửi hàng Mỹ → VN từ A đến Z" data-en="US to VN shipping guide A to Z">Hướng dẫn gửi hàng Mỹ → VN từ A đến Z</div>
+ </li>
+ <li class="popular-item" onclick="openArticle('customs-vn')">
+ <div class="popular-num">2</div>
+ <div class="popular-title" data-vi="Quy định hải quan VN 2026 — Hàng từ Mỹ" data-en="Vietnam customs 2026 — US goods">Quy định hải quan VN 2026 — Hàng từ Mỹ</div>
+ </li>
+ <li class="popular-item" onclick="openArticle('tips-ship')">
+ <div class="popular-num">3</div>
+ <div class="popular-title" data-vi="7 cách tiết kiệm phí ship Mỹ - Việt" data-en="7 ways to save on US-VN shipping">7 cách tiết kiệm phí ship Mỹ - Việt</div>
+ </li>
+ <li class="popular-item" onclick="openArticle('guide-label')">
+ <div class="popular-num">4</div>
+ <div class="popular-title" data-vi="UPS, FedEx hay USPS? So sánh chi tiết" data-en="UPS, FedEx or USPS? Detailed comparison">UPS, FedEx hay USPS? So sánh chi tiết</div>
+ </li>
+ <li class="popular-item" onclick="openArticle('customs-ensure')">
+ <div class="popular-num">5</div>
+ <div class="popular-title" data-vi="Mang sữa Ensure về VN — bao nhiêu hộp?" data-en="Bringing Ensure to VN — how many cans?">Mang sữa Ensure về VN — bao nhiêu hộp?</div>
+ </li>
+ </ul>
+ </div>
+
+ <div class="sidebar-card">
+ <h4 data-vi=" Chủ đề" data-en=" Topics"> Chủ đề</h4>
+ <div class="tag-cloud">
+ <span class="tag-chip" onclick="filterBlog('guide', document.querySelector('[onclick*=guide]'))" data-vi="Hướng dẫn" data-en="Guides">Hướng dẫn</span>
+ <span class="tag-chip" data-vi="Gửi hàng quốc tế" data-en="International shipping">Gửi hàng quốc tế</span>
+ <span class="tag-chip" data-vi="Nội địa Mỹ" data-en="US domestic">Nội địa Mỹ</span>
+ <span class="tag-chip" data-vi="Hải quan" data-en="Customs">Hải quan</span>
+ <span class="tag-chip" data-vi="Mua hộ" data-en="Shopping service">Mua hộ</span>
+ <span class="tag-chip">Amazon</span>
+ <span class="tag-chip">Ensure</span>
+ <span class="tag-chip" data-vi="Dầu gió" data-en="Medicated oil">Dầu gió</span>
+ <span class="tag-chip">Black Friday</span>
+ <span class="tag-chip">Tips</span>
+ <span class="tag-chip" data-vi="Giá cước" data-en="Rates">Giá cước</span>
+ </div>
+ </div>
+
+ <div class="sidebar-card newsletter-sidebar">
+ <h4 data-vi=" Nhận tin mới nhất" data-en=" Get latest updates"> Nhận tin mới nhất</h4>
+ <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;line-height:1.6;" data-vi="Cập nhật giá cước, chính sách hải quan, deal sale hàng tuần." data-en="Weekly shipping rate updates, customs policy changes and sale deals.">Cập nhật giá cước, chính sách hải quan, deal sale hàng tuần.</p>
+ <div class="form-group">
+ <input type="email" class="cc-input" placeholder="email@example.com" id="nl-email-sidebar" />
+ </div>
+ <button class="btn btn-primary btn-full" style="margin-top:8px;" onclick="subscribeNL()" data-vi="Đăng ký miễn phí" data-en="Subscribe free">Đăng ký miễn phí</button>
+ </div>
+
+ <div class="sidebar-card">
+ <h4 data-vi=" Cần tư vấn ngay?" data-en=" Need advice now?"> Cần tư vấn ngay?</h4>
+ <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;" data-vi="Chat với đội ngũ Cuckoo Cargo" data-en="Chat with the Cuckoo Cargo team">Chat với đội ngũ Cuckoo Cargo</p>
+ <div style="display:flex;flex-direction:column;gap:8px;">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="btn btn-primary btn-full"> Zalo</a>
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="btn btn-secondary btn-full"> Messenger</a>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- ARTICLE MODAL -->
+<div class="article-modal-overlay" id="article-modal" onclick="closeArticleOutside(event)">
+ <div class="article-modal" id="article-inner">
+ <div class="article-header">
+ <div class="article-tag" id="art-tag"></div>
+ <div class="article-title" id="art-title"></div>
+ <div class="article-meta" id="art-meta"></div>
+ </div>
+ <div class="article-body" id="art-body"></div>
+ <div class="article-footer">
+ <button class="btn-close-article" onclick="closeArticle()" data-vi="← Quay lại blog" data-en="← Back to blog">← Quay lại blog</button>
+ <div style="display:flex;gap:8px;">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="btn btn-primary" data-vi=" Hỏi thêm qua Zalo" data-en=" Ask via Zalo"> Hỏi thêm qua Zalo</a>
+ </div>
+ </div>
+ </div>
+</div>
+
+<footer id="cc-footer" class="cc-footer"></footer>
+
+<script src="assets/js/lang.js"></script>
+<script src="assets/js/global.js"></script>
+<script src="assets/js/pricing.js"></script>
+<script>
+ injectNav('blog');
+ injectFooter();
+
+ // Filter
+ function filterBlog(cat, btn) {
+ document.querySelectorAll('.blog-filter').forEach(t => t.classList.remove('active'));
+ if(btn) btn.classList.add('active');
+ document.querySelectorAll('.bl-card').forEach(c => {
+ c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
+ });
+ const featured = document.querySelector('.blog-featured');
+ if(featured) featured.style.display = (cat === 'all' || cat === 'guide') ? '' : 'none';
+ }
+
+ // Newsletter
+ function subscribeNL() {
+ const email = document.getElementById('nl-email-sidebar').value;
+ if(!email || !email.includes('@')) { showToast('error','Vui lòng nhập email hợp lệ'); return; }
+ showToast('success',' Đăng ký thành công! Bạn sẽ nhận tin từ Cuckoo Cargo.', 6000);
+ document.getElementById('nl-email-sidebar').value = '';
+ }
+
+ // Articles content
+ const isEN = () => window.currentLang === 'en';
+ const ARTICLES = {
+ 'guide-mvv': {
+ tag: () => isEN() ? ' Guide' : ' Hướng dẫn',
+ title: () => isEN() ? 'Complete guide to shipping from US to Vietnam — A to Z (2026)' : 'Hướng dẫn gửi hàng từ Mỹ về Việt Nam — Từ A đến Z (2026)',
+ meta: [' 01/06/2026', () => isEN() ? '⏱ 8 min read' : '⏱ 8 phút đọc', () => isEN() ? ' 2.4k views' : ' 2.4k lượt xem'],
+ body_vi: `
+ <h3>Tổng quan dịch vụ</h3>
+ <p>Gửi hàng từ Mỹ về Việt Nam có thể qua nhiều kênh: bưu điện (USPS), hãng hàng không riêng, hoặc dịch vụ chuyên biệt như Cuckoo Cargo. Mỗi kênh có ưu nhược điểm về giá, tốc độ và mức độ an toàn khác nhau.</p>
+ <h3>Bước 1 — Chuẩn bị hàng hóa</h3>
+ <ul>
+ <li>Kiểm tra danh sách hàng <strong>cấm vận chuyển</strong> (vũ khí, chất lỏng dễ cháy, pin lithium rời...)</li>
+ <li>Cân và đo kích thước kiện hàng để tính cước chính xác</li>
+ <li>Đóng gói chắc chắn — dùng bubble wrap cho hàng dễ vỡ, gia cố góc hộp</li>
+ <li>Giữ hóa đơn mua hàng gốc để khai báo hải quan</li>
+ </ul>
+ <div class="tip-box">💡 <strong>Mẹo:</strong> Cuckoo Cargo kiểm tra, đóng gói và chụp ảnh xác nhận trước khi gửi — bạn không cần lo khâu này.</div>
+ <h3>Bước 2 — Khai báo hải quan</h3>
+ <p>Khi gửi hàng quốc tế, bạn cần khai báo nội dung và giá trị thực tế của kiện hàng. Khai báo thấp hơn thực tế có thể bị giữ hàng hoặc phạt tiền.</p>
+ <ul>
+ <li>Hàng dưới <strong>$200 USD</strong>: thường miễn thuế nhập khẩu VN</li>
+ <li>Hàng từ $200 – $1,000: chịu thuế nhập khẩu từ 5–35% tùy loại</li>
+ <li>Hàng trên $1,000: cần chứng từ đầy đủ, thuế cao hơn</li>
+ </ul>
+ <h3>Bước 3 — Chọn dịch vụ phù hợp</h3>
+ <p>Cuckoo Cargo cung cấp vận chuyển Mỹ - Việt Nam với thời gian <strong>7–15 ngày làm việc</strong>, theo dõi hành trình qua mã đơn hàng, và đội ngũ hỗ trợ tiếng Việt 7 ngày/tuần.</p>
+ <h3>Bước 4 — Thanh toán và theo dõi</h3>
+ <p>Sau khi tạo đơn và thanh toán, bạn nhận mã đơn CC-YYYYMM-XXX để theo dõi tại <a href="tracking.html" style="color:var(--orange);">trang tra cứu</a>. Mỗi sự kiện quan trọng đều được cập nhật: nhận kho, xuất kho, thông quan, giao hàng.</p>
+ `,
+ body_en: `
+ <h3>Service Overview</h3>
+ <p>Shipping from the US to Vietnam can go through several channels: postal service (USPS), private freight, or specialized services like Cuckoo Cargo. Each channel has different trade-offs in price, speed, and reliability.</p>
+ <h3>Step 1 — Prepare Your Goods</h3>
+ <ul>
+ <li>Check the list of <strong>prohibited items</strong> (weapons, flammable liquids, loose lithium batteries...)</li>
+ <li>Weigh and measure your package for accurate rate calculation</li>
+ <li>Pack securely — use bubble wrap for fragile items, reinforce box corners</li>
+ <li>Keep original purchase receipts for customs declaration</li>
+ </ul>
+ <div class="tip-box">💡 <strong>Tip:</strong> Cuckoo Cargo inspects, repacks, and photos your items before shipping — you don't need to worry about this step.</div>
+ <h3>Step 2 — Customs Declaration</h3>
+ <p>When shipping internationally, you must declare the contents and actual value of the package. Under-declaring can result in packages being held or fined.</p>
+ <ul>
+ <li>Items under <strong>$200 USD</strong>: usually exempt from Vietnam import duty</li>
+ <li>Items $200–$1,000: subject to 5–35% import duty depending on type</li>
+ <li>Items over $1,000: full documentation required, higher duties apply</li>
+ </ul>
+ <h3>Step 3 — Choose the Right Service</h3>
+ <p>Cuckoo Cargo provides US–Vietnam shipping in <strong>7–15 business days</strong>, with order tracking via tracking code, and Vietnamese-speaking support 7 days a week.</p>
+ <h3>Step 4 — Payment and Tracking</h3>
+ <p>After placing your order and paying, you receive code CC-YYYYMM-XXX to track at the <a href="tracking.html" style="color:var(--orange);">tracking page</a>. Every key event is updated: received at warehouse, departed, customs cleared, delivered.</p>
+ `
+ },
+ 'tips-ship': {
+ tag: () => isEN() ? ' Money tips' : ' Tips tiết kiệm',
+ title: () => isEN() ? '7 ways to save on US to Vietnam shipping costs' : '7 cách tiết kiệm phí ship hàng Mỹ về Việt Nam',
+ meta: [' 28/05/2026', () => isEN() ? '⏱ 5 min read' : '⏱ 5 phút đọc'],
+ body_vi: `
+ <h3>1. Gộp nhiều đơn thành một kiện</h3>
+ <p>Thay vì gửi 3 kiện nhỏ riêng lẻ, hãy gộp lại thành 1 kiện lớn. Phí cơ bản (handling fee) chỉ tính 1 lần, tiết kiệm đáng kể cho đơn nhỏ.</p>
+ <h3>2. Cân thực vs. cân thể tích — biết để tối ưu</h3>
+ <p>Hãng tính theo cân thực hoặc cân thể tích (DIM weight), lấy cái lớn hơn. Đóng gói vừa vặn, tránh hộp quá to so với hàng bên trong.</p>
+ <div class="tip-box">📐 Công thức DIM: (Dài × Rộng × Cao) / 139 = DIM lbs. Nếu DIM > cân thực → tính DIM.</div>
+ <h3>3. Đặt đơn sớm — tránh rush</h3>
+ <p>Dịch vụ tiêu chuẩn 10–15 ngày rẻ hơn 30–50% so với dịch vụ nhanh 7 ngày. Nếu không cần gấp, chọn tiêu chuẩn.</p>
+ <h3>4. Khai báo giá trị đúng — không khai thấp</h3>
+ <p>Khai thấp giá trị không tiết kiệm thuế mà còn tăng rủi ro bị giữ hàng. Khai đúng để thủ tục hải quan thuận lợi hơn.</p>
+ <h3>5. Loại bỏ bao bì gốc cồng kềnh</h3>
+ <p>Giày, đồ điện tử thường có hộp to. Bỏ hộp gốc ra, đóng gói lại nhỏ hơn có thể giảm 20–30% cân thể tích.</p>
+ <h3>6. Mua hàng có Free Shipping trên Amazon</h3>
+ <p>Với Prime, nhiều mặt hàng giao miễn phí đến kho Cuckoo Cargo. Bạn chỉ trả phí quốc tế từ kho về VN.</p>
+ <h3>7. Tận dụng ưu đãi theo mùa của Cuckoo Cargo</h3>
+ <p>Theo dõi fanpage và blog để nhận thông báo ưu đãi tháng, giảm giá đơn trên 20 lbs, hoặc freeship trong dịp lễ.</p>
+ `,
+ body_en: `
+ <h3>1. Consolidate multiple orders into one package</h3>
+ <p>Instead of shipping 3 small packages separately, combine them into 1 larger box. The base handling fee is charged only once, saving significantly on small orders.</p>
+ <h3>2. Actual weight vs. dimensional weight — know the difference</h3>
+ <p>Carriers charge based on actual weight or dimensional (DIM) weight, whichever is greater. Pack tightly to avoid oversized boxes relative to their contents.</p>
+ <div class="tip-box">📐 DIM formula: (Length × Width × Height) / 139 = DIM lbs. If DIM > actual weight → DIM is billed.</div>
+ <h3>3. Order early — avoid rush shipping</h3>
+ <p>Standard 10–15 day service is 30–50% cheaper than 7-day express. If you're not in a hurry, choose standard.</p>
+ <h3>4. Declare accurate value — never under-declare</h3>
+ <p>Under-declaring doesn't save on duties but increases the risk of packages being held. Accurate declaration makes customs smoother.</p>
+ <h3>5. Remove bulky original packaging</h3>
+ <p>Shoes and electronics often come in large boxes. Removing original packaging and repacking tighter can reduce dimensional weight by 20–30%.</p>
+ <h3>6. Buy items with Free Shipping on Amazon</h3>
+ <p>With Prime, many items ship free to the Cuckoo Cargo warehouse. You only pay the international leg from warehouse to Vietnam.</p>
+ <h3>7. Take advantage of Cuckoo Cargo seasonal promotions</h3>
+ <p>Follow the fanpage and blog for monthly deals, discounts on orders over 20 lbs, or free shipping during holidays.</p>
+ `
+ },
+ 'customs-vn': {
+ tag: () => isEN() ? ' Customs' : ' Hải quan',
+ title: () => isEN() ? 'Vietnam Customs Regulations 2026 — Goods from the US' : 'Quy định hải quan Việt Nam 2026 — Hàng hóa từ Mỹ',
+ meta: [' 20/05/2026', () => isEN() ? '⏱ 6 min read' : '⏱ 6 phút đọc'],
+ body_vi: `
+ <h3>Mức miễn thuế</h3>
+ <p>Theo quy định hiện hành, hàng hóa nhập khẩu từ nước ngoài vào Việt Nam:</p>
+ <ul>
+ <li>Giá trị <strong>dưới 1,000,000 VNĐ (~$40 USD)</strong>: miễn thuế hoàn toàn</li>
+ <li>Hàng quà tặng gửi qua bưu chính dưới ngưỡng quy định: thường được miễn thuế</li>
+ <li>Hàng thương mại: áp thuế nhập khẩu + VAT theo từng loại hàng</li>
+ </ul>
+ <div class="tip-box">⚠️ Quy định có thể thay đổi. Liên hệ Cuckoo Cargo để được tư vấn cụ thể cho từng loại hàng.</div>
+ <h3>Hàng bị hải quan kiểm tra kỹ</h3>
+ <ul>
+ <li>Thực phẩm chức năng, dược phẩm (cần giấy phép)</li>
+ <li>Điện tử có trị giá cao (laptop, điện thoại mới)</li>
+ <li>Hàng hiệu — kiểm tra chính hãng</li>
+ <li>Số lượng lớn cùng một loại (nghi thương mại)</li>
+ </ul>
+ <h3>Hàng cấm nhập khẩu vào Việt Nam</h3>
+ <ul>
+ <li>Vũ khí, đạn dược, vật liệu nổ</li>
+ <li>Ma túy, chất kích thích bị cấm</li>
+ <li>Ấn phẩm chống phá Nhà nước</li>
+ <li>Động thực vật hoang dã không có giấy phép CITES</li>
+ <li>Hàng giả, hàng nhái nhãn hiệu</li>
+ </ul>
+ <h3>Khi hàng bị giữ — phải làm gì?</h3>
+ <p>Liên hệ ngay Cuckoo Cargo. Chúng tôi có kinh nghiệm xử lý thủ tục hải quan, bổ sung chứng từ, và làm việc trực tiếp với cơ quan chức năng để giải phóng hàng nhanh nhất.</p>
+ `,
+ body_en: `
+ <h3>Duty-Free Thresholds</h3>
+ <p>Under current Vietnamese regulations, imported goods are subject to:</p>
+ <ul>
+ <li>Value <strong>under 1,000,000 VND (~$40 USD)</strong>: fully duty-free</li>
+ <li>Gift packages sent via postal service below the threshold: generally duty-free</li>
+ <li>Commercial goods: subject to import duty + VAT based on product type</li>
+ </ul>
+ <div class="tip-box">⚠️ Regulations may change. Contact Cuckoo Cargo for specific advice on your items.</div>
+ <h3>Items Subject to Strict Customs Inspection</h3>
+ <ul>
+ <li>Dietary supplements, pharmaceuticals (may require permits)</li>
+ <li>High-value electronics (new laptops, smartphones)</li>
+ <li>Luxury branded goods — authenticity checks apply</li>
+ <li>Large quantities of the same item (suspected commercial imports)</li>
+ </ul>
+ <h3>Items Prohibited from Import into Vietnam</h3>
+ <ul>
+ <li>Weapons, ammunition, explosives</li>
+ <li>Narcotics and banned stimulants</li>
+ <li>Publications deemed anti-government</li>
+ <li>Wildlife without valid CITES permits</li>
+ <li>Counterfeit or trademark-infringing goods</li>
+ </ul>
+ <h3>If Your Package Is Held — What to Do?</h3>
+ <p>Contact Cuckoo Cargo immediately. We have experience handling customs procedures, supplementing documentation, and working directly with authorities to clear packages as quickly as possible.</p>
+ `
+ },
+ 'guide-label': {
+ tag: () => isEN() ? ' Guide' : ' Hướng dẫn',
+ title: () => isEN() ? 'US Domestic Label — UPS, FedEx or USPS? Which to choose?' : 'Label nội địa Mỹ — UPS, FedEx hay USPS? Chọn hãng nào?',
+ meta: [' 15/05/2026', () => isEN() ? '⏱ 7 min read' : '⏱ 7 phút đọc'],
+ body_vi: `
+ <h3>UPS — Mạnh về Ground, phủ khắp nơi</h3>
+ <p>UPS Ground là lựa chọn tốt cho hàng nặng và cồng kềnh. Thời gian 1–5 ngày tùy khoảng cách. Pickup tại nhà có phí ($9.65 nhà riêng, $16.15 căn hộ) hoặc drop-off miễn phí tại UPS Store.</p>
+ <ul>
+ <li>✅ Tốt cho hàng nặng (>10 lbs)</li>
+ <li>✅ Mạng lưới rộng, 50 tiểu bang</li>
+ <li>❌ Pickup có phí</li>
+ </ul>
+ <h3>FedEx — Nhanh, đáng tin cậy</h3>
+ <p>FedEx Home Delivery giao tận nhà, kể cả cuối tuần. FedEx Express cho đơn cần giao trong 1–2 ngày. Pickup miễn phí.</p>
+ <ul>
+ <li>✅ Pickup miễn phí tại nhà</li>
+ <li>✅ Giao cuối tuần (Home Delivery)</li>
+ <li>✅ Express 1–2 ngày đáng tin</li>
+ <li>❌ Giá cao hơn UPS/USPS với hàng nặng</li>
+ </ul>
+ <h3>USPS — Rẻ nhất cho hàng nhẹ</h3>
+ <p>USPS Priority Mail và First Class là lựa chọn kinh tế nhất cho hàng nhẹ dưới 5 lbs. Giao 1–3 ngày với Priority Mail. Pickup miễn phí.</p>
+ <ul>
+ <li>✅ Rẻ nhất cho hàng &lt;5 lbs</li>
+ <li>✅ Pickup miễn phí tại nhà</li>
+ <li>✅ Giao đến P.O. Box</li>
+ <li>❌ Giá tăng nhanh theo cân với hàng nặng</li>
+ </ul>
+ <div class="tip-box">💡 <strong>Gợi ý nhanh:</strong> Hàng &lt;5 lbs → USPS · Hàng 5–20 lbs → UPS hoặc FedEx · Cần gấp → FedEx Express</div>
+ <p>Tạo label qua Cuckoo Cargo tại <a href="noi-dia-my.html" style="color:var(--orange);">trang Label nội địa</a> — giá tốt hơn đi trực tiếp tại quầy.</p>
+ `,
+ body_en: `
+ <h3>UPS — Strong Ground network, coast to coast</h3>
+ <p>UPS Ground is the best choice for heavy and bulky items. Transit time 1–5 days depending on distance. Home pickup has a fee ($9.65 residential, $16.15 apartment) or free drop-off at a UPS Store.</p>
+ <ul>
+ <li>✅ Best for heavy packages (>10 lbs)</li>
+ <li>✅ Wide network, all 50 states</li>
+ <li>❌ Home pickup fee applies</li>
+ </ul>
+ <h3>FedEx — Fast, reliable</h3>
+ <p>FedEx Home Delivery reaches your door including weekends. FedEx Express for orders needing 1–2 day delivery. Free home pickup.</p>
+ <ul>
+ <li>✅ Free home pickup</li>
+ <li>✅ Weekend delivery (Home Delivery)</li>
+ <li>✅ Reliable 1–2 day Express option</li>
+ <li>❌ More expensive than UPS/USPS for heavy items</li>
+ </ul>
+ <h3>USPS — Cheapest for light packages</h3>
+ <p>USPS Priority Mail and First Class are the most economical for packages under 5 lbs. Priority Mail delivers in 1–3 days. Free home pickup.</p>
+ <ul>
+ <li>✅ Cheapest for packages &lt;5 lbs</li>
+ <li>✅ Free home pickup</li>
+ <li>✅ Delivers to P.O. Boxes</li>
+ <li>❌ Price increases quickly by weight for heavy items</li>
+ </ul>
+ <div class="tip-box">💡 <strong>Quick guide:</strong> Under 5 lbs → USPS · 5–20 lbs → UPS or FedEx · Need it fast → FedEx Express</div>
+ <p>Create your label through Cuckoo Cargo at the <a href="noi-dia-my.html" style="color:var(--orange);">Domestic Label page</a> — better rates than walking into the carrier store.</p>
+ `
+ },
+ 'tips-muaho': {
+ tag: () => isEN() ? ' Money tips' : ' Tips tiết kiệm',
+ title: () => isEN() ? 'US Personal Shopping: Black Friday, Prime Day — Best time to buy?' : 'Mua hộ hàng Mỹ: Black Friday, Prime Day — Khi nào mua rẻ nhất?',
+ meta: [' 10/05/2026', () => isEN() ? '⏱ 4 min read' : '⏱ 4 phút đọc'],
+ body_vi: `
+ <h3>Lịch sale lớn tại Mỹ 2026</h3>
+ <ul>
+ <li><strong>Amazon Prime Day</strong> — Tháng 7 (thường tuần 2–3). Ưu đãi khủng cho thành viên Prime.</li>
+ <li><strong>Back to School</strong> — Tháng 8. Điện tử, đồ dùng học tập giảm mạnh.</li>
+ <li><strong>Black Friday / Cyber Monday</strong> — Cuối tháng 11. Sale lớn nhất năm, giảm 30–70%.</li>
+ <li><strong>After Christmas</strong> — 26–31/12. Hàng tồn kho giảm cực sâu.</li>
+ </ul>
+ <h3>Cách đặt trước để không bỏ lỡ</h3>
+ <ol style="padding-left:20px;margin-bottom:14px;">
+ <li style="margin-bottom:8px;">Lập danh sách sản phẩm muốn mua từ trước 2–4 tuần</li>
+ <li style="margin-bottom:8px;">Theo dõi giá bằng app CamelCamelCamel (Amazon price tracker)</li>
+ <li style="margin-bottom:8px;">Gửi danh sách cho Cuckoo Cargo — chúng tôi mua ngay khi deal xuất hiện</li>
+ <li style="margin-bottom:8px;">Thanh toán ngay sau xác nhận để giữ giá</li>
+ </ol>
+ <div class="tip-box">🛒 Black Friday tại Mỹ thường bắt đầu từ đêm thứ Tư — Cuckoo Cargo có nhân viên trực đêm để săn deal cho bạn.</div>
+ <h3>Sản phẩm nên mua mùa sale</h3>
+ <p>Điện tử (TV, laptop, tai nghe), đồ gia dụng, quần áo thể thao, giày sneakers, thực phẩm chức năng. Sữa Ensure và dầu gió thường không sale nhiều — mua bình thường vẫn được giá tốt qua Cuckoo Cargo.</p>
+ `,
+ body_en: `
+ <h3>Major US Sale Events in 2026</h3>
+ <ul>
+ <li><strong>Amazon Prime Day</strong> — July (usually weeks 2–3). Massive deals for Prime members.</li>
+ <li><strong>Back to School</strong> — August. Electronics and school supplies heavily discounted.</li>
+ <li><strong>Black Friday / Cyber Monday</strong> — Late November. Biggest sales of the year, 30–70% off.</li>
+ <li><strong>After Christmas</strong> — Dec 26–31. Clearance pricing on remaining inventory.</li>
+ </ul>
+ <h3>How to pre-order and never miss a deal</h3>
+ <ol style="padding-left:20px;margin-bottom:14px;">
+ <li style="margin-bottom:8px;">Build your wishlist 2–4 weeks before the sale</li>
+ <li style="margin-bottom:8px;">Track prices with CamelCamelCamel app (Amazon price tracker)</li>
+ <li style="margin-bottom:8px;">Send your list to Cuckoo Cargo — we buy the moment the deal goes live</li>
+ <li style="margin-bottom:8px;">Pay immediately after confirmation to lock in the price</li>
+ </ol>
+ <div class="tip-box">🛒 Black Friday in the US typically kicks off Wednesday night — Cuckoo Cargo has overnight staff to hunt deals for you.</div>
+ <h3>Best products to buy during sales</h3>
+ <p>Electronics (TVs, laptops, headphones), appliances, athletic wear, sneakers, and supplements. Ensure milk and medicated oil don't discount much — Cuckoo Cargo's regular pricing is already competitive on these.</p>
+ `
+ },
+ 'customs-ensure': {
+ tag: () => isEN() ? ' Customs' : ' Hải quan',
+ title: () => isEN() ? 'Bringing Ensure from the US to Vietnam — Regulations and allowed quantity' : 'Mang sữa Ensure từ Mỹ về Việt Nam — Quy định và số lượng cho phép',
+ meta: [' 05/05/2026', () => isEN() ? '⏱ 3 min read' : '⏱ 3 phút đọc'],
+ body_vi: `
+ <h3>Ensure có bị cấm nhập khẩu không?</h3>
+ <p>Không. Sữa Ensure là thực phẩm dinh dưỡng thông thường, không bị cấm nhập khẩu vào Việt Nam. Tuy nhiên, số lượng và giá trị ảnh hưởng đến thuế.</p>
+ <h3>Bao nhiêu hộp thì miễn thuế?</h3>
+ <p>Theo kinh nghiệm thực tế của khách hàng Cuckoo Cargo:</p>
+ <ul>
+ <li><strong>1–3 hộp (24 chai/hộp)</strong>: thường qua hải quan không vấn đề, coi là hàng cá nhân</li>
+ <li><strong>4–6 hộp</strong>: đôi khi bị hỏi — nên có giấy tờ mua hàng</li>
+ <li><strong>Trên 6 hộp</strong>: dễ bị coi là hàng thương mại — cần khai báo rõ ràng, có thể chịu thuế</li>
+ </ul>
+ <div class="tip-box">⚠️ Quy định thực tế phụ thuộc vào từng cửa khẩu và thời điểm. Cuckoo Cargo tư vấn miễn phí cho từng đơn hàng.</div>
+ <h3>Nên khai báo như thế nào?</h3>
+ <p>Khai báo đúng tên sản phẩm "Ensure Nutritional Supplement", đúng số lượng, giá trị theo hóa đơn mua hàng gốc (Cuckoo Cargo cung cấp khi yêu cầu). Không khai thấp hơn thực tế.</p>
+ <h3>Cần hỗ trợ thủ tục?</h3>
+ <p>Liên hệ Cuckoo Cargo — chúng tôi có kinh nghiệm gửi sữa Ensure về VN hàng trăm đơn, biết cách đóng gói và khai báo để thủ tục thuận lợi nhất.</p>
+ `,
+ body_en: `
+ <h3>Is Ensure banned from import?</h3>
+ <p>No. Ensure is a standard nutritional supplement and is not prohibited from import into Vietnam. However, quantity and declared value affect applicable duties.</p>
+ <h3>How many cans are duty-free?</h3>
+ <p>Based on real experience from Cuckoo Cargo customers:</p>
+ <ul>
+ <li><strong>1–3 cases (24 bottles/case)</strong>: typically clears customs without issue, treated as personal use</li>
+ <li><strong>4–6 cases</strong>: sometimes questioned — having purchase receipts helps</li>
+ <li><strong>Over 6 cases</strong>: may be flagged as commercial import — requires clear declaration, duties may apply</li>
+ </ul>
+ <div class="tip-box">⚠️ Actual treatment varies by port of entry and timing. Cuckoo Cargo provides free consultation for each order.</div>
+ <h3>How should I declare it?</h3>
+ <p>Declare the product accurately as "Ensure Nutritional Supplement" with the correct quantity and value per original purchase receipt (Cuckoo Cargo provides this on request). Never under-declare.</p>
+ <h3>Need help with the paperwork?</h3>
+ <p>Contact Cuckoo Cargo — we have handled hundreds of Ensure shipments to Vietnam and know exactly how to package and declare them for the smoothest customs experience.</p>
+ `
+ },
+ 'news-price': {
+ tag: () => isEN() ? ' News' : ' Tin tức',
+ title: () => isEN() ? 'US–Vietnam Shipping Rate Update — June 2026' : 'Cập nhật giá cước vận chuyển Mỹ – Việt tháng 06/2026',
+ meta: [' 01/06/2026', () => isEN() ? '⏱ 2 min read' : '⏱ 2 phút đọc'],
+ body_vi: `
+ <h3>Giá cước tháng 06/2026</h3>
+ <p>Cuckoo Cargo duy trì mức giá ổn định và cạnh tranh trong tháng 6. Liên hệ trực tiếp để nhận báo giá chính xác theo cân và địa chỉ nhận.</p>
+ <h3>Ưu đãi tháng 6</h3>
+ <ul>
+ <li>🔥 <strong>Giảm 10%</strong> cho đơn trên 20 lbs trong tháng 6/2026</li>
+ <li>📦 <strong>Miễn phí đóng gói gia cố</strong> cho đơn hàng điện tử trên $200</li>
+ <li>⭐ <strong>Ưu tiên xử lý</strong> cho khách hàng thân thiết (có mã CAC)</li>
+ </ul>
+ <div class="tip-box">📅 Đặt đơn trước ngày 15/06 để được áp dụng ưu đãi. Liên hệ Zalo hoặc Messenger để xác nhận.</div>
+ <h3>Dự báo giá tháng tới</h3>
+ <p>Giá nhiên liệu hàng không đang ổn định. Chúng tôi dự kiến duy trì mức giá hiện tại đến hết quý 3/2026. Theo dõi fanpage để nhận thông báo sớm nhất.</p>
+ `,
+ body_en: `
+ <h3>June 2026 Shipping Rates</h3>
+ <p>Cuckoo Cargo is maintaining stable and competitive rates in June. Contact us directly for an accurate quote based on weight and delivery address.</p>
+ <h3>June Promotions</h3>
+ <ul>
+ <li>🔥 <strong>10% off</strong> for orders over 20 lbs in June 2026</li>
+ <li>📦 <strong>Free reinforced packaging</strong> for electronics orders over $200</li>
+ <li>⭐ <strong>Priority processing</strong> for loyalty customers (CAC code holders)</li>
+ </ul>
+ <div class="tip-box">📅 Place your order before June 15 to take advantage of these promotions. Contact us via Zalo or Messenger to confirm.</div>
+ <h3>Next Month Rate Outlook</h3>
+ <p>Airfreight fuel costs are currently stable. We expect to maintain current rates through the end of Q3 2026. Follow our fanpage for early notifications of any changes.</p>
+ `
+ },
+ };
+
+ function openArticle(id) {
+ const a = ARTICLES[id]; if(!a) return;
+ const en = window.currentLang === 'en';
+ document.getElementById('art-tag').textContent = a.tag();
+ document.getElementById('art-title').textContent = a.title();
+ document.getElementById('art-meta').innerHTML = a.meta.map(m => `<span>${typeof m === 'function' ? m() : m}</span>`).join('');
+ document.getElementById('art-body').innerHTML = en ? (a.body_en || a.body_vi) : (a.body_vi || a.body_en);
+ document.getElementById('article-modal').classList.add('open');
+ document.getElementById('article-inner').scrollTop = 0;
+ document.body.style.overflow = 'hidden';
+ }
+ function closeArticle() {
+ document.getElementById('article-modal').classList.remove('open');
+ document.body.style.overflow = '';
+ }
+ function closeArticleOutside(e) {
+ if(e.target === document.getElementById('article-modal')) closeArticle();
+ }
+</script>
+<!-- FLOATING BUTTONS -->
+<div id="cc-fab-wrap">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="cc-fab cc-fab-zalo" aria-label="Zalo">
+  <svg viewBox="0 0 50 50" width="28" height="28"><rect x="3" y="3" width="44" height="38" rx="10" fill="white"/><text x="25" y="28" text-anchor="middle" font-size="18" font-weight="900" fill="#0068FF" font-family="Arial,sans-serif">Zalo</text><polygon points="10,41 18,41 10,50" fill="white"/></svg>
+ </a>
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="cc-fab cc-fab-fb" aria-label="Facebook">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+ </a>
+ <a href="https://www.tiktok.com/@cuckoo.cargo6" target="_blank" class="cc-fab cc-fab-tiktok" aria-label="TikTok">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-6.34 6.29 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+ </a>
+ <button class="cc-fab cc-fab-top" id="cc-fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Lên đầu" style="display:none">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+ </button>
+</div>
+</body>
+</html>

@@ -1,0 +1,491 @@
+/* ═══════════════════════════════════════════════════════════
+   CUCKOO CARGO — Mobile Responsive (mobile.css)
+   Tối ưu UX/UI cho tất cả breakpoints
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Prevent horizontal overflow globally ── */
+html, body { overflow-x: hidden; max-width: 100vw; }
+img { max-width: 100%; height: auto; }
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+
+/* ── Fix text overflow toàn site ── */
+p, li, td, th, span, div, a, label {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+table { table-layout: auto; }
+
+/* ── Scroll margin for sticky nav ── */
+[id] { scroll-margin-top: 80px; }
+
+/* ═══════════════════════════════════════════════════════════
+   HAMBURGER BUTTON
+═══════════════════════════════════════════════════════════ */
+.mobile-nav-toggle,
+.cc-mobile-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1.5px solid #E5E5EA;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BREAKPOINT: TABLET & MOBILE (≤ 900px)
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+
+  /* ── Hamburger visible ── */
+  .mobile-nav-toggle,
+  .cc-mobile-toggle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important; height: 40px !important;
+    border: 1.5px solid #E5E5EA !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    color: #0F0F10 !important;
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+  }
+  .mobile-nav-toggle:hover,
+  .cc-mobile-toggle:hover { border-color: #F47B20 !important; color: #F47B20 !important; }
+
+  /* ── Nav links: slide-down drawer ── */
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: #fff;
+    border-bottom: 2px solid #E5E5EA;
+    padding: 12px 16px 16px;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 199;
+    box-shadow: 0 8px 32px rgba(0,0,0,.14);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a {
+    padding: 13px 16px !important;
+    width: 100%;
+    border-radius: 10px;
+    font-size: 15px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── Nav-links inline (my-ve-viet, noi-dia-my, mua-ho) ── */
+  .nav-links {
+    display: none !important;
+    position: fixed !important;
+    top: 64px; left: 0; right: 0;
+    background: #fff;
+    border-bottom: 2px solid #E5E5EA;
+    padding: 12px 16px 16px;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 199;
+    box-shadow: 0 8px 32px rgba(0,0,0,.12);
+  }
+  .nav-links.open { display: flex !important; }
+  .nav-links a {
+    padding: 13px 16px !important;
+    width: 100% !important;
+    border-radius: 10px;
+    font-size: 15px !important;
+    min-height: 48px;
+    display: flex !important;
+    align-items: center;
+  }
+
+  /* ── Global nav (global.js injected) ── */
+  .cc-nav-links {
+    display: none;
+    position: fixed !important;
+    top: 64px !important;
+    left: 0 !important; right: 0 !important;
+    background: #fff;
+    border-bottom: 2px solid #E5E5EA;
+    padding: 12px 16px 16px;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 199 !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,.14) !important;
+  }
+  .cc-nav-links.open { display: flex !important; }
+  .cc-nav { position: sticky; top: 0; z-index: 200; }
+
+  .nav-cta, .cc-nav-cta { display: none; }
+
+  /* ── Page body ── */
+  .page-body { grid-template-columns: 1fr !important; padding: 24px 16px !important; }
+  .mh-form-layout { grid-template-columns: 1fr !important; }
+  .form-layout { grid-template-columns: 1fr !important; }
+
+  /* ── Sidebar stacks below form ── */
+  .sidebar, .mh-sidebar { order: 2; }
+  .wizard { order: 1; }
+
+  /* ── Cam kết section (index) ── */
+  .camket-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .camket-logo  { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BREAKPOINT: TABLET (≤ 768px)
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── Service cards: tablet 2 columns → list compact ── */
+  .svc-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+
+  /* ── Service card: compact horizontal on mobile ── */
+  .service-card {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .service-card-top {
+    padding: 20px 18px 16px !important;
+  }
+  .service-card-top h3 { font-size: 18px !important; }
+  .service-card-top .sub { font-size: 13px !important; margin-bottom: 10px !important; }
+  .service-card-features { padding: 12px 18px !important; }
+  .service-card-footer { padding: 14px 18px !important; }
+
+  /* ── Pricing tables: stack vertically ── */
+  .pricing-tables { grid-template-columns: 1fr !important; gap: 16px !important; }
+
+  /* ── Tables: horizontal scroll ── */
+  .price-card table,
+  .fee-table,
+  .pkg-table,
+  .ptable { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ── Tracking info ── */
+  .tk-info-section { grid-template-columns: 1fr 1fr !important; }
+
+  /* ── Why grid ── */
+  .why-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BREAKPOINT: MOBILE (≤ 640px)
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+
+  /* ── Hero sections ── */
+  .hero         { padding: 36px 16px 28px !important; }
+  .mh-hero      { padding: 40px 16px 32px !important; }
+  .tk-hero      { padding: 40px 16px 36px !important; }
+  .hero h1, .mh-hero h1, .tk-hero h1 {
+    font-size: clamp(26px, 8vw, 40px) !important;
+    letter-spacing: 1px !important;
+    line-height: 1.15 !important;
+  }
+  .hero p, .mh-hero p, .tk-hero p {
+    font-size: 14px !important;
+    margin-bottom: 24px !important;
+  }
+  .hero-stats, .mh-hero-stats { gap: 16px !important; }
+  .hero-actions { flex-direction: column; align-items: center; gap: 10px !important; }
+  .hero-actions a, .hero-actions button {
+    width: 100%;
+    max-width: 340px;
+    justify-content: center;
+  }
+
+  /* ── Hero meta (my-ve-viet) ── */
+  .hero-meta { gap: 20px !important; flex-wrap: wrap; justify-content: center; }
+  .hero-meta-item .val { font-size: 22px !important; }
+
+  /* ── Hero CTA buttons (my-ve-viet) ── */
+  .hero-cta-primary, .hero-cta-secondary {
+    width: 100% !important;
+    max-width: 320px !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* ── Section padding ── */
+  .section      { padding: 40px 16px !important; }
+  .services-section { padding: 40px 16px !important; }
+  .pricing-section-inner,
+  .container    { padding-left: 16px !important; padding-right: 16px !important; }
+  .form-section { padding: 20px 16px 40px !important; }
+
+  /* ── Service cards: simplified mobile view ── */
+  .svc-icon-wrap {
+    width: 44px !important;
+    height: 44px !important;
+    margin-bottom: 12px !important;
+  }
+  .svc-icon-wrap svg { width: 22px !important; height: 22px !important; }
+  .svc-price {
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+  }
+  .svc-price .amount { font-size: 20px !important; }
+
+  /* ── Section title ── */
+  .section-title h2 { font-size: clamp(20px, 5vw, 28px) !important; }
+  .section-title p  { font-size: 14px !important; }
+
+  /* ── Carrier tabs (noi-dia-my) ── */
+  .carrier-tabs {
+    gap: 8px !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+  }
+  .ctab {
+    min-width: 80px !important;
+    flex-shrink: 0 !important;
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+  }
+  .ctab-icon img { height: 22px !important; }
+
+  /* ── Service tabs (Ground/3-Day/etc) ── */
+  .service-tabs-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    gap: 4px !important;
+    padding: 0 !important;
+  }
+  .stab { padding: 8px 6px !important; font-size: 11px !important; flex: 1 1 0 !important; min-width: 0 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; text-align: center !important; }
+
+  /* ── Selector section (noi-dia-my) ── */
+  .selector-section { padding: 14px 12px 0 !important; }
+  .svc-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+
+  /* ── Mode grid: Xuyên bang / Lên kho ── */
+  .mode-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .mode-card { padding: 12px 10px !important; }
+  .mode-card strong { font-size: 13px !important; }
+  .mode-card p { font-size: 12px !important; display: none; } /* Ẩn mô tả dài trên mobile nhỏ */
+
+  /* ── Pricing section (noi-dia-my) ── */
+  .pricing-section { padding: 16px 0 0 !important; }
+  .pricing-inner { padding: 0 !important; }
+
+
+  /* ── Svc header badge ── */
+  .svc-header-badge { font-size: 11px !important; padding: 4px 10px !important; }
+
+  /* ── UPS/FedEx/USPS price table ── */
+  .svc-header { padding: 14px 16px !important; border-radius: 12px 12px 0 0 !important; }
+  .svc-header-left h3 { font-size: 15px !important; }
+
+  /* Fixed column widths: prevent huge gaps between columns */
+  .ptable { display: table !important; table-layout: fixed !important; width: 100% !important; }
+  .ptable th:nth-child(1), .ptable td:nth-child(1) { width: 36% !important; }
+  .ptable th:nth-child(2), .ptable td:nth-child(2) { width: 28% !important; text-align: center !important; }
+  .ptable th:nth-child(3), .ptable td:nth-child(3) { width: 36% !important; }
+
+  /* Subhead rows span all 3 cols — keep full-width */
+  .ptable .subhead td,
+  .ptable .subhead-warn td,
+  .ptable .surcharge-note td { width: auto !important; text-align: left !important; }
+
+  /* Shrink font/padding for tight columns */
+  .ptable th { padding: 8px 10px !important; font-size: 10.5px !important; }
+  .ptable td { padding: 10px 10px !important; font-size: 13px !important; }
+  .ptable .price-cell { font-size: 13.5px !important; }
+  .ptable .flat-badge { font-size: 10px !important; padding: 2px 8px !important; }
+
+  /* Last column: FAB clearance reduced to 48px */
+  .ptable th:last-child,
+  .ptable td:last-child { padding-right: 48px !important; }
+
+  /* ── Steps wizard bar ── */
+  .steps-bar-inner { gap: 0 !important; overflow-x: auto; flex-wrap: nowrap !important; padding: 0 8px !important; }
+  .step-item { padding: 6px 5px !important; font-size: 10px !important; flex-shrink: 0; }
+  .step-item .snum { width: 22px !important; height: 22px !important; font-size: 11px !important; }
+  .step-arrow { display: none !important; }
+
+  /* ── Progress bar wizard ── */
+  .progress-bar-wrap { margin-bottom: 20px !important; }
+  .progress-label span { font-size: 12px !important; }
+
+  /* ── Step heading ── */
+  .step-heading h2 { font-size: 18px !important; }
+  .step-heading p  { font-size: 13px !important; }
+
+  /* ── Form grids ── */
+  .form-row.col2, .form-row.c2,
+  .form-row.col3, .form-row.c3 { grid-template-columns: 1fr !important; }
+  .addr-row { grid-template-columns: 1fr !important; }
+
+  /* ── Prevent iOS zoom on inputs ── */
+  input[type=text], input[type=email], input[type=tel],
+  input[type=number], select, textarea { font-size: 16px !important; }
+  .fc-body input, .fc-body select, .fc-body textarea { font-size: 16px !important; }
+
+  /* ── Form card padding ── */
+  .form-card-body, .fc-body { padding: 14px 14px 16px !important; }
+  .form-card-header, .fc-head { padding: 12px 14px !important; }
+
+  /* ── Quick buttons in wizard ── */
+  .quick-btns { gap: 6px !important; }
+  .quick-btn  { font-size: 11px !important; padding: 7px 10px !important; }
+
+  /* ── Insurance grid ── */
+  .ins-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .ins-card { padding: 12px 10px !important; }
+  .ins-card .ins-tier  { font-size: 13px !important; }
+  .ins-card .ins-price { font-size: 17px !important; }
+
+  /* ── Package grid ── */
+  .pkg-grid { gap: 10px !important; }
+  .pkg-card { padding: 12px 14px !important; gap: 12px !important; }
+  .pkg-icon { font-size: 22px !important; }
+  .pkg-name { font-size: 14px !important; }
+
+  /* ── Summary review sheet ── */
+  .review-sheet, .mvv-review-sheet { padding: 20px 16px 32px !important; }
+  .review-actions, .mvv-review-actions { flex-direction: column !important; }
+  .btn-edit, .btn-confirm,
+  .mvv-btn-edit, .mvv-btn-confirm { flex: none; width: 100%; }
+  .mvv-total { font-size: 15px !important; }
+
+  /* ── Time options ── */
+  .time-opts { grid-template-columns: 1fr 1fr !important; }
+  .time-opt  { padding: 12px 10px !important; }
+  .time-opt .t-name { font-size: 13px !important; }
+
+  /* ── Timeslot grid ── */
+  .ts-grid, .timeslot-grid, .timeslot-grid-4 { grid-template-columns: 1fr 1fr !important; }
+  .timeslot { padding: 12px !important; font-size: 14px !important; }
+
+  /* ── Calendar ── */
+  .pickup-calendar { padding: 14px !important; }
+  .cal-day { font-size: 13px !important; }
+
+  /* ── Tracking page ── */
+  .tk-search-wrap { flex-direction: column; gap: 8px !important; }
+  .tk-search-input { min-width: 0 !important; }
+  .tk-search-btn  { width: 100%; justify-content: center; }
+  .tk-progress-steps { gap: 0 !important; }
+  .tk-prog-label { font-size: 9px !important; }
+  .tk-prog-dot   { width: 24px !important; height: 24px !important; font-size: 10px !important; }
+  .tk-order-header { flex-direction: column; gap: 10px; }
+  .tk-info-section { grid-template-columns: 1fr 1fr !important; }
+  .other-services  { grid-template-columns: 1fr !important; }
+  .tk-timeline-section { padding: 16px !important; }
+  .tk-progress-section { padding: 16px !important; }
+
+  /* ── Tracking result card ── */
+  .tk-order-id { font-size: 16px !important; }
+  .tk-order-meta { font-size: 12px !important; }
+
+  /* ── FAQ ── */
+  .faq-q { padding: 14px 16px !important; font-size: 14px !important; }
+  .faq-a { padding: 0 16px 16px 16px !important; font-size: 13px !important; }
+
+  /* ── Steps grid (how it works) ── */
+  .steps-grid, .mh-steps { grid-template-columns: 1fr 1fr !important; }
+  .how-step-card .step-icon { font-size: 32px !important; }
+
+  /* ── Stores grid ── */
+  .stores-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* ── Quick calc (index) ── */
+  .calc-inner  { flex-direction: column; align-items: stretch; }
+  .calc-fields { flex-direction: column; }
+  .calc-result { text-align: center; }
+
+  /* ── Label popup ── */
+  .label-popup { border-radius: 20px; }
+  .popup-header { padding: 20px 18px 16px; }
+  .popup-body   { padding: 16px 18px 22px; }
+
+  /* ── Admin tracking ── */
+  .oi-meta { grid-template-columns: 1fr 1fr !important; }
+  .form-grid { grid-template-columns: 1fr !important; }
+  .info-grid { grid-template-columns: 1fr 1fr !important; }
+  .info-item.span2 { grid-column: span 1 !important; }
+  .info-item.span3 { grid-column: span 2 !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BREAKPOINT: SMALL MOBILE (≤ 480px)
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+  /* ── Mode grid: stack on very small ── */
+  .mode-grid { grid-template-columns: 1fr !important; }
+  .mode-card p { display: block !important; font-size: 11px !important; }
+
+  /* ── Insurance: 1 col ── */
+  .ins-grid { grid-template-columns: 1fr !important; }
+
+  /* ── Lang toggle ── */
+  .lang-toggle, .cc-lang { margin-right: 4px; }
+
+  /* ── Review overlay ── */
+  .review-overlay, .mvv-review-overlay,
+  .label-overlay { align-items: flex-end !important; }
+
+  /* ── Item row ── */
+  .item-row-2 { grid-template-columns: 1fr 1fr !important; }
+  .pkg-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ── Pay method grid ── */
+  .pay-method-grid { grid-template-columns: 1fr 1fr !important; }
+  .pay-method { padding: 12px !important; }
+  .pay-flag { font-size: 22px !important; }
+  .pay-name { font-size: 14px !important; }
+
+  /* ── Tracking progress ── */
+  .tk-prog-label { display: none; } /* Ẩn label, chỉ giữ dot */
+  .tk-progress-steps::before { top: 12px !important; }
+  .tk-prog-dot { width: 20px !important; height: 20px !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOUCH TARGETS (tất cả mobile)
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  button, a[href], input[type=submit], .svc-cta,
+  .btn-next, .btn-back, .btn-search, .btn-add {
+    min-height: 44px;
+  }
+  input[type=checkbox], input[type=radio] {
+    min-height: 20px;
+    min-width: 20px;
+  }
+  /* ── Pickup timeline ── */
+  .pickup-toggle { flex-direction: column !important; }
+
+  /* ── Nav lang toggle ── */
+  .lang-btn { padding: 6px 10px !important; }
+
+  /* ── FAQ / Blog text overflow fix ── */
+  .faq-a, .faq-a * { overflow-wrap: break-word !important; word-break: break-word !important; }
+  .blog-content, .blog-content * { overflow-wrap: break-word !important; }
+
+  /* ── Nav mobile: search box full width ── */
+  .cc-search-box { width: calc(100vw - 24px) !important; right: 0 !important; }
+
+  /* ── Search icon visible on mobile ── */
+  .cc-search-icon-btn { display: flex !important; }
+
+  /* ── Nav right spacing ── */
+  .cc-nav-right { gap: 8px !important; }
+
+  /* ── Prevent table overflow in blog/FAQ ── */
+  table { display: block; overflow-x: auto; max-width: 100%; }
+}

@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Gửi Hàng Mỹ - Việt Nam | Cuckoo Cargo</title>
+ <meta name="description" content="Dịch vụ gửi hàng từ Mỹ về Việt Nam. 7–10 ngày giao hàng, bảo hiểm đầy đủ, drop-off hoặc pickup tận nơi. Tạo đơn online dễ dàng." />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Faustina:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+ <link rel="stylesheet" href="assets/css/global.css" />
+ <link rel="stylesheet" href="assets/css/mobile.css" />
+ <style>
+ *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+ html { scroll-behavior:smooth; }
+ :root {
+ --orange:#F47B20; --orange-deep:#D4650E; --orange-light:#FFB366;
+ --orange-bg:#FFF3E8; --black:#0F0F10; --surface:#1A1A1E;
+ --white:#FFFFFF; --gray:#8E8E93; --gray-light:#F5F5F7;
+ --gray-border:#E5E5EA; --text-primary:#0F0F10; --text-muted:#8E8E93;
+ --green:#22C55E; --blue:#3B82F6;
+ --radius-sm:8px; --radius-md:14px; --radius-lg:22px;
+ }
+ body { font-family:'Faustina',serif; color:var(--text-primary); background:var(--white); overflow-x:hidden; }
+
+ /* NAV */
+ nav {
+ position:sticky; top:0; z-index:100;
+ background:rgba(255,255,255,.96); backdrop-filter:blur(12px);
+ border-bottom:1px solid var(--gray-border); padding:0 24px;
+ }
+ .nav-inner {
+ max-width:1200px; margin:0 auto;
+ display:flex; align-items:center; justify-content:space-between;
+ height:64px; gap:24px;
+ }
+ .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+ .nav-logo-icon { width:36px; height:36px; background:var(--orange); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+ .nav-logo-text { font-family:'Faustina',serif; font-size:20px; letter-spacing:2px; color:var(--black); }
+ .nav-links { display:flex; gap:4px; flex:1; }
+ .nav-links a { padding:8px 14px; border-radius:8px; font-size:14px; font-weight:500; color:var(--text-primary); text-decoration:none; transition:background .2s; }
+ .nav-links a:hover,.nav-links a.active { background:var(--orange-bg); color:var(--orange); }
+ .nav-right { display:flex; align-items:center; gap:10px; }
+ .lang-toggle { display:flex; border:1px solid var(--gray-border); border-radius:20px; overflow:hidden; }
+ .lang-btn { padding:5px 12px; font-size:12px; font-weight:600; cursor:pointer; transition:all .2s; background:transparent; border:none; }
+ .lang-btn.active { background:var(--orange); color:var(--white); }
+
+ /* HERO */
+ .hero {
+ background:var(--black); padding:56px 24px 48px; text-align:center;
+ position:relative; overflow:hidden;
+ }
+ .hero::before {
+ content:''; position:absolute; inset:0;
+ background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(244,123,32,.18) 0%, transparent 70%);
+ }
+ .hero-badge {
+ display:inline-flex; align-items:center; gap:6px;
+ background:rgba(244,123,32,.15); border:1px solid rgba(244,123,32,.3);
+ color:var(--orange); padding:6px 16px; border-radius:20px;
+ font-size:12px; font-weight:600; letter-spacing:1px; margin-bottom:20px;
+ position:relative;
+ }
+ .hero h1 {
+ font-family:'Faustina',serif;
+ font-size:clamp(34px,6vw,70px);
+ color:var(--white); letter-spacing:3px; line-height:1.05;
+ margin-bottom:16px; position:relative;
+ }
+ .hero h1 span { color:var(--orange); }
+ .hero p { font-size:16px; color:#999; max-width:540px; margin:0 auto 32px; line-height:1.7; position:relative; }
+ .hero-meta {
+ display:flex; justify-content:center; gap:32px; flex-wrap:wrap; position:relative;
+ }
+ .hero-meta-item { text-align:center; }
+ .hero-meta-item .val { font-size:26px; font-weight:800; color:var(--orange); }
+ .hero-meta-item .lbl { font-size:11px; color:#666; margin-top:2px; }
+
+ /* STEPS OVERVIEW (How it works) */
+ .steps-bar {
+ background:var(--orange-bg); border-bottom:1px solid #FFD9B3;
+ padding:14px 0;
+ }
+ .steps-bar-inner {
+ max-width:900px; margin:0 auto;
+ display:flex; align-items:center; justify-content:center;
+ gap:0; flex-wrap:nowrap;
+ overflow-x:auto; -webkit-overflow-scrolling:touch;
+ padding:0 20px 2px;
+ scrollbar-width:none;
+ }
+ .steps-bar-inner::-webkit-scrollbar { display:none; }
+ .step-item {
+ display:flex; align-items:center; gap:7px;
+ font-size:13px; font-weight:600; color:var(--text-muted);
+ padding:5px 10px; white-space:nowrap; flex-shrink:0;
+ }
+ .step-item .snum {
+ width:26px; height:26px; border-radius:50%;
+ background:var(--gray-border); color:var(--gray);
+ display:flex; align-items:center; justify-content:center;
+ font-size:12px; font-weight:700; flex-shrink:0;
+ }
+ .step-item.done .snum { background:var(--green); color:#fff; }
+ .step-item.active .snum { background:var(--orange); color:#fff; }
+ .step-item.active { color:var(--orange); font-weight:700; }
+ .step-arrow { color:#ccc; font-size:14px; flex-shrink:0; }
+ @media(max-width:640px){
+   .step-item { font-size:11.5px; padding:4px 6px; gap:5px; }
+   .step-item .snum { width:22px; height:22px; font-size:11px; }
+   .step-arrow { font-size:12px; }
+ }
+ /* Trên mobile nhỏ: ẩn label, chỉ hiện số vòng tròn → giảm chiều rộng từ ~800px → ~250px */
+ @media(max-width:480px){
+   .step-item:not(.active) span { display:none; }
+   .step-item:not(.active) { padding:4px 3px; gap:0; }
+   .step-item.active { padding:4px 8px; }
+   .step-arrow { font-size:10px; padding:0 1px; }
+ }
+
+ /* Province fee note */
+ .province-fee-note { font-size:13px; font-weight:600; margin-top:6px; padding:6px 10px; border-radius:8px; }
+ .province-fee-note.free { background:#DCFCE7; color:#16A34A; }
+ .province-fee-note.paid { background:#FFF3E8; color:var(--orange-deep); }
+
+ /* Packaging guide */
+ .pkg-guide { background:#FFFBF0; border:1px solid #FDE68A; border-radius:14px; padding:18px; margin-bottom:16px; }
+ .pkg-guide-title { font-size:15px; font-weight:800; margin-bottom:14px; color:var(--black); }
+ .pkg-guide-item { display:flex; gap:14px; margin-bottom:14px; background:#fff; border-radius:12px; padding:14px; border:1px solid #FDE68A; }
+ .pkg-guide-item.warning { border-color:#FCA5A5; background:#FFF5F5; }
+ .pkg-guide-icon { font-size:28px; flex-shrink:0; margin-top:2px; }
+ .pkg-guide-head { font-size:14px; font-weight:800; margin-bottom:6px; }
+ .pkg-guide-body p { font-size:13px; line-height:1.65; color:var(--text-primary); margin:0; }
+ .pkg-tips { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+ .pkg-tips li { font-size:13px; line-height:1.6; padding:8px 10px; background:var(--gray-light); border-radius:8px; }
+ .pkg-guide-code { background:var(--orange-bg); border:1px solid var(--orange-light); border-radius:12px; padding:14px; margin-top:12px; }
+ .pkg-guide-code-title { font-size:14px; font-weight:800; margin-bottom:8px; color:var(--black); }
+ .pkg-guide-code p { font-size:13px; line-height:1.65; margin-bottom:10px; }
+ .pkg-code-example { display:flex; flex-direction:column; align-items:center; }
+ .pkg-code-box { background:#fff; border:2px dashed var(--orange); border-radius:10px; padding:16px 24px; text-align:center; }
+ .pkg-code-line { font-size:13px; color:var(--text-muted); margin-bottom:4px; }
+ .pkg-code-line.big { font-size:18px; font-weight:800; color:var(--black); }
+ .pkg-code-line.orange { color:var(--orange); }
+
+ /* PRICING SECTION */
+ .pricing-section { background:var(--gray-light); padding:36px 24px; }
+ .pricing-section-inner { max-width:1100px; margin:0 auto; }
+ .pricing-section h2 { font-size:22px; font-weight:800; margin-bottom:20px; text-align:center; }
+ .pricing-tables { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+ @media(max-width:760px){ .pricing-tables { grid-template-columns:1fr; } }
+ .price-card { background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+ .price-card-title { background:var(--orange); color:#fff; padding:12px 18px; font-weight:800; font-size:15px; }
+ .price-card table { width:100%; border-collapse:collapse; font-size:14px; }
+ .price-card table thead th { background:#fff3e8; padding:8px 14px; font-weight:700; text-align:left; color:var(--orange-deep); }
+ .price-card table tbody td { padding:9px 14px; border-bottom:1px solid var(--gray-border); }
+ .price-card table tbody tr:last-child td { border-bottom:none; }
+ .price-card table tbody tr:hover { background:#fafafa; }
+ .price-bold { font-weight:800; color:var(--orange); font-size:16px; }
+ .price-note { padding:10px 14px; font-size:12px; color:var(--text-muted); background:#fafafa; border-top:1px solid var(--gray-border); }
+ .customs-list { padding:14px 18px; }
+ .customs-list li { font-size:13px; padding:5px 0; border-bottom:1px solid var(--gray-border); list-style:none; display:flex; justify-content:space-between; }
+ .customs-list li:last-child { border-bottom:none; }
+ .customs-fee { font-weight:700; color:#EF4444; }
+
+ /* MAIN LAYOUT */
+ .page-body {
+ max-width:1100px; margin:0 auto; padding:48px 24px;
+ display:grid; grid-template-columns:1fr 360px; gap:32px; align-items:start;
+ }
+ @media(max-width:900px) { .page-body { grid-template-columns:1fr; } }
+
+ /* WIZARD FORM */
+ .wizard { background:var(--white); }
+
+ /* Progress bar */
+ .progress-bar-wrap { margin-bottom:32px; }
+ .progress-label {
+ display:flex; justify-content:space-between; align-items:center;
+ margin-bottom:10px;
+ }
+ .progress-label span { font-size:13px; font-weight:600; color:var(--text-muted); }
+ .progress-label strong { color:var(--orange); }
+ .progress-track {
+ height:6px; background:var(--gray-border); border-radius:3px; overflow:hidden;
+ }
+ .progress-fill {
+ height:100%; background:linear-gradient(90deg,var(--orange),var(--orange-light));
+ border-radius:3px; transition:width .5s cubic-bezier(.4,0,.2,1);
+ }
+
+ /* Step panels */
+ .step-panel { display:none; animation:fadeIn .3s ease; }
+ .step-panel.active { display:block; }
+ @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+ .step-heading {
+ margin-bottom:24px;
+ }
+ .step-heading .step-badge {
+ display:inline-flex; align-items:center; gap:6px;
+ background:var(--orange-bg); color:var(--orange);
+ padding:4px 12px; border-radius:20px;
+ font-size:12px; font-weight:700; margin-bottom:10px;
+ }
+ .step-heading h2 { font-size:22px; font-weight:800; color:var(--black); }
+ .step-heading p { font-size:14px; color:var(--text-muted); margin-top:5px; line-height:1.6; }
+
+ /* Fields */
+ .form-group { margin-bottom:18px; }
+ .form-group label { display:block; font-size:13px; font-weight:600; margin-bottom:7px; color:var(--text-primary); }
+ .form-group label .req { color:var(--orange); }
+ .form-group label .hint { font-weight:400; color:var(--text-muted); font-size:12px; }
+ .form-row { display:grid; gap:14px; }
+ .form-row.col2 { grid-template-columns:1fr 1fr; }
+ @media(max-width:560px) { .form-row.col2 { grid-template-columns:1fr; } }
+
+ input[type=text],input[type=email],input[type=tel],input[type=number],
+ select,textarea {
+ width:100%; padding:12px 14px;
+ border:1.5px solid var(--gray-border); border-radius:10px;
+ font-size:14px; font-family:inherit; background:var(--white);
+ color:var(--text-primary); outline:none; transition:border .2s;
+ }
+ input:focus,select:focus,textarea:focus { border-color:var(--orange); }
+ textarea { resize:vertical; min-height:90px; }
+ select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:36px; }
+
+ .input-note { font-size:12px; color:var(--text-muted); margin-top:5px; }
+
+ /* Address cascade */
+ .addr-row { display:grid; gap:10px; grid-template-columns:1fr 1fr; }
+ @media(max-width:560px) { .addr-row { grid-template-columns:1fr; } }
+
+ /* Step 3 — Delivery mode */
+ .time-opts { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:4px; }
+ .time-opt {
+ border:2px solid var(--gray-border); border-radius:12px;
+ padding:16px 14px; cursor:pointer; transition:all .2s;
+ }
+ .time-opt.active { border-color:var(--orange); background:var(--orange-bg); }
+ .time-opt .t-icon { font-size:24px; margin-bottom:6px; }
+ .time-opt .t-name { font-size:14px; font-weight:700; }
+ .time-opt .t-sub { font-size:12px; color:var(--text-muted); margin-top:3px; }
+ .time-opt.active .t-sub { color:var(--orange); }
+
+ /* Calendar */
+ .pickup-calendar {
+ background:var(--white); border-radius:16px;
+ border:1.5px solid var(--gray-border); padding:20px;
+ box-shadow:0 2px 12px rgba(0,0,0,.06); margin-bottom:14px;
+ }
+ .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+ .cal-month-label { font-size:16px; font-weight:800; }
+ .cal-nav {
+ width:36px; height:36px; border-radius:10px;
+ background:var(--gray-light); border:1.5px solid var(--gray-border);
+ cursor:pointer; font-size:20px; color:#555; font-family:inherit;
+ display:flex; align-items:center; justify-content:center; transition:background .2s;
+ }
+ .cal-nav:hover { background:#ddd; }
+ .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:6px; }
+ .cal-dow { text-align:center; font-size:12px; font-weight:700; color:var(--text-muted); padding:4px 0; }
+ .cal-dow.weekend { color:#ccc; }
+ .cal-days { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+ .cal-day {
+ aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+ border-radius:50%; font-size:14px; font-weight:600; cursor:pointer;
+ transition:all .15s; color:var(--text-primary);
+ }
+ .cal-day:hover:not(.off) { background:#E0F2FE; color:#0284C7; }
+ .cal-day.selected { background:#38BDF8; color:#fff !important; }
+ .cal-day.today { border:2px solid var(--orange); color:var(--orange); font-weight:800; }
+ .cal-day.off { color:#ccc !important; cursor:default; pointer-events:none; }
+ .cal-day.empty { pointer-events:none; }
+
+ /* Time slots */
+ .timeslot-section { margin-bottom:14px; }
+ .timeslot-label { font-size:13px; font-weight:700; color:var(--text-muted); margin-bottom:10px; }
+ .timeslot-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+ .timeslot {
+ padding:14px; border-radius:12px; border:2px solid var(--gray-border);
+ text-align:center; font-size:15px; font-weight:700;
+ cursor:pointer; transition:all .2s; color:var(--text-primary);
+ }
+ .timeslot:hover { border-color:#38BDF8; color:#0284C7; }
+ .timeslot.selected { background:#38BDF8; border-color:#38BDF8; color:#fff; }
+
+ /* Pickup timeline */
+ .pktl-wrap {
+ background:#F0F9FF; border:1.5px solid #BAE6FD;
+ border-radius:12px; padding:16px 18px; margin-top:12px;
+ }
+ .pktl-title { font-size:14px; font-weight:800; color:#0369A1; margin-bottom:12px; }
+ .pktl-step { display:flex; gap:12px; }
+ .pktl-left { display:flex; flex-direction:column; align-items:center; width:20px; flex-shrink:0; }
+ .pktl-dot { width:10px; height:10px; border-radius:50%; background:#0369A1; flex-shrink:0; }
+ .pktl-line { flex:1; width:2px; background:#BAE6FD; min-height:20px; margin:2px 0; }
+ .pktl-step:last-child .pktl-line { display:none; }
+ .pktl-text { font-size:13px; color:#0C4A6E; padding-bottom:16px; line-height:1.5; }
+ .pktl-text strong { color:#0369A1; }
+
+ /* Phone error */
+ .phone-err { font-size:12px; color:#EF4444; margin-top:4px; min-height:16px; }
+
+ /* Step 4 — Policy */
+ .policy-box {
+ background:#FFFBF7; border:1.5px solid #FFD9B3;
+ border-radius:14px; padding:20px 20px;
+ }
+ .policy-title { font-size:15px; font-weight:800; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+ .policy-checks { display:flex; flex-direction:column; gap:13px; }
+ .pcheck { display:flex; gap:11px; align-items:flex-start; }
+ .pcheck input[type=checkbox] {
+ width:18px; height:18px; min-width:18px;
+ accent-color:var(--orange); margin-top:2px;
+ cursor:pointer; border:none; padding:0;
+ }
+ .pcheck label { font-size:13px; line-height:1.65; cursor:pointer; margin-bottom:0; font-weight:400; }
+ .pcheck label strong { color:var(--black); }
+
+ /* Prohibited toggle */
+ .prohibited-toggle {
+ display:flex; align-items:center; gap:7px;
+ font-size:13px; font-weight:600; color:var(--orange);
+ cursor:pointer; margin:10px 0 6px; user-select:none;
+ }
+ .prohibited-toggle .arr { transition:transform .25s; display:inline-block; }
+ .prohibited-toggle.open .arr { transform:rotate(90deg); }
+ .prohibited-list {
+ background:#FFF5F5; border:1px solid #FFCCCC;
+ border-radius:10px; padding:14px; display:none;
+ }
+ .prohibited-list.show { display:block; }
+ .prohibited-list ul { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+ .prohibited-list li { font-size:12px; color:#666; display:flex; align-items:center; gap:5px; }
+ .prohibited-list li::before { content:""; font-size:11px; }
+
+ /* Step 5 — Insurance */
+ .ins-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+ @media(max-width:400px) { .ins-grid { grid-template-columns:1fr; } }
+ .ins-card {
+ border:2px solid var(--gray-border); border-radius:14px;
+ padding:16px 14px; cursor:pointer; transition:all .2s;
+ position:relative;
+ }
+ .ins-card:hover { border-color:var(--orange-light); }
+ .ins-card.active { border-color:var(--orange); background:var(--orange-bg); }
+ .ins-card .ins-tier { font-size:16px; font-weight:800; margin-bottom:4px; }
+ .ins-card .ins-price { font-size:20px; font-weight:800; color:var(--orange); margin-bottom:8px; }
+ .ins-card .ins-price span { font-size:13px; font-weight:400; color:var(--text-muted); }
+ .ins-card .ins-cover { font-size:13px; color:var(--text-muted); margin-bottom:8px; }
+ .ins-card .ins-features { list-style:none; display:flex; flex-direction:column; gap:5px; }
+ .ins-card .ins-features li { font-size:12px; display:flex; gap:6px; }
+ .ins-recommended {
+ position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+ background:var(--orange); color:#fff;
+ padding:2px 12px; border-radius:20px; font-size:11px; font-weight:700;
+ white-space:nowrap;
+ }
+ input[type=hidden] { display:none; }
+
+ /* Step 6 — Packaging */
+ .pkg-grid { display:flex; flex-direction:column; gap:12px; }
+ .pkg-card {
+ border:2px solid var(--gray-border); border-radius:14px;
+ padding:16px 18px; cursor:pointer; transition:all .2s;
+ display:flex; align-items:center; gap:16px;
+ }
+ .pkg-card:hover { border-color:var(--orange-light); }
+ .pkg-card.active { border-color:var(--orange); background:var(--orange-bg); }
+ .pkg-icon { font-size:28px; flex-shrink:0; }
+ .pkg-info { flex:1; }
+ .pkg-name { font-size:15px; font-weight:700; }
+ .pkg-sub { font-size:13px; color:var(--text-muted); margin-top:3px; }
+ .pkg-price { font-size:15px; font-weight:800; color:var(--orange); white-space:nowrap; }
+ .pkg-price.free { color:var(--green); }
+
+ /* Step 7 — Summary */
+ .summary-card {
+ background:var(--gray-light); border-radius:14px;
+ padding:20px; margin-bottom:20px;
+ }
+ .summary-title { font-size:14px; font-weight:700; color:var(--text-muted); margin-bottom:12px; letter-spacing:.5px; text-transform:uppercase; }
+ .summary-rows { display:flex; flex-direction:column; gap:8px; }
+ .summary-row { display:flex; justify-content:space-between; align-items:flex-start; font-size:14px; gap:16px; }
+ .summary-row .sk { color:var(--text-muted); flex-shrink:0; }
+ .summary-row .sv { font-weight:600; text-align:right; }
+ .summary-divider { height:1px; background:var(--gray-border); margin:8px 0; }
+ .summary-total { display:flex; justify-content:space-between; font-size:16px; font-weight:800; margin-top:12px; padding-top:12px; border-top:2px solid var(--gray-border); }
+ .summary-total .tv { color:var(--orange); }
+
+ /* Insurance alert */
+ .ins-alert {
+ background:#FFF3E8; border:1px solid var(--orange-light); border-radius:10px;
+ padding:12px 16px; font-size:13px; color:var(--text-primary);
+ margin-bottom:16px; line-height:1.6;
+ }
+
+ /* Cost estimate in summary */
+ .cost-est-title { font-size:13px; font-weight:700; color:var(--text-muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px; }
+ .cost-est-rows { display:flex; flex-direction:column; gap:6px; }
+ .cost-est-row { display:flex; justify-content:space-between; font-size:14px; }
+ .cost-est-row .ck { color:var(--text-muted); }
+ .cost-est-row .cv { font-weight:600; }
+ .cost-est-total { display:flex; justify-content:space-between; font-size:17px; font-weight:800; margin-top:10px; padding-top:10px; border-top:2px solid var(--gray-border); }
+ .cost-est-total .tv { color:var(--orange); }
+
+ /* Payment notice */
+ .payment-notice {
+ background:#fff; border:2px solid var(--orange);
+ border-radius:16px; padding:22px; margin-bottom:20px;
+ }
+ .pay-notice-title { font-size:16px; font-weight:800; margin-bottom:10px; }
+ .pay-notice-body p { font-size:13px; line-height:1.7; color:var(--text-primary); margin-bottom:16px; }
+ .pay-method-title { font-size:13px; font-weight:700; color:var(--text-muted); margin-bottom:10px; text-transform:uppercase; letter-spacing:.5px; }
+ .pay-method-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+ .pay-method {
+ border:2px solid var(--gray-border); border-radius:12px; padding:14px;
+ cursor:pointer; text-align:center; transition:all .2s;
+ }
+ .pay-method:hover { border-color:var(--orange-light); }
+ .pay-method.active { border-color:var(--orange); background:var(--orange-bg); }
+ .pay-flag { font-size:28px; margin-bottom:4px; }
+ .pay-name { font-size:16px; font-weight:800; }
+ .pay-sub { font-size:12px; color:var(--text-muted); }
+ .pay-info-box {
+ background:var(--gray-light); border-radius:10px; padding:14px;
+ font-size:13px; line-height:1.8; color:var(--text-primary);
+ }
+
+ /* QR payment (keep for possible future use, hidden now) */
+ .qr-section {
+ background:var(--white); border:2px solid var(--orange);
+ border-radius:16px; padding:24px; text-align:center; margin-bottom:20px;
+ }
+ .qr-title { font-size:16px; font-weight:800; margin-bottom:6px; }
+ .qr-sub { font-size:13px; color:var(--text-muted); margin-bottom:16px; }
+ .qr-box {
+ width:180px; height:180px; margin:0 auto 14px;
+ background:var(--gray-light); border-radius:12px;
+ display:flex; align-items:center; justify-content:center;
+ border:1px solid var(--gray-border); font-size:14px; color:var(--text-muted);
+ text-align:center; padding:12px;
+ }
+ .qr-info { font-size:13px; color:var(--text-muted); line-height:1.7; }
+ .qr-info strong { color:var(--text-primary); }
+ .qr-note { font-size:12px; color:var(--orange); margin-top:8px; font-weight:600; }
+
+ /* LABEL REMINDER POPUP */
+ .label-overlay {
+ position:fixed; inset:0; background:rgba(0,0,0,.6);
+ z-index:300; display:flex; align-items:center; justify-content:center;
+ padding:20px; animation:fadeOverlay .3s ease;
+ }
+ @keyframes fadeOverlay { from{opacity:0} to{opacity:1} }
+ .label-popup {
+ background:#fff; border-radius:24px; width:100%; max-width:460px;
+ overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,.25);
+ animation:popIn .35s cubic-bezier(.34,1.56,.64,1);
+ }
+ @keyframes popIn { from{opacity:0;transform:scale(.88)} to{opacity:1;transform:scale(1)} }
+ .popup-header {
+ background:linear-gradient(135deg,var(--black),#1a1a2e);
+ padding:28px 28px 22px; text-align:center; position:relative;
+ }
+ .popup-icon { font-size:48px; margin-bottom:10px; display:block; }
+ .popup-header h2 {
+ font-size:18px; font-weight:800; color:#fff; line-height:1.3;
+ }
+ .popup-header p { font-size:13px; color:rgba(255,255,255,.6); margin-top:8px; line-height:1.6; }
+ .popup-body { padding:22px 24px 28px; }
+ .popup-question {
+ font-size:15px; font-weight:700; color:var(--text-primary);
+ text-align:center; margin-bottom:20px; line-height:1.5;
+ }
+ .popup-question span { color:var(--orange); }
+ .popup-actions { display:flex; flex-direction:column; gap:10px; }
+ .popup-btn-book {
+ width:100%; padding:15px; border:none; border-radius:14px;
+ background:linear-gradient(135deg,var(--orange),var(--orange-deep));
+ color:#fff; font-size:15px; font-weight:800; cursor:pointer;
+ font-family:inherit; transition:all .2s; text-decoration:none;
+ display:flex; align-items:center; justify-content:center; gap:8px;
+ }
+ .popup-btn-book:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(244,123,32,.4); }
+ .popup-btn-skip {
+ width:100%; padding:13px; border:2px solid var(--gray-border);
+ background:transparent; border-radius:14px;
+ font-size:14px; font-weight:700; cursor:pointer; color:var(--text-muted);
+ font-family:inherit; transition:all .2s;
+ }
+ .popup-btn-skip:hover { border-color:var(--gray); color:var(--text-primary); }
+ .popup-info-box {
+ background:var(--orange-bg); border:1px solid var(--orange-light);
+ border-radius:10px; padding:12px 14px; font-size:12px;
+ color:var(--orange-deep); margin-bottom:16px; line-height:1.6; text-align:center;
+ }
+
+ /* REVIEW SHEET (MỸ-VIỆT) */
+ .mvv-review-overlay {
+ position:fixed; inset:0; background:rgba(0,0,0,.5);
+ z-index:200; display:none; align-items:flex-end; justify-content:center;
+ }
+ .mvv-review-overlay.show { display:flex; }
+ .mvv-review-sheet {
+ background:#fff; border-radius:24px 24px 0 0;
+ width:100%; max-width:640px; padding:28px 24px 40px;
+ max-height:90vh; overflow-y:auto;
+ animation:slideUpMVV .3s ease;
+ }
+ @keyframes slideUpMVV { from{transform:translateY(100%)} to{transform:translateY(0)} }
+ .mvv-review-handle { width:40px; height:4px; background:#ddd; border-radius:2px; margin:0 auto 18px; }
+ .mvv-review-title { font-size:18px; font-weight:800; margin-bottom:18px; }
+ .mvv-rrow {
+ display:flex; justify-content:space-between; align-items:flex-start;
+ padding:11px 0; border-bottom:1px solid var(--gray-border); font-size:14px; gap:16px;
+ }
+ .mvv-rrow:last-of-type { border-bottom:none; }
+ .mvv-rrow .rk { color:var(--text-muted); flex-shrink:0; }
+ .mvv-rrow .rv { font-weight:600; text-align:right; max-width:300px; }
+ .mvv-rrow .rv.orange { color:var(--orange); }
+ .mvv-rrow .rv.green { color:#16A34A; }
+ .mvv-divider { height:2px; background:var(--gray-border); margin:10px 0; }
+ .mvv-total {
+ display:flex; justify-content:space-between;
+ font-size:17px; font-weight:800; padding:14px 0;
+ }
+ .mvv-total .tv { color:var(--orange); }
+ .mvv-cam-ket {
+ background:var(--orange-bg); border:1px solid var(--orange-light);
+ border-radius:10px; padding:12px 14px; font-size:12.5px;
+ color:var(--orange-deep); margin:12px 0; line-height:1.6;
+ }
+ .mvv-review-actions { display:flex; gap:12px; margin-top:16px; }
+ .mvv-btn-edit {
+ flex:1; padding:14px; background:transparent; border:2px solid var(--gray-border);
+ border-radius:12px; font-size:14px; font-weight:700; cursor:pointer;
+ font-family:inherit; transition:all .2s; color:var(--text-primary);
+ }
+ .mvv-btn-edit:hover { border-color:var(--orange); color:var(--orange); }
+ .mvv-btn-confirm {
+ flex:2; padding:14px;
+ background:linear-gradient(135deg,#22C55E,#16A34A);
+ color:#fff; border:none; border-radius:12px;
+ font-size:15px; font-weight:800; cursor:pointer;
+ font-family:inherit; transition:all .2s;
+ }
+ .mvv-btn-confirm:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(34,197,94,.35); }
+ .mvv-btn-confirm:disabled { background:#ccc; cursor:not-allowed; transform:none; }
+
+ /* Nav buttons */
+ .wizard-nav {
+ display:flex; gap:12px; margin-top:28px;
+ }
+ .btn-back {
+ flex:1; padding:13px;
+ background:transparent; border:2px solid var(--gray-border);
+ border-radius:12px; font-size:15px; font-weight:700;
+ cursor:pointer; transition:all .2s; color:var(--text-primary);
+ }
+ .btn-back:hover { border-color:var(--orange); color:var(--orange); }
+ .btn-next {
+ flex:2; padding:13px;
+ background:linear-gradient(135deg,var(--orange),var(--orange-deep));
+ color:#fff; border:none; border-radius:12px;
+ font-size:15px; font-weight:800; cursor:pointer;
+ transition:all .2s; display:flex; align-items:center; justify-content:center; gap:8px;
+ }
+ .btn-next:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(244,123,32,.35); }
+ .btn-next:disabled { background:#ccc; cursor:not-allowed; transform:none; box-shadow:none; }
+ .btn-next.submit { background:linear-gradient(135deg,#22C55E,#16A34A); }
+ .btn-next.submit:hover { box-shadow:0 8px 24px rgba(34,197,94,.35); }
+
+ /* SIDEBAR */
+ .sidebar { display:flex; flex-direction:column; gap:16px; }
+
+ .sidebar-card {
+ background:var(--white); border:1.5px solid var(--gray-border);
+ border-radius:var(--radius-md); padding:20px; overflow:hidden;
+ }
+ .sidebar-card .sc-title { font-size:14px; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+
+ /* Why choose */
+ .why-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+ .why-list li { display:flex; gap:10px; font-size:13px; align-items:flex-start; line-height:1.5; }
+ .why-list li .wi { font-size:16px; flex-shrink:0; }
+
+ /* Timeline */
+ .timeline { display:flex; flex-direction:column; gap:0; }
+ .tl-item { display:flex; gap:12px; }
+ .tl-left { display:flex; flex-direction:column; align-items:center; width:28px; flex-shrink:0; }
+ .tl-dot { width:12px; height:12px; border-radius:50%; background:var(--orange); flex-shrink:0; }
+ .tl-line { flex:1; width:2px; background:var(--gray-border); margin:2px 0; }
+ .tl-item:last-child .tl-line { display:none; }
+ .tl-content { padding-bottom:14px; }
+ .tl-day { font-size:12px; font-weight:700; color:var(--orange); }
+ .tl-text { font-size:13px; color:var(--text-muted); margin-top:2px; }
+
+ /* Contact */
+ .contact-list { display:flex; flex-direction:column; gap:10px; }
+ .contact-item {
+ display:flex; gap:10px; align-items:center;
+ font-size:13px; padding:10px 12px;
+ background:var(--gray-light); border-radius:10px;
+ text-decoration:none; color:var(--text-primary);
+ transition:background .2s;
+ }
+ .contact-item:hover { background:var(--orange-bg); }
+ .contact-item .ci { font-size:18px; flex-shrink:0; }
+ .contact-item .cn { font-weight:600; }
+ .contact-item .cs { font-size:12px; color:var(--text-muted); }
+
+ /* Toast */
+ .toast {
+ position:fixed; bottom:24px; right:24px; z-index:999;
+ background:var(--black); color:#fff;
+ padding:14px 20px; border-radius:12px; font-size:14px; font-weight:600;
+ display:flex; align-items:center; gap:10px;
+ transform:translateY(80px); opacity:0;
+ transition:all .4s cubic-bezier(.34,1.56,.64,1);
+ max-width:400px; box-shadow:0 8px 32px rgba(0,0,0,.3);
+ }
+ .toast.show { transform:translateY(0); opacity:1; }
+
+ /* Success Modal */
+ .success-modal-overlay {
+   position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:1000;
+   display:flex; align-items:center; justify-content:center; padding:16px;
+   opacity:0; pointer-events:none; transition:opacity .3s;
+ }
+ .success-modal-overlay.show { opacity:1; pointer-events:auto; }
+ .success-modal {
+   background:#fff; border-radius:20px; padding:36px 28px; max-width:480px; width:100%;
+   text-align:center; box-shadow:0 24px 64px rgba(0,0,0,.25);
+   transform:translateY(20px) scale(.97); transition:transform .3s;
+ }
+ .success-modal-overlay.show .success-modal { transform:translateY(0) scale(1); }
+ .success-modal-icon {
+   width:72px; height:72px; background:#DCFCE7; border-radius:50%;
+   display:flex; align-items:center; justify-content:center; margin:0 auto 20px;
+ }
+ .success-modal-icon svg { width:36px; height:36px; stroke:#16A34A; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+ .success-modal h3 { font-size:22px; font-weight:900; color:#0F0F10; margin-bottom:8px; }
+ .success-modal p { font-size:14px; color:#8E8E93; line-height:1.7; margin-bottom:20px; }
+ .success-modal-code {
+   background:#FFF3E8; border:2px dashed #F47B20; border-radius:12px;
+   padding:14px 20px; margin-bottom:24px;
+ }
+ .success-modal-code .code-label { font-size:11px; font-weight:700; color:#8E8E93; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+ .success-modal-code .code-value { font-size:24px; font-weight:900; color:#F47B20; letter-spacing:2px; }
+ .success-modal-close {
+   width:100%; padding:14px; background:#F47B20; color:#fff; border:none;
+   border-radius:12px; font-size:15px; font-weight:800; cursor:pointer;
+   font-family:inherit; transition:background .2s;
+ }
+ .success-modal-close:hover { background:#D4650E; }
+
+ /* Footer */
+ footer a { color:var(--orange); text-decoration:none; }
+ </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+ <div class="nav-inner">
+ <a href="index.html" class="nav-logo">
+ <img src="assets/images/logo.png" alt="Cuckoo Cargo" style="height:38px;width:auto;display:block;" />
+ </a>
+ <div class="nav-links" id="cc-nav-links">
+ <a href="index.html" data-vi="Trang chủ" data-en="Home">Trang chủ</a>
+ <a href="my-ve-viet.html" class="active" data-vi="Mỹ - Việt" data-en="US to Vietnam">Mỹ - Việt</a>
+ <a href="noi-dia-my.html" data-vi="Label Nội địa" data-en="Domestic Label">Label Nội địa</a>
+ <a href="mua-ho.html" data-vi="Mua hộ" data-en="Shop For Me">Mua hộ</a>
+ <a href="tracking.html" data-vi="Tra cứu" data-en="Track Order">Tra cứu</a>
+ <a href="san-pham.html" data-vi="Sản phẩm" data-en="Products">Sản phẩm</a>
+ <a href="blog.html" data-vi="Blog" data-en="Blog">Blog</a>
+ </div>
+ <div class="nav-right">
+ <div class="cc-search-wrap" id="cc-search-wrap">
+ <button class="cc-search-icon-btn" onclick="toggleNavSearch()" aria-label="Tìm kiếm">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+ </button>
+ <div class="cc-search-box" id="cc-search-box">
+  <input type="text" id="cc-search-input" placeholder="Tìm dịch vụ, thông tin..." autocomplete="off"
+   oninput="doNavSearch(this.value)" onkeydown="if(event.key===\'Escape\')closeNavSearch()" />
+  <div class="cc-search-results" id="cc-search-results"></div>
+ </div>
+</div>
+<div class="lang-toggle">
+ <button class="lang-btn active" onclick="setLang('vi')"> VN</button>
+ <button class="lang-btn" onclick="setLang('en')"> EN</button>
+ </div>
+ <button class="mobile-nav-toggle" id="mobile-toggle-btn" onclick="toggleMobileNav()" aria-label="Menu">
+  <svg class="hbg-open" width="20" height="14" viewBox="0 0 20 14" fill="none"><rect width="20" height="2" rx="1" fill="currentColor"/><rect y="6" width="20" height="2" rx="1" fill="currentColor"/><rect y="12" width="20" height="2" rx="1" fill="currentColor"/></svg>
+  <svg class="hbg-close" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none"><line x1="1" y1="1" x2="15" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="15" y1="1" x2="1" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+ </div>
+ </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+ <div class="hero-badge" data-vi=" MỸ - VIỆT NAM" data-en=" US - VIETNAM"> MỸ - VIỆT NAM</div>
+ <h1 data-vi="Gửi Hàng &lt;span&gt;Mỹ Về Việt&lt;/span&gt;&lt;br&gt;Nhanh — An Toàn — Uy Tín" data-en="Ship from &lt;span&gt;US to Vietnam&lt;/span&gt;&lt;br&gt;Fast — Safe — Trusted">Gửi Hàng <span>Mỹ Về Việt</span><br>Nhanh — An Toàn — Uy Tín</h1>
+ <p data-vi="Tạo đơn online chỉ 5 phút. Drop-off hoặc pickup tận nơi tại Mỹ. Giao hàng tận nhà tại Việt Nam trong 7–10 ngày." data-en="Create order online in 5 minutes. Drop-off or pickup across the US. Home delivery in Vietnam in 7–10 days.">Tạo đơn online chỉ 5 phút. Drop-off hoặc pickup tận nơi tại Mỹ. Giao hàng tận nhà tại Việt Nam trong 7–10 ngày.</p>
+ <div class="hero-meta">
+ <div class="hero-meta-item"><div class="val">7–10</div><div class="lbl" data-vi="Ngày giao hàng" data-en="Days to deliver">Ngày giao hàng</div></div>
+ <div class="hero-meta-item"><div class="val">50</div><div class="lbl" data-vi="Tiểu bang Mỹ" data-en="US states">Tiểu bang Mỹ</div></div>
+ <div class="hero-meta-item"><div class="val">34</div><div class="lbl" data-vi="Tỉnh thành VN" data-en="Provinces in VN">Tỉnh thành VN</div></div>
+ <div class="hero-meta-item"><div class="val">100%</div><div class="lbl" data-vi="Có bảo hiểm" data-en="Insured">Có bảo hiểm</div></div>
+ </div>
+</div>
+
+<!-- PRICING SECTION -->
+<div class="pricing-section">
+ <div class="pricing-section-inner">
+ <h2 data-vi=" Bảng Giá Gửi Hàng Mỹ - Việt Nam" data-en=" US - Vietnam Shipping Rates"> Bảng Giá Gửi Hàng Mỹ - Việt Nam</h2>
+ <div class="pricing-tables">
+
+ <!-- Bảng giá cước -->
+ <div class="price-card">
+ <div class="price-card-title" data-vi=" Cước vận chuyển (USD/lbs)" data-en=" Shipping Rate (USD/lbs)"> Cước vận chuyển (USD/lbs)</div>
+ <table>
+ <thead><tr><th data-vi="Cân nặng" data-en="Weight">Cân nặng</th><th data-vi="Giá (USD/lbs)" data-en="Rate (USD/lbs)">Giá (USD/lbs)</th></tr></thead>
+ <tbody>
+ <tr><td>&lt; 10 lbs <small style="color:var(--text-muted)">(tính tròn 10 lbs)</small></td><td class="price-bold">$3,89</td></tr>
+ <tr><td>10 – 50 lbs</td><td class="price-bold">$3,89</td></tr>
+ <tr><td>50,1 – 90 lbs</td><td class="price-bold">$3,79</td></tr>
+ <tr><td>90,1 – 150 lbs</td><td class="price-bold">$3,59</td></tr>
+ <tr><td>&gt; 150 lbs</td><td class="price-bold">$3,49</td></tr>
+ <tr><td data-vi="Thời gian bay" data-en="Flight days">Thời gian bay</td><td><strong data-vi="Thứ 3 &amp; Thứ 6" data-en="Tue &amp; Fri">Thứ 3 &amp; Thứ 6</strong></td></tr>
+ <tr><td data-vi="Giao tại TP. Hồ Chí Minh &amp; Hà Nội" data-en="Delivery in HCMC &amp; Hanoi">Giao tại TP. Hồ Chí Minh &amp; Hà Nội</td><td style="color:var(--green);font-weight:700" data-vi="Miễn phí" data-en="Free">Miễn phí</td></tr>
+ <tr><td data-vi="Ra tỉnh khác" data-en="Other provinces">Ra tỉnh khác</td><td>+$0,99/lbs</td></tr>
+ <tr><td data-vi="Đóng gói &amp; bảo hiểm thùng" data-en="Packaging &amp; box insurance">Đóng gói &amp; bảo hiểm thùng</td><td style="color:var(--green);font-weight:700" data-vi="Miễn phí" data-en="Free">Miễn phí</td></tr>
+ <tr><td data-vi="Phí mua hộ" data-en="Shopping fee">Phí mua hộ</td><td data-vi="5% giá trị hàng" data-en="5% of item value">5% giá trị hàng</td></tr>
+ </tbody>
+ </table>
+ <div class="price-note" data-vi=" Thời gian 7–14 ngày là ước tính, có thể thay đổi do thông quan hoặc ngày lễ." data-en=" 7–14 day delivery is an estimate, may vary due to customs or holidays."> Thời gian 7–14 ngày là ước tính, có thể thay đổi do thông quan hoặc ngày lễ.</div>
+ </div>
+
+ <!-- Phụ thu hải quan -->
+ <div class="price-card">
+ <div class="price-card-title" data-vi=" Phụ thu thuế Hải quan (nếu có)" data-en=" Customs Surcharge (if any)"> Phụ thu thuế Hải quan (nếu có)</div>
+ <ul class="customs-list">
+ <li><span data-vi="Rượu" data-en="Alcohol">Rượu</span><span class="customs-fee">$14 USD/chai</span></li>
+ <li><span>Cigar</span><span class="customs-fee">$20 USD/hộp</span></li>
+ <li><span data-vi="Nước hoa" data-en="Perfume">Nước hoa</span><span class="customs-fee">$7 USD/chai</span></li>
+ <li><span data-vi="Vitamin / mỹ phẩm <small>(≥50% kiện)</small>" data-en="Vitamins / cosmetics <small>(≥50% of shipment)</small>">Vitamin / mỹ phẩm <small>(≥50% kiện)</small></span><span class="customs-fee">+$0,99/lbs</span></li>
+ <li><span data-vi="Điện thoại, iPhone, máy tính bảng, iPad, MacBook — Thế hệ cũ" data-en="Phone, iPhone, Tablet, iPad, MacBook — Old generation">Điện thoại, iPhone, máy tính bảng, iPad, MacBook — Thế hệ cũ</span><span class="customs-fee">$60/cái</span></li>
+ <li><span data-vi="Điện thoại, iPhone, máy tính bảng, iPad, MacBook — Thế hệ mới" data-en="Phone, iPhone, Tablet, iPad, MacBook — New generation">Điện thoại, iPhone, máy tính bảng, iPad, MacBook — Thế hệ mới</span><span class="customs-fee">$90/cái</span></li>
+ <li><span data-vi="Tai nghe, AirPod, Apple Watch, đồng hồ thông minh" data-en="Earphones, AirPods, Apple Watch, smartwatch">Tai nghe, AirPod, Apple Watch, đồng hồ thông minh</span><span class="customs-fee">$12/cái</span></li>
+ <li><span data-vi="Vaccine, máy y tế, xe máy" data-en="Vaccines, medical devices, motorbikes">Vaccine, máy y tế, xe máy</span><span class="customs-fee" data-vi="Thuế 20%" data-en="20% tax">Thuế 20%</span></li>
+ <li><span data-vi="Điện tử khác (không liệt kê trên)" data-en="Other electronics (not listed above)">Điện tử khác (không liệt kê trên)</span><span class="customs-fee" data-vi="10% giá trị" data-en="10% of value">10% giá trị</span></li>
+ </ul>
+ <div class="price-note" style="background:#fff3e8;">
+ <span data-vi="<strong>Bảo hiểm hàng hoá:</strong><br>Không khai báo: đền <strong>$6/lbs</strong>, tối đa $100.<br>Khai báo đầy đủ + giấy tờ: thuế HQ 10% giá trị; đền <strong>70–100%</strong> giá trị hàng." data-en="<strong>Cargo insurance:</strong><br>Not declared: $6/lbs, max $100.<br>Fully declared + documents: 10% customs tax; 70–100% of item value."><strong>Bảo hiểm hàng hoá:</strong><br>
+ Không khai báo: đền <strong>$6/lbs</strong>, tối đa $100.<br>
+ Khai báo đầy đủ + giấy tờ: thuế HQ 10% giá trị; đền <strong>70–100%</strong> giá trị hàng.</span>
+ </div>
+ </div>
+
+ </div>
+ </div>
+</div>
+
+<!-- STEPS OVERVIEW -->
+<div class="steps-bar">
+ <div class="steps-bar-inner" id="steps-overview">
+ <div class="step-item active" id="ov-1"><div class="snum">1</div><span data-vi="Người gửi" data-en="Sender">Người gửi</span></div>
+ <div class="step-arrow">›</div>
+ <div class="step-item" id="ov-2"><div class="snum">2</div><span data-vi="Người nhận" data-en="Receiver">Người nhận</span></div>
+ <div class="step-arrow">›</div>
+ <div class="step-item" id="ov-3"><div class="snum">3</div><span data-vi="Hàng hóa" data-en="Package">Hàng hóa</span></div>
+ <div class="step-arrow">›</div>
+ <div class="step-item" id="ov-4"><div class="snum">4</div><span data-vi="Chính sách" data-en="Policies">Chính sách</span></div>
+ <div class="step-arrow">›</div>
+ <div class="step-item" id="ov-5"><div class="snum">5</div><span data-vi="Bảo hiểm" data-en="Insurance">Bảo hiểm</span></div>
+ <div class="step-arrow">›</div>
+ <div class="step-item" id="ov-6"><div class="snum">6</div><span data-vi="Đóng gói" data-en="Packaging">Đóng gói</span></div>
+ <div class="step-arrow">›</div>
+ <div class="step-item" id="ov-7"><div class="snum">7</div><span data-vi="Xác nhận" data-en="Confirm">Xác nhận</span></div>
+ </div>
+</div>
+
+<!-- MAIN -->
+<div class="page-body">
+
+ <!-- WIZARD -->
+ <div class="wizard">
+
+ <!-- Progress bar -->
+ <div class="progress-bar-wrap">
+ <div class="progress-label">
+ <span><span data-vi="Bước" data-en="Step">Bước</span> <strong id="cur-step">1</strong> / 7</span>
+ <span id="step-name-label" data-vi="Thông tin người gửi" data-en="Sender Information">Thông tin người gửi</span>
+ </div>
+ <div class="progress-track">
+ <div class="progress-fill" id="progress-fill" style="width:14.3%"></div>
+ </div>
+ </div>
+
+ <!-- STEP 1: Người gửi -->
+ <div class="step-panel active" id="step-1">
+ <div class="step-heading">
+ <div class="step-badge" data-vi=" Bước 1 / 7" data-en=" Step 1 / 7"> Bước 1 / 7</div>
+ <h2 data-vi="Thông tin người gửi" data-en="Sender Information">Thông tin người gửi</h2>
+ <p data-vi="Điền đầy đủ để Cuckoo Cargo liên hệ xác nhận và gửi thông tin vận đơn." data-en="Fill in your details so Cuckoo Cargo can confirm and send shipment info.">Điền đầy đủ để Cuckoo Cargo liên hệ xác nhận và gửi thông tin vận đơn.</p>
+ </div>
+ <div class="form-row col2">
+ <div class="form-group">
+ <label data-vi="Tên Facebook <span class='req'>*</span>" data-en="Facebook Name <span class='req'>*</span>">Tên Facebook <span class="req">*</span></label>
+ <input type="text" id="s1-fb" placeholder="Nguyen Van A" required />
+ </div>
+ <div class="form-group">
+ <label data-vi="Mã khách hàng <span class='hint'>(CAC + 4 số)</span>" data-en="Customer Code <span class='hint'>(CAC + 4 digits)</span>">Mã khách hàng <span class="hint">(CAC + 4 số)</span></label>
+ <input type="text" id="s1-code" placeholder="CAC0001" maxlength="10" />
+ <div class="input-note" data-vi="Chưa có mã? Nhân viên sẽ cấp sau khi xác nhận đơn." data-en="No code? Staff will assign one after order confirmation.">Chưa có mã? Nhân viên sẽ cấp sau khi xác nhận đơn.</div>
+ </div>
+ </div>
+ <div class="form-row col2">
+ <div class="form-group">
+ <label data-vi="Họ và tên <span class='req'>*</span>" data-en="Full Name <span class='req'>*</span>">Họ và tên <span class="req">*</span></label>
+ <input type="text" id="s1-name" placeholder="Nguyễn Văn A" required />
+ </div>
+ <div class="form-group">
+ <label data-vi="SĐT tại Mỹ <span class='req'>*</span>" data-en="US Phone <span class='req'>*</span>">SĐT tại Mỹ <span class="req">*</span></label>
+ <input type="tel" id="s1-phone" placeholder="+1 213 xxx xxxx" required oninput="validatePhone(this,'us')" />
+ <div class="phone-err" id="s1-phone-err"></div>
+ </div>
+ </div>
+ <div class="form-group">
+ <label data-vi="Email <span class='req'>*</span> <span class='hint'>— Nhận xác nhận đơn hàng tại đây</span>" data-en="Email <span class='req'>*</span> <span class='hint'>— Receive order confirmation here</span>">Email <span class="req">*</span> <span class="hint">— Nhận xác nhận đơn hàng tại đây</span></label>
+ <input type="email" id="s1-email" placeholder="example@gmail.com" required oninput="validateEmail(this)" />
+ <div class="phone-err" id="s1-email-err"></div>
+ </div>
+ <div class="form-group">
+ <label data-vi="Địa chỉ tại Mỹ <span class='hint'>(địa chỉ kho hoặc nhà)</span>" data-en="US Address <span class='hint'>(warehouse or home address)</span>">Địa chỉ tại Mỹ <span class="hint">(địa chỉ kho hoặc nhà)</span></label>
+ <input type="text" id="s1-addr" placeholder="123 Main St, Los Angeles, CA 90001" />
+ </div>
+ <div class="wizard-nav">
+ <button class="btn-next" onclick="nextStep(1)" data-vi="Tiếp theo — Thông tin người nhận →" data-en="Next — Receiver Information →">Tiếp theo — Thông tin người nhận →</button>
+ </div>
+ </div>
+
+ <!-- STEP 2: Người nhận -->
+ <div class="step-panel" id="step-2">
+ <div class="step-heading">
+ <div class="step-badge" data-vi=" Bước 2 / 7" data-en=" Step 2 / 7"> Bước 2 / 7</div>
+ <h2 data-vi="Thông tin người nhận tại Việt Nam" data-en="Receiver Information in Vietnam">Thông tin người nhận tại Việt Nam</h2>
+ <p data-vi="Địa chỉ người nhận phải chính xác. Cuckoo Cargo sẽ liên hệ người nhận trước khi giao hàng." data-en="Receiver address must be accurate. Cuckoo Cargo will contact the receiver before delivery.">Địa chỉ người nhận phải chính xác. Cuckoo Cargo sẽ liên hệ người nhận trước khi giao hàng.</p>
+ </div>
+ <div class="form-row col2">
+ <div class="form-group">
+ <label data-vi="Họ và tên người nhận <span class='req'>*</span>" data-en="Receiver Full Name <span class='req'>*</span>">Họ và tên người nhận <span class="req">*</span></label>
+ <input type="text" id="s2-name" placeholder="Nguyễn Thị B" required />
+ </div>
+ <div class="form-group">
+ <label data-vi="SĐT tại Việt Nam <span class='req'>*</span>" data-en="Vietnam Phone <span class='req'>*</span>">SĐT tại Việt Nam <span class="req">*</span></label>
+ <input type="tel" id="s2-phone" placeholder="0909 xxx xxx" required oninput="validatePhone(this,'vn')" />
+ <div class="phone-err" id="s2-phone-err"></div>
+ </div>
+ </div>
+ <div class="form-group">
+ <label data-vi="Tỉnh / Thành phố <span class='req'>*</span>" data-en="Province / City <span class='req'>*</span>">Tỉnh / Thành phố <span class="req">*</span></label>
+ <select id="s2-province" onchange="onProvinceChange()" required>
+ <option value="" data-vi="— Chọn tỉnh/thành —" data-en="— Select province —">— Chọn tỉnh/thành —</option>
+ <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+ <option value="TP. Hà Nội">TP. Hà Nội</option>
+ <option value="An Giang">An Giang</option>
+ <option value="Bắc Ninh">Bắc Ninh</option>
+ <option value="Cà Mau">Cà Mau</option>
+ <option value="Cao Bằng">Cao Bằng</option>
+ <option value="TP. Cần Thơ">TP. Cần Thơ</option>
+ <option value="TP. Đà Nẵng">TP. Đà Nẵng</option>
+ <option value="Đắk Lắk">Đắk Lắk</option>
+ <option value="Điện Biên">Điện Biên</option>
+ <option value="Đồng Nai">Đồng Nai</option>
+ <option value="Đồng Tháp">Đồng Tháp</option>
+ <option value="Gia Lai">Gia Lai</option>
+ <option value="Hà Tĩnh">Hà Tĩnh</option>
+ <option value="TP. Hải Phòng">TP. Hải Phòng</option>
+ <option value="TP. Huế">TP. Huế</option>
+ <option value="Hưng Yên">Hưng Yên</option>
+ <option value="Khánh Hòa">Khánh Hòa</option>
+ <option value="Lai Châu">Lai Châu</option>
+ <option value="Lâm Đồng">Lâm Đồng</option>
+ <option value="Lạng Sơn">Lạng Sơn</option>
+ <option value="Lào Cai">Lào Cai</option>
+ <option value="Nghệ An">Nghệ An</option>
+ <option value="Ninh Bình">Ninh Bình</option>
+ <option value="Phú Thọ">Phú Thọ</option>
+ <option value="Quảng Ngãi">Quảng Ngãi</option>
+ <option value="Quảng Ninh">Quảng Ninh</option>
+ <option value="Quảng Trị">Quảng Trị</option>
+ <option value="Sơn La">Sơn La</option>
+ <option value="Tây Ninh">Tây Ninh</option>
+ <option value="Thái Nguyên">Thái Nguyên</option>
+ <option value="Thanh Hóa">Thanh Hóa</option>
+ <option value="Tuyên Quang">Tuyên Quang</option>
+ <option value="Vĩnh Long">Vĩnh Long</option>
+ </select>
+ <div class="province-fee-note" id="province-fee-note"></div>
+ </div>
+ <div class="form-group">
+ <label data-vi="Phường / Xã <span class='req'>*</span>" data-en="Ward / Commune <span class='req'>*</span>">Phường / Xã <span class="req">*</span></label>
+ <select id="s2-ward" required>
+ <option value="" data-vi="— Chọn tỉnh/thành trước —" data-en="— Select province first —">— Chọn tỉnh/thành trước —</option>
+ </select>
+ </div>
+ <div class="form-group">
+ <label data-vi="Số nhà, tên đường <span class='req'>*</span>" data-en="House number, street name <span class='req'>*</span>">Số nhà, tên đường <span class="req">*</span></label>
+ <input type="text" id="s2-street" placeholder="123 Lê Lợi" required />
+ </div>
+ <div class="wizard-nav">
+ <button class="btn-back" onclick="prevStep(2)" data-vi="← Quay lại" data-en="← Back">← Quay lại</button>
+ <button class="btn-next" onclick="nextStep(2)" data-vi="Tiếp theo — Thông tin hàng hóa →" data-en="Next — Package Information →">Tiếp theo — Thông tin hàng hóa →</button>
+ </div>
+ </div>
+
+ <!-- STEP 3: Hàng hóa & thời gian -->
+ <div class="step-panel" id="step-3">
+ <div class="step-heading">
+ <div class="step-badge" data-vi=" Bước 3 / 7" data-en=" Step 3 / 7"> Bước 3 / 7</div>
+ <h2 data-vi="Thông tin hàng hóa" data-en="Package Information">Thông tin hàng hóa</h2>
+ <p data-vi="Khai báo trung thực để tránh vấn đề thông quan. Không cần chính xác tuyệt đối." data-en="Declare honestly to avoid customs issues. No need to be exact.">Khai báo trung thực để tránh vấn đề thông quan. Không cần chính xác tuyệt đối.</p>
+ </div>
+ <div class="form-group">
+ <label data-vi="Mặt hàng bên trong <span class='hint'>— Mô tả sơ lược (không bắt buộc liệt kê đầy đủ)</span>" data-en="Items inside <span class='hint'>— Brief description (no need to list everything)</span>">Mặt hàng bên trong <span class="hint">— Mô tả sơ lược (không bắt buộc liệt kê đầy đủ)</span></label>
+ <textarea id="s3-items" placeholder="Ví dụ: Quần áo, giày thể thao, mỹ phẩm, đồ gia dụng..."></textarea>
+ </div>
+ <div class="form-group">
+ <label data-vi="Cân nặng (lbs) <span class='req'>*</span> <span class='hint'>— 1 kg = 2.2 lbs</span>" data-en="Weight (lbs) <span class='req'>*</span> <span class='hint'>— 1 kg = 2.2 lbs</span>">Cân nặng (lbs) <span class="req">*</span> <span class="hint">— 1 kg = 2.2 lbs</span></label>
+ <input type="number" id="s3-weight" placeholder="10" step="0.1" min="0.1" required />
+ <div class="input-note" data-vi="Nhân viên sẽ cân lại chính xác tại kho. Nếu sai lệch, phí tính theo cân thực tế." data-en="Staff will reweigh at warehouse. If different, fee is based on actual weight.">Nhân viên sẽ cân lại chính xác tại kho. Nếu sai lệch, phí tính theo cân thực tế.</div>
+ </div>
+ <!-- Packaging & Shipping Guide (collapsible) -->
+ <div style="margin-bottom:16px;">
+ <div class="pkg-guide-title" id="pkg-guide-toggle" onclick="togglePkgGuide()" style="cursor:pointer;display:flex;align-items:center;gap:8px;background:#FFFBF0;border:1px solid #FDE68A;border-radius:10px;padding:12px 16px;margin-bottom:0;">
+ <span id="pkg-guide-arr" style="display:inline-block;transition:transform .25s;font-size:12px;"></span>
+ <span data-vi="Hướng dẫn đóng gói &amp; gửi hàng lên kho Mỹ" data-en="Packaging &amp; shipping guide to US warehouse">Hướng dẫn đóng gói & gửi hàng lên kho Mỹ</span>
+ </div>
+ <div class="pkg-guide" id="pkg-guide-body" style="display:none;border-radius:0 0 14px 14px;border-top:none;margin-top:0;">
+
+ <div class="pkg-guide-item" style="margin-top:4px;">
+ <div class="pkg-guide-icon"></div>
+ <div class="pkg-guide-body">
+ <div class="pkg-guide-head" data-vi="Chọn thùng Carton cứng cáp, tránh rách" data-en="Choose a sturdy cardboard box, avoid tears">Chọn thùng Carton cứng cáp, tránh rách</div>
+ <p data-vi="Quá trình vận chuyển từ nhà quý khách đến kho Mỹ luôn xảy ra quăng quật và va đập — bưu kiện đóng không kỹ sẽ bị rách nát và rơi rớt hàng hoá bên trong. <strong>Chọn thùng carton dày, nên dán kỹ và bọc thêm lớp chống sốc trong thùng.</strong>" data-en="Shipping from your home to the US warehouse involves lots of handling — poorly packed boxes will tear and contents will fall out. <strong>Use thick cardboard, tape well and add shock-absorbing padding inside.</strong>">Quá trình vận chuyển từ nhà quý khách đến kho Mỹ luôn xảy ra quăng quật và va đập — bưu kiện đóng không kỹ sẽ bị rách nát và rơi rớt hàng hoá bên trong. <strong>Chọn thùng carton dày, nên dán kỹ và bọc thêm lớp chống sốc trong thùng.</strong></p>
+ </div>
+ </div>
+
+ <div class="pkg-guide-item">
+ <div class="pkg-guide-icon"></div>
+ <div class="pkg-guide-body">
+ <div class="pkg-guide-head" data-vi="Dán kỹ, chèn thêm lớp bọc trong thùng" data-en="Tape firmly, add extra padding inside">Dán kỹ, chèn thêm lớp bọc trong thùng</div>
+ <p data-vi="Tránh trường hợp thùng hàng không đảm bảo, <strong>nên bọc kỹ hoặc chèn thêm 2–3 lớp dưới đáy thùng và 2 cạnh thùng tránh hỏng vỡ, rơi rớt</strong> trong quá trình gửi từ nhà lên kho Mỹ qua UPS." data-en="To prevent damage, <strong>wrap well or add 2–3 layers at the bottom and sides of the box</strong> to prevent breakage during UPS shipping to the US warehouse.">Tránh trường hợp thùng hàng không đảm bảo, <strong style="color:var(--orange)">nên bọc kỹ hoặc chèn thêm 2–3 lớp dưới đáy thùng và 2 cạnh thùng tránh hỏng vỡ, rơi rớt</strong> trong quá trình gửi từ nhà lên kho Mỹ qua UPS.</p>
+ </div>
+ </div>
+
+ <div class="pkg-guide-item">
+ <div class="pkg-guide-icon"></div>
+ <div class="pkg-guide-body">
+ <div class="pkg-guide-head" data-vi="Cách đóng gói theo từng loại hàng" data-en="Packaging by item type">Cách đóng gói theo từng loại hàng</div>
+ <ul class="pkg-tips">
+ <li data-vi=" <strong>Đồ dễ vỡ (gốm sứ, thủy tinh, chai lọ):</strong> Bọc chống sốc tối thiểu 5 lớp. Ghi nhãn &quot;FRAGILE&quot; rõ ràng." data-en=" <strong>Fragile items (ceramics, glass, bottles):</strong> Minimum 5 layers of bubble wrap. Label &quot;FRAGILE&quot; clearly."> <strong>Đồ dễ vỡ (gốm sứ, thủy tinh, chai lọ):</strong> Bọc chống sốc tối thiểu 5 lớp. Ghi nhãn "FRAGILE" rõ ràng.</li>
+ </ul>
+ </div>
+ </div>
+
+ <div class="pkg-guide-code">
+ <div class="pkg-guide-code-title" data-vi=" Ghi mã khách hàng lên kiện hàng — Tránh thất lạc tại kho" data-en=" Write your customer code on the package — Avoid getting lost at warehouse"> Ghi mã khách hàng lên kiện hàng — Tránh thất lạc tại kho</div>
+ <p data-vi="Quý khách vui lòng ghi <strong>Tên + Mã CAC (được Cuckoo Cargo cung cấp)</strong> lên label vận chuyển hoặc trực tiếp lên kiện hàng để tránh lạc hàng tại kho." data-en="Please write your <strong>Name + CAC Code (provided by Cuckoo Cargo)</strong> on the shipping label or directly on the package to avoid getting lost at warehouse.">Quý khách vui lòng ghi <strong>Tên + Mã CAC (được Cuckoo Cargo cung cấp)</strong> lên label vận chuyển hoặc trực tiếp lên kiện hàng để tránh lạc hàng tại kho.</p>
+ <div class="pkg-code-example">
+ <div class="pkg-code-box">
+ <div class="pkg-code-line">Cuckoo Cargo</div>
+ <div class="pkg-code-line big">NGUYỄN VĂN A</div>
+ <div class="pkg-code-line big orange">CAC0001</div>
+ </div>
+ </div>
+ </div>
+
+ </div>
+ </div>
+ <div class="form-group">
+ <label data-vi="Ghi chú đặc biệt" data-en="Special notes">Ghi chú đặc biệt</label>
+ <textarea id="s3-note" placeholder="Hàng dễ vỡ, yêu cầu đặc biệt, ghi chú cho nhân viên..."></textarea>
+ </div>
+ <div class="wizard-nav">
+ <button class="btn-back" onclick="prevStep(3)" data-vi="← Quay lại" data-en="← Back">← Quay lại</button>
+ <button class="btn-next" onclick="nextStep(3)" data-vi="Tiếp theo — Chính sách →" data-en="Next — Policies →">Tiếp theo — Chính sách →</button>
+ </div>
+ </div>
+
+ <!-- STEP 4: Chính sách -->
+ <div class="step-panel" id="step-4">
+ <div class="step-heading">
+ <div class="step-badge" data-vi=" Bước 4 / 7" data-en=" Step 4 / 7"> Bước 4 / 7</div>
+ <h2 data-vi="Xác nhận chính sách" data-en="Confirm Policies">Xác nhận chính sách</h2>
+ <p data-vi="Vui lòng đọc kỹ và tick vào tất cả các mục bên dưới để tiếp tục." data-en="Please read carefully and check all boxes below to continue.">Vui lòng đọc kỹ và tick vào tất cả các mục bên dưới để tiếp tục.</p>
+ </div>
+ <div class="policy-box">
+ <div class="policy-title" data-vi=" Điều khoản gửi hàng Cuckoo Cargo" data-en=" Cuckoo Cargo Shipping Terms"> Điều khoản gửi hàng Cuckoo Cargo</div>
+
+ <div class="prohibited-toggle" onclick="toggleProhibited(this)">
+ <span class="arr"></span> <span data-vi="Xem danh sách hàng hóa bị cấm vận chuyển" data-en="View list of prohibited items">Xem danh sách hàng hóa bị cấm vận chuyển</span>
+ </div>
+ <div class="prohibited-list" id="proh-list">
+ <ul>
+ <li>Vũ khí, đạn dược, pháo hoa</li><li>Chất nổ, chất độc hại</li>
+ <li>Chất lỏng dễ cháy, bình xịt có ký hiệu ngọn lửa</li><li>Pin Lithium rời</li>
+ <li>Ma túy hoặc chất cấm</li><li>Động vật sống</li>
+ <li>Thi hài hoặc bộ phận cơ thể người</li><li>Kim loại quý, giấy tờ có giá</li>
+ </ul>
+ </div>
+
+ <div class="policy-checks" style="margin-top:14px;">
+ <div class="pcheck">
+ <input type="checkbox" id="pc1" />
+ <label for="pc1" data-vi="Tôi xác nhận kiện hàng <strong>không chứa bất kỳ hàng hóa bị cấm</strong> theo quy định của pháp luật Mỹ và Việt Nam." data-en="I confirm the shipment <strong>contains no prohibited items</strong> under US and Vietnamese law.">Tôi xác nhận kiện hàng <strong>không chứa bất kỳ hàng hóa bị cấm</strong> theo quy định của pháp luật Mỹ và Việt Nam.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="pc2" />
+ <label for="pc2" data-vi="Tôi đồng ý với <strong>chính sách thông quan</strong>: Cuckoo Cargo không chịu trách nhiệm với hàng bị giữ do khai báo sai hoặc hàng cấm." data-en="I agree to the <strong>customs policy</strong>: Cuckoo Cargo is not liable for items held due to misdeclaration or prohibited goods.">Tôi đồng ý với <strong>chính sách thông quan</strong>: Cuckoo Cargo không chịu trách nhiệm với hàng bị giữ do khai báo sai hoặc hàng cấm.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="pc3" />
+ <label for="pc3" data-vi="Tôi hiểu rằng <strong>thời gian vận chuyển 7–14 ngày</strong> là ước tính, có thể thay đổi do thông quan, ngày lễ hoặc sự kiện bất khả kháng." data-en="I understand that the <strong>7–14 day transit time</strong> is an estimate and may change due to customs, holidays, or force majeure.">Tôi hiểu rằng <strong>thời gian vận chuyển 7–14 ngày</strong> là ước tính, có thể thay đổi do thông quan, ngày lễ hoặc sự kiện bất khả kháng.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="pc4" />
+ <label for="pc4" data-vi="Tôi đồng ý <strong>thanh toán phí vận chuyển</strong> theo bảng giá Cuckoo Cargo. Phí sẽ được thông báo sau khi cân kiện hàng tại kho." data-en="I agree to <strong>pay the shipping fee</strong> per Cuckoo Cargo's rate. The fee will be confirmed after weighing at the warehouse.">Tôi đồng ý <strong>thanh toán phí vận chuyển</strong> theo bảng giá Cuckoo Cargo. Phí sẽ được thông báo sau khi cân kiện hàng tại kho.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="pc5" />
+ <label for="pc5" data-vi="Tôi xác nhận tất cả thông tin người gửi và người nhận <strong>đều chính xác</strong>. Cuckoo Cargo không chịu trách nhiệm giao sai do thông tin lỗi." data-en="I confirm all sender and receiver information is <strong>accurate</strong>. Cuckoo Cargo is not liable for misdelivery due to incorrect information.">Tôi xác nhận tất cả thông tin người gửi và người nhận <strong>đều chính xác</strong>. Cuckoo Cargo không chịu trách nhiệm giao sai do thông tin lỗi.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="pc6" />
+ <label for="pc6" data-vi="Tôi hiểu rằng Cuckoo Cargo <strong>không chịu trách nhiệm với mọi hư hỏng do đóng gói không an toàn</strong>. Tôi cam kết đóng gói kỹ, chống sốc nhiều lớp với hàng dễ vỡ và thiết bị điện tử." data-en="I understand that Cuckoo Cargo <strong>is not liable for damage caused by unsafe packaging</strong>. I commit to packing carefully with multiple shock-absorbing layers for fragile items and electronics.">Tôi hiểu rằng Cuckoo Cargo <strong>không chịu trách nhiệm với mọi hư hỏng do đóng gói không an toàn</strong>. Tôi cam kết đóng gói kỹ, chống sốc nhiều lớp với hàng dễ vỡ và thiết bị điện tử.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="pc7" />
+ <label for="pc7" data-vi="Tôi cam kết <strong>khai đúng kích thước và cân nặng</strong>. Nếu sai lệch cân nặng, tôi đồng ý chịu phạt <strong>$19,25/kiện hàng</strong> và thanh toán theo cân nặng thực tế." data-en="I commit to <strong>accurately declaring dimensions and weight</strong>. If weight differs, I agree to pay a <strong>$19.25/package</strong> penalty and the actual weight rate.">Tôi cam kết <strong>khai đúng kích thước và cân nặng</strong>. Nếu sai lệch cân nặng, tôi đồng ý chịu phạt <strong>$19,25/kiện hàng</strong> và thanh toán theo cân nặng thực tế.</label>
+ </div>
+ </div>
+ </div>
+ <div class="wizard-nav">
+ <button class="btn-back" onclick="prevStep(4)" data-vi="← Quay lại" data-en="← Back">← Quay lại</button>
+ <button class="btn-next" id="btn-next-4" onclick="nextStep(4)" disabled data-vi="Đồng ý & Tiếp theo →" data-en="Agree & Continue →">Đồng ý & Tiếp theo →</button>
+ </div>
+ </div>
+
+ <!-- STEP 5: Bảo hiểm -->
+ <div class="step-panel" id="step-5">
+ <div class="step-heading">
+ <div class="step-badge" data-vi=" Bước 5 / 7" data-en=" Step 5 / 7"> Bước 5 / 7</div>
+ <h2 data-vi="Chọn gói bảo hiểm" data-en="Choose Insurance Plan">Chọn gói bảo hiểm</h2>
+ <p data-vi="Bảo hiểm bảo vệ hàng hóa trong trường hợp mất, hư hỏng do lỗi vận chuyển." data-en="Insurance protects your goods against loss or shipping damage.">Bảo hiểm bảo vệ hàng hóa trong trường hợp mất, hư hỏng do lỗi vận chuyển.</p>
+ </div>
+ <div class="ins-alert" data-vi="Tỷ lệ rủi ro mất hàng (~1%). Khi xảy ra, Cuckoo Cargo hoàn <strong>100% phí vận chuyển</strong> + đền bù theo gói bảo hiểm đã chọn. Gói Special đền bù <strong>70–100% giá trị hàng hóa thực tế</strong>." data-en="Loss rate (~1%). Cuckoo Cargo refunds <strong>100% shipping fee</strong> + compensation per chosen plan. Special plan covers <strong>70–100% of actual item value</strong>.">
+ Tỷ lệ rủi ro mất hàng (~1%). Khi xảy ra, Cuckoo Cargo hoàn <strong>100% phí vận chuyển</strong> + đền bù theo gói bảo hiểm đã chọn. Gói Special đền bù <strong>70–100% giá trị hàng hóa thực tế</strong>.
+ </div>
+ <div class="ins-grid">
+ <div class="ins-card" onclick="setIns(this,'Free')">
+ <div class="ins-tier" data-vi=" FREE — Miễn phí" data-en=" FREE — No cost"> FREE — Miễn phí</div>
+ <div class="ins-price">$0 <span data-vi="/ đơn" data-en="/ order">/ đơn</span></div>
+ <ul class="ins-features">
+ <li data-vi=" Phí mua: <strong>Miễn phí</strong>" data-en=" Cost: <strong>Free</strong>"> Phí mua: <strong>Miễn phí</strong></li>
+ <li data-vi=" Đền bù: <strong>$5 USD/lbs</strong>" data-en=" Compensation: <strong>$5 USD/lbs</strong>"> Đền bù: <strong>$5 USD/lbs</strong></li>
+ <li data-vi=" Tối đa: <strong>$100 USD</strong>" data-en=" Max: <strong>$100 USD</strong>"> Tối đa: <strong>$100 USD</strong></li>
+ <li data-vi=" Phù hợp đơn <strong>giá trị thấp</strong>" data-en=" Best for <strong>low-value</strong> orders"> Phù hợp đơn <strong>giá trị thấp</strong></li>
+ </ul>
+ </div>
+ <div class="ins-card" onclick="setIns(this,'Pro')">
+ <div class="ins-tier" data-vi=" PRO — Bảo vệ nâng cao" data-en=" PRO — Enhanced Protection"> PRO — Bảo vệ nâng cao</div>
+ <div class="ins-price">$19.99 <span data-vi="/ đơn" data-en="/ order">/ đơn</span></div>
+ <ul class="ins-features">
+ <li data-vi=" Phí mua: <strong>$19.99 USD</strong>" data-en=" Cost: <strong>$19.99 USD</strong>"> Phí mua: <strong>$19.99 USD</strong></li>
+ <li data-vi=" Đền bù: <strong>$12 USD/lbs</strong>" data-en=" Compensation: <strong>$12 USD/lbs</strong>"> Đền bù: <strong>$12 USD/lbs</strong></li>
+ <li data-vi=" Tối đa: <strong>$500 USD</strong>" data-en=" Max: <strong>$500 USD</strong>"> Tối đa: <strong>$500 USD</strong></li>
+ <li data-vi=" Phù hợp đơn <strong>giá trị tầm trung</strong>" data-en=" Best for <strong>mid-value</strong> orders"> Phù hợp đơn <strong>giá trị tầm trung</strong></li>
+ </ul>
+ </div>
+ <div class="ins-card" onclick="setIns(this,'ProMax')">
+ <div class="ins-recommended" data-vi="Phổ biến nhất" data-en="Most popular">Phổ biến nhất</div>
+ <div class="ins-tier" data-vi=" PRO MAX — Bảo vệ tối thượng" data-en=" PRO MAX — Ultimate Protection"> PRO MAX — Bảo vệ tối thượng</div>
+ <div class="ins-price">$59.99 <span data-vi="/ đơn" data-en="/ order">/ đơn</span></div>
+ <ul class="ins-features">
+ <li data-vi=" Phí mua: <strong>$59.99 USD</strong>" data-en=" Cost: <strong>$59.99 USD</strong>"> Phí mua: <strong>$59.99 USD</strong></li>
+ <li data-vi=" Đền bù: <strong>$20 USD/lbs</strong>" data-en=" Compensation: <strong>$20 USD/lbs</strong>"> Đền bù: <strong>$20 USD/lbs</strong></li>
+ <li data-vi=" Tối đa: <strong>$800 USD</strong>" data-en=" Max: <strong>$800 USD</strong>"> Tối đa: <strong>$800 USD</strong></li>
+ <li data-vi=" Phù hợp đơn <strong>giá trị cao</strong>" data-en=" Best for <strong>high-value</strong> orders"> Phù hợp đơn <strong>giá trị cao</strong></li>
+ </ul>
+ </div>
+ <div class="ins-card" onclick="setIns(this,'Special')">
+ <div class="ins-tier" data-vi=" SPECIAL — Bảo hiểm theo giá trị" data-en=" SPECIAL — Value-based Insurance"> SPECIAL — Bảo hiểm theo giá trị</div>
+ <div class="ins-price" style="font-size:14px;" data-vi="10% giá trị khai báo <span class='unit'>/ đơn</span>" data-en="10% of declared value <span class='unit'>/ order</span>">10% giá trị khai báo <span data-vi="/ đơn" data-en="/ order">/ đơn</span></div>
+ <ul class="ins-features">
+ <li data-vi=" Phí: <strong>10% giá trị hàng</strong> (bao gồm thuế HQ + bảo hiểm tiểu bang)" data-en=" Fee: <strong>10% of item value</strong> (includes customs tax + state insurance)"> Phí: <strong>10% giá trị hàng</strong> (bao gồm thuế HQ + bảo hiểm tiểu bang)</li>
+ <li data-vi=" Đền bù: <strong>70–100% giá trị hàng</strong>" data-en=" Compensation: <strong>70–100% of item value</strong>"> Đền bù: <strong>70–100% giá trị hàng</strong></li>
+ <li data-vi=" Theo giá trị khai báo" data-en=" Based on declared value"> Theo giá trị khai báo</li>
+ <li data-vi=" Ưu đãi <strong>1 được 2</strong>" data-en=" Bonus: <strong>buy 1 get 2</strong>"> Ưu đãi <strong>1 được 2</strong></li>
+ </ul>
+ </div>
+ </div>
+ <input type="hidden" id="f-insurance" value="Free" />
+ <div class="wizard-nav">
+ <button class="btn-back" onclick="prevStep(5)" data-vi="← Quay lại" data-en="← Back">← Quay lại</button>
+ <button class="btn-next" onclick="nextStep(5)" data-vi="Tiếp theo — Chọn đóng gói →" data-en="Next — Choose Packaging →">Tiếp theo — Chọn đóng gói →</button>
+ </div>
+ </div>
+
+ <!-- STEP 6: Đóng gói -->
+ <div class="step-panel" id="step-6">
+ <div class="step-heading">
+ <div class="step-badge" data-vi=" Bước 6 / 7" data-en=" Step 6 / 7"> Bước 6 / 7</div>
+ <h2 data-vi="Chọn cách đóng gói" data-en="Choose Packaging">Chọn cách đóng gói</h2>
+ <p data-vi="Đóng gói kỹ giúp bảo vệ hàng trong suốt hành trình dài từ Mỹ về Việt Nam." data-en="Careful packaging protects your goods throughout the long journey from the US to Vietnam.">Đóng gói kỹ giúp bảo vệ hàng trong suốt hành trình dài từ Mỹ về Việt Nam.</p>
+ </div>
+ <div class="pkg-grid">
+ <div class="pkg-card active" onclick="setPkg(this,'Miễn phí',0)">
+ <div class="pkg-icon"></div>
+ <div class="pkg-info">
+ <div class="pkg-name" data-vi="Miễn phí" data-en="Free">Miễn phí</div>
+ <div class="pkg-sub" data-vi="Đảm bảo: không mất hàng, không khui thùng, không đổ vỡ &amp; hư hại trong quá trình vận chuyển." data-en="Guaranteed: no loss, no opened boxes, no breakage &amp; damage during transit.">Đảm bảo: không mất hàng, không khui thùng, không đổ vỡ &amp; hư hại trong quá trình vận chuyển.</div>
+ </div>
+ <div class="pkg-price free" data-vi="Miễn phí" data-en="Free">Miễn phí</div>
+ </div>
+ <div class="pkg-card" onclick="setPkg(this,'Tiêu chuẩn',0.39)">
+ <div class="pkg-icon"></div>
+ <div class="pkg-info">
+ <div class="pkg-name" data-vi="Tiêu chuẩn" data-en="Standard">Tiêu chuẩn</div>
+ <div class="pkg-sub" data-vi="Thùng carton 3 lớp, đóng gói cơ bản. Phù hợp với quần áo, đồ vải, hàng không dễ vỡ." data-en="3-layer carton, basic packaging. Suitable for clothing, fabric, non-fragile items.">Thùng carton 3 lớp, đóng gói cơ bản. Phù hợp với quần áo, đồ vải, hàng không dễ vỡ.</div>
+ </div>
+ <div class="pkg-price">+$0,39/lbs</div>
+ </div>
+ <div class="pkg-card" onclick="setPkg(this,'Nâng cao',0.69)">
+ <div class="pkg-icon"></div>
+ <div class="pkg-info">
+ <div class="pkg-name" data-vi="Nâng cao" data-en="Premium">Nâng cao</div>
+ <div class="pkg-sub" data-vi="Thùng carton 3 lớp, bọc từng gói riêng lẻ. Phù hợp với đồ điện tử, mỹ phẩm, đồ dễ vỡ." data-en="3-layer carton, each item individually wrapped. Suitable for electronics, cosmetics, fragile items.">Thùng carton 3 lớp, bọc từng gói riêng lẻ. Phù hợp với đồ điện tử, mỹ phẩm, đồ dễ vỡ.</div>
+ </div>
+ <div class="pkg-price">+$0,69/lbs</div>
+ </div>
+ </div>
+ <input type="hidden" id="f-packaging" value="Miễn phí" />
+ <input type="hidden" id="f-pkg-rate" value="0" />
+ <div class="wizard-nav">
+ <button class="btn-back" onclick="prevStep(6)" data-vi="← Quay lại" data-en="← Back">← Quay lại</button>
+ <button class="btn-next" onclick="nextStep(6)" data-vi="Tiếp theo — Xem tóm tắt →" data-en="Next — View Summary →">Tiếp theo — Xem tóm tắt →</button>
+ </div>
+ </div>
+
+ <!-- STEP 7: Xác nhận -->
+ <div class="step-panel" id="step-7">
+ <div class="step-heading">
+ <div class="step-badge" data-vi=" Bước 7 / 7" data-en=" Step 7 / 7"> Bước 7 / 7</div>
+ <h2 data-vi="Xác nhận & Gửi đơn" data-en="Confirm & Submit Order">Xác nhận & Gửi đơn</h2>
+ <p data-vi="Kiểm tra lại thông tin và nhấn xác nhận." data-en="Review your information and click confirm.">Kiểm tra lại thông tin và nhấn xác nhận. Cuckoo Cargo sẽ liên hệ &amp; gửi QR thanh toán qua Zelle.</p>
+ </div>
+
+ <!-- Summary -->
+ <div class="summary-card">
+ <div class="summary-title" data-vi=" Tóm tắt đơn hàng" data-en=" Order Summary"> Tóm tắt đơn hàng</div>
+ <div class="summary-rows" id="summary-content">
+ <!-- filled by JS -->
+ </div>
+ <!-- Estimated cost -->
+ <div id="cost-estimate" style="display:none; margin-top:16px; padding-top:14px; border-top:2px solid var(--gray-border);">
+ <div class="cost-est-title" data-vi=" Chi phí ước tính" data-en=" Estimated Cost"> Chi phí ước tính</div>
+ <div class="cost-est-rows" id="cost-rows"></div>
+ <div class="cost-est-total" id="cost-total"></div>
+ <div style="font-size:11px;color:var(--text-muted);margin-top:6px;" data-vi="* Cước ước tính dựa trên cân nặng bạn nhập. Phí chính xác sau khi cân tại kho." data-en="* Estimated rate based on your entered weight. Exact fee confirmed after weighing at warehouse.">* Cước ước tính dựa trên cân nặng bạn nhập. Phí chính xác sau khi cân tại kho.</div>
+ </div>
+ </div>
+
+ <!-- Payment notice -->
+ <div class="payment-notice">
+ <div class="pay-notice-title" data-vi=" Thanh toán" data-en=" Payment"> Thanh toán</div>
+ <div class="pay-notice-body">
+ <p> <strong>Phí vận chuyển chính xác sẽ được thông báo sau khi cân hàng tại kho.</strong> Cuckoo Cargo sẽ chụp ảnh &amp; mức cân của kiện hàng của quý khách. Quý khách sẽ thực hiện thanh toán khi Cuckoo Cargo gửi <strong>mã QR thanh toán bằng Zelle</strong>.</p>
+ </div>
+
+ <div class="pay-method-title" data-vi=" Chọn phương thức thanh toán" data-en=" Choose Payment Method"> Chọn phương thức thanh toán</div>
+ <div class="pay-method-grid">
+ <div class="pay-method active" id="pay-usd" onclick="setPayMethod(this,'USD')">
+ <div class="pay-flag"></div>
+ <div class="pay-name">USD</div>
+ <div class="pay-sub">Zelle / Cash</div>
+ </div>
+ <div class="pay-method" id="pay-vnd" onclick="setPayMethod(this,'VND')">
+ <div class="pay-flag"></div>
+ <div class="pay-name">VND</div>
+ <div class="pay-sub" data-vi="Chuyển khoản VN" data-en="VN Bank Transfer">Chuyển khoản VN</div>
+ </div>
+ </div>
+ <input type="hidden" id="f-pay-method" value="USD" />
+ <div id="pay-usd-info" class="pay-info-box">
+ <strong data-vi=" Thanh toán bằng USD (Zelle):" data-en=" Pay in USD (Zelle):"> Thanh toán bằng USD (Zelle):</strong><br>
+ <span data-vi="Cuckoo Cargo sẽ gửi QR chuyển khoản USD qua Zalo/Messenger sau khi xác nhận đơn." data-en="Cuckoo Cargo will send a Zelle QR code via Zalo/Messenger after order confirmation.">Cuckoo Cargo sẽ gửi QR chuyển khoản USD qua Zalo/Messenger sau khi xác nhận đơn.</span>
+ </div>
+ <div id="pay-vnd-info" class="pay-info-box" style="display:none;">
+ <strong data-vi=" Thanh toán bằng VND:" data-en=" Pay in VND:"> Thanh toán bằng VND:</strong><br>
+ <span data-vi="Cuckoo Cargo sẽ gửi QR chuyển khoản VND qua Zalo/Messenger sau khi xác nhận đơn." data-en="Cuckoo Cargo will send a VND bank transfer QR via Zalo/Messenger after order confirmation.">Cuckoo Cargo sẽ gửi QR chuyển khoản VND qua Zalo/Messenger sau khi xác nhận đơn.</span><br>
+ <span style="font-size:12px;color:var(--text-muted)" data-vi="Tỷ giá áp dụng tại thời điểm thanh toán và phí chuyển tiền." data-en="Exchange rate applied at time of payment plus transfer fee.">Tỷ giá áp dụng tại thời điểm thanh toán và phí chuyển tiền.</span>
+ </div>
+ </div>
+
+ <div class="wizard-nav">
+ <button class="btn-back" onclick="prevStep(7)" data-vi="← Chỉnh sửa" data-en="← Edit">← Chỉnh sửa</button>
+ <button class="btn-next submit" onclick="showMVVReview()">
+ <span></span><span>Xem tóm tắt & Xác nhận →</span>
+ </button>
+ </div>
+ </div>
+
+ </div><!-- end wizard -->
+
+ <!-- SIDEBAR -->
+ <div class="sidebar">
+
+ <!-- Why Cuckoo -->
+ <div class="sidebar-card">
+ <div class="sc-title" data-vi=" Tại sao chọn Cuckoo Cargo?" data-en=" Why Choose Cuckoo Cargo?"> Tại sao chọn Cuckoo Cargo?</div>
+ <ul class="why-list">
+ <li><span class="wi"></span><span data-vi="Giao hàng <strong>7–10 ngày</strong> từ Mỹ về Việt Nam" data-en="Delivery in <strong>7–10 days</strong> from US to Vietnam">Giao hàng <strong>7–10 ngày</strong> từ Mỹ về Việt Nam</span></li>
+ <li><span class="wi"></span><span data-vi="Pickup tận nơi tại <strong>50 tiểu bang</strong>" data-en="Door pickup across all <strong>50 US states</strong>">Pickup tận nơi tại <strong>50 tiểu bang</strong></span></li>
+ <li><span class="wi"></span><span data-vi="Bảo hiểm đầy đủ cho mọi loại hàng hóa" data-en="Full insurance for all types of goods">Bảo hiểm đầy đủ cho mọi loại hàng hóa</span></li>
+ <li><span class="wi"></span><span data-vi="Hỗ trợ tiếng Việt 7 ngày / tuần" data-en="Vietnamese support 7 days a week">Hỗ trợ tiếng Việt 7 ngày / tuần</span></li>
+ <li><span class="wi"></span><span data-vi="Hỗ trợ đóng gói, carton chắc chắn" data-en="Packaging assistance, sturdy carton boxes">Hỗ trợ đóng gói, carton chắc chắn</span></li>
+ <li><span class="wi"></span><span data-vi="Tracking thời gian thực qua website" data-en="Real-time tracking on website">Tracking thời gian thực qua website</span></li>
+ </ul>
+ </div>
+
+ <!-- Timeline -->
+ <div class="sidebar-card">
+ <div class="sc-title" data-vi=" Lộ trình giao hàng" data-en=" Delivery Timeline"> Lộ trình giao hàng</div>
+ <div class="timeline">
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-content"><div class="tl-day" data-vi="Ngày 1" data-en="Day 1">Ngày 1</div><div class="tl-text" data-vi="Tạo đơn & drop-off / pickup tại Mỹ" data-en="Create order & drop-off / pickup in US">Tạo đơn & drop-off / pickup tại Mỹ</div></div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-content"><div class="tl-day" data-vi="Ngày 2–3" data-en="Day 2–3">Ngày 2–3</div><div class="tl-text" data-vi="Kiểm tra hàng, đóng gói tại kho Mỹ" data-en="Inspect goods, package at US warehouse">Kiểm tra hàng, đóng gói tại kho Mỹ</div></div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-content"><div class="tl-day" data-vi="Ngày 3–5" data-en="Day 3–5">Ngày 3–5</div><div class="tl-text" data-vi="Xuất kho — bay về Việt Nam" data-en="Depart warehouse — fly to Vietnam">Xuất kho — bay về Việt Nam</div></div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-content"><div class="tl-day" data-vi="Ngày 5–7" data-en="Day 5–7">Ngày 5–7</div><div class="tl-text" data-vi="Thông quan tại Tân Sơn Nhất / Nội Bài" data-en="Customs clearance at Tan Son Nhat / Noi Bai">Thông quan tại Tân Sơn Nhất / Nội Bài</div></div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot" style="background:var(--green)"></div><div class="tl-line"></div></div>
+ <div class="tl-content"><div class="tl-day" style="color:var(--green)" data-vi="Ngày 7–10" data-en="Day 7–10">Ngày 7–10</div><div class="tl-text" data-vi="Giao hàng tận nhà tại Việt Nam " data-en="Home delivery across Vietnam ">Giao hàng tận nhà tại Việt Nam </div></div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Contact -->
+ <div class="sidebar-card">
+ <div class="sc-title" data-vi=" Hỗ trợ" data-en=" Support"> Hỗ trợ</div>
+ <div class="contact-list">
+ <a href="https://www.facebook.com/61582783740459/" class="contact-item" target="_blank">
+ <span class="ci"></span>
+ <div><div class="cn">Facebook Messenger</div><div class="cs" data-vi="Phản hồi trong 5 phút" data-en="Response within 5 minutes">Phản hồi trong 5 phút</div></div>
+ </a>
+ <a href="https://zalo.me/cuckoocargo" class="contact-item" target="_blank">
+ <span class="ci"></span>
+ <div><div class="cn">Zalo</div><div class="cs" data-vi="Chat tiếng Việt" data-en="Vietnamese chat support">Chat tiếng Việt</div></div>
+ </a>
+ <a href="tel:+17143984817" class="contact-item">
+ <span class="ci"></span>
+ <div><div class="cn">+1 (714) 398-4817</div><div class="cs" data-vi="Thứ 2–6, 9AM–6PM PST" data-en="Mon–Fri, 9AM–6PM PST">Thứ 2–6, 9AM–6PM PST</div></div>
+ </a>
+ </div>
+ </div>
+
+ </div>
+</div><!-- end page-body -->
+
+<!-- LABEL REMINDER POPUP -->
+<div class="label-overlay" id="label-popup-overlay" style="display:none;">
+ <div class="label-popup">
+ <div class="popup-header">
+ <span class="popup-icon"></span>
+ <h2 data-vi="Bạn đã sẵn sàng gửi hàng về Việt Nam?" data-en="Ready to ship to Vietnam?">Bạn đã sẵn sàng gửi hàng về Việt Nam?</h2>
+ <p data-vi="Trước khi tạo đơn Mỹ - Việt Nam, kiện hàng của bạn cần đến kho Cuckoo Cargo tại California trước." data-en="Before creating a US–Vietnam order, your package must first arrive at Cuckoo Cargo's warehouse in California.">Trước khi tạo đơn Mỹ - Việt Nam, kiện hàng của bạn cần đến kho Cuckoo Cargo tại California trước.</p>
+ </div>
+ <div class="popup-body">
+ <div class="popup-info-box">
+ Kho Cuckoo Cargo: <strong>13122 Newell Street, Garden Grove, CA 92843</strong>
+ </div>
+ <div class="popup-question">
+ Bạn đã có <span>label nội địa Mỹ</span> và gửi hàng lên kho Cuckoo Cargo chưa?
+ </div>
+ <div class="popup-actions">
+ <a href="noi-dia-my.html" class="popup-btn-book">
+ Chưa có — Đặt label nội địa ngay
+ </a>
+ <button class="popup-btn-skip" onclick="closePopup()">
+ Rồi — Tiếp tục tạo đơn Mỹ - Việt Nam
+ </button>
+ </div>
+ </div>
+ </div>
+</div>
+
+<!-- REVIEW SHEET (MỸ-VIỆT) -->
+<div class="mvv-review-overlay" id="mvv-review-overlay" onclick="closeMVVReview(event)">
+ <div class="mvv-review-sheet" id="mvv-review-sheet">
+ <div class="mvv-review-handle"></div>
+ <div class="mvv-review-title" data-vi=" Xác nhận đơn gửi hàng Mỹ - Việt Nam" data-en=" Confirm US - Vietnam Shipping Order"> Xác nhận đơn gửi hàng Mỹ - Việt Nam</div>
+ <div id="mvv-review-content"></div>
+ <div class="mvv-cam-ket">
+ <span data-vi="Cuckoo Cargo cam kết giao hàng đúng địa chỉ. Phí chính xác sẽ được thông báo sau khi cân tại kho qua Messenger và Zalo." data-en="Cuckoo Cargo commits to accurate delivery. Exact fee will be notified after weighing at warehouse via Messenger and Zalo.">Cuckoo Cargo cam kết giao hàng đúng địa chỉ. Phí chính xác sẽ được thông báo sau khi cân tại kho qua <strong>Messenger</strong> và <strong>Zalo</strong>.</span>
+ </div>
+ <div class="mvv-review-actions">
+ <button class="mvv-btn-edit" onclick="closeMVVReview(null)" data-vi=" Chỉnh sửa" data-en=" Edit"> Chỉnh sửa</button>
+ <button class="mvv-btn-confirm" id="mvv-btn-confirm" onclick="submitOrder()" data-vi=" Xác nhận & Gửi đơn" data-en=" Confirm & Submit"> Xác nhận & Gửi đơn</button>
+ </div>
+ </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+ <span id="toast-icon"></span>
+ <span id="toast-msg"></span>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="success-modal-overlay" id="success-modal-overlay">
+ <div class="success-modal">
+   <div class="success-modal-icon">
+     <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+   </div>
+   <h3 data-vi="Đơn hàng đã gửi thành công!" data-en="Order submitted successfully!">Đơn hàng đã gửi thành công!</h3>
+   <p data-vi="Cuckoo Cargo sẽ liên hệ xác nhận và báo giá qua <strong>Facebook / Zalo</strong> trong thời gian sớm nhất." data-en="Cuckoo Cargo will contact you to confirm and provide a quote via <strong>Facebook / Zalo</strong> as soon as possible.">Cuckoo Cargo sẽ liên hệ xác nhận và báo giá qua <strong>Facebook / Zalo</strong> trong thời gian sớm nhất.</p>
+   <div class="success-modal-code">
+     <div class="code-label" data-vi="Mã đơn hàng của bạn" data-en="Your order code">Mã đơn hàng của bạn</div>
+     <div class="code-value" id="success-order-code">—</div>
+   </div>
+   <p style="font-size:12px;color:#aaa;margin-bottom:20px;" data-vi="Vui lòng lưu lại mã này để tra cứu trạng thái đơn hàng." data-en="Please save this code to track your order status.">Vui lòng lưu lại mã này để tra cứu trạng thái đơn hàng.</p>
+   <button class="success-modal-close" onclick="window.location.href='index.html'" data-vi="Đóng" data-en="Close">Đóng</button>
+ </div>
+</div>
+
+<!-- Footer -->
+<footer id="cc-footer" class="cc-footer"></footer>
+
+<script src="assets/js/pricing.js"></script>
+<script src="assets/js/ward-data.js"></script>
+<script src="assets/js/lang.js"></script>
+<script src="assets/js/global.js"></script>
+<script>
+ // CONFIG 
+ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53kdguSGjFrD-ipJRTAlVJlCpq28_3C9ZoH5Mb-RBlKTP1lER/exec";
+
+ // AUTO-GENERATE MÃ KHÁCH HÀNG
+ function setupAutoCustomerCode(phoneId, codeId) {
+   const phoneEl = document.getElementById(phoneId);
+   const codeEl  = document.getElementById(codeId);
+   if (!phoneEl || !codeEl) return;
+   let _t = null;
+   const run = async (val) => {
+     const digits = val.replace(/\D/g,'');
+     if (digits.length < 4) return;
+     const cur = codeEl.value.trim();
+     if (cur && !cur.toUpperCase().startsWith('CAC')) return;
+     // Hiện mã tức thì — không cần chờ API
+     const localCode = 'CAC' + digits.slice(-4);
+     codeEl.value = localCode;
+     codeEl.style.borderColor = '#F47B20';
+     setTimeout(() => codeEl.style.borderColor = '', 2000);
+     // Check trùng ngầm ở background
+     try {
+       const res  = await fetch(`${SCRIPT_URL}?action=generateCode&phone=${encodeURIComponent(digits)}`,{redirect:'follow'});
+       const data = await res.json();
+       if (data.success && data.code && data.code !== localCode) {
+         codeEl.value = data.code;
+         codeEl.style.borderColor = '#22C55E';
+         setTimeout(() => codeEl.style.borderColor = '', 2000);
+       }
+     } catch(e) {}
+   };
+   phoneEl.addEventListener('input',  e => { clearTimeout(_t); _t = setTimeout(() => run(e.target.value), 400); });
+   phoneEl.addEventListener('blur',   e => { clearTimeout(_t); run(e.target.value); });
+ }
+
+ // STATE
+ let currentStep = 1;
+ let delivMode = 'dropoff';
+ let insVal = 'Basic';
+ let pkgVal = 'Tiêu chuẩn';
+
+ const STEP_NAMES_VI = ['','Thông tin người gửi','Thông tin người nhận','Thông tin hàng hóa','Xác nhận chính sách','Chọn bảo hiểm','Chọn đóng gói','Xác nhận & Gửi'];
+ const STEP_NAMES_EN = ['','Sender Information','Receiver Information','Package Information','Confirm Policies','Choose Insurance','Choose Packaging','Confirm & Submit'];
+ const STEP_NAMES = window.currentLang === 'en' ? STEP_NAMES_EN : STEP_NAMES_VI;
+
+ // WIZARD NAVIGATION 
+ function nextStep(from) {
+ if (!validateStep(from)) return;
+ goToStep(from + 1);
+ }
+
+ function prevStep(from) {
+ goToStep(from - 1);
+ }
+
+ function goToStep(n) {
+ document.getElementById('step-'+currentStep).classList.remove('active');
+ currentStep = n;
+ document.getElementById('step-'+n).classList.add('active');
+
+ // Progress bar
+ document.getElementById('cur-step').textContent = n;
+ const sNames = window.currentLang === 'en' ? STEP_NAMES_EN : STEP_NAMES_VI; document.getElementById('step-name-label').textContent = sNames[n];
+ document.getElementById('progress-fill').style.width = (n/7*100).toFixed(1)+'%';
+
+ // Step overview indicator
+ for(let i=1;i<=7;i++){
+ const el = document.getElementById('ov-'+i);
+ el.classList.remove('active','done');
+ if(i < n) el.classList.add('done'), el.querySelector('.snum').innerHTML = '<svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,6 5,9 10,3"/></svg>';
+ else if(i === n) el.classList.add('active'), el.querySelector('.snum').textContent = i;
+ else el.querySelector('.snum').textContent = i;
+ }
+
+ if (n===7) buildSummary();
+ const wizard = document.querySelector('.wizard');
+ if (wizard) {
+ const top = wizard.getBoundingClientRect().top + window.scrollY - 80;
+ window.scrollTo({ top, behavior:'smooth' });
+ }
+ }
+
+ // VALIDATION 
+ function validateStep(n) {
+ const required = {
+ 1: ['s1-fb','s1-name','s1-phone','s1-email'],
+ 2: ['s2-name','s2-phone','s2-province','s2-ward','s2-street'],
+ 3: [],
+ 4: [],
+ 5: [], 6: [], 7: [],
+ };
+
+ for(const id of (required[n]||[])){
+ const el = document.getElementById(id);
+ if(!el || !el.value.trim()){
+ el && el.focus();
+ showToast('error',' Vui lòng điền đầy đủ thông tin bắt buộc.');
+ el && (el.style.borderColor='#EF4444');
+ setTimeout(()=>{ if(el) el.style.borderColor=''; },2000);
+ return false;
+ }
+ }
+
+ if(n===3){
+ const wEl = document.getElementById('s3-weight');
+ const wt = parseFloat(wEl.value);
+ if(!wEl.value || isNaN(wt) || wt <= 0){
+ wEl.focus();
+ wEl.style.borderColor = '#EF4444';
+ setTimeout(()=>{ wEl.style.borderColor=''; },2000);
+ showToast('error',' Vui lòng nhập cân nặng kiện hàng.');
+ return false;
+ }
+ }
+
+ if(n===4){
+ const boxes = ['pc1','pc2','pc3','pc4','pc5','pc6','pc7'];
+ if(!boxes.every(id=>document.getElementById(id).checked)){
+ showToast('error',' Vui lòng xác nhận tất cả các điều khoản.');
+ return false;
+ }
+ }
+ return true;
+ }
+
+ // POLICY AUTO-ENABLE BTN 
+ document.addEventListener('change', function(e){
+ if(['pc1','pc2','pc3','pc4','pc5','pc6','pc7'].includes(e.target.id)){
+ const all = ['pc1','pc2','pc3','pc4','pc5','pc6','pc7'].every(id=>document.getElementById(id).checked);
+ document.getElementById('btn-next-4').disabled = !all;
+ }
+ });
+
+ // PROVINCE DELIVERY FEE 
+ const FREE_PROVINCES = ['TP. Hồ Chí Minh','TP. Hà Nội'];
+
+ function onProvinceChange(){
+ const prov = v('s2-province');
+ const noteEl = document.getElementById('province-fee-note');
+ if (!noteEl) return;
+
+ // Reset ward
+ const wardSel = document.getElementById('s2-ward');
+ wardSel.innerHTML = '<option value="">— Chọn phường/xã —</option>';
+
+ if (!prov) {
+ wardSel.innerHTML = '<option value="" data-vi="— Chọn tỉnh/thành trước —" data-en="— Select province first —">— Chọn tỉnh/thành trước —</option>';
+ noteEl.className = 'province-fee-note';
+ noteEl.textContent = '';
+ return;
+ }
+
+ // Populate ward from WARD_DATA
+ if (typeof WARD_DATA !== 'undefined' && WARD_DATA[prov]) {
+ WARD_DATA[prov].forEach(ward => {
+ const opt = document.createElement('option');
+ opt.value = ward;
+ opt.textContent = ward;
+ wardSel.appendChild(opt);
+ });
+ }
+
+ const isFree = FREE_PROVINCES.includes(prov);
+ noteEl.className = 'province-fee-note ' + (isFree ? 'free' : 'paid');
+ const isENp = window.currentLang === 'en';
+ noteEl.textContent = isFree
+ ? (isENp ? ' Free delivery within ' + prov : ' Giao hàng nội thành ' + prov + ' — Miễn phí')
+ : (isENp ? ' ' + prov + ' — Surcharge +$0.99/lbs' : ' ' + prov + ' — Phụ thu +$0,99/lbs (tính khi cân hàng tại kho)');
+ }
+
+ // INSURANCE 
+ function setIns(el, val){
+ document.querySelectorAll('.ins-card').forEach(c=>c.classList.remove('active'));
+ el.classList.add('active');
+ insVal = val;
+ document.getElementById('f-insurance').value = val;
+ }
+
+ // PACKAGING 
+ let pkgRate = 0;
+ function setPkg(el, val, rate){
+ document.querySelectorAll('.pkg-card').forEach(c=>c.classList.remove('active'));
+ el.classList.add('active');
+ pkgVal = val;
+ pkgRate = rate;
+ document.getElementById('f-packaging').value = val;
+ document.getElementById('f-pkg-rate').value = rate;
+ }
+
+ // INIT DYNAMIC PRICING — cập nhật thẻ bảo hiểm & đóng gói từ CC_PRICING
+ function initMVVPricing() {
+   if (typeof CC_PRICING === 'undefined') return;
+   const ins = CC_PRICING.insurance;
+   const pkg = CC_PRICING.packaging;
+   const isEN = window.currentLang === 'en';
+
+   // ── Insurance cards ──────────────────────────────────────
+   document.querySelectorAll('.ins-card').forEach(function(card) {
+     var oc = card.getAttribute('onclick') || '';
+     var key = null;
+     if (oc.indexOf("'Pro'")    !== -1) key = 'Pro';
+     if (oc.indexOf("'ProMax'") !== -1) key = 'ProMax';
+     if (oc.indexOf("'Free'")   !== -1) key = 'Free';
+     if (!key || !ins[key]) return;
+     var d = ins[key];
+
+     // Cập nhật giá hiển thị
+     if (d.price !== null) {
+       var priceEl = card.querySelector('.ins-price');
+       if (priceEl) {
+         var span = priceEl.querySelector('span');
+         priceEl.textContent = (d.price === 0 ? '$0' : '$' + d.price.toFixed(2)) + ' ';
+         if (span) priceEl.appendChild(span);
+       }
+     }
+
+     // Cập nhật li[0]: phí, li[1]: bồi thường/lbs, li[2]: tối đa
+     var lis = card.querySelectorAll('.ins-features li');
+     if (lis[0] && d.price !== null) {
+       var vi0 = d.price === 0 ? ' Phí mua: <strong>Miễn phí</strong>' : ' Phí mua: <strong>$' + d.price.toFixed(2) + ' USD</strong>';
+       var en0 = d.price === 0 ? ' Cost: <strong>Free</strong>' : ' Cost: <strong>$' + d.price.toFixed(2) + ' USD</strong>';
+       lis[0].setAttribute('data-vi', vi0); lis[0].setAttribute('data-en', en0);
+       lis[0].innerHTML = isEN ? en0 : vi0;
+     }
+     if (lis[1] && d.perLbs !== null) {
+       var vi1 = ' Đền bù: <strong>$' + d.perLbs + ' USD/lbs</strong>';
+       var en1 = ' Compensation: <strong>$' + d.perLbs + ' USD/lbs</strong>';
+       lis[1].setAttribute('data-vi', vi1); lis[1].setAttribute('data-en', en1);
+       lis[1].innerHTML = isEN ? en1 : vi1;
+     }
+     if (lis[2] && d.maxCover !== null) {
+       var vi2 = ' Tối đa: <strong>$' + d.maxCover + ' USD</strong>';
+       var en2 = ' Max: <strong>$' + d.maxCover + ' USD</strong>';
+       lis[2].setAttribute('data-vi', vi2); lis[2].setAttribute('data-en', en2);
+       lis[2].innerHTML = isEN ? en2 : vi2;
+     }
+   });
+
+   // ── Packaging cards ──────────────────────────────────────
+   document.querySelectorAll('.pkg-card').forEach(function(card) {
+     var oc = card.getAttribute('onclick') || '';
+     var pkgKey = null;
+     if (oc.indexOf("'Tiêu chuẩn'") !== -1) pkgKey = 'Tiêu chuẩn';
+     if (oc.indexOf("'Nâng cao'")    !== -1) pkgKey = 'Nâng cao';
+     if (!pkgKey || !pkg[pkgKey]) return;
+     var d = pkg[pkgKey];
+     card.setAttribute('onclick', "setPkg(this,'" + pkgKey + "'," + d.rate + ")");
+     var priceEl = card.querySelector('.pkg-price');
+     if (priceEl && !priceEl.classList.contains('free')) {
+       priceEl.textContent = '+$' + d.rate.toFixed(2) + '/lbs';
+     }
+   });
+ }
+
+ // PAYMENT METHOD 
+ function setPayMethod(el, method){
+ document.querySelectorAll('.pay-method').forEach(m=>m.classList.remove('active'));
+ el.classList.add('active');
+ document.getElementById('f-pay-method').value = method;
+ document.getElementById('pay-usd-info').style.display = method==='USD' ? 'block' : 'none';
+ document.getElementById('pay-vnd-info').style.display = method==='VND' ? 'block' : 'none';
+ }
+
+ // PACKAGING GUIDE TOGGLE 
+ function togglePkgGuide(){
+ const body = document.getElementById('pkg-guide-body');
+ const arr = document.getElementById('pkg-guide-arr');
+ const open = body.style.display === 'block';
+ body.style.display = open ? 'none' : 'block';
+ arr.style.transform = open ? 'rotate(0deg)' : 'rotate(90deg)';
+ }
+
+ // PROHIBITED 
+ function toggleProhibited(el){
+ el.classList.toggle('open');
+ document.getElementById('proh-list').classList.toggle('show');
+ }
+
+ // SUMMARY 
+ // Pricing tiers & insurance fees — kéo từ CC_PRICING (pricing.js), fallback hardcode
+ const MVV_TIERS = typeof CC_PRICING !== 'undefined'
+   ? CC_PRICING.mvv.map(t => ({ from: t.from, to: t.to, rate: t.price }))
+   : [
+     { from:0, to:10, rate:3.89 },
+     { from:10, to:50, rate:3.89 },
+     { from:50, to:90, rate:3.79 },
+     { from:90, to:150, rate:3.59 },
+     { from:150, to:9999, rate:3.49 },
+   ];
+ const INS_FEES = typeof CC_PRICING !== 'undefined'
+   ? { Free: CC_PRICING.insurance.Free.price, Pro: CC_PRICING.insurance.Pro.price, ProMax: CC_PRICING.insurance.ProMax.price, Special: null }
+   : { Free:0, Pro:19.99, ProMax:59.99, Special:null };
+
+ function calcShipping(lbs){
+ const w = lbs < 10 ? 10 : lbs;
+ const tier = MVV_TIERS.find(t => w >= t.from && w < t.to);
+ return tier ? w * tier.rate : null;
+ }
+
+ function buildSummary(){
+ const isEN = window.currentLang === 'en';
+ const L = {
+   fb: isEN ? 'Facebook Name' : 'Tên Facebook',
+   code: isEN ? 'Customer Code' : 'Mã khách hàng',
+   noCode: isEN ? '(Not assigned)' : '(Chưa có)',
+   sender: isEN ? 'Sender' : 'Người gửi',
+   receiver: isEN ? 'Receiver' : 'Người nhận',
+   addrVN: isEN ? 'VN Address' : 'Địa chỉ VN',
+   items: isEN ? 'Items' : 'Hàng hóa',
+   noItems: isEN ? '(Not specified)' : '(Không ghi cụ thể)',
+   weight: isEN ? 'Weight' : 'Cân nặng',
+   noWeight: isEN ? 'Staff will weigh at warehouse' : 'Nhân viên cân tại kho',
+   delivFee: isEN ? 'VN Delivery Fee' : 'Phí giao hàng VN',
+   freeCity: isEN ? ' Free (within city)' : ' Miễn phí (nội thành)',
+   insurance: isEN ? 'Insurance' : 'Bảo hiểm',
+   packaging: isEN ? 'Packaging' : 'Đóng gói',
+   note: isEN ? 'Notes' : 'Ghi chú',
+   noNote: isEN ? 'None' : 'Không có',
+ };
+ const rows = [
+ [L.fb, v('s1-fb')],
+ [L.code, v('s1-code') || L.noCode],
+ [L.sender, v('s1-name') + ' — ' + v('s1-phone')],
+ ['Email', v('s1-email')],
+ ['—','—'],
+ [L.receiver, v('s2-name') + ' — ' + v('s2-phone')],
+ [L.addrVN, [v('s2-street'),v('s2-ward'),v('s2-district'),v('s2-province')].filter(Boolean).join(', ')],
+ ['—','—'],
+ [L.items, v('s3-items') || L.noItems],
+ [L.weight, v('s3-weight') ? v('s3-weight')+' lbs' : L.noWeight],
+ [L.delivFee, FREE_PROVINCES.includes(v('s2-province')) ? L.freeCity : ' +$0,99/lbs (' + (isEN ? 'province ' : 'tỉnh ') + v('s2-province') + ')'],
+ ['—','—'],
+ [L.insurance, insVal],
+ [L.packaging, pkgVal + (pkgRate > 0 ? ' (+$'+pkgRate.toFixed(2)+'/lbs)' : '')],
+ [L.note, v('s3-note') || L.noNote],
+ ];
+
+ const html = rows.map(([k,val])=>{
+ if(k==='—') return `<div class="summary-divider"></div>`;
+ return `<div class="summary-row"><span class="sk">${k}</span><span class="sv">${val||'—'}</span></div>`;
+ }).join('');
+ document.getElementById('summary-content').innerHTML = html;
+
+ // Cost estimate
+ const wt = parseFloat(v('s3-weight'));
+ if (!isNaN(wt) && wt > 0) {
+ const effW = wt < 10 ? 10 : wt;
+ const shipping = calcShipping(wt);
+ const pkgCost = pkgRate * effW;
+ const insFee = INS_FEES[insVal]; // null = special (% based)
+ const isFree = FREE_PROVINCES.includes(v('s2-province'));
+ const delivFee = isFree ? 0 : effW * 0.99;
+
+ let costRows = '';
+ costRows += `<div class="cost-est-row"><span class="ck">${isEN ? 'Shipping rate' : 'Cước vận chuyển'} (${effW} lbs)</span><span class="cv">~$${shipping ? shipping.toFixed(2) : '—'}</span></div>`;
+ if(pkgRate > 0) costRows += `<div class="cost-est-row"><span class="ck">${isEN ? 'Packaging' : 'Đóng gói'} (${pkgVal})</span><span class="cv">+$${pkgCost.toFixed(2)}</span></div>`;
+ if(insFee !== null && insFee > 0) costRows += `<div class="cost-est-row"><span class="ck">${isEN ? 'Insurance' : 'Bảo hiểm'} (${insVal})</span><span class="cv">+$${insFee.toFixed(2)}</span></div>`;
+ if(insFee === null) costRows += `<div class="cost-est-row"><span class="ck">${isEN ? 'Insurance (Special)' : 'Bảo hiểm (Special)'}</span><span class="cv">${isEN ? '10% of declared value' : '10% giá trị khai báo'}</span></div>`;
+ costRows += `<div class="cost-est-row"><span class="ck">${isEN ? 'VN Delivery' : 'Giao hàng VN'} (${v('s2-province')||'—'})</span><span class="cv">${isFree ? (isEN ? ' Free' : ' Miễn phí') : '+$'+delivFee.toFixed(2)}</span></div>`;
+
+ const totalNum = (shipping || 0) + pkgCost + (insFee || 0) + delivFee;
+ const totalStr = insFee === null ? '~$' + ((shipping||0)+pkgCost+delivFee).toFixed(2) + (isEN ? ' + 10% of value' : ' + 10% giá trị') : '~$' + totalNum.toFixed(2);
+
+ document.getElementById('cost-rows').innerHTML = costRows;
+ document.getElementById('cost-total').innerHTML = `<span>${isEN ? 'Estimated total' : 'Tổng ước tính'}</span><span class="tv">${totalStr}</span>`;
+ document.getElementById('cost-estimate').style.display = 'block';
+ } else {
+ document.getElementById('cost-estimate').style.display = 'none';
+ }
+ }
+
+ function v(id){ const el=document.getElementById(id); return el?el.value.trim():''; }
+
+ // SUBMIT 
+ function generateHTS() {
+ var d = new Date();
+ var yyyy = d.getFullYear();
+ var mm = ('0'+(d.getMonth()+1)).slice(-2);
+ var dd = ('0'+d.getDate()).slice(-2);
+ var rand = Math.floor(1000 + Math.random()*9000);
+ return 'HTS' + yyyy + mm + dd + rand;
+ }
+
+ async function submitOrder(){
+ const btn = document.getElementById('mvv-btn-confirm') || document.querySelector('.btn-next.submit');
+ btn.disabled = true;
+ btn.innerHTML = window.currentLang === 'en' ? '⏳ Submitting...' : '⏳ Đang gửi...';
+
+ const receiverAddress = [v('s2-street'),v('s2-ward'),v('s2-district'),v('s2-province')].filter(Boolean).join(', ');
+
+ const htsMa = generateHTS();
+ const data = {
+ formType: 'order',
+ orderId: htsMa,
+ facebookName: v('s1-fb'),
+ customerCode: v('s1-code'),
+ senderName: v('s1-name'),
+ phoneUS: v('s1-phone'),
+ email: v('s1-email'),
+ senderAddress: v('s1-addr'),
+ receiverName: v('s2-name'),
+ receiverPhone: v('s2-phone'),
+ receiverAddress,
+ items: v('s3-items'),
+ weight: v('s3-weight'),
+ deliveryMode: delivMode,
+ pickupDate: v('s3-pickup-date'),
+ pickupTime: v('s3-pickup-time'),
+ insurance: insVal,
+ packaging: pkgVal,
+ payMethod: v('f-pay-method') || 'USD',
+ note: v('s3-note'),
+ };
+
+ try {
+ if(!SCRIPT_URL || SCRIPT_URL.includes('PASTE')){
+ await new Promise(r=>setTimeout(r,1500));
+ document.getElementById('mvv-review-overlay').classList.remove('show');
+ showSuccessModal(htsMa);
+ } else {
+ await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(data)});
+ document.getElementById('mvv-review-overlay').classList.remove('show');
+ showSuccessModal(htsMa);
+ }
+ } catch(err){
+ showToast('error',' Lỗi: '+err.message);
+ }
+
+ btn.disabled = false;
+ btn.innerHTML = ' Xác nhận & Gửi đơn';
+ }
+
+ // SUCCESS MODAL
+ function showSuccessModal(code) {
+   document.getElementById('success-order-code').textContent = code;
+   document.getElementById('success-modal-overlay').classList.add('show');
+ }
+
+ // TOAST
+ function showToast(type, msg){
+ const t = document.getElementById('toast');
+ t.style.background = type==='success' ? '#16A34A' : '#DC2626';
+ document.getElementById('toast-msg').textContent = msg;
+ t.classList.add('show');
+ setTimeout(()=>t.classList.remove('show'),5000);
+ }
+
+ // PHONE VALIDATION 
+ function validatePhone(input, type) {
+ const digits = input.value.replace(/\D/g,'');
+ const errEl = document.getElementById(input.id + '-err');
+ if (!errEl) return;
+ if (!digits) { errEl.textContent = ''; return; }
+
+ if (type === 'us') {
+ // 10 digits, or 11 starting with 1
+ const ok = digits.length === 10 || (digits.length === 11 && digits[0] === '1');
+ errEl.textContent = ok ? '' : ' Số điện thoại Mỹ cần 10 chữ số (hoặc 11 nếu có mã +1)';
+ } else {
+ // VN: 10 digits starting with 0
+ const ok = digits.length === 10 && digits[0] === '0';
+ errEl.textContent = ok ? '' : ' Số điện thoại VN cần 10 chữ số, bắt đầu bằng 0';
+ }
+ }
+
+ // EMAIL VALIDATION 
+ function validateEmail(input) {
+ const errEl = document.getElementById('s1-email-err');
+ if (!errEl) return;
+ const val = input.value.trim();
+ if (!val) { errEl.textContent = ''; return; }
+ const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+ errEl.textContent = ok ? '' : ' Email không đúng định dạng (ví dụ: ten@gmail.com)';
+ }
+
+ // CALENDAR 
+ let calViewDate = new Date();
+ // start from next month if today is near end; always show at least tomorrow
+ calViewDate.setDate(1);
+
+ const MONTH_NAMES = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6',
+ 'Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
+
+ function renderCalendar() {
+ const year = calViewDate.getFullYear();
+ const month = calViewDate.getMonth();
+ document.getElementById('cal-month-label').textContent = MONTH_NAMES[month] + ' ' + year;
+
+ const grid = document.getElementById('cal-days');
+ grid.innerHTML = '';
+
+ // First weekday of month (convert Sun=0 → Mon=0 index)
+ const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+ const startOffset = (firstDay === 0) ? 6 : firstDay - 1; // Mon-based offset
+
+ const daysInMonth = new Date(year, month+1, 0).getDate();
+
+ const today = new Date(); today.setHours(0,0,0,0);
+ const tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
+
+ // Empty cells before day 1
+ for (let i=0; i<startOffset; i++) {
+ const blank = document.createElement('div');
+ blank.className = 'cal-day off';
+ grid.appendChild(blank);
+ }
+
+ for (let d=1; d<=daysInMonth; d++) {
+ const date = new Date(year, month, d);
+ const dayOfWk = date.getDay(); // 0=Sun, 6=Sat
+ const isWeekend = dayOfWk === 0 || dayOfWk === 6;
+ const isPast = date < tomorrow;
+ const dateStr = date.toISOString().split('T')[0];
+
+ const cell = document.createElement('div');
+ cell.textContent = d;
+ cell.className = 'cal-day';
+
+ if (isWeekend || isPast) {
+ cell.classList.add('off');
+ } else {
+ cell.onclick = () => selectCalDay(dateStr, cell);
+ }
+
+ // Highlight today
+ if (date.getTime() === today.getTime()) cell.classList.add('today');
+
+ // Highlight selected
+ if (dateStr === document.getElementById('s3-pickup-date').value) cell.classList.add('selected');
+
+ grid.appendChild(cell);
+ }
+ }
+
+ function calNav(dir) {
+ calViewDate.setMonth(calViewDate.getMonth() + dir);
+ renderCalendar();
+ }
+
+ function selectCalDay(dateStr, el) {
+ // Deselect previous
+ document.querySelectorAll('.cal-day.selected').forEach(c => c.classList.remove('selected'));
+ el.classList.add('selected');
+
+ document.getElementById('s3-pickup-date').value = dateStr;
+
+ // Show time slots
+ document.getElementById('timeslot-section').style.display = 'block';
+
+ // Reset time selection
+ document.querySelectorAll('.timeslot').forEach(t => t.classList.remove('selected'));
+ document.getElementById('s3-pickup-time').value = '';
+ document.getElementById('pktl-wrap').style.display = 'none';
+ }
+
+ function selectSlot(el, time) {
+ document.querySelectorAll('.timeslot').forEach(t => t.classList.remove('selected'));
+ el.classList.add('selected');
+ document.getElementById('s3-pickup-time').value = time;
+ document.getElementById('pktl-wrap').style.display = 'block';
+ }
+
+ injectFooter();
+
+ // LANG handled by assets/js/lang.js (shared engine, persists across pages)
+
+ // LABEL REMINDER POPUP 
+ function closePopup() {
+ document.getElementById('label-popup-overlay').style.display = 'none';
+ sessionStorage.setItem('mvv-popup-seen', '1');
+ }
+
+ // MVV REVIEW SHEET 
+ function showMVVReview() {
+ const isENr = window.currentLang === 'en';
+ const RL = {
+   fb: isENr?'Facebook Name':'Tên Facebook', sender:isENr?'Sender':'Người gửi',
+   receiver: isENr?'Receiver':'Người nhận', code:isENr?'Customer Code':'Mã khách hàng',
+   addrVN: isENr?'VN Address':'Địa chỉ VN', items:isENr?'Items':'Hàng hóa',
+   noItems: isENr?'(Not specified)':'(Không ghi cụ thể)', weight:isENr?'Weight':'Cân nặng',
+   insurance: isENr?'Insurance':'Bảo hiểm', packaging:isENr?'Packaging':'Đóng gói',
+   free: isENr?'Free':'Miễn phí', payment:isENr?'Payment':'Thanh toán',
+   total: isENr?'Estimated total':'Tổng ước tính',
+   delivVN: isENr?'VN Delivery':'Giao hàng VN',
+ };
+ const isFree = FREE_PROVINCES.includes(v('s2-province'));
+ const wt = parseFloat(v('s3-weight'));
+ const effW = (!isNaN(wt) && wt > 0) ? (wt < 10 ? 10 : wt) : null;
+ const pkgRate = parseFloat(document.getElementById('f-pkg-rate')?.value) || 0;
+
+ let costHTML = '';
+ if (effW) {
+ const shipping = calcShipping(wt);
+ const pkgCost = pkgRate * effW;
+ const insFee = INS_FEES[insVal];
+ const delivFee = isFree ? 0 : effW * 0.99;
+ const totalNum = (shipping||0) + pkgCost + (insFee||0) + delivFee;
+ const totalStr = insFee === null
+ ? '~$'+((shipping||0)+pkgCost+delivFee).toFixed(2)+(isENr?' + 10% of value':' + 10% giá trị')
+ : '~$'+totalNum.toFixed(2);
+
+ costHTML = `
+ <div class="mvv-divider"></div>
+ <div class="mvv-rrow"><span class="rk">${window.currentLang==='en'?'Shipping':'Cước'} (~${effW} lbs)</span><span class="rv orange">~$${shipping ? shipping.toFixed(2) : '—'}</span></div>
+ ${pkgCost > 0 ? `<div class="mvv-rrow"><span class="rk">${window.currentLang==='en'?'Packaging':'Đóng gói'} (${v('f-packaging')})</span><span class="rv">+$${pkgCost.toFixed(2)}</span></div>` : ''}
+ ${insFee !== null && insFee > 0 ? `<div class="mvv-rrow"><span class="rk">${window.currentLang==='en'?'Insurance':'Bảo hiểm'} (${insVal})</span><span class="rv">+$${insFee.toFixed(2)}</span></div>` : ''}
+ ${insFee === null ? `<div class="mvv-rrow"><span class="rk">${isENr?"Insurance (Special)":"Bảo hiểm (Special)"}</span><span class="rv">${isENr?"10% of value":"10% giá trị"}</span></div>` : ''}
+ <div class="mvv-rrow"><span class="rk">${RL.delivVN}</span>
+ <span class="rv" style="color:${isFree?'#16A34A':'var(--orange)'}">${isFree ? (isENr?' Free':'  Miễn phí')+'('+v('s2-province')+')' : '+$'+delivFee.toFixed(2)+' ('+v('s2-province')+')'}</span>
+ </div>
+ <div class="mvv-total"><span>${RL.total}</span><span class="tv">${totalStr}</span></div>`;
+ }
+
+ const addr = [v('s2-street'), v('s2-ward'), v('s2-province')].filter(Boolean).join(', ');
+ const payMeth = v('f-pay-method') || 'USD';
+
+ document.getElementById('mvv-review-content').innerHTML = `
+ <div class="mvv-rrow"><span class="rk">${RL.fb}</span><span class="rv">${v('s1-fb')}</span></div>
+ <div class="mvv-rrow"><span class="rk">${RL.sender}</span><span class="rv">${v('s1-name')} · ${v('s1-phone')}</span></div>
+ <div class="mvv-rrow"><span class="rk">Email</span><span class="rv">${v('s1-email')}</span></div>
+ <div class="mvv-rrow"><span class="rk">${RL.code}</span><span class="rv">${v('s1-code')||'—'}</span></div>
+ <div class="mvv-divider"></div>
+ <div class="mvv-rrow"><span class="rk">${RL.receiver}</span><span class="rv">${v('s2-name')} · ${v('s2-phone')}</span></div>
+ <div class="mvv-rrow"><span class="rk">${RL.addrVN}</span><span class="rv" style="max-width:280px;text-align:right;">${addr||'—'}</span></div>
+ <div class="mvv-divider"></div>
+ <div class="mvv-rrow"><span class="rk">${RL.items}</span><span class="rv">${v('s3-items')||RL.noItems}</span></div>
+ <div class="mvv-rrow"><span class="rk">${RL.weight}</span><span class="rv">${v('s3-weight')} lbs</span></div>
+ <div class="mvv-rrow"><span class="rk">${RL.insurance}</span><span class="rv">${insVal}</span></div>
+ <div class="mvv-rrow"><span class="rk">${RL.packaging}</span><span class="rv">${v('f-packaging')||RL.free}</span></div>
+ <div class="mvv-rrow"><span class="rk">${RL.payment}</span><span class="rv">${payMeth==='USD'?' USD (Zelle)':(isENr?' VND (Bank transfer)':' VND (Chuyển khoản)')}</span></div>
+ ${costHTML}
+ `;
+ document.getElementById('mvv-review-overlay').classList.add('show');
+ }
+
+ function closeMVVReview(e) {
+ if (!e || e.target === document.getElementById('mvv-review-overlay')) {
+ document.getElementById('mvv-review-overlay').classList.remove('show');
+ }
+ }
+
+ // INIT
+ document.addEventListener('DOMContentLoaded', () => {
+ onProvinceChange();
+ initMVVPricing();
+ // Show label popup after 800ms unless already dismissed this session
+ setTimeout(() => {
+ if (!sessionStorage.getItem('mvv-popup-seen')) {
+ document.getElementById('label-popup-overlay').style.display = 'flex';
+ }
+ }, 800);
+ // Auto-generate mã khách hàng từ SĐT
+ setupAutoCustomerCode('s1-phone', 's1-code');
+ });
+
+// Mobile nav toggle
+function toggleMobileNav() {
+  var nav = document.getElementById('cc-nav-links');
+  var btn = document.getElementById('mobile-toggle-btn');
+  if (!nav) return;
+  var isOpen = nav.classList.toggle('open');
+  if (btn) {
+    var open = btn.querySelector('.hbg-open');
+    var close = btn.querySelector('.hbg-close');
+    if (open)  open.style.display  = isOpen ? 'none'  : 'block';
+    if (close) close.style.display = isOpen ? 'block' : 'none';
+  }
+}
+// Đóng menu khi click ra ngoài
+document.addEventListener('click', function(e) {
+  var nav = document.getElementById('cc-nav-links');
+  var btn = document.getElementById('mobile-toggle-btn');
+  if (nav && nav.classList.contains('open') && btn && !nav.contains(e.target) && !btn.contains(e.target)) {
+    nav.classList.remove('open');
+    var open = btn.querySelector('.hbg-open');
+    var close = btn.querySelector('.hbg-close');
+    if (open)  open.style.display  = 'block';
+    if (close) close.style.display = 'none';
+  }
+});
+</script>
+<!-- FLOATING BUTTONS -->
+<div id="cc-fab-wrap">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="cc-fab cc-fab-zalo" aria-label="Zalo">
+  <svg viewBox="0 0 50 50" width="28" height="28"><rect x="3" y="3" width="44" height="38" rx="10" fill="white"/><text x="25" y="28" text-anchor="middle" font-size="18" font-weight="900" fill="#0068FF" font-family="Arial,sans-serif">Zalo</text><polygon points="10,41 18,41 10,50" fill="white"/></svg>
+ </a>
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="cc-fab cc-fab-fb" aria-label="Facebook">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+ </a>
+ <a href="https://www.tiktok.com/@cuckoo.cargo6" target="_blank" class="cc-fab cc-fab-tiktok" aria-label="TikTok">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-6.34 6.29 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+ </a>
+ <button class="cc-fab cc-fab-top" id="cc-fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Lên đầu" style="display:none">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+ </button>
+</div>
+</body>
+</html>

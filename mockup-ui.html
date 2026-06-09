@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuckoo Cargo — UI Mockup / Design Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+ /* ===== RESET & BASE ===== */
+ *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ :root {
+ --orange: #F47B20;
+ --orange-dark: #d4661a;
+ --black: #0F0F10;
+ --white: #FFFFFF;
+ --gray: #8E8E93;
+ --gray-light: #1C1C1E;
+ --gray-border: #2C2C2E;
+ --gray-card: #1A1A1C;
+ }
+ body { font-family: 'Inter', sans-serif; background: #111; color: #ccc; font-size: 14px; }
+ .bebas { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; }
+
+ /* ===== MOCKUP SHELL ===== */
+ .shell { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+ /* ===== TOP BAR ===== */
+ .top-bar {
+ background: #1a1a1a;
+ border: 1px solid #333;
+ border-radius: 12px 12px 0 0;
+ padding: 10px 16px;
+ display: flex; align-items: center; gap: 8px;
+ }
+ .dot { width: 12px; height: 12px; border-radius: 50%; }
+ .dot-red { background: #FF5F57; }
+ .dot-yellow { background: #FFBD2E; }
+ .dot-green { background: #28C840; }
+ .url-bar {
+ flex: 1; background: #2a2a2a; border-radius: 6px;
+ padding: 5px 12px; font-size: 12px; color: #888;
+ margin: 0 12px; text-align: center;
+ }
+
+ /* ===== PAGE TABS ===== */
+ .page-tabs {
+ display: flex; gap: 4px; padding: 16px 0 0;
+ border-bottom: 2px solid #222; margin-bottom: 0;
+ flex-wrap: wrap;
+ }
+ .tab {
+ padding: 10px 20px; border-radius: 8px 8px 0 0;
+ cursor: pointer; font-size: 13px; font-weight: 600;
+ background: #1a1a1a; color: #888; border: 1px solid #333;
+ border-bottom: none; transition: all 0.2s;
+ }
+ .tab:hover { color: #F47B20; background: #1f1f1f; }
+ .tab.active { background: var(--black); color: var(--orange); border-color: #F47B20; }
+
+ /* ===== PAGE CONTENT ===== */
+ .page { display: none; }
+ .page.active { display: block; }
+ .browser-frame {
+ background: var(--black);
+ border: 1px solid #333; border-top: none;
+ border-radius: 0 0 12px 12px; overflow: hidden;
+ }
+
+ /* ===== NAVBAR ===== */
+ .navbar {
+ background: rgba(15,15,16,0.95);
+ backdrop-filter: blur(20px);
+ border-bottom: 1px solid #1f1f1f;
+ padding: 0 48px;
+ display: flex; align-items: center; justify-content: space-between;
+ height: 68px; position: sticky; top: 0; z-index: 100;
+ }
+ .logo { display: flex; align-items: center; gap: 10px; }
+ .logo-icon {
+ width: 38px; height: 38px; background: var(--orange);
+ border-radius: 8px; display: flex; align-items: center; justify-content: center;
+ font-size: 18px;
+ }
+ .logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: white; letter-spacing: 2px; }
+ .logo-sub { font-size: 9px; color: var(--gray); letter-spacing: 3px; text-transform: uppercase; margin-top: -4px; }
+ .nav-links { display: flex; gap: 32px; align-items: center; }
+ .nav-links a { color: #ccc; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+ .nav-links a:hover, .nav-links a.active { color: var(--orange); }
+ .nav-cta {
+ background: var(--orange); color: white; padding: 10px 22px;
+ border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none;
+ transition: background 0.2s;
+ }
+ .nav-cta:hover { background: var(--orange-dark); }
+ .nav-phone { color: var(--orange); font-weight: 700; font-size: 14px; }
+
+ /* ===== HERO ===== */
+ .hero {
+ background: var(--black);
+ min-height: 600px; position: relative; overflow: hidden;
+ display: flex; align-items: center; padding: 80px 48px;
+ }
+ .hero-bg {
+ position: absolute; inset: 0;
+ background: radial-gradient(ellipse 60% 80% at 70% 50%, rgba(244,123,32,0.08) 0%, transparent 70%),
+ radial-gradient(ellipse 40% 60% at 20% 80%, rgba(244,123,32,0.05) 0%, transparent 60%);
+ }
+ .hero-grid {
+ position: absolute; inset: 0; opacity: 0.03;
+ background-image: linear-gradient(#F47B20 1px, transparent 1px),
+ linear-gradient(90deg, #F47B20 1px, transparent 1px);
+ background-size: 60px 60px;
+ }
+ .hero-content { position: relative; max-width: 600px; }
+ .hero-badge {
+ display: inline-flex; align-items: center; gap: 8px;
+ background: rgba(244,123,32,0.1); border: 1px solid rgba(244,123,32,0.3);
+ padding: 6px 14px; border-radius: 100px; margin-bottom: 24px;
+ font-size: 12px; color: var(--orange); font-weight: 600;
+ }
+ .hero-badge-dot { width: 6px; height: 6px; background: var(--orange); border-radius: 50%; animation: pulse 2s infinite; }
+ @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+ .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: 72px; line-height: 0.95; color: white; margin-bottom: 20px; }
+ .hero h1 span { color: var(--orange); }
+ .hero-desc { font-size: 16px; color: #999; line-height: 1.7; margin-bottom: 36px; max-width: 480px; }
+ .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
+ .btn-primary {
+ background: var(--orange); color: white; padding: 14px 28px;
+ border-radius: 10px; font-weight: 700; font-size: 15px;
+ text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+ }
+ .btn-secondary {
+ background: transparent; color: white; padding: 14px 28px;
+ border-radius: 10px; font-weight: 600; font-size: 15px;
+ border: 1px solid #333; text-decoration: none;
+ display: inline-flex; align-items: center; gap: 8px;
+ }
+ .hero-stats { display: flex; gap: 40px; }
+ .hero-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: white; line-height: 1; }
+ .hero-stat-num span { color: var(--orange); }
+ .hero-stat-label { font-size: 12px; color: var(--gray); margin-top: 4px; }
+ .hero-visual {
+ position: absolute; right: 48px; top: 50%; transform: translateY(-50%);
+ width: 420px;
+ }
+ .tracking-card {
+ background: #1A1A1C; border: 1px solid #2C2C2E;
+ border-radius: 16px; padding: 24px; margin-bottom: 16px;
+ }
+ .tracking-card-title { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+ .tracking-input-row { display: flex; gap: 8px; }
+ .tracking-input {
+ flex: 1; background: #111; border: 1px solid #333;
+ border-radius: 8px; padding: 12px 16px; color: white; font-size: 14px;
+ font-family: 'Inter', sans-serif;
+ }
+ .tracking-btn {
+ background: var(--orange); color: white; padding: 12px 20px;
+ border-radius: 8px; font-weight: 700; font-size: 14px; border: none; cursor: pointer;
+ }
+ .timeline { margin-top: 20px; }
+ .timeline-item { display: flex; gap: 12px; padding: 10px 0; position: relative; }
+ .timeline-item:not(:last-child)::after {
+ content: ''; position: absolute; left: 11px; top: 32px;
+ width: 2px; height: calc(100% - 12px); background: #2C2C2E;
+ }
+ .timeline-dot { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 1px; }
+ .timeline-dot.done { background: rgba(244,123,32,0.2); color: var(--orange); border: 2px solid var(--orange); }
+ .timeline-dot.active { background: var(--orange); color: white; }
+ .timeline-dot.pending { background: #2C2C2E; color: #555; }
+ .timeline-info { flex: 1; }
+ .timeline-title { font-size: 13px; font-weight: 600; color: white; }
+ .timeline-sub { font-size: 11px; color: var(--gray); margin-top: 2px; }
+ .timeline-time { font-size: 11px; color: var(--gray); text-align: right; white-space: nowrap; }
+
+ /* ===== QUICK QUOTE ===== */
+ .quick-quote {
+ background: #0A0A0B; padding: 60px 48px;
+ border-top: 1px solid #1a1a1a;
+ }
+ .section-label {
+ font-size: 12px; color: var(--orange); font-weight: 700;
+ text-transform: uppercase; letter-spacing: 3px; margin-bottom: 12px;
+ display: flex; align-items: center; gap: 8px;
+ }
+ .section-label::before { content: ''; width: 24px; height: 2px; background: var(--orange); }
+ .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 46px; color: white; line-height: 1; margin-bottom: 8px; }
+ .section-title span { color: var(--orange); }
+ .section-desc { color: var(--gray); font-size: 15px; margin-bottom: 40px; max-width: 500px; }
+ .quote-card {
+ background: #141416; border: 1px solid #2C2C2E;
+ border-radius: 20px; padding: 36px; max-width: 900px; margin: 0 auto;
+ }
+ .service-tabs { display: flex; gap: 4px; margin-bottom: 32px; background: #0F0F10; border-radius: 10px; padding: 4px; }
+ .service-tab {
+ flex: 1; padding: 10px; text-align: center; border-radius: 8px;
+ font-size: 13px; font-weight: 600; cursor: pointer; color: #666;
+ transition: all 0.2s;
+ }
+ .service-tab.active { background: var(--orange); color: white; }
+ .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+ .form-group label { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
+ .form-select, .form-input {
+ width: 100%; background: #0F0F10; border: 1px solid #2C2C2E;
+ border-radius: 8px; padding: 12px 16px; color: white; font-size: 14px;
+ font-family: 'Inter', sans-serif; appearance: none;
+ }
+ .price-result {
+ background: rgba(244,123,32,0.05); border: 1px solid rgba(244,123,32,0.2);
+ border-radius: 12px; padding: 20px 24px;
+ display: flex; align-items: center; justify-content: space-between;
+ }
+ .price-label { font-size: 13px; color: var(--gray); }
+ .price-value { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--orange); }
+ .price-note { font-size: 12px; color: var(--gray); margin-top: 4px; }
+ .price-cta { background: var(--orange); color: white; padding: 14px 32px; border-radius: 10px; font-weight: 700; font-size: 15px; border: none; cursor: pointer; }
+
+ /* ===== SERVICES ===== */
+ .services-section { padding: 80px 48px; background: var(--black); }
+ .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
+ .service-card {
+ background: #141416; border: 1px solid #2C2C2E;
+ border-radius: 20px; padding: 32px; position: relative; overflow: hidden;
+ transition: border-color 0.3s;
+ }
+ .service-card:hover { border-color: rgba(244,123,32,0.4); }
+ .service-card.featured { border-color: rgba(244,123,32,0.5); }
+ .service-card-bg {
+ position: absolute; top: -20px; right: -20px; width: 120px; height: 120px;
+ border-radius: 50%; background: rgba(244,123,32,0.05);
+ }
+ .service-icon {
+ width: 52px; height: 52px; background: rgba(244,123,32,0.1);
+ border-radius: 14px; display: flex; align-items: center; justify-content: center;
+ font-size: 24px; margin-bottom: 20px;
+ }
+ .service-tag {
+ display: inline-block; background: rgba(244,123,32,0.1); color: var(--orange);
+ font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px;
+ letter-spacing: 1px; margin-bottom: 14px; text-transform: uppercase;
+ }
+ .service-title { font-size: 20px; font-weight: 800; color: white; margin-bottom: 10px; line-height: 1.3; }
+ .service-desc { font-size: 14px; color: var(--gray); line-height: 1.7; margin-bottom: 24px; }
+ .service-features { list-style: none; margin-bottom: 28px; }
+ .service-features li {
+ font-size: 13px; color: #999; padding: 6px 0;
+ border-bottom: 1px solid #1f1f1f; display: flex; align-items: center; gap: 8px;
+ }
+ .service-features li::before { content: ''; color: var(--orange); font-weight: 700; font-size: 12px; }
+ .service-price { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--orange); }
+ .service-price-unit { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--gray); font-weight: 400; }
+ .service-link {
+ display: inline-flex; align-items: center; gap: 6px;
+ color: var(--orange); font-size: 14px; font-weight: 700;
+ text-decoration: none; margin-top: 16px;
+ }
+
+ /* ===== HOW IT WORKS ===== */
+ .hiw-section { padding: 80px 48px; background: #0A0A0B; }
+ .hiw-tabs { display: flex; gap: 4px; background: #141416; border-radius: 12px; padding: 4px; margin-bottom: 48px; max-width: 500px; }
+ .hiw-tab { flex: 1; padding: 10px; text-align: center; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; color: #666; }
+ .hiw-tab.active { background: var(--orange); color: white; }
+ .hiw-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; position: relative; }
+ .hiw-steps::before {
+ content: ''; position: absolute; top: 36px; left: 60px; right: 60px;
+ height: 2px; background: repeating-linear-gradient(90deg, var(--orange) 0, var(--orange) 8px, transparent 8px, transparent 16px);
+ }
+ .hiw-step { text-align: center; position: relative; }
+ .hiw-num {
+ width: 72px; height: 72px; border-radius: 50%;
+ background: var(--black); border: 2px solid var(--orange);
+ display: flex; align-items: center; justify-content: center;
+ margin: 0 auto 20px; font-family: 'Bebas Neue', sans-serif;
+ font-size: 28px; color: var(--orange); position: relative; z-index: 1;
+ }
+ .hiw-num.done { background: var(--orange); color: white; }
+ .hiw-step-title { font-size: 16px; font-weight: 700; color: white; margin-bottom: 8px; }
+ .hiw-step-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+ /* ===== TRUST STATS ===== */
+ .trust-section {
+ padding: 80px 48px;
+ background: var(--black);
+ }
+ .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: #1a1a1a; border-radius: 20px; overflow: hidden; margin-bottom: 64px; }
+ .stat-item { background: var(--black); padding: 40px; text-align: center; }
+ .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 56px; color: white; line-height: 1; }
+ .stat-num span { color: var(--orange); }
+ .stat-label { font-size: 14px; color: var(--gray); margin-top: 8px; }
+ .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+ .review-card {
+ background: #141416; border: 1px solid #2C2C2E;
+ border-radius: 16px; padding: 24px;
+ }
+ .review-stars { color: #F5A623; font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+ .review-text { font-size: 14px; color: #bbb; line-height: 1.7; margin-bottom: 18px; font-style: italic; }
+ .review-author { display: flex; align-items: center; gap: 12px; }
+ .review-avatar {
+ width: 40px; height: 40px; border-radius: 50%;
+ background: linear-gradient(135deg, var(--orange), #ff9f4a);
+ display: flex; align-items: center; justify-content: center;
+ font-weight: 700; color: white; font-size: 15px;
+ }
+ .review-name { font-weight: 700; color: white; font-size: 14px; }
+ .review-loc { font-size: 12px; color: var(--gray); }
+
+ /* ===== CTA BANNER ===== */
+ .cta-banner {
+ margin: 0 48px; border-radius: 24px; padding: 64px;
+ background: linear-gradient(135deg, #1a0d00, #2a1200, #1a0d00);
+ border: 1px solid rgba(244,123,32,0.3);
+ text-align: center; position: relative; overflow: hidden;
+ }
+ .cta-banner::before {
+ content: ''; position: absolute; inset: 0;
+ background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(244,123,32,0.1), transparent);
+ }
+ .cta-content { position: relative; }
+ .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: 58px; color: white; line-height: 1; margin-bottom: 16px; }
+ .cta-title span { color: var(--orange); }
+ .cta-desc { font-size: 16px; color: #aaa; margin-bottom: 36px; }
+ .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+ /* ===== FOOTER ===== */
+ .footer { background: #080809; padding: 60px 48px 32px; border-top: 1px solid #1a1a1a; }
+ .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+ .footer-brand p { font-size: 14px; color: #666; line-height: 1.7; margin: 16px 0 24px; }
+ .footer-contact-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #999; }
+ .footer-contact-icon { width: 32px; height: 32px; background: #1a1a1a; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+ .footer-col-title { font-size: 14px; font-weight: 700; color: white; margin-bottom: 20px; }
+ .footer-links { list-style: none; }
+ .footer-links li { margin-bottom: 10px; }
+ .footer-links a { font-size: 13px; color: #666; text-decoration: none; }
+ .footer-links a:hover { color: var(--orange); }
+ .footer-bottom { border-top: 1px solid #1a1a1a; padding-top: 24px; display: flex; align-items: center; justify-content: space-between; }
+ .footer-bottom p { font-size: 13px; color: #555; }
+ .social-links { display: flex; gap: 10px; }
+ .social-btn { width: 36px; height: 36px; background: #1a1a1a; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+ .zalo-float {
+ position: fixed; bottom: 24px; right: 24px; z-index: 1000;
+ width: 52px; height: 52px; background: #0068FF;
+ border-radius: 50%; display: flex; align-items: center; justify-content: center;
+ box-shadow: 0 4px 20px rgba(0,104,255,0.4); font-size: 22px;
+ }
+
+ /* ===== TRACKING PAGE ===== */
+ .tracking-page { padding: 80px 48px; background: var(--black); }
+ .tracking-hero { text-align: center; margin-bottom: 48px; }
+ .tracking-box {
+ max-width: 700px; margin: 0 auto 64px;
+ background: #141416; border: 1px solid #2C2C2E;
+ border-radius: 20px; padding: 40px;
+ }
+ .tracking-box-input { display: flex; gap: 12px; margin-bottom: 12px; }
+ .tracking-id-input {
+ flex: 1; background: #0F0F10; border: 2px solid #2C2C2E;
+ border-radius: 10px; padding: 16px 20px; color: white; font-size: 16px;
+ font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 1px;
+ }
+ .tracking-id-input:focus { outline: none; border-color: var(--orange); }
+ .tracking-submit {
+ background: var(--orange); color: white; padding: 16px 32px;
+ border-radius: 10px; font-weight: 700; font-size: 16px; border: none; cursor: pointer;
+ white-space: nowrap;
+ }
+ .tracking-result {
+ background: #141416; border: 1px solid #2C2C2E;
+ border-radius: 20px; padding: 36px; max-width: 860px; margin: 0 auto;
+ }
+ .tracking-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #1f1f1f; }
+ .order-id { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: white; }
+ .order-status { background: rgba(244,123,32,0.1); border: 1px solid rgba(244,123,32,0.3); color: var(--orange); padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 700; }
+ .tracking-map {
+ height: 200px; background: #0a0a0a; border-radius: 12px; margin-bottom: 28px;
+ display: flex; align-items: center; justify-content: center;
+ border: 1px solid #1f1f1f; position: relative; overflow: hidden;
+ }
+ .map-dots { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+ .route-line { width: 60%; height: 2px; background: linear-gradient(90deg, var(--orange) 40%, #333 40%); position: relative; }
+ .route-dot { width: 12px; height: 12px; border-radius: 50%; position: absolute; top: 50%; transform: translateY(-50%); }
+ .route-dot.start { background: var(--orange); left: 0; margin-left: -6px; }
+ .route-dot.current { background: white; left: 40%; margin-left: -6px; box-shadow: 0 0 0 4px rgba(255,255,255,0.2); }
+ .route-dot.end { background: #444; right: 0; margin-right: -6px; }
+ .route-label { position: absolute; top: -24px; font-size: 11px; font-weight: 700; }
+ .route-label.start { left: 0; color: var(--orange); }
+ .route-label.current { left: 40%; margin-left: -20px; color: white; }
+ .route-label.end { right: 0; color: #666; }
+ .tracking-timeline { }
+ .tl-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid #141414; }
+ .tl-dot-wrap { display: flex; flex-direction: column; align-items: center; gap: 0; }
+ .tl-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; }
+ .tl-dot.done { background: var(--orange); }
+ .tl-dot.current { background: white; box-shadow: 0 0 0 4px rgba(255,255,255,0.15); }
+ .tl-dot.pending { background: #2C2C2E; }
+ .tl-line { width: 2px; flex: 1; background: #1f1f1f; margin: 4px auto 0; }
+ .tl-body { flex: 1; padding-top: 0; }
+ .tl-title { font-size: 15px; font-weight: 700; color: white; }
+ .tl-sub { font-size: 13px; color: var(--gray); margin-top: 4px; }
+ .tl-time { font-size: 12px; color: #555; white-space: nowrap; padding-top: 2px; }
+
+ /* ===== PRICING PAGE ===== */
+ .pricing-page { padding: 80px 48px; background: var(--black); }
+ .pricing-toggle { display: flex; gap: 0; background: #141416; border-radius: 10px; padding: 4px; width: fit-content; margin: 0 auto 48px; }
+ .pricing-toggle-btn { padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; color: #666; }
+ .pricing-toggle-btn.active { background: var(--orange); color: white; }
+ .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto; }
+ .pricing-card {
+ background: #141416; border: 1px solid #2C2C2E;
+ border-radius: 20px; padding: 36px; position: relative;
+ }
+ .pricing-card.popular { border-color: rgba(244,123,32,0.5); }
+ .popular-badge {
+ position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+ background: var(--orange); color: white; font-size: 12px; font-weight: 700;
+ padding: 4px 16px; border-radius: 100px;
+ }
+ .pricing-tier { font-size: 13px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+ .pricing-price { font-family: 'Bebas Neue', sans-serif; font-size: 52px; color: white; line-height: 1; margin-bottom: 4px; }
+ .pricing-price span { color: var(--orange); font-size: 28px; }
+ .pricing-price-unit { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--gray); font-weight: 400; }
+ .pricing-desc { font-size: 13px; color: var(--gray); margin: 16px 0 24px; line-height: 1.6; }
+ .pricing-divider { height: 1px; background: #2C2C2E; margin-bottom: 24px; }
+ .pricing-features { list-style: none; margin-bottom: 32px; }
+ .pricing-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: #bbb; padding: 8px 0; }
+ .pricing-features li .check { color: var(--orange); font-weight: 700; flex-shrink: 0; }
+ .pricing-features li .cross { color: #444; flex-shrink: 0; }
+ .pricing-cta { width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
+ .pricing-cta.primary { background: var(--orange); color: white; border: none; }
+ .pricing-cta.outline { background: transparent; color: white; border: 1px solid #2C2C2E; }
+
+ /* ===== SERVICES DETAIL PAGE ===== */
+ .services-page { padding: 80px 48px; background: var(--black); }
+ .services-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 64px; }
+ .service-detail-card {
+ background: #141416; border: 1px solid #2C2C2E;
+ border-radius: 20px; overflow: hidden;
+ }
+ .sdc-header { padding: 32px; background: linear-gradient(135deg, #1a0800, #0F0F10); border-bottom: 1px solid #2C2C2E; }
+ .sdc-body { padding: 32px; }
+ .sdc-icon { font-size: 40px; margin-bottom: 16px; }
+ .sdc-title { font-size: 22px; font-weight: 800; color: white; margin-bottom: 8px; }
+ .sdc-desc { font-size: 14px; color: #999; line-height: 1.7; }
+ .sdc-detail-list { list-style: none; }
+ .sdc-detail-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1a1a1a; font-size: 14px; color: #bbb; }
+ .sdc-detail-list li .icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+ .faq-section { max-width: 800px; margin: 0 auto; }
+ .faq-item { border-bottom: 1px solid #1a1a1a; }
+ .faq-q { padding: 20px 0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 15px; font-weight: 600; color: white; }
+ .faq-a { font-size: 14px; color: var(--gray); line-height: 1.7; padding-bottom: 20px; }
+ .faq-arrow { color: var(--orange); font-size: 18px; transition: transform 0.2s; }
+
+ /* ===== CONTACT PAGE ===== */
+ .contact-page { padding: 80px 48px; background: var(--black); }
+ .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1000px; margin: 0 auto; }
+ .contact-form-card { background: #141416; border: 1px solid #2C2C2E; border-radius: 20px; padding: 40px; }
+ .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+ .form-full { margin-bottom: 16px; }
+ .form-label { font-size: 12px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
+ .form-field {
+ width: 100%; background: #0F0F10; border: 1px solid #2C2C2E;
+ border-radius: 8px; padding: 12px 16px; color: white; font-size: 14px;
+ font-family: 'Inter', sans-serif;
+ }
+ textarea.form-field { height: 120px; resize: none; }
+ .contact-info { }
+ .contact-info-title { font-size: 28px; font-weight: 800; color: white; margin-bottom: 24px; }
+ .info-card { background: #141416; border: 1px solid #2C2C2E; border-radius: 16px; padding: 24px; margin-bottom: 16px; display: flex; gap: 16px; }
+ .info-icon { width: 48px; height: 48px; background: rgba(244,123,32,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+ .info-label { font-size: 12px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+ .info-value { font-size: 15px; font-weight: 600; color: white; }
+ .map-preview { background: #0a0a0a; border: 1px solid #1f1f1f; border-radius: 16px; height: 200px; display: flex; align-items: center; justify-content: center; color: #444; font-size: 14px; margin-top: 16px; }
+
+ /* ===== ANNOTATION LAYER ===== */
+ .annotation { position: relative; }
+ .annotation-note {
+ background: rgba(244,123,32,0.9); color: white;
+ font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 4px;
+ position: absolute; top: -12px; right: 8px; z-index: 10;
+ white-space: nowrap; display: none;
+ }
+ .show-notes .annotation-note { display: block; }
+
+ /* ===== DESIGN SPECS PANEL ===== */
+ .specs-panel {
+ background: #0d0d0e; border: 1px solid #222; border-radius: 12px;
+ padding: 24px; margin-top: 24px;
+ }
+ .specs-title { font-size: 14px; font-weight: 700; color: var(--orange); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+ .specs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+ .spec-item { }
+ .spec-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+ .spec-value { font-size: 13px; color: #ccc; font-weight: 600; }
+ .color-swatch { display: flex; align-items: center; gap: 8px; }
+ .swatch { width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0; }
+
+ /* ===== RESPONSIVE NOTE ===== */
+ .responsive-bar {
+ display: flex; gap: 12px; align-items: center; padding: 16px 0;
+ border-bottom: 1px solid #1a1a1a; margin-bottom: 8px;
+ }
+ .device-btn { padding: 6px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; background: #1a1a1a; color: #666; border: 1px solid #2a2a2a; }
+ .device-btn.active { background: var(--orange); color: white; border-color: var(--orange); }
+ .viewport-size { font-size: 12px; color: #555; margin-left: auto; }
+
+ /* ===== SCROLLBAR ===== */
+ ::-webkit-scrollbar { width: 6px; }
+ ::-webkit-scrollbar-track { background: #111; }
+ ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+ <!-- HEADER -->
+ <div style="padding: 24px 0 16px;">
+ <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px;">
+ <div>
+ <div style="font-family:'Bebas Neue',sans-serif; font-size:28px; color:#F47B20; letter-spacing:3px;">CUCKOO CARGO</div>
+ <div style="font-size:12px; color:#666; letter-spacing:2px; text-transform:uppercase;">UI/UX Design Proposal — v1.0</div>
+ </div>
+ <div style="text-align:right;">
+ <div style="font-size:12px; color:#555;">Prepared by: BA & Design Team</div>
+ <div style="font-size:12px; color:#555; margin-top:2px;">Platform: Web + Mobile Responsive</div>
+ <div style="font-size:12px; color:#F47B20; margin-top:6px; font-weight:700;">5 Pages · 20+ Components</div>
+ </div>
+ </div>
+
+ <!-- SPECS PANEL -->
+ <div class="specs-panel">
+ <div class="specs-title"> Design Specifications</div>
+ <div class="specs-grid">
+ <div class="spec-item">
+ <div class="spec-label">Primary Color</div>
+ <div class="color-swatch"><div class="swatch" style="background:#F47B20;"></div><div class="spec-value">#F47B20</div></div>
+ </div>
+ <div class="spec-item">
+ <div class="spec-label">Background</div>
+ <div class="color-swatch"><div class="swatch" style="background:#0F0F10; border:1px solid #333;"></div><div class="spec-value">#0F0F10</div></div>
+ </div>
+ <div class="spec-item">
+ <div class="spec-label">Heading Font</div>
+ <div class="spec-value" style="font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px;">Bebas Neue</div>
+ </div>
+ <div class="spec-item">
+ <div class="spec-label">Body Font</div>
+ <div class="spec-value">Inter (300–800)</div>
+ </div>
+ <div class="spec-item">
+ <div class="spec-label">Border Radius</div>
+ <div class="spec-value">8px / 12px / 20px</div>
+ </div>
+ <div class="spec-item">
+ <div class="spec-label">Card Background</div>
+ <div class="color-swatch"><div class="swatch" style="background:#141416; border:1px solid #333;"></div><div class="spec-value">#141416</div></div>
+ </div>
+ <div class="spec-item">
+ <div class="spec-label">Gray Text</div>
+ <div class="color-swatch"><div class="swatch" style="background:#8E8E93;"></div><div class="spec-value">#8E8E93</div></div>
+ </div>
+ <div class="spec-item">
+ <div class="spec-label">Grid / Layout</div>
+ <div class="spec-value">Max 1280px · 48px pad</div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- BROWSER CHROME -->
+ <div class="top-bar">
+ <div class="dot dot-red"></div>
+ <div class="dot dot-yellow"></div>
+ <div class="dot dot-green"></div>
+ <div class="url-bar" id="urlBar"> cuckoocargo.com</div>
+ <div style="font-size:12px; color:#555;">Desktop · 1440px</div>
+ </div>
+
+ <!-- PAGE TABS -->
+ <div class="page-tabs">
+ <div class="tab active" onclick="showPage('home', this, 'cuckoocargo.com')"> Trang Chủ</div>
+ <div class="tab" onclick="showPage('tracking', this, 'cuckoocargo.com/tracking')"> Theo Dõi Đơn</div>
+ <div class="tab" onclick="showPage('services', this, 'cuckoocargo.com/dich-vu')"> Dịch Vụ</div>
+ <div class="tab" onclick="showPage('pricing', this, 'cuckoocargo.com/bang-gia')"> Bảng Giá</div>
+ <div class="tab" onclick="showPage('contact', this, 'cuckoocargo.com/lien-he')"> Liên Hệ</div>
+ </div>
+
+ <!-- BROWSER FRAME -->
+ <div class="browser-frame">
+
+ <!-- ================================================ -->
+ <!-- PAGE 1: HOME -->
+ <!-- ================================================ -->
+ <div id="page-home" class="page active">
+
+ <!-- NAVBAR -->
+ <nav class="navbar">
+ <div class="logo">
+ <div class="logo-icon"></div>
+ <div>
+ <div class="logo-text">CUCKOO CARGO</div>
+ <div class="logo-sub">Los Angeles · Since 2020</div>
+ </div>
+ </div>
+ <div class="nav-links">
+ <a href="#" class="active">Trang Chủ</a>
+ <a href="#">Dịch Vụ</a>
+ <a href="#">Theo Dõi Đơn</a>
+ <a href="#">Bảng Giá</a>
+ <a href="#">Liên Hệ</a>
+ </div>
+ <div style="display:flex; align-items:center; gap:16px;">
+ <div class="nav-phone"> (213) 555-0198</div>
+ <a href="#" class="nav-cta">Gửi Hàng Ngay →</a>
+ </div>
+ </nav>
+
+ <!-- HERO -->
+ <div class="hero">
+ <div class="hero-bg"></div>
+ <div class="hero-grid"></div>
+ <div class="hero-content">
+ <div class="hero-badge">
+ <div class="hero-badge-dot"></div>
+ Giao hàng Mỹ → Việt Nam chỉ 7–10 ngày
+ </div>
+ <h1>VẬN CHUYỂN<br><span>UY TÍN</span><br>TỪ MỸ VỀ VIỆT NAM</h1>
+ <p class="hero-desc">Gửi hàng nội địa Mỹ, vận chuyển Mỹ–Việt, dịch vụ mua hộ. Nhanh chóng, an toàn, giá tốt nhất Los Angeles.</p>
+ <div class="hero-btns">
+ <a href="#" class="btn-primary"> Tính Cước Ngay</a>
+ <a href="#" class="btn-secondary"> Theo Dõi Đơn</a>
+ </div>
+ <div class="hero-stats">
+ <div>
+ <div class="hero-stat-num">5,000<span>+</span></div>
+ <div class="hero-stat-label">Đơn hàng / tháng</div>
+ </div>
+ <div>
+ <div class="hero-stat-num">99<span>%</span></div>
+ <div class="hero-stat-label">Tỷ lệ thành công</div>
+ </div>
+ <div>
+ <div class="hero-stat-num">4<span>năm</span></div>
+ <div class="hero-stat-label">Kinh nghiệm</div>
+ </div>
+ </div>
+ </div>
+ <div class="hero-visual">
+ <div class="tracking-card">
+ <div class="tracking-card-title"> THEO DÕI ĐƠN HÀNG</div>
+ <div class="tracking-input-row">
+ <input class="tracking-input" value="CC-2024-087234" readonly>
+ <button class="tracking-btn">Tìm</button>
+ </div>
+ <div class="timeline" style="margin-top:20px;">
+ <div class="timeline-item">
+ <div class="timeline-dot done"></div>
+ <div class="timeline-info">
+ <div class="timeline-title">Đã nhận hàng tại kho LA</div>
+ <div class="timeline-sub">Los Angeles, CA</div>
+ </div>
+ <div class="timeline-time">10/01</div>
+ </div>
+ <div class="timeline-item">
+ <div class="timeline-dot done"></div>
+ <div class="timeline-info">
+ <div class="timeline-title">Xuất khẩu Mỹ</div>
+ <div class="timeline-sub">LAX Airport</div>
+ </div>
+ <div class="timeline-time">11/01</div>
+ </div>
+ <div class="timeline-item">
+ <div class="timeline-dot active"></div>
+ <div class="timeline-info">
+ <div class="timeline-title" style="color:#F47B20;">Đang trên đường bay</div>
+ <div class="timeline-sub">Dự kiến đến TP.HCM: 15/01</div>
+ </div>
+ <div class="timeline-time">Now</div>
+ </div>
+ <div class="timeline-item">
+ <div class="timeline-dot pending"></div>
+ <div class="timeline-info">
+ <div class="timeline-title" style="color:#555;">Thông quan Việt Nam</div>
+ <div class="timeline-sub">Sân bay Tân Sơn Nhất</div>
+ </div>
+ <div class="timeline-time">~15/01</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- QUICK QUOTE -->
+ <div class="quick-quote">
+ <div style="text-align:center; margin-bottom:40px;">
+ <div class="section-label" style="justify-content:center;">Ước Tính Cước Phí</div>
+ <div class="section-title">TÍNH CƯỚC <span>NHANH</span></div>
+ <div class="section-desc" style="margin:8px auto 0;">Nhập thông tin để xem giá ước tính ngay lập tức</div>
+ </div>
+ <div class="quote-card">
+ <div class="service-tabs">
+ <div class="service-tab active"> Mỹ → Việt Nam</div>
+ <div class="service-tab"> Nội Địa Mỹ</div>
+ <div class="service-tab"> Mua Hộ</div>
+ </div>
+ <div class="form-grid">
+ <div class="form-group">
+ <label>Từ (Bang / Thành Phố)</label>
+ <select class="form-select"><option>California — Los Angeles</option><option>New York</option><option>Texas</option></select>
+ </div>
+ <div class="form-group">
+ <label>Đến (Tỉnh / Thành Phố VN)</label>
+ <select class="form-select"><option>TP. Hồ Chí Minh</option><option>Hà Nội</option><option>Đà Nẵng</option></select>
+ </div>
+ <div class="form-group">
+ <label>Trọng Lượng (lbs)</label>
+ <input class="form-input" value="10" type="number">
+ </div>
+ </div>
+ <div class="price-result">
+ <div>
+ <div class="price-label">Cước ước tính</div>
+ <div class="price-value">$42.50</div>
+ <div class="price-note"> 7–10 ngày · Bao gồm bảo hiểm cơ bản</div>
+ </div>
+ <button class="price-cta">Đặt Gửi Ngay →</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- SERVICES -->
+ <div class="services-section">
+ <div class="section-label">Dịch Vụ Của Chúng Tôi</div>
+ <div class="section-title">3 DỊCH VỤ <span>CHỦ LỰC</span></div>
+ <div class="section-desc">Giải pháp vận chuyển toàn diện cho người Việt tại Mỹ</div>
+ <div class="services-grid">
+ <!-- Service 1 -->
+ <div class="service-card featured annotation">
+ <div class="annotation-note"> Card nổi bật — featured border</div>
+ <div class="service-card-bg"></div>
+ <div class="service-icon"></div>
+ <div class="service-tag">Phổ Biến Nhất</div>
+ <div class="service-title">Vận Chuyển<br>Mỹ → Việt Nam</div>
+ <div class="service-desc">Gửi hàng từ Mỹ về Việt Nam nhanh chóng, an toàn. Nhận tận kho hoặc địa chỉ nhà, giao tận cửa.</div>
+ <ul class="service-features">
+ <li>Nhận hàng tại kho LA hoặc ship về kho</li>
+ <li>Thủ tục hải quan trọn gói</li>
+ <li>Theo dõi realtime 24/7</li>
+ <li>Bảo hiểm hàng hóa</li>
+ <li>Giao tận nhà toàn quốc VN</li>
+ </ul>
+ <div class="service-price">$3.50 <span class="service-price-unit">/ lbs · từ</span></div>
+ <a href="#" class="service-link">Xem chi tiết →</a>
+ </div>
+ <!-- Service 2 -->
+ <div class="service-card">
+ <div class="service-card-bg"></div>
+ <div class="service-icon"></div>
+ <div class="service-tag">Nội Địa Mỹ</div>
+ <div class="service-title">Vận Chuyển<br>Nội Địa Mỹ</div>
+ <div class="service-desc">Chuyển đồ giữa các tiểu bang trong Mỹ. Phù hợp khi chuyển nhà, gửi quà hoặc nhận hàng online.</div>
+ <ul class="service-features">
+ <li>Giao toàn bộ 50 tiểu bang</li>
+ <li>Pick-up tận địa chỉ</li>
+ <li>Đóng gói chuyên nghiệp</li>
+ <li>1–5 ngày làm việc</li>
+ <li>Hàng cồng kềnh / oversize</li>
+ </ul>
+ <div class="service-price">$25 <span class="service-price-unit">/ box · từ</span></div>
+ <a href="#" class="service-link">Xem chi tiết →</a>
+ </div>
+ <!-- Service 3 -->
+ <div class="service-card">
+ <div class="service-card-bg"></div>
+ <div class="service-icon"></div>
+ <div class="service-tag">Mua Hộ</div>
+ <div class="service-title">Dịch Vụ<br>Mua Hộ Mỹ</div>
+ <div class="service-desc">Không có thẻ visa hay địa chỉ Mỹ? Chúng tôi mua và ship hộ mọi sản phẩm từ các website Mỹ.</div>
+ <ul class="service-features">
+ <li>Amazon, Walmart, Target, Costco...</li>
+ <li>Thời trang, mỹ phẩm, điện tử</li>
+ <li>Kiểm tra hàng trước khi gửi</li>
+ <li>Phí dịch vụ chỉ từ 5%</li>
+ <li>Tư vấn lựa chọn sản phẩm</li>
+ </ul>
+ <div class="service-price">5% <span class="service-price-unit">/ giá trị đơn hàng</span></div>
+ <a href="#" class="service-link">Xem chi tiết →</a>
+ </div>
+ </div>
+ </div>
+
+ <!-- HOW IT WORKS -->
+ <div class="hiw-section">
+ <div style="text-align:center; margin-bottom:48px;">
+ <div class="section-label" style="justify-content:center;">Quy Trình</div>
+ <div class="section-title">CHỈ <span>4 BƯỚC</span> ĐƠN GIẢN</div>
+ </div>
+ <div class="hiw-tabs">
+ <div class="hiw-tab active"> Mỹ → Việt Nam</div>
+ <div class="hiw-tab"> Nội Địa</div>
+ <div class="hiw-tab"> Mua Hộ</div>
+ </div>
+ <div class="hiw-steps">
+ <div class="hiw-step">
+ <div class="hiw-num done">1</div>
+ <div class="hiw-step-title">Đặt đơn online</div>
+ <div class="hiw-step-desc">Điền thông tin hàng hóa và địa chỉ nhận trên website hoặc nhắn Zalo</div>
+ </div>
+ <div class="hiw-step">
+ <div class="hiw-num done">2</div>
+ <div class="hiw-step-title">Giao hàng về kho LA</div>
+ <div class="hiw-step-desc">Ship hàng về địa chỉ kho của Cuckoo tại Los Angeles, CA</div>
+ </div>
+ <div class="hiw-step">
+ <div class="hiw-num active">3</div>
+ <div class="hiw-step-title">Chúng tôi xử lý</div>
+ <div class="hiw-step-desc">Kiểm tra, cân đo, đóng gói, làm thủ tục xuất khẩu và theo dõi hành trình</div>
+ </div>
+ <div class="hiw-step">
+ <div class="hiw-num" style="color:#555; border-color:#333;">4</div>
+ <div class="hiw-step-title">Nhận hàng tại VN</div>
+ <div class="hiw-step-desc">Hàng về TP.HCM, Hà Nội và giao tận nhà trên toàn quốc</div>
+ </div>
+ </div>
+ </div>
+
+ <!-- TRUST STATS -->
+ <div class="trust-section">
+ <div class="stats-grid">
+ <div class="stat-item">
+ <div class="stat-num">5,000<span>+</span></div>
+ <div class="stat-label">Đơn hàng / tháng</div>
+ </div>
+ <div class="stat-item">
+ <div class="stat-num">99<span>%</span></div>
+ <div class="stat-label">Tỷ lệ giao thành công</div>
+ </div>
+ <div class="stat-item">
+ <div class="stat-num">4<span>năm</span></div>
+ <div class="stat-label">Kinh nghiệm hoạt động</div>
+ </div>
+ <div class="stat-item">
+ <div class="stat-num">4.9<span></span></div>
+ <div class="stat-label">Đánh giá trung bình</div>
+ </div>
+ </div>
+ <div style="text-align:center; margin-bottom:40px;">
+ <div class="section-label" style="justify-content:center;">Khách Hàng Nói Gì</div>
+ <div class="section-title">KHÁCH HÀNG <span>TIN TƯỞNG</span></div>
+ </div>
+ <div class="reviews-grid">
+ <div class="review-card">
+ <div class="review-stars"></div>
+ <div class="review-text">"Gửi hàng về cho gia đình rất nhanh và an toàn. Anh chị staff tư vấn nhiệt tình, đóng gói cẩn thận. Sẽ tiếp tục sử dụng dịch vụ!"</div>
+ <div class="review-author">
+ <div class="review-avatar">M</div>
+ <div><div class="review-name">Minh Tú Nguyễn</div><div class="review-loc">San Jose, CA → TP.HCM</div></div>
+ </div>
+ </div>
+ <div class="review-card">
+ <div class="review-stars"></div>
+ <div class="review-text">"Mua hộ đồ trên Amazon về Việt Nam siêu tiện. Giá cước hợp lý, theo dõi đơn hàng dễ dàng. Nhân viên respond nhanh qua Zalo."</div>
+ <div class="review-author">
+ <div class="review-avatar">L</div>
+ <div><div class="review-name">Lan Anh Trần</div><div class="review-loc">Houston, TX → Hà Nội</div></div>
+ </div>
+ </div>
+ <div class="review-card">
+ <div class="review-stars"></div>
+ <div class="review-text">"Chuyển nhà từ LA sang New York, dùng dịch vụ nội địa của Cuckoo. Nhanh hơn dự kiến 2 ngày, đồ đạc nguyên vẹn 100%."</div>
+ <div class="review-author">
+ <div class="review-avatar">H</div>
+ <div><div class="review-name">Hùng Phạm</div><div class="review-loc">Los Angeles → New York</div></div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- CTA BANNER -->
+ <div style="padding: 0 0 64px; background: var(--black);">
+ <div class="cta-banner">
+ <div class="cta-content">
+ <div style="font-size:13px; color:rgba(244,123,32,0.8); font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;">Bắt Đầu Ngay Hôm Nay</div>
+ <div class="cta-title">SẴN SÀNG GỬI<br><span>HÀNG VỀ NHÀ?</span></div>
+ <div class="cta-desc">Đặt đơn online, nhắn Zalo hoặc gọi hotline để được tư vấn miễn phí.</div>
+ <div class="cta-btns">
+ <a href="#" class="btn-primary" style="font-size:16px; padding:16px 32px;"> Đặt Gửi Ngay</a>
+ <a href="#" class="btn-secondary" style="font-size:16px; padding:16px 32px;"> Chat Zalo</a>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- FOOTER -->
+ <div class="footer">
+ <div class="footer-grid">
+ <div class="footer-brand">
+ <div class="logo">
+ <div class="logo-icon"></div>
+ <div>
+ <div class="logo-text">CUCKOO CARGO</div>
+ <div class="logo-sub">Los Angeles · Since 2020</div>
+ </div>
+ </div>
+ <p>Dịch vụ vận chuyển uy tín từ Los Angeles, Mỹ về Việt Nam và nội địa Mỹ. Nhanh chóng, an toàn, giá cạnh tranh.</p>
+ <div class="footer-contact-item"><div class="footer-contact-icon"></div> 1234 S Figueroa St, Los Angeles, CA 90015</div>
+ <div class="footer-contact-item"><div class="footer-contact-icon"></div> (213) 555-0198</div>
+ <div class="footer-contact-item"><div class="footer-contact-icon"></div> info@cuckoocargo.com</div>
+ </div>
+ <div>
+ <div class="footer-col-title">Dịch Vụ</div>
+ <ul class="footer-links">
+ <li><a href="#">Vận chuyển Mỹ → VN</a></li>
+ <li><a href="#">Nội địa Mỹ</a></li>
+ <li><a href="#">Mua hộ</a></li>
+ <li><a href="#">Kho bãi</a></li>
+ <li><a href="#">Bảo hiểm hàng hóa</a></li>
+ </ul>
+ </div>
+ <div>
+ <div class="footer-col-title">Hỗ Trợ</div>
+ <ul class="footer-links">
+ <li><a href="#">Theo dõi đơn hàng</a></li>
+ <li><a href="#">Bảng giá cước</a></li>
+ <li><a href="#">Hướng dẫn gửi hàng</a></li>
+ <li><a href="#">Câu hỏi thường gặp</a></li>
+ <li><a href="#">Liên hệ</a></li>
+ </ul>
+ </div>
+ <div>
+ <div class="footer-col-title">Theo Dõi Chúng Tôi</div>
+ <ul class="footer-links">
+ <li><a href="#"> Facebook</a></li>
+ <li><a href="#"> Instagram</a></li>
+ <li><a href="#"> TikTok</a></li>
+ <li><a href="#"> Zalo OA</a></li>
+ <li><a href="#"> YouTube</a></li>
+ </ul>
+ </div>
+ </div>
+ <div class="footer-bottom">
+ <p>© 2024 Cuckoo Cargo LLC · All rights reserved · Los Angeles, CA</p>
+ <div style="display:flex; gap:16px;">
+ <a href="#" style="font-size:12px; color:#555; text-decoration:none;">Chính sách bảo mật</a>
+ <a href="#" style="font-size:12px; color:#555; text-decoration:none;">Điều khoản dịch vụ</a>
+ </div>
+ </div>
+ </div>
+ </div><!-- /page-home -->
+
+
+ <!-- ================================================ -->
+ <!-- PAGE 2: TRACKING -->
+ <!-- ================================================ -->
+ <div id="page-tracking" class="page">
+ <nav class="navbar">
+ <div class="logo"><div class="logo-icon"></div><div><div class="logo-text">CUCKOO CARGO</div><div class="logo-sub">Los Angeles · Since 2020</div></div></div>
+ <div class="nav-links"><a href="#">Trang Chủ</a><a href="#">Dịch Vụ</a><a href="#" class="active">Theo Dõi Đơn</a><a href="#">Bảng Giá</a><a href="#">Liên Hệ</a></div>
+ <div style="display:flex; gap:16px; align-items:center;"><div class="nav-phone"> (213) 555-0198</div><a href="#" class="nav-cta">Gửi Hàng Ngay →</a></div>
+ </nav>
+ <div class="tracking-page">
+ <div class="tracking-hero">
+ <div class="section-label" style="justify-content:center;">Kiểm Tra Đơn Hàng</div>
+ <div class="section-title" style="font-size:52px; text-align:center;">THEO DÕI <span style="color:var(--orange);">ĐƠN HÀNG</span></div>
+ <div class="section-desc" style="text-align:center; margin: 8px auto 0;">Nhập mã vận đơn để xem trạng thái đơn hàng theo thời gian thực</div>
+ </div>
+ <div class="tracking-box">
+ <div class="tracking-box-input">
+ <input class="tracking-id-input" value="CC-2024-087234" placeholder="Nhập mã vận đơn (VD: CC-2024-087234)">
+ <button class="tracking-submit"> Tra Cứu</button>
+ </div>
+ <div style="font-size:12px; color:#555; text-align:center;">Mã vận đơn được gửi qua email/Zalo sau khi đặt đơn thành công</div>
+ </div>
+ <div class="tracking-result">
+ <div class="tracking-header">
+ <div>
+ <div class="order-id">Đơn hàng #CC-2024-087234</div>
+ <div style="color:#666; font-size:13px; margin-top:6px;"> 1 kiện · 12 lbs · Los Angeles → TP. Hồ Chí Minh</div>
+ <div style="color:#666; font-size:13px; margin-top:4px;"> Ngày nhận kho: 10/01/2024 · Dự kiến giao: 17/01/2024</div>
+ </div>
+ <div style="text-align:right;">
+ <div class="order-status"> Đang Vận Chuyển</div>
+ <div style="font-size:12px; color:#555; margin-top:8px;">Cập nhật lần cuối: 2 giờ trước</div>
+ </div>
+ </div>
+ <div class="tracking-map">
+ <div class="map-dots">
+ <div class="route-line">
+ <div class="route-dot start"><span class="route-label start"> LA</span></div>
+ <div class="route-dot current"><span class="route-label current"> Bay</span></div>
+ <div class="route-dot end"><span class="route-label end"> SGN</span></div>
+ </div>
+ </div>
+ </div>
+ <div class="tracking-timeline">
+ <div class="tl-item">
+ <div class="tl-dot-wrap"><div class="tl-dot done"></div><div class="tl-line"></div></div>
+ <div class="tl-body"><div class="tl-title">Đã nhận hàng tại kho Los Angeles</div><div class="tl-sub">1234 S Figueroa St, Los Angeles, CA · Cân nặng: 12 lbs</div></div>
+ <div class="tl-time">10/01 · 10:30</div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-dot-wrap"><div class="tl-dot done"></div><div class="tl-line"></div></div>
+ <div class="tl-body"><div class="tl-title">Kiểm tra & đóng gói hoàn tất</div><div class="tl-sub">Đã kiểm tra nội dung, đóng gói cẩn thận, gắn nhãn vận chuyển</div></div>
+ <div class="tl-time">10/01 · 15:00</div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-dot-wrap"><div class="tl-dot done"></div><div class="tl-line"></div></div>
+ <div class="tl-body"><div class="tl-title">Xuất khẩu — Sân bay LAX</div><div class="tl-sub">Thủ tục hải quan xuất khẩu hoàn tất</div></div>
+ <div class="tl-time">11/01 · 20:00</div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-dot-wrap"><div class="tl-dot current"></div><div class="tl-line"></div></div>
+ <div class="tl-body"><div class="tl-title" style="color:var(--orange);"> Đang trên chuyến bay — Pacific crossing</div><div class="tl-sub">Chuyến bay VN-209 · Dự kiến đến Tân Sơn Nhất: 13/01</div></div>
+ <div class="tl-time" style="color:var(--orange);">Now</div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-dot-wrap"><div class="tl-dot pending"></div><div class="tl-line"></div></div>
+ <div class="tl-body" style="opacity:0.4;"><div class="tl-title">Nhập khẩu & thông quan Việt Nam</div><div class="tl-sub">Sân bay Tân Sơn Nhất, TP.HCM</div></div>
+ <div class="tl-time" style="opacity:0.4;">~13/01</div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-dot-wrap"><div class="tl-dot pending"></div></div>
+ <div class="tl-body" style="opacity:0.4;"><div class="tl-title">Giao hàng tận nhà</div><div class="tl-sub">123 Nguyễn Văn Linh, Quận 7, TP.HCM</div></div>
+ <div class="tl-time" style="opacity:0.4;">~17/01</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div><!-- /page-tracking -->
+
+
+ <!-- ================================================ -->
+ <!-- PAGE 3: SERVICES -->
+ <!-- ================================================ -->
+ <div id="page-services" class="page">
+ <nav class="navbar">
+ <div class="logo"><div class="logo-icon"></div><div><div class="logo-text">CUCKOO CARGO</div><div class="logo-sub">Los Angeles · Since 2020</div></div></div>
+ <div class="nav-links"><a href="#">Trang Chủ</a><a href="#" class="active">Dịch Vụ</a><a href="#">Theo Dõi Đơn</a><a href="#">Bảng Giá</a><a href="#">Liên Hệ</a></div>
+ <div style="display:flex; gap:16px; align-items:center;"><div class="nav-phone"> (213) 555-0198</div><a href="#" class="nav-cta">Gửi Hàng Ngay →</a></div>
+ </nav>
+ <div class="services-page">
+ <div style="text-align:center; margin-bottom:56px;">
+ <div class="section-label" style="justify-content:center;">Khám Phá Dịch Vụ</div>
+ <div class="section-title" style="font-size:52px;">DỊCH VỤ <span style="color:var(--orange);">ĐẦY ĐỦ</span></div>
+ <div class="section-desc" style="margin: 8px auto 0; text-align:center;">Ba dịch vụ chủ lực phục vụ cộng đồng người Việt tại Mỹ</div>
+ </div>
+ <div class="services-detail-grid">
+ <div class="service-detail-card">
+ <div class="sdc-header">
+ <div class="sdc-icon"></div>
+ <div class="sdc-title">Vận Chuyển Mỹ → Việt Nam</div>
+ <div class="sdc-desc">Dịch vụ gửi hàng từ Mỹ về Việt Nam uy tín. Nhận hàng tại kho LA hoặc pick-up tận địa chỉ, giao tận nhà toàn quốc.</div>
+ </div>
+ <div class="sdc-body">
+ <ul class="sdc-detail-list">
+ <li><div class="icon">⏱</div><div><div style="font-weight:600; color:white; margin-bottom:2px;">Thời gian giao hàng</div>7–10 ngày làm việc từ ngày nhận hàng tại kho</div></li>
+ <li><div class="icon"></div><div><div style="font-weight:600; color:white; margin-bottom:2px;">Loại hàng được chấp nhận</div>Quần áo, giày dép, mỹ phẩm, thực phẩm khô, điện tử...</div></li>
+ <li><div class="icon"></div><div><div style="font-weight:600; color:white; margin-bottom:2px;">Giới hạn trọng lượng</div>Không giới hạn · Tính theo lbs hoặc kg (0.45 kg/lb)</div></li>
+ <li><div class="icon"></div><div><div style="font-weight:600; color:white; margin-bottom:2px;">Bảo hiểm</div>Bảo hiểm cơ bản miễn phí · Nâng cấp lên $0.5/lbs</div></li>
+ <li><div class="icon"></div><div><div style="font-weight:600; color:white; margin-bottom:2px;">Địa chỉ kho nhận hàng</div>1234 S Figueroa St, Los Angeles, CA 90015</div></li>
+ </ul>
+ </div>
+ </div>
+ <div class="service-detail-card">
+ <div class="sdc-header">
+ <div class="sdc-icon"></div>
+ <div class="sdc-title">Dịch Vụ Mua Hộ</div>
+ <div class="sdc-desc">Không có thẻ visa, địa chỉ Mỹ? Chúng tôi mua hộ từ Amazon, Walmart, Target và hàng trăm website khác.</div>
+ </div>
+ <div class="sdc-body">
+ <ul class="sdc-detail-list">
+ <li><div class="icon"></div><div><div style="font-weight:600; color:white; margin-bottom:2px;">Website hỗ trợ</div>Amazon, Walmart, Target, Costco, Nike, Apple Store...</div></li>
+ <li><div class="icon"></div><div><div style="font-weight:600; color:white; margin-bottom:2px;">Phí dịch vụ</div>5% giá trị đơn hàng (tối thiểu $5)</div></li>
+ <li><div class="icon"></div><div><div style="font-weight:600; color:white; margin-bottom:2px;">Kiểm tra hàng</div>Quay video/chụp ảnh kiểm tra trước khi đóng gói gửi</div></li>
+ <li><div class="icon">↩</div><div><div style="font-weight:600; color:white; margin-bottom:2px;">Hỗ trợ hoàn hàng</div>Hỗ trợ return/exchange theo chính sách của shop</div></li>
+ <li><div class="icon"></div><div><div style="font-weight:600; color:white; margin-bottom:2px;">Tư vấn</div>Tư vấn chọn sản phẩm, so sánh giá miễn phí</div></li>
+ </ul>
+ </div>
+ </div>
+ </div>
+ <!-- FAQ -->
+ <div style="text-align:center; margin-bottom:40px;">
+ <div class="section-label" style="justify-content:center;">Câu Hỏi Thường Gặp</div>
+ <div class="section-title" style="font-size:42px;">FAQ — <span style="color:var(--orange);">GIẢI ĐÁP NHANH</span></div>
+ </div>
+ <div class="faq-section">
+ <div class="faq-item">
+ <div class="faq-q">Hàng mất bao lâu để về Việt Nam? <div class="faq-arrow"></div></div>
+ <div class="faq-a">Thông thường 7–10 ngày làm việc kể từ ngày chúng tôi nhận hàng tại kho LA. Thời gian có thể lâu hơn vào dịp lễ tết hoặc khi hải quan kiểm tra.</div>
+ </div>
+ <div class="faq-item">
+ <div class="faq-q">Những loại hàng nào không được phép gửi? <div class="faq-arrow"></div></div>
+ <div class="faq-a">Hàng cấm theo luật Mỹ và Việt Nam: chất lỏng dễ cháy, vũ khí, chất kích thích, tiền mặt... Liên hệ để được tư vấn cụ thể về mặt hàng của bạn.</div>
+ </div>
+ <div class="faq-item">
+ <div class="faq-q">Làm sao để tính cước phí? <div class="faq-arrow"></div></div>
+ <div class="faq-a">Cước tính theo lbs (1 lb ≈ 0.45 kg) hoặc volumetric weight (D×R×C / 139). Chúng tôi sẽ tính theo trọng lượng thực tế hoặc thể tích, cái nào lớn hơn.</div>
+ </div>
+ <div class="faq-item">
+ <div class="faq-q">Có hỗ trợ giao hàng tận nhà tại Việt Nam không? <div class="faq-arrow"></div></div>
+ <div class="faq-a">Có. Chúng tôi giao tận nhà toàn quốc qua đối tác logistics trong nước. Phí giao nội địa VN từ 30,000đ–80,000đ tùy tỉnh thành.</div>
+ </div>
+ </div>
+ </div>
+ </div><!-- /page-services -->
+
+
+ <!-- ================================================ -->
+ <!-- PAGE 4: PRICING -->
+ <!-- ================================================ -->
+ <div id="page-pricing" class="page">
+ <nav class="navbar">
+ <div class="logo"><div class="logo-icon"></div><div><div class="logo-text">CUCKOO CARGO</div><div class="logo-sub">Los Angeles · Since 2020</div></div></div>
+ <div class="nav-links"><a href="#">Trang Chủ</a><a href="#">Dịch Vụ</a><a href="#">Theo Dõi Đơn</a><a href="#" class="active">Bảng Giá</a><a href="#">Liên Hệ</a></div>
+ <div style="display:flex; gap:16px; align-items:center;"><div class="nav-phone"> (213) 555-0198</div><a href="#" class="nav-cta">Gửi Hàng Ngay →</a></div>
+ </nav>
+ <div class="pricing-page">
+ <div style="text-align:center; margin-bottom:8px;">
+ <div class="section-label" style="justify-content:center;">Giá Cả Minh Bạch</div>
+ <div class="section-title" style="font-size:52px;">BẢNG GIÁ <span style="color:var(--orange);">CƯỚC PHÍ</span></div>
+ <div class="section-desc" style="text-align:center; margin: 8px auto 0;">Không phí ẩn · Không phụ phí bất ngờ · Giá niêm yết rõ ràng</div>
+ </div>
+ <div class="pricing-toggle">
+ <div class="pricing-toggle-btn active"> Mỹ → Việt Nam</div>
+ <div class="pricing-toggle-btn"> Nội Địa Mỹ</div>
+ </div>
+ <div class="pricing-grid">
+ <div class="pricing-card">
+ <div class="pricing-tier">Tiết Kiệm</div>
+ <div class="pricing-price"><span>$</span>3.50 <span class="pricing-price-unit">/ lb</span></div>
+ <div class="pricing-desc">Phù hợp đơn hàng nhỏ, không gấp. Giao 10–14 ngày.</div>
+ <div class="pricing-divider"></div>
+ <ul class="pricing-features">
+ <li><span class="check"></span> Cân nặng: 1–50 lbs</li>
+ <li><span class="check"></span> Theo dõi đơn hàng online</li>
+ <li><span class="check"></span> Bảo hiểm cơ bản</li>
+ <li><span class="check"></span> Giao tận kho VN</li>
+ <li><span class="cross"></span> Giao tận nhà</li>
+ <li><span class="cross"></span> Ưu tiên xử lý</li>
+ </ul>
+ <button class="pricing-cta outline">Chọn Gói Này</button>
+ </div>
+ <div class="pricing-card popular">
+ <div class="popular-badge"> Phổ Biến Nhất</div>
+ <div class="pricing-tier">Tiêu Chuẩn</div>
+ <div class="pricing-price"><span>$</span>4.50 <span class="pricing-price-unit">/ lb</span></div>
+ <div class="pricing-desc">Lựa chọn tốt nhất · Cân bằng giá và tốc độ. Giao 7–10 ngày.</div>
+ <div class="pricing-divider"></div>
+ <ul class="pricing-features">
+ <li><span class="check"></span> Cân nặng: không giới hạn</li>
+ <li><span class="check"></span> Theo dõi realtime</li>
+ <li><span class="check"></span> Bảo hiểm nâng cao</li>
+ <li><span class="check"></span> Giao tận nhà toàn quốc VN</li>
+ <li><span class="check"></span> Hỗ trợ 24/7 qua Zalo</li>
+ <li><span class="cross"></span> Ưu tiên thông quan</li>
+ </ul>
+ <button class="pricing-cta primary">Chọn Gói Này</button>
+ </div>
+ <div class="pricing-card">
+ <div class="pricing-tier">Express</div>
+ <div class="pricing-price"><span>$</span>7.00 <span class="pricing-price-unit">/ lb</span></div>
+ <div class="pricing-desc">Cho hàng gấp, cần nhanh nhất. Giao 4–6 ngày.</div>
+ <div class="pricing-divider"></div>
+ <ul class="pricing-features">
+ <li><span class="check"></span> Ưu tiên xử lý trong ngày</li>
+ <li><span class="check"></span> Theo dõi realtime + SMS</li>
+ <li><span class="check"></span> Bảo hiểm đầy đủ</li>
+ <li><span class="check"></span> Giao tận nhà ưu tiên</li>
+ <li><span class="check"></span> Ưu tiên thông quan</li>
+ <li><span class="check"></span> Account manager riêng</li>
+ </ul>
+ <button class="pricing-cta outline">Chọn Gói Này</button>
+ </div>
+ </div>
+ <!-- Promo banner -->
+ <div style="background: rgba(244,123,32,0.05); border: 1px solid rgba(244,123,32,0.2); border-radius:16px; padding:24px 32px; margin-top:40px; display:flex; align-items:center; gap:16px;">
+ <div style="font-size:32px;"></div>
+ <div style="flex:1;">
+ <div style="font-weight:800; color:white; font-size:16px; margin-bottom:4px;">Khách hàng mới — Giảm 15% đơn hàng đầu tiên!</div>
+ <div style="font-size:14px; color:#888;">Nhập code <span style="color:var(--orange); font-weight:700;">WELCOME15</span> khi đặt đơn. Áp dụng đến 31/12/2024.</div>
+ </div>
+ <button class="btn-primary" style="white-space:nowrap; padding:12px 24px; font-size:14px;">Đặt Ngay</button>
+ </div>
+ </div>
+ </div><!-- /page-pricing -->
+
+
+ <!-- ================================================ -->
+ <!-- PAGE 5: CONTACT -->
+ <!-- ================================================ -->
+ <div id="page-contact" class="page">
+ <nav class="navbar">
+ <div class="logo"><div class="logo-icon"></div><div><div class="logo-text">CUCKOO CARGO</div><div class="logo-sub">Los Angeles · Since 2020</div></div></div>
+ <div class="nav-links"><a href="#">Trang Chủ</a><a href="#">Dịch Vụ</a><a href="#">Theo Dõi Đơn</a><a href="#">Bảng Giá</a><a href="#" class="active">Liên Hệ</a></div>
+ <div style="display:flex; gap:16px; align-items:center;"><div class="nav-phone"> (213) 555-0198</div><a href="#" class="nav-cta">Gửi Hàng Ngay →</a></div>
+ </nav>
+ <div class="contact-page">
+ <div style="text-align:center; margin-bottom:56px;">
+ <div class="section-label" style="justify-content:center;">Hỗ Trợ 24/7</div>
+ <div class="section-title" style="font-size:52px;">LIÊN HỆ <span style="color:var(--orange);">CHÚNG TÔI</span></div>
+ <div class="section-desc" style="text-align:center; margin: 8px auto 0;">Đội ngũ tư vấn sẵn sàng hỗ trợ bạn mọi lúc</div>
+ </div>
+ <div class="contact-grid">
+ <div class="contact-form-card">
+ <div style="font-size:20px; font-weight:800; color:white; margin-bottom:24px;"> Gửi Tin Nhắn</div>
+ <div class="form-row">
+ <div><label class="form-label">Họ và tên</label><input class="form-field" placeholder="Nguyễn Văn A"></div>
+ <div><label class="form-label">Số điện thoại</label><input class="form-field" placeholder="(xxx) xxx-xxxx"></div>
+ </div>
+ <div class="form-full"><label class="form-label">Email</label><input class="form-field" placeholder="email@example.com"></div>
+ <div class="form-full"><label class="form-label">Dịch vụ quan tâm</label>
+ <select class="form-field"><option>Vận chuyển Mỹ → Việt Nam</option><option>Nội địa Mỹ</option><option>Mua hộ</option><option>Khác</option></select>
+ </div>
+ <div class="form-full"><label class="form-label">Nội dung</label><textarea class="form-field" placeholder="Mô tả câu hỏi hoặc yêu cầu của bạn..."></textarea></div>
+ <button class="btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:15px;"> Gửi Tin Nhắn</button>
+ </div>
+ <div class="contact-info">
+ <div class="contact-info-title">Thông Tin Liên Hệ</div>
+ <div class="info-card"><div class="info-icon"></div><div><div class="info-label">Hotline</div><div class="info-value">(213) 555-0198</div><div style="font-size:12px; color:#666; margin-top:4px;">Thứ 2 – CN · 8:00am – 8:00pm PST</div></div></div>
+ <div class="info-card"><div class="info-icon"></div><div><div class="info-label">Zalo (24/7)</div><div class="info-value">0901 234 567</div><div style="font-size:12px; color:#666; margin-top:4px;">Phản hồi trong vòng 15 phút</div></div></div>
+ <div class="info-card"><div class="info-icon"></div><div><div class="info-label">Email</div><div class="info-value">info@cuckoocargo.com</div><div style="font-size:12px; color:#666; margin-top:4px;">Trả lời trong 2–4 giờ làm việc</div></div></div>
+ <div class="info-card"><div class="info-icon"></div><div><div class="info-label">Địa chỉ kho</div><div class="info-value">1234 S Figueroa St</div><div style="font-size:12px; color:#666; margin-top:4px;">Los Angeles, CA 90015 · Thứ 2–6 9am–5pm</div></div></div>
+ <div class="map-preview"> Google Maps Embed — 1234 S Figueroa St, Los Angeles, CA</div>
+ </div>
+ </div>
+ </div>
+ </div><!-- /page-contact -->
+
+ </div><!-- /browser-frame -->
+
+ <!-- ZALO FLOAT (global) -->
+ <div class="zalo-float"></div>
+
+ <!-- DESIGN NOTES -->
+ <div style="padding: 32px 0; border-top: 1px solid #1a1a1a; margin-top: 32px;">
+ <div style="font-family:'Bebas Neue',sans-serif; font-size:22px; color:#F47B20; letter-spacing:2px; margin-bottom:20px;"> GHI CHÚ THIẾT KẾ — DESIGN NOTES</div>
+ <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+ <div style="background:#141416; border:1px solid #2C2C2E; border-radius:16px; padding:24px;">
+ <div style="font-weight:800; color:white; font-size:16px; margin-bottom:16px;"> Component Library</div>
+ <ul style="list-style:none; display:grid; gap:10px;">
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">01</span> Navbar — Sticky, blur backdrop, CTA button</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">02</span> Hero — Full-width, animated badge, live tracking preview</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">03</span> Quick Quote Calculator — 3 service tabs, instant pricing</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">04</span> Service Cards — Featured card, feature list, CTA</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">05</span> How It Works — Step flow, tabbed for each service</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">06</span> Stats Bar — 4-column stats grid</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">07</span> Review Cards — Star rating + avatar</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">08</span> CTA Banner — Gradient glow, two-button</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">09</span> Tracking Timeline — Step-by-step with map preview</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">10</span> Pricing Cards — 3-tier with popular badge</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">11</span> Contact Form + Info Cards</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">12</span> FAQ Accordion</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">13</span> Footer — 4-column grid</li>
+ <li style="display:flex; gap:10px; font-size:14px; color:#aaa;"><span style="color:#F47B20; font-weight:700;">14</span> Zalo Floating Button</li>
+ </ul>
+ </div>
+ <div style="background:#141416; border:1px solid #2C2C2E; border-radius:16px; padding:24px;">
+ <div style="font-weight:800; color:white; font-size:16px; margin-bottom:16px;"> Responsive Strategy</div>
+ <div style="font-size:14px; color:#aaa; line-height:1.8; margin-bottom:16px;">
+ <strong style="color:white;">Mobile (< 768px):</strong><br>
+ Hamburger menu · Full-width cards · Stack grid layout · Bottom sticky CTA bar
+ </div>
+ <div style="font-size:14px; color:#aaa; line-height:1.8; margin-bottom:16px;">
+ <strong style="color:white;">Tablet (768–1024px):</strong><br>
+ 2-column service grid · Compact navbar · Hero stacks vertically
+ </div>
+ <div style="font-size:14px; color:#aaa; line-height:1.8; margin-bottom:24px;">
+ <strong style="color:white;">Desktop (1024px+):</strong><br>
+ Full layout như mockup · Max-width 1280px · Centered content
+ </div>
+ <div style="font-weight:800; color:white; font-size:16px; margin-bottom:12px;"> Bước Tiếp Theo</div>
+ <div style="display:grid; gap:8px;">
+ <div style="background:#0F0F10; border:1px solid #1f1f1f; border-radius:8px; padding:12px; font-size:13px; color:#aaa;">
+ <span style="color:#F47B20; font-weight:700;">1.</span> Dùng mockup này làm tài liệu tham chiếu cho Claude Code
+ </div>
+ <div style="background:#0F0F10; border:1px solid #1f1f1f; border-radius:8px; padding:12px; font-size:13px; color:#aaa;">
+ <span style="color:#F47B20; font-weight:700;">2.</span> Xây dựng Next.js components từng page theo thứ tự
+ </div>
+ <div style="background:#0F0F10; border:1px solid #1f1f1f; border-radius:8px; padding:12px; font-size:13px; color:#aaa;">
+ <span style="color:#F47B20; font-weight:700;">3.</span> Apply Tailwind CSS với custom colors từ design system
+ </div>
+ <div style="background:#0F0F10; border:1px solid #1f1f1f; border-radius:8px; padding:12px; font-size:13px; color:#aaa;">
+ <span style="color:#F47B20; font-weight:700;">4.</span> Connect API backend cho Quote Calculator + Tracking
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+</div><!-- /shell -->
+
+<script>
+function showPage(pageId, tab, url) {
+ document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+ document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+ document.getElementById('page-' + pageId).classList.add('active');
+ tab.classList.add('active');
+ document.getElementById('urlBar').textContent = ' ' + url;
+}
+</script>
+</body>
+</html>

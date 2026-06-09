@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Test Form → Google Sheet | Cuckoo Cargo</title>
+ <style>
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body {
+ font-family: 'Segoe UI', sans-serif;
+ background: #f5f5f5;
+ padding: 40px 20px;
+ color: #1a1a1a;
+ }
+ .container { max-width: 600px; margin: 0 auto; }
+ h1 { font-size: 24px; margin-bottom: 8px; color: #F47B20; }
+ .subtitle { color: #666; margin-bottom: 32px; font-size: 14px; }
+
+ /* Config box */
+ .config-box {
+ background: #fff3e0;
+ border: 2px dashed #F47B20;
+ border-radius: 12px;
+ padding: 20px;
+ margin-bottom: 32px;
+ }
+ .config-box h3 { color: #F47B20; margin-bottom: 12px; font-size: 16px; }
+ .config-box input {
+ width: 100%;
+ padding: 10px 14px;
+ border: 1px solid #ddd;
+ border-radius: 8px;
+ font-size: 14px;
+ margin-top: 6px;
+ }
+ .config-box p { font-size: 13px; color: #666; margin-top: 8px; }
+
+ /* Tabs */
+ .tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+ .tab {
+ flex: 1;
+ padding: 10px;
+ border: 2px solid #ddd;
+ border-radius: 8px;
+ background: white;
+ cursor: pointer;
+ font-size: 13px;
+ font-weight: 600;
+ text-align: center;
+ transition: all .2s;
+ }
+ .tab.active { border-color: #F47B20; background: #F47B20; color: white; }
+
+ /* Form */
+ .form-panel { display: none; background: white; border-radius: 16px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+ .form-panel.active { display: block; }
+ .field { margin-bottom: 16px; }
+ label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #333; }
+ input, select, textarea {
+ width: 100%;
+ padding: 10px 14px;
+ border: 1px solid #e0e0e0;
+ border-radius: 8px;
+ font-size: 14px;
+ outline: none;
+ transition: border .2s;
+ }
+ input:focus, select:focus, textarea:focus { border-color: #F47B20; }
+ textarea { resize: vertical; min-height: 80px; }
+ .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+ /* Button */
+ .btn {
+ width: 100%;
+ padding: 14px;
+ background: #F47B20;
+ color: white;
+ border: none;
+ border-radius: 10px;
+ font-size: 16px;
+ font-weight: 700;
+ cursor: pointer;
+ margin-top: 8px;
+ transition: background .2s;
+ }
+ .btn:hover { background: #D4650E; }
+ .btn:disabled { background: #ccc; cursor: not-allowed; }
+
+ /* Result */
+ .result {
+ margin-top: 20px;
+ padding: 16px 20px;
+ border-radius: 10px;
+ font-size: 14px;
+ display: none;
+ }
+ .result.success { background: #e8f5e9; border: 1px solid #4caf50; color: #2e7d32; }
+ .result.error { background: #ffebee; border: 1px solid #ef5350; color: #c62828; }
+
+ /* Steps */
+ .steps { background: #f9f9f9; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+ .steps h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #F47B20; }
+ .step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; font-size: 13px; }
+ .step-num {
+ width: 24px; height: 24px; border-radius: 50%;
+ background: #F47B20; color: white;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 12px; font-weight: 700; flex-shrink: 0;
+ }
+ code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+ </style>
+</head>
+<body>
+<div class="container">
+ <h1> Test: Form → Google Sheet</h1>
+ <p class="subtitle">File này dùng để test kết nối. Xóa sau khi xác nhận hoạt động.</p>
+
+ <!-- Hướng dẫn setup -->
+ <div class="steps">
+ <h4> Làm theo 5 bước này trước khi test:</h4>
+ <div class="step">
+ <div class="step-num">1</div>
+ <div>Tạo Google Sheet mới tại <strong>sheets.google.com</strong>. Đặt tên: <strong>Cuckoo Cargo Orders</strong>. Tạo 5 sheet tab: <code>ORDERS</code> <code>TRACKING</code> <code>CUSTOMERS</code> <code>LABELS</code> <code>SHOPPING</code></div>
+ </div>
+ <div class="step">
+ <div class="step-num">2</div>
+ <div>Copy <strong>Sheet ID</strong> từ URL (phần giữa <code>/d/</code> và <code>/edit</code>). Dán vào ô bên dưới.</div>
+ </div>
+ <div class="step">
+ <div class="step-num">3</div>
+ <div>Mở <strong>Extensions → Apps Script</strong> trong Google Sheet. Paste toàn bộ nội dung file <code>google-apps-script.js</code> vào đó. Thay <code>PASTE_YOUR_GOOGLE_SHEET_ID_HERE</code> bằng Sheet ID thật.</div>
+ </div>
+ <div class="step">
+ <div class="step-num">4</div>
+ <div>Nhấn <strong>Deploy → New deployment → Web App</strong>. Execute as: <em>Me</em>. Who has access: <em>Anyone</em>. Copy URL deploy → dán vào ô bên dưới.</div>
+ </div>
+ <div class="step">
+ <div class="step-num">5</div>
+ <div>Điền form bên dưới → nhấn Gửi → kiểm tra Google Sheet có dữ liệu không </div>
+ </div>
+ </div>
+
+ <!-- Config -->
+ <div class="config-box">
+ <h3> Cấu hình kết nối</h3>
+ <label>Script URL (sau khi Deploy Apps Script)</label>
+ <input type="url" id="scriptUrl" placeholder="https://script.google.com/macros/s/AKfy.../exec" />
+ <p> Bạn phải điền URL này trước. Lấy từ Apps Script → Deploy → Manage deployments.</p>
+ </div>
+
+ <!-- Tabs chọn loại form -->
+ <div class="tabs">
+ <div class="tab active" onclick="switchTab('order')"> Mỹ → Việt</div>
+ <div class="tab" onclick="switchTab('label')"> Label Nội địa</div>
+ <div class="tab" onclick="switchTab('shopping')"> Mua hộ</div>
+ </div>
+
+ <!-- FORM: Mỹ → Việt -->
+ <div class="form-panel active" id="panel-order">
+ <form onsubmit="submitForm(event, 'order')">
+ <div class="row">
+ <div class="field">
+ <label>Tên Facebook *</label>
+ <input name="facebookName" required placeholder="Nguyen Van A" />
+ </div>
+ <div class="field">
+ <label>Mã khách hàng</label>
+ <input name="customerCode" placeholder="CAC0001" />
+ </div>
+ </div>
+ <div class="row">
+ <div class="field">
+ <label>Họ tên người gửi *</label>
+ <input name="senderName" required placeholder="Nguyễn Văn A" />
+ </div>
+ <div class="field">
+ <label>SĐT Mỹ *</label>
+ <input name="phoneUS" required placeholder="+1 213 xxx xxxx" />
+ </div>
+ </div>
+ <div class="field">
+ <label>Email *</label>
+ <input type="email" name="email" required placeholder="example@gmail.com" />
+ </div>
+ <div class="row">
+ <div class="field">
+ <label>Tên người nhận *</label>
+ <input name="receiverName" required placeholder="Nguyễn Thị B" />
+ </div>
+ <div class="field">
+ <label>SĐT người nhận (VN) *</label>
+ <input name="receiverPhone" required placeholder="0909 xxx xxx" />
+ </div>
+ </div>
+ <div class="field">
+ <label>Địa chỉ nhận hàng tại VN *</label>
+ <input name="receiverAddress" required placeholder="123 Lê Lợi, Quận 1, TP.HCM" />
+ </div>
+ <div class="field">
+ <label>Mặt hàng bên trong *</label>
+ <textarea name="items" required placeholder="Quần áo, giày, đồ gia dụng..."></textarea>
+ </div>
+ <div class="row">
+ <div class="field">
+ <label>Giá trị khai báo (USD)</label>
+ <input type="number" name="declaredValue" placeholder="100" />
+ </div>
+ <div class="field">
+ <label>Cân nặng (lbs)</label>
+ <input type="number" name="weight" placeholder="10" step="0.1" />
+ </div>
+ </div>
+ <div class="row">
+ <div class="field">
+ <label>Gói bảo hiểm</label>
+ <select name="insurance">
+ <option value="Free">Free (Không BH)</option>
+ <option value="Basic">Basic</option>
+ <option value="Pro">Pro</option>
+ <option value="Max">Max</option>
+ </select>
+ </div>
+ <div class="field">
+ <label>Đóng gói</label>
+ <select name="packaging">
+ <option value="Tiêu chuẩn">Tiêu chuẩn (Miễn phí)</option>
+ <option value="Gia cố">Gia cố thêm</option>
+ <option value="Pallet">Pallet</option>
+ </select>
+ </div>
+ </div>
+ <div class="field">
+ <label>Ghi chú</label>
+ <textarea name="note" placeholder="Hàng dễ vỡ, xin nhẹ tay..."></textarea>
+ </div>
+ <button type="submit" class="btn" id="btn-order"> Gửi đơn hàng test</button>
+ <div class="result" id="result-order"></div>
+ </form>
+ </div>
+
+ <!-- FORM: Label Nội địa -->
+ <div class="form-panel" id="panel-label">
+ <form onsubmit="submitForm(event, 'label')">
+ <div class="row">
+ <div class="field">
+ <label>Hãng vận chuyển *</label>
+ <select name="carrier" required>
+ <option value="UPS">UPS</option>
+ <option value="FedEx">FedEx</option>
+ <option value="USPS">USPS</option>
+ </select>
+ </div>
+ <div class="field">
+ <label>Dịch vụ *</label>
+ <select name="service" required>
+ <option value="Ground">Ground</option>
+ <option value="2-Day">2-Day</option>
+ <option value="3-Day">3-Day</option>
+ <option value="Overnight">Overnight</option>
+ </select>
+ </div>
+ </div>
+ <div class="row">
+ <div class="field">
+ <label>Tên Facebook *</label>
+ <input name="facebookName" required placeholder="Nguyen Van A" />
+ </div>
+ <div class="field">
+ <label>Mã khách hàng</label>
+ <input name="customerCode" placeholder="CAC0001" />
+ </div>
+ </div>
+ <div class="row">
+ <div class="field">
+ <label>Họ tên *</label>
+ <input name="senderName" required placeholder="Nguyễn Văn A" />
+ </div>
+ <div class="field">
+ <label>Email *</label>
+ <input type="email" name="email" required placeholder="example@gmail.com" />
+ </div>
+ </div>
+ <div class="row">
+ <div class="field">
+ <label>SĐT Mỹ *</label>
+ <input name="phoneUS" required placeholder="+1 213 xxx xxxx" />
+ </div>
+ <div class="field">
+ <label>Cân nặng (lbs) *</label>
+ <input type="number" name="weight" required placeholder="5" step="0.1" />
+ </div>
+ </div>
+ <div class="row">
+ <div class="field">
+ <label>Hình thức *</label>
+ <select name="pickupMode" required>
+ <option value="Drop-off">Drop-off (Tự mang đến)</option>
+ <option value="Pickup">Pickup tận nơi</option>
+ </select>
+ </div>
+ <div class="field">
+ <label>Bảo hiểm</label>
+ <select name="insurance">
+ <option value="Free">Free</option>
+ <option value="Basic">Basic</option>
+ <option value="Pro">Pro</option>
+ </select>
+ </div>
+ </div>
+ <div class="field">
+ <label>Địa chỉ lấy hàng *</label>
+ <input name="pickupAddress" required placeholder="123 Main St, Los Angeles, CA 90001" />
+ </div>
+ <div class="field">
+ <label>Tên người nhận *</label>
+ <input name="receiverName" required placeholder="John Smith" />
+ </div>
+ <div class="field">
+ <label>Địa chỉ người nhận *</label>
+ <input name="receiverAddress" required placeholder="456 Oak Ave, New York, NY 10001" />
+ </div>
+ <button type="submit" class="btn" id="btn-label"> Gửi yêu cầu label test</button>
+ <div class="result" id="result-label"></div>
+ </form>
+ </div>
+
+ <!-- FORM: Mua hộ -->
+ <div class="form-panel" id="panel-shopping">
+ <form onsubmit="submitForm(event, 'shopping')">
+ <div class="row">
+ <div class="field">
+ <label>Tên Facebook *</label>
+ <input name="facebookName" required placeholder="Nguyen Van A" />
+ </div>
+ <div class="field">
+ <label>Họ tên *</label>
+ <input name="customerName" required placeholder="Nguyễn Văn A" />
+ </div>
+ </div>
+ <div class="row">
+ <div class="field">
+ <label>Email *</label>
+ <input type="email" name="email" required placeholder="example@gmail.com" />
+ </div>
+ <div class="field">
+ <label>Mã khách hàng</label>
+ <input name="customerCode" placeholder="CAC0001" />
+ </div>
+ </div>
+
+ <div id="items-container">
+ <div class="field" style="border-top:1px solid #eee;padding-top:16px;margin-top:8px;">
+ <label> Sản phẩm 1</label>
+ <input name="item0_url" placeholder="Link Amazon/Walmart/Target..." style="margin-bottom:8px;" />
+ <div class="row">
+ <input name="item0_qty" placeholder="Số lượng" type="number" />
+ <input name="item0_size" placeholder="Size (S/M/L/XL...)" />
+ </div>
+ <input name="item0_color" placeholder="Màu sắc" style="margin-top:8px;" />
+ </div>
+ </div>
+
+ <button type="button" onclick="addItem()" style="
+ width:100%; padding:10px; margin:12px 0;
+ border:2px dashed #F47B20; border-radius:8px;
+ background:transparent; color:#F47B20; font-weight:600; cursor:pointer;
+ ">+ Thêm sản phẩm</button>
+
+ <div class="field">
+ <label>Địa chỉ nhận hàng tại VN *</label>
+ <input name="receiverAddress" required placeholder="123 Lê Lợi, Quận 1, TP.HCM" />
+ </div>
+ <div class="field">
+ <label>Ghi chú</label>
+ <textarea name="note" placeholder="Yêu cầu đặc biệt..."></textarea>
+ </div>
+ <button type="submit" class="btn" id="btn-shopping"> Gửi yêu cầu mua hộ test</button>
+ <div class="result" id="result-shopping"></div>
+ </form>
+ </div>
+</div>
+
+<script>
+ let itemCount = 1;
+ let activeTab = 'order';
+
+ function switchTab(tab) {
+ activeTab = tab;
+ document.querySelectorAll('.tab').forEach((t, i) => {
+ t.classList.toggle('active', ['order','label','shopping'][i] === tab);
+ });
+ document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+ document.getElementById('panel-' + tab).classList.add('active');
+ }
+
+ function addItem() {
+ if (itemCount >= 3) {
+ alert('Tối đa 3 sản phẩm mỗi lần. Nếu cần thêm, ghi vào phần Ghi chú.');
+ return;
+ }
+ const container = document.getElementById('items-container');
+ const div = document.createElement('div');
+ div.className = 'field';
+ div.style = 'border-top:1px solid #eee;padding-top:16px;margin-top:8px;';
+ div.innerHTML = `
+ <label> Sản phẩm ${itemCount + 1}</label>
+ <input name="item${itemCount}_url" placeholder="Link Amazon/Walmart/Target..." style="margin-bottom:8px;" />
+ <div class="row">
+ <input name="item${itemCount}_qty" placeholder="Số lượng" type="number" />
+ <input name="item${itemCount}_size" placeholder="Size (S/M/L/XL...)" />
+ </div>
+ <input name="item${itemCount}_color" placeholder="Màu sắc" style="margin-top:8px;" />
+ `;
+ container.appendChild(div);
+ itemCount++;
+ }
+
+ async function submitForm(e, type) {
+ e.preventDefault();
+ const scriptUrl = document.getElementById('scriptUrl').value.trim();
+ if (!scriptUrl) {
+ alert(' Bạn chưa điền Script URL! Làm theo hướng dẫn phía trên trước.');
+ return;
+ }
+
+ const form = e.target;
+ const btn = document.getElementById('btn-' + type);
+ const result = document.getElementById('result-' + type);
+ const formData = new FormData(form);
+ const data = { formType: type };
+
+ if (type === 'shopping') {
+ // Gom items từ form
+ data.items = [];
+ for (let i = 0; i < 3; i++) {
+ const url = formData.get(`item${i}_url`);
+ if (url) data.items.push({
+ url,
+ qty: formData.get(`item${i}_qty`) || '',
+ size: formData.get(`item${i}_size`) || '',
+ color: formData.get(`item${i}_color`) || '',
+ });
+ }
+ ['facebookName','customerName','customerCode','email','receiverAddress','note']
+ .forEach(k => data[k] = formData.get(k) || '');
+ } else {
+ formData.forEach((v, k) => data[k] = v);
+ }
+
+ btn.disabled = true;
+ btn.textContent = '⏳ Đang gửi...';
+ result.style.display = 'none';
+
+ try {
+ await fetch(scriptUrl, {
+ method: 'POST',
+ mode: 'no-cors',
+ headers: { 'Content-Type': 'text/plain' },
+ body: JSON.stringify(data),
+ });
+ result.className = 'result success';
+ result.style.display = 'block';
+ result.innerHTML = `<strong>Đã gửi!</strong><br>
+ Vào <a href="https://docs.google.com/spreadsheets/d/1HXUV1N4tRUK0vAEYz_IiQ7vjODWuMfRmeWf2kPljfwE/edit" target="_blank" style="color:#2e7d32;font-weight:700;">Google Sheet</a> kiểm tra dữ liệu xuất hiện chưa.`;
+ form.reset();
+ } catch (err) {
+ result.className = 'result error';
+ result.style.display = 'block';
+ result.innerHTML = `<strong>Lỗi:</strong> ${err.message}<br>
+ <small>Kiểm tra lại Script URL và quyền truy cập Apps Script.</small>`;
+ }
+
+ btn.disabled = false;
+ btn.textContent = type === 'order'
+ ? ' Gửi đơn hàng test'
+ : type === 'label'
+ ? ' Gửi yêu cầu label test'
+ : ' Gửi yêu cầu mua hộ test';
+ }
+</script>
+</body>
+</html>

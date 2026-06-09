@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Cuckoo Cargo — Gửi Hàng Mỹ Về Việt Nam | Label Nội Địa | Mua Hộ</title>
+ <meta name="description" content="Dịch vụ gửi hàng từ Mỹ về Việt Nam uy tín. Label nội địa UPS/FedEx/USPS 50 tiểu bang. Mua hộ hàng Mỹ. Giao hàng 7–10 ngày." />
+
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+ <link rel="stylesheet" href="assets/css/global.css" />
+ <link rel="stylesheet" href="assets/css/pages.css" />
+ <link rel="stylesheet" href="assets/css/mobile.css" />
+
+ <style>
+ /* HERO */
+ .hero {
+ background: var(--black); padding: 72px 24px 64px;
+ text-align: center; position: relative; overflow: hidden;
+ min-height: 580px; display: flex; align-items: center;
+ }
+ .hero-bg {
+ position: absolute; inset: 0; pointer-events: none;
+ background:
+ radial-gradient(ellipse 90% 70% at 50% -10%, rgba(244,123,32,.22) 0%, transparent 65%),
+ radial-gradient(ellipse 40% 40% at 80% 80%, rgba(244,123,32,.07) 0%, transparent 60%);
+ }
+ .hero-grid-lines {
+ position: absolute; inset: 0; pointer-events: none; opacity: .04;
+ background-image: linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+ linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
+ background-size: 60px 60px;
+ }
+ .hero-inner { position: relative; max-width: 900px; margin: 0 auto; width: 100%; }
+ .hero-badge {
+ display: inline-flex; align-items: center; gap: 6px;
+ background: rgba(244,123,32,.15); border: 1px solid rgba(244,123,32,.35);
+ color: var(--orange); padding: 6px 18px; border-radius: 20px;
+ font-size: 12px; font-weight: 700; letter-spacing: 1.5px;
+ margin-bottom: 24px; text-transform: uppercase;
+ }
+ .hero h1 {
+ font-family: 'Faustina', serif;
+ font-size: clamp(44px, 8vw, 88px);
+ color: var(--white); letter-spacing: 3px;
+ line-height: 1.0; margin-bottom: 20px;
+ }
+ .hero h1 .line-orange { color: var(--orange); display: block; }
+ .hero p {
+ font-size: 17px; color: #aaa; max-width: 580px;
+ margin: 0 auto 36px; line-height: 1.75;
+ }
+ .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; }
+ .hero-cta-primary {
+ background: var(--grad-orange); color: #fff;
+ padding: 15px 32px; border-radius: 12px;
+ font-size: 15px; font-weight: 800; text-decoration: none;
+ transition: transform .2s, box-shadow .2s;
+ display: flex; align-items: center; gap: 8px;
+ }
+ .hero-cta-primary:hover { transform: translateY(-3px); box-shadow: var(--shadow-orange); }
+ .hero-cta-secondary {
+ background: rgba(255,255,255,.07); color: #fff;
+ border: 1.5px solid rgba(255,255,255,.15);
+ padding: 15px 28px; border-radius: 12px;
+ font-size: 15px; font-weight: 600; text-decoration: none;
+ transition: background .2s, border-color .2s;
+ display: flex; align-items: center; gap: 8px;
+ }
+ .hero-cta-secondary:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.3); }
+
+ .hero-stats {
+ display: grid; grid-template-columns: repeat(4, 1fr);
+ border-top: 1px solid rgba(255,255,255,.08); padding-top: 32px; gap: 0;
+ }
+ @media(max-width:640px) { .hero-stats { grid-template-columns: repeat(2,1fr); gap: 20px 0; } }
+ .hero-stat {
+ text-align: center; padding: 0 16px;
+ border-right: 1px solid rgba(255,255,255,.08);
+ }
+ .hero-stat:last-child { border-right: none; }
+ .hero-stat .val { font-family:'Faustina',serif; font-size: 40px; color: var(--orange); letter-spacing: 1px; }
+ .hero-stat .lbl { font-size: 12px; color: #666; margin-top: 2px; }
+
+ /* QUICK CALC */
+ .calc-section { background: var(--surface); border-top: 1px solid rgba(255,255,255,.06); padding: 28px 24px; }
+ .calc-inner {
+ max-width: 900px; margin: 0 auto;
+ display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+ }
+ .calc-label { font-size: 13px; font-weight: 700; color: #aaa; white-space: nowrap; }
+ .calc-fields { display: flex; gap: 10px; flex: 1; flex-wrap: wrap; }
+ .calc-fields select, .calc-fields input {
+ background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.12);
+ color: #fff; flex: 1; min-width: 110px;
+ }
+ .calc-fields select option { background: #1a1a1e; }
+ .calc-result {
+ background: var(--orange); color: #fff;
+ padding: 11px 20px; border-radius: 10px;
+ font-size: 18px; font-weight: 900; white-space: nowrap; min-width: 130px; text-align: center;
+ }
+ .calc-result .rlabel { font-size: 10px; opacity: .8; display: block; }
+ @media(max-width:640px){
+   .calc-section { padding: 20px 16px; }
+   .calc-inner { flex-direction: row; flex-wrap: wrap; gap: 10px; }
+   .calc-label { width: 100%; font-size: 14px; color: #fff; text-align: center; margin-bottom: 2px; }
+   .calc-fields { width: 100%; flex-wrap: nowrap; gap: 8px; }
+   .calc-fields select { min-width: 0; flex: 2; font-size: 13px; }
+   .calc-fields input { min-width: 0; flex: 1; font-size: 13px; }
+   .calc-result { width: 100%; border-radius: 12px; padding: 12px 16px; font-size: 22px; }
+   .calc-section .btn { width: 100%; justify-content: center; padding: 13px; font-size: 15px; }
+ }
+
+ /* SERVICES */
+ .services-section { padding: 72px 24px; }
+ .services-inner { max-width: 1100px; margin: 0 auto; }
+ .svc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+ @media(max-width:900px) { .svc-grid { grid-template-columns: 1fr 1fr; gap: 14px; } }
+ @media(max-width:560px) { .svc-grid { grid-template-columns: 1fr; gap: 12px; } }
+
+ .service-card {
+ background: var(--white); border: 1.5px solid var(--gray-border);
+ border-radius: var(--radius-xl); overflow: hidden;
+ display: flex; flex-direction: column;
+ transition: transform .25s, box-shadow .25s, border-color .25s;
+ }
+ .service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--orange-light); }
+ .service-card-top { padding: 32px 28px 24px; position: relative; overflow: hidden; }
+ .svc-icon-wrap {
+ width: 64px; height: 64px; border-radius: 18px;
+ background: var(--orange-bg); border: 1.5px solid rgba(244,123,32,.2);
+ display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+ position: relative; overflow: hidden;
+ }
+ .svc-icon-wrap::after {
+ content:''; position:absolute; inset:0;
+ background: radial-gradient(circle at 30% 30%, rgba(244,123,32,.15), transparent 70%);
+ }
+ .svc-icon-wrap svg { width:30px; height:30px; stroke:var(--orange); fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; position:relative; z-index:1; }
+ .svc-icon-wrap.dark { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.15); }
+ .svc-icon-wrap.dark svg { stroke:#fff; }
+ .svc-feat { display: flex; gap: 9px; font-size: 13.5px; margin-bottom: 10px; align-items: flex-start; line-height: 1.5; }
+ .svc-feat .fi { flex-shrink: 0; display:flex; align-items:center; margin-top:1px; }
+ .service-card-top h3 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+ .service-card-top .sub { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
+ .svc-price { display: inline-flex; align-items: baseline; gap: 4px; background: var(--orange-bg); border: 1px solid rgba(244,123,32,.25); padding: 5px 14px; border-radius: 20px; }
+ .svc-price .from { font-size: 12px; color: var(--text-muted); }
+ .svc-price .amount { font-size: 18px; font-weight: 900; color: var(--orange); }
+ .svc-price .unit { font-size: 12px; color: var(--text-muted); }
+ .service-card-features { padding: 16px 28px; flex: 1; border-top: 1px solid var(--gray-border); }
+
+ .service-card-footer { padding: 20px 28px; border-top: 1px solid var(--gray-border); }
+
+ /* Mobile service card: compact */
+ @media(max-width:560px) {
+   .service-card-top { padding: 20px 16px 14px !important; }
+   .service-card-top h3 { font-size: 17px !important; margin-bottom: 4px; }
+   .service-card-top .sub { font-size: 12px !important; margin-bottom: 10px !important; }
+   .service-card-features { padding: 12px 16px !important; }
+   .service-card-footer { padding: 12px 16px !important; }
+   .svc-icon-wrap { width: 44px !important; height: 44px !important; border-radius: 12px !important; margin-bottom: 12px !important; }
+   .svc-icon-wrap svg { width: 22px !important; height: 22px !important; }
+   .svc-feat { font-size: 13px !important; margin-bottom: 8px !important; }
+   /* Ẩn feature cuối để card gọn hơn */
+   .svc-feat:nth-child(n+4) { display: none !important; }
+ }
+ @media(max-width:900px) and (min-width:561px) {
+   .service-card-top { padding: 22px 18px 16px !important; }
+   .service-card-top h3 { font-size: 18px !important; }
+   .service-card-features { padding: 12px 18px !important; }
+   .service-card-footer { padding: 14px 18px !important; }
+   .svc-icon-wrap { width: 50px !important; height: 50px !important; margin-bottom: 14px !important; }
+   .svc-feat:nth-child(n+4) { display: none !important; }
+ }
+ .svc-cta {
+ display: flex; align-items: center; justify-content: center; gap: 8px;
+ width: 100%; padding: 13px; background: var(--grad-orange); color: #fff;
+ border: none; border-radius: 12px; font-size: 15px; font-weight: 700;
+ font-family: inherit; cursor: pointer; text-decoration: none;
+ transition: opacity .2s, transform .2s;
+ }
+ .svc-cta:hover { opacity: .9; transform: translateY(-1px); }
+
+ /* HOW IT WORKS */
+ .how-section { background: var(--gray-light); padding: 72px 24px; }
+ .how-inner { max-width: 1000px; margin: 0 auto; }
+ .how-tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 48px; flex-wrap: wrap; }
+ .how-tab {
+ padding: 9px 22px; border-radius: 20px; border: 1.5px solid var(--gray-border);
+ font-size: 14px; font-weight: 600; cursor: pointer;
+ background: var(--white); color: var(--text-muted); transition: all .2s;
+ }
+ .how-tab.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+ .how-panel { display: none; }
+ .how-panel.active { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+ @media(max-width:640px) { .how-panel.active { grid-template-columns: 1fr; } }
+ .how-step-card { background: var(--white); border-radius: var(--radius-md); padding: 28px 22px; text-align: center; position: relative; box-shadow: var(--shadow-sm); }
+ .how-step-card .step-n { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); width: 28px; height: 28px; border-radius: 50%; background: var(--orange); color: #fff; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+ .how-step-card .step-icon { font-size: 40px; margin: 8px 0 14px; }
+ .how-step-card h4 { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+ .how-step-card p { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+
+ /* WHY US */
+ /* WHY SECTION */
+ .why-section {
+ padding: 96px 24px; background: var(--black); position: relative; overflow: hidden;
+ }
+ /* Subtle radial glow top-right */
+ .why-section::before {
+ content:''; position:absolute; top:-120px; right:-80px; width:480px; height:480px;
+ background: radial-gradient(circle, rgba(244,123,32,.08) 0%, transparent 65%);
+ pointer-events:none;
+ }
+ .why-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+ /* Header row */
+ .why-header {
+ display: flex; align-items: flex-end; justify-content: space-between;
+ gap: 32px; margin-bottom: 56px; flex-wrap: wrap;
+ }
+ .why-header-left .why-eyebrow {
+ font-size: 11px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase;
+ color: var(--orange); margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+ }
+ .why-header-left .why-eyebrow::after {
+ content:''; display:block; width:32px; height:2px; background:var(--orange); border-radius:2px;
+ }
+ .why-header-left h2 {
+ font-family:'Faustina',serif; font-size: clamp(28px,4vw,46px);
+ color: var(--white); letter-spacing: 1px; line-height: 1.1;
+ }
+ .why-header-left h2 span { color: var(--orange); }
+ .why-header-right { display: flex; gap: 36px; flex-shrink: 0; }
+ .why-stat { text-align: center; }
+ .why-stat .ws-num {
+ font-family:'Faustina',serif; font-size: 36px; font-weight: 900;
+ color: var(--orange); line-height: 1; letter-spacing: -1px;
+ }
+ .why-stat .ws-lbl { font-size: 11px; color: #555; margin-top: 4px; max-width: 80px; line-height: 1.4; }
+ .why-stat-divider { width: 1px; background: rgba(255,255,255,.08); }
+ @media(max-width:700px) { .why-header { flex-direction:column; align-items:flex-start; } .why-header-right { gap:24px; } }
+
+ /* Grid */
+ .why-grid {
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 16px;
+ }
+ @media(max-width:768px) { .why-grid { grid-template-columns: 1fr 1fr; } }
+ @media(max-width:480px) { .why-grid { grid-template-columns: 1fr; } }
+
+ .why-card {
+ background: rgba(255,255,255,.03);
+ border: 1px solid rgba(255,255,255,.07);
+ border-radius: 18px; padding: 28px 24px;
+ transition: background .3s, border-color .3s, transform .25s;
+ position: relative; overflow: hidden;
+ }
+ .why-card::before {
+ content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+ background: linear-gradient(90deg, var(--orange), var(--orange-deep));
+ transform: scaleX(0); transform-origin: left;
+ transition: transform .35s ease;
+ }
+ .why-card:hover { background: rgba(244,123,32,.06); border-color: rgba(244,123,32,.25); transform: translateY(-4px); }
+ .why-card:hover::before { transform: scaleX(1); }
+
+ /* Icon box */
+ .wc-icon-box {
+ width: 52px; height: 52px; border-radius: 14px;
+ background: rgba(244,123,32,.1); border: 1px solid rgba(244,123,32,.2);
+ display: flex; align-items: center; justify-content: center;
+ margin-bottom: 20px; transition: background .3s;
+ }
+ .why-card:hover .wc-icon-box { background: rgba(244,123,32,.18); }
+ .wc-icon-box svg { width: 24px; height: 24px; stroke: var(--orange); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+ /* Text */
+ .why-card h4 { font-size: 15px; font-weight: 800; color: var(--white); margin-bottom: 8px; }
+ .why-card p { font-size: 13px; color: #666; line-height: 1.7; }
+ /* Featured card (first) */
+ .why-card.featured {
+ background: linear-gradient(135deg, rgba(244,123,32,.12) 0%, rgba(244,123,32,.04) 100%);
+ border-color: rgba(244,123,32,.3);
+ }
+ .why-card.featured .wc-icon-box { background: rgba(244,123,32,.2); border-color: rgba(244,123,32,.4); }
+
+ /* CAM KẾT */
+ /* CAM KET */
+ .camket-section {
+ padding: 96px 24px;
+ background: #09090b;
+ position: relative; overflow: hidden;
+ }
+ .camket-section::before {
+ content: ''; position: absolute;
+ top: 0; left: 0; width: 5px; height: 100%;
+ background: linear-gradient(180deg, var(--orange) 0%, var(--orange-deep) 100%);
+ }
+ .camket-section::after {
+ content: ''; position: absolute; inset: 0; pointer-events: none;
+ background-image: repeating-linear-gradient(-45deg, rgba(244,123,32,.025) 0px, rgba(244,123,32,.025) 1px, transparent 1px, transparent 32px);
+ }
+ .camket-inner {
+ max-width: 1100px; margin: 0 auto; position: relative; z-index: 1;
+ display: grid; grid-template-columns: 1fr 1.45fr; gap: 80px; align-items: center;
+ }
+ @media(max-width:900px) { .camket-inner { grid-template-columns: 1fr; gap: 48px; } }
+ .camket-eyebrow {
+ font-size: 11px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase;
+ color: var(--orange); margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+ }
+ .camket-eyebrow::after {
+ content: ''; display: block; width: 36px; height: 2px;
+ background: var(--orange); border-radius: 2px;
+ }
+ .camket-left h2 {
+ font-family: 'Faustina', serif; font-size: clamp(30px,4vw,52px);
+ color: #fff; letter-spacing: 1px; margin-bottom: 18px; line-height: 1.05;
+ }
+ .camket-left h2 .hl {
+ color: var(--orange); position: relative; display: inline-block;
+ }
+ .camket-left h2 .hl::after {
+ content: ''; position: absolute; bottom: 3px; left: 0; right: 0; height: 3px;
+ background: var(--orange); opacity: .3; border-radius: 2px;
+ }
+ .camket-left p { font-size: 15px; color: #777; line-height: 1.8; margin-bottom: 32px; }
+ .camket-stats { display: flex; gap: 28px; margin-bottom: 4px; }
+ .ck-stat .ck-val { font-size: 26px; font-weight: 900; color: #fff; }
+ .ck-stat .ck-val span { color: var(--orange); }
+ .ck-stat .ck-lbl { font-size: 11px; color: #555; margin-top: 2px; }
+ .camket-deco {
+ margin-top: 28px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.06);
+ display: flex; align-items: center; gap: 14px;
+ }
+ .camket-deco-line { flex: 1; height: 1px; background: rgba(244,123,32,.2); }
+ .camket-deco-text {
+ font-family: 'Faustina', serif; font-size: 13px; font-weight: 700;
+ color: rgba(244,123,32,.4); letter-spacing: 2px; text-transform: uppercase; white-space: nowrap;
+ }
+ .camket-list { display: flex; flex-direction: column; gap: 10px; }
+ .camket-item {
+ display: flex; align-items: center; gap: 16px;
+ background: rgba(255,255,255,.03);
+ border: 1px solid rgba(255,255,255,.06);
+ border-left: 3px solid rgba(244,123,32,.35);
+ border-radius: 14px; padding: 18px 20px;
+ transition: background .25s, border-left-color .25s, transform .2s;
+ cursor: default; position: relative; overflow: hidden;
+ }
+ .camket-item::after {
+ content: ''; position: absolute; inset: 0;
+ background: linear-gradient(90deg, rgba(244,123,32,.05) 0%, transparent 55%);
+ opacity: 0; transition: opacity .25s;
+ }
+ .camket-item:hover { background: rgba(255,255,255,.06); border-left-color: var(--orange); transform: translateX(5px); }
+ .camket-item:hover::after { opacity: 1; }
+ .camket-icon {
+ width: 42px; height: 42px; flex-shrink: 0;
+ background: rgba(244,123,32,.1); border: 1px solid rgba(244,123,32,.2);
+ border-radius: 11px; display: flex; align-items: center; justify-content: center; z-index: 1;
+ }
+ .camket-icon svg { width: 20px; height: 20px; stroke: var(--orange); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+ .camket-text { flex: 1; z-index: 1; }
+ .camket-text strong { display: block; font-size: 14px; font-weight: 800; color: #f0f0f0; margin-bottom: 3px; }
+ .camket-text span { font-size: 12.5px; color: #5a5a5a; line-height: 1.6; }
+ .camket-check {
+ width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%; z-index: 1;
+ background: rgba(34,197,94,.1); border: 1.5px solid rgba(34,197,94,.3);
+ display: flex; align-items: center; justify-content: center;
+ }
+ .camket-check svg { width: 13px; height: 13px; stroke: #22C55E; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+ /* TRACKING PREVIEW */
+ .tracking-preview { padding: 72px 24px; }
+ .tp-inner {
+ max-width: 900px; margin: 0 auto; background: var(--black);
+ border-radius: var(--radius-xl); padding: 48px 40px;
+ display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+ }
+ @media(max-width:640px) { .tp-inner { grid-template-columns: 1fr; padding: 32px 24px; gap: 32px; } }
+ .tp-left h2 { font-family:'Faustina',serif; font-size: 42px; letter-spacing: 2px; color: var(--white); margin-bottom: 12px; }
+ .tp-left h2 span { color: var(--orange); }
+ .tp-left p { font-size: 14px; color: #777; line-height: 1.7; margin-bottom: 20px; }
+ .tp-row { display: flex; gap: 8px; }
+ .tp-row input { flex: 1; background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.12); color: #fff; }
+ .tp-row input::placeholder { color: #555; }
+ .tp-btn { padding: 11px 18px; background: var(--orange); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; transition: background .2s; }
+ .tp-btn:hover { background: var(--orange-deep); }
+ .mini-tl { display: flex; flex-direction: column; }
+ .mini-tl-item { display: flex; gap: 12px; }
+ .mini-tl-left { display: flex; flex-direction: column; align-items: center; width: 22px; flex-shrink: 0; }
+ .mini-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+ .mini-dot.done { background: var(--green); }
+ .mini-dot.active { background: var(--orange); box-shadow: 0 0 0 3px rgba(244,123,32,.3); }
+ .mini-dot.pending { background: var(--elevated,#2a2a2e); border: 1.5px solid #444; }
+ .mini-line { flex: 1; width: 1px; background: rgba(255,255,255,.08); margin: 2px 0; }
+ .mini-tl-item:last-child .mini-line { display: none; }
+ .mini-content { padding-bottom: 16px; }
+ .mini-label { font-size: 13px; font-weight: 600; color: var(--white); }
+ .mini-sub { font-size: 11px; color: #555; margin-top: 2px; }
+
+ /* PRODUCTS */
+ .products-section { background: var(--orange-bg); padding: 72px 24px; }
+ .products-inner { max-width: 1100px; margin: 0 auto; }
+ .prod-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; margin-top: 48px; }
+ @media(max-width:640px) { .prod-grid { grid-template-columns: 1fr; } }
+ .prod-card { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; display: flex; box-shadow: var(--shadow-sm); transition: transform .25s, box-shadow .25s; }
+ .prod-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+ .prod-img { width: 160px; flex-shrink: 0; background: var(--gray-light); overflow: hidden; }
+ .prod-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+ @media(max-width:480px) {
+   .prod-card { flex-direction: column; }
+   .prod-img { width: 100%; height: 200px; }
+   .prod-img img { width: 100%; height: 100%; object-fit: cover; }
+   .prod-info { padding: 16px; }
+   .prod-name { font-size: 16px; }
+ }
+ .prod-info { padding: 22px 20px; flex: 1; min-width: 0; overflow: hidden; }
+ .prod-tag { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+ .prod-name { font-size: 18px; font-weight: 800; margin-bottom: 6px; line-height: 1.3; word-break: break-word; }
+ .prod-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.6; }
+ .prod-price { font-size: 22px; font-weight: 900; color: var(--orange); margin-bottom: 14px; }
+ .prod-price .u { font-size: 13px; font-weight: 400; color: var(--text-muted); }
+ .prod-cta { padding: 9px 18px; background: var(--black); color: #fff; border: none; border-radius: 9px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background .2s; }
+ .prod-cta:hover { background: var(--orange); }
+
+ /* BLOG */
+ .blog-section { padding: 72px 24px; }
+ .blog-inner { max-width: 1100px; margin: 0 auto; }
+ .blog-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; flex-wrap: wrap; gap: 12px; }
+ .blog-head h2 { font-family:'Faustina',serif; font-size: clamp(28px,4vw,44px); letter-spacing: 2px; }
+ .blog-head h2 span { color: var(--orange); }
+ .blog-head p { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+ .blog-grid-home { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+ @media(max-width:768px) { .blog-grid-home { grid-template-columns: 1fr 1fr; } }
+ @media(max-width:480px) { .blog-grid-home { grid-template-columns: 1fr; } }
+ .blog-card-home { border-radius: var(--radius-md); border: 1.5px solid var(--gray-border); overflow: hidden; transition: transform .2s, box-shadow .2s, border-color .2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+ .blog-card-home:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--orange-light); }
+ .blog-img-home { height: 180px; background: var(--gray-light); display: flex; align-items: center; justify-content: center; font-size: 56px; position: relative; }
+ .blog-cat-tag { position: absolute; bottom: 10px; left: 12px; background: var(--orange); color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+ .blog-card-body-home { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+ .blog-title-home { font-size: 15px; font-weight: 700; line-height: 1.45; margin-bottom: 8px; flex: 1; }
+ .blog-meta-home { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; }
+ .blog-read-more { color: var(--orange); font-weight: 600; }
+
+ /* FAQ */
+ .faq-section { padding: 96px 24px; background: #f9f9fb; position: relative; overflow: hidden; }
+ .faq-section::before {
+ content:''; position:absolute; top:-100px; left:-80px; width:400px; height:400px;
+ background: radial-gradient(circle, rgba(244,123,32,.06) 0%, transparent 65%);
+ pointer-events:none;
+ }
+ .faq-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 340px 1fr; gap: 64px; align-items: start; position: relative; z-index: 1; }
+ @media(max-width:900px) { .faq-wrap { grid-template-columns: 1fr; gap: 40px; } }
+
+ /* Left panel */
+ .faq-left { position: sticky; top: 88px; }
+ @media(max-width:900px){ .faq-left { position: static; } }
+ .faq-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+ .faq-eyebrow::after { content:''; display:block; width:32px; height:2px; background:var(--orange); border-radius:2px; }
+ .faq-left h2 { font-family:'Faustina',serif; font-size: clamp(28px,3.5vw,42px); color: var(--black); letter-spacing: 1px; line-height: 1.1; margin-bottom: 16px; }
+ .faq-left h2 span { color: var(--orange); }
+ .faq-left p { font-size: 14px; color: var(--text-muted); line-height: 1.8; margin-bottom: 28px; }
+ .faq-contact-box { background: var(--black); border-radius: 16px; padding: 22px 20px; }
+ .faq-contact-box p { font-size: 13px; color: #888; margin-bottom: 14px; line-height: 1.6; }
+ .faq-contact-btns { display: flex; flex-direction: column; gap: 8px; }
+ .faq-cta-btn { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; transition: opacity .2s; }
+ .faq-cta-btn:hover { opacity: .85; }
+ .faq-cta-btn.fb { background: #1877F2; color: #fff; }
+ .faq-cta-btn.zalo { background: #0068FF; color: #fff; }
+ .faq-cta-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+ .faq-cta-icon img { width: 32px; height: 32px; object-fit: cover; border-radius: 8px; }
+ .faq-cta-icon svg { width: 16px; height: 16px; fill: #fff; }
+
+ /* Right: accordion */
+ .faq-list { display: flex; flex-direction: column; gap: 10px; }
+ .faq-item {
+ background: var(--white); border: 1.5px solid #ebebeb;
+ border-radius: 14px; overflow: hidden;
+ transition: border-color .25s, box-shadow .25s;
+ }
+ .faq-item:hover { border-color: rgba(244,123,32,.3); box-shadow: 0 4px 20px rgba(244,123,32,.06); }
+ .faq-item.open { border-color: var(--orange); box-shadow: 0 4px 24px rgba(244,123,32,.1); }
+ .faq-q {
+ padding: 20px 22px; font-size: 15px; font-weight: 700;
+ cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+ gap: 16px; user-select: none; transition: background .2s; color: var(--text-primary);
+ }
+ .faq-q:hover { background: var(--orange-bg); }
+ .faq-item.open .faq-q { background: var(--orange-bg); }
+ .faq-q-left { display: flex; align-items: center; gap: 14px; }
+ .faq-q-icon {
+ width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+ background: var(--orange-bg); border: 1px solid rgba(244,123,32,.2);
+ display: flex; align-items: center; justify-content: center;
+ transition: background .25s;
+ }
+ .faq-item.open .faq-q-icon { background: var(--orange); }
+ .faq-q-icon svg { width: 18px; height: 18px; stroke: var(--orange); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: stroke .25s; }
+ .faq-item.open .faq-q-icon svg { stroke: #fff; }
+ .faq-q-text { font-size: 14.5px; font-weight: 700; line-height: 1.45; }
+ .faq-arrow {
+ width: 30px; height: 30px; border-radius: 50%; background: rgba(244,123,32,.08);
+ display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+ transition: transform .3s, background .25s;
+ }
+ .faq-arrow svg { width: 14px; height: 14px; stroke: var(--orange); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+ .faq-item.open .faq-arrow { transform: rotate(180deg); background: var(--orange); }
+ .faq-item.open .faq-arrow svg { stroke: #fff; }
+ .faq-a {
+ display: none; padding: 0 22px 22px 74px;
+ font-size: 14px; color: var(--text-muted); line-height: 1.85;
+ border-top: 1px solid rgba(244,123,32,.12);
+ }
+ .faq-item.open .faq-a { display: block; }
+ .faq-a p { margin: 0 0 10px 0; }
+ .faq-a p:last-child { margin-bottom: 0; }
+ .faq-a strong { color: var(--text-primary); }
+ .faq-a ul { margin: 0 0 10px 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+ .faq-a ul li { position: relative; padding-left: 16px; line-height: 1.7; }
+ .faq-a ul li::before { content: ""; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+ @media(max-width:640px){
+   .faq-a { padding: 14px 16px 18px 16px; }
+   .faq-a ul li { flex-wrap: nowrap; }
+   .faq-q { padding: 14px 14px; gap: 10px; }
+   .faq-q-icon { width: 32px; height: 32px; border-radius: 8px; }
+   .faq-q-icon svg { width: 15px; height: 15px; }
+   .faq-q-text { font-size: 13.5px; }
+   .faq-arrow { width: 26px; height: 26px; flex-shrink: 0; }
+ }
+
+ /* NEWSLETTER */
+ .newsletter { background: var(--black); padding: 72px 24px; }
+ .nl-inner { max-width: 600px; margin: 0 auto; text-align: center; }
+ .nl-inner h2 { font-family:'Faustina',serif; font-size: 42px; letter-spacing: 2px; color: var(--white); margin-bottom: 10px; }
+ .nl-inner h2 span { color: var(--orange); }
+ .nl-inner p { font-size: 15px; color: #777; margin-bottom: 28px; }
+ .nl-form { display: flex; gap: 10px; max-width: 480px; margin: 0 auto; }
+ @media(max-width:480px) { .nl-form { flex-direction: column; } }
+ .nl-form input { flex: 1; background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.12); color: #fff; }
+ .nl-form input::placeholder { color: #555; }
+ .nl-form button { padding: 12px 22px; background: var(--orange); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .2s; white-space: nowrap; }
+ .nl-form button:hover { background: var(--orange-deep); }
+ .nl-note { font-size: 12px; color: #555; margin-top: 12px; }
+
+ /* FLOATING BTNS */
+ .float-btns { position: fixed; bottom: 24px; right: 24px; z-index: 500; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+ .float-btn { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,.25); transition: transform .2s; border: none; cursor: pointer; }
+ .float-btn:hover { transform: scale(1.12); }
+ .float-fb { background: #1877F2; }
+ .float-zalo { background: #0068FF; }
+ .float-top { background: var(--orange); color: #fff; font-size: 18px; opacity: 0; pointer-events: none; transition: opacity .3s; }
+ .float-top.show { opacity: 1; pointer-events: auto; }
+ </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header id="cc-nav" class="cc-nav"></header>
+
+<!-- HERO -->
+<section class="hero">
+ <div class="hero-bg"></div>
+ <div class="hero-grid-lines"></div>
+ <div class="hero-inner">
+ <div class="hero-badge" data-vi=" Dịch vụ vận chuyển Mỹ – Việt" data-en=" US – Vietnam Shipping Service"> Dịch vụ vận chuyển Mỹ – Việt</div>
+ <h1 data-vi="Gửi Hàng Mỹ <span class=&quot;line-orange&quot;>Về Việt Nam</span>" data-en="Ship from the US <span class=&quot;line-orange&quot;>to Vietnam</span>">
+ Gửi Hàng Mỹ
+ <span class="line-orange">Về Việt Nam</span>
+ </h1>
+ <p data-vi="Drop-off hoặc pickup tận nơi tại 50 tiểu bang. Giao hàng tận nhà tại Việt Nam trong 7–10 ngày. Bảo hiểm đầy đủ — uy tín 100%." data-en="Drop-off or doorstep pickup across all 50 states. Home delivery in Vietnam within 7–10 days. Fully insured — 100% trusted.">Drop-off hoặc pickup tận nơi tại 50 tiểu bang. Giao hàng tận nhà tại Việt Nam trong 7–10 ngày. Bảo hiểm đầy đủ — uy tín 100%.</p>
+ <div class="hero-ctas">
+ <a href="my-ve-viet.html" class="hero-cta-primary" data-vi=" Tạo đơn Mỹ - Việt" data-en=" Create US – Vietnam Order"> Tạo đơn Mỹ - Việt</a>
+ <a href="noi-dia-my.html" class="hero-cta-secondary" data-vi=" Book Label Nội địa" data-en=" Book a Domestic Label"> Book Label Nội địa</a>
+ </div>
+ <div class="hero-stats">
+ <div class="hero-stat"><div class="val">7–10</div><div class="lbl" data-vi="Ngày giao hàng" data-en="Days to deliver">Ngày giao hàng</div></div>
+ <div class="hero-stat"><div class="val">50</div><div class="lbl" data-vi="Tiểu bang phủ sóng" data-en="States covered">Tiểu bang phủ sóng</div></div>
+ <div class="hero-stat"><div class="val">63</div><div class="lbl" data-vi="Tỉnh thành VN" data-en="Provinces in VN">Tỉnh thành VN</div></div>
+ <div class="hero-stat"><div class="val">100%</div><div class="lbl" data-vi="Có bảo hiểm" data-en="Insured">Có bảo hiểm</div></div>
+ </div>
+ </div>
+</section>
+
+<!-- QUICK CALC -->
+<div class="calc-section">
+ <div class="calc-inner">
+ <div class="calc-label" data-vi=" Tính giá nhanh" data-en=" Quick price estimate"> Tính giá nhanh</div>
+ <div class="calc-fields">
+ <select id="calc-service" onchange="quickCalc()">
+ <option value="mvv" data-vi="Mỹ - Việt Nam" data-en="US – Vietnam">Mỹ - Việt Nam</option>
+ <option value="UPS" data-vi="Label UPS ($1.99/lbs)" data-en="UPS Label ($1.99/lbs)">Label UPS ($1.99/lbs)</option>
+ <option value="FedEx" data-vi="Label FedEx ($2.49/lbs)" data-en="FedEx Label ($2.49/lbs)">Label FedEx ($2.49/lbs)</option>
+ <option value="USPS" data-vi="Label USPS (từ $1.49/lbs)" data-en="USPS Label (from $1.49/lbs)">Label USPS (từ $1.49/lbs)</option>
+ </select>
+ <input type="number" id="calc-weight" placeholder="Cân nặng (lbs)" data-vi-placeholder="Cân nặng (lbs)" data-en-placeholder="Weight (lbs)"
+ min="0.1" step="0.1" oninput="quickCalc()" style="max-width:160px;" />
+ </div>
+ <div class="calc-result">
+ <span class="rlabel" data-vi="Phí ước tính" data-en="Estimated fee">Phí ước tính</span>
+ <span id="calc-price">$0.00</span>
+ </div>
+ <a href="my-ve-viet.html" class="btn btn-primary btn-sm" data-vi="Tạo đơn →" data-en="Create order →">Tạo đơn →</a>
+ </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services-section">
+ <div class="services-inner">
+ <div class="section-title">
+ <h2 data-vi="Dịch Vụ <span>Cuckoo Cargo</span>" data-en="<span>Cuckoo Cargo</span> Services">Dịch Vụ <span>Cuckoo Cargo</span></h2>
+ <p data-vi="Ba dịch vụ chính — phủ sóng mọi nhu cầu gửi hàng của người Việt tại Mỹ" data-en="Three core services — covering every shipping need of Vietnamese living in the US">Ba dịch vụ chính — phủ sóng mọi nhu cầu gửi hàng của người Việt tại Mỹ</p>
+ </div>
+ <div class="svc-grid">
+
+ <!-- Mỹ - Việt -->
+ <div class="service-card">
+ <div class="service-card-top">
+ <div class="svc-icon-wrap">
+ <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+ </div>
+ <h3 data-vi="Mỹ - Việt Nam" data-en="US – Vietnam">Mỹ - Việt Nam</h3>
+ <p class="sub" data-vi="Gửi hàng từ bất kỳ tiểu bang nào về 63 tỉnh thành Việt Nam. Tạo đơn online, nhân viên lấy tận nơi." data-en="Ship from any state to all 63 provinces of Vietnam. Create your order online, our staff picks it up at your door.">Gửi hàng từ bất kỳ tiểu bang nào về 63 tỉnh thành Việt Nam. Tạo đơn online, nhân viên lấy tận nơi.</p>
+ <div class="svc-price"><span class="from" data-vi="Từ" data-en="From">Từ</span><span class="amount">$3.49</span><span class="unit">/lbs</span></div>
+ </div>
+ <div class="service-card-features">
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="Pickup tại 50 tiểu bang Mỹ" data-en="Pickup across all 50 US states">Pickup tại 50 tiểu bang Mỹ</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="Giao hàng tận nhà tại Việt Nam" data-en="Home delivery in Vietnam">Giao hàng tận nhà tại Việt Nam</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="Tracking thời gian thực" data-en="Real-time tracking">Tracking thời gian thực</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="Bảo hiểm 4 gói linh hoạt" data-en="4 flexible insurance plans">Bảo hiểm 4 gói linh hoạt</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span data-vi="7–10 ngày giao hàng" data-en="7–10 day delivery">7–10 ngày giao hàng</span></div>
+ </div>
+ <div class="service-card-footer"><a href="my-ve-viet.html" class="svc-cta" data-vi="Tạo đơn ngay →" data-en="Create order now →">Tạo đơn ngay →</a></div>
+ </div>
+
+ <!-- Label Nội địa -->
+ <div class="service-card" style="border-color:var(--ups-purple);">
+ <div class="service-card-top" style="background:linear-gradient(160deg,#0d0520,#1a0a40);">
+ <div class="svc-icon-wrap dark">
+ <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+ </div>
+ <h3 style="color:#fff;" data-vi="Label Nội địa Mỹ" data-en="US Domestic Label">Label Nội địa Mỹ</h3>
+ <p class="sub" style="color:rgba(255,255,255,.6);" data-vi="UPS, FedEx, USPS — ship hàng trong 50 tiểu bang. Tiết kiệm 3–4 lần so với giá lẻ." data-en="UPS, FedEx, USPS — ship within all 50 states. Save 3–4× vs. retail rates.">UPS, FedEx, USPS — ship hàng trong 50 tiểu bang. Tiết kiệm 3–4 lần so với giá lẻ.</p>
+ <div class="svc-price" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);">
+ <span class="from" style="color:rgba(255,255,255,.5);" data-vi="Từ" data-en="From">Từ</span>
+ <span class="amount" style="color:#fff;">$1.49</span>
+ <span class="unit" style="color:rgba(255,255,255,.5);">/lbs</span>
+ </div>
+ </div>
+ <div class="service-card-features">
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="UPS $1.99/lbs — Drop-off hoặc Pickup" data-en="UPS $1.99/lbs — Drop-off or Pickup">UPS $1.99/lbs — Drop-off hoặc Pickup</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="FedEx $2.49/lbs — Ổn định, ít delay" data-en="FedEx $2.49/lbs — Reliable, fewer delays">FedEx $2.49/lbs — Ổn định, ít delay</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="USPS từ $1.49/lbs — Phù hợp hàng nhẹ" data-en="USPS from $1.49/lbs — Best for light items">USPS từ $1.49/lbs — Phù hợp hàng nhẹ</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span data-vi="Nhận label trong 30–60 phút" data-en="Receive label in 30–60 minutes">Nhận label trong 30–60 phút</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#22C55E;flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="FedEx & USPS free pickup" data-en="Free FedEx & USPS pickup">FedEx & USPS free pickup</span></div>
+ </div>
+ <div class="service-card-footer"><a href="noi-dia-my.html" class="svc-cta" data-vi="Book Label →" data-en="Book Label →">Book Label →</a></div>
+ </div>
+
+ <!-- Mua hộ -->
+ <div class="service-card">
+ <div class="service-card-top">
+ <div class="svc-icon-wrap">
+ <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+ </div>
+ <h3 data-vi="Mua hộ hàng Mỹ" data-en="Shop For Me (US)">Mua hộ hàng Mỹ</h3>
+ <p class="sub" data-vi="Không có thẻ Mỹ? Gửi link — Cuckoo Cargo mua và ship về Việt Nam. Nhận báo giá trong 24h." data-en="No US card? Send us a link — Cuckoo Cargo buys it and ships it to Vietnam. Get a quote within 24h.">Không có thẻ Mỹ? Gửi link — Cuckoo Cargo mua và ship về Việt Nam. Nhận báo giá trong 24h.</p>
+ <div class="svc-price"><span class="from" data-vi="Phí" data-en="Fee">Phí</span><span class="amount" data-vi="Liên hệ" data-en="Contact us">Liên hệ</span></div>
+ </div>
+ <div class="service-card-features">
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="Gửi link Amazon, Walmart, Target..." data-en="Send links from Amazon, Walmart, Target...">Gửi link Amazon, Walmart, Target...</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><span data-vi="Nhận báo giá trong vòng 24h" data-en="Get a quote within 24h">Nhận báo giá trong vòng 24h</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="Gom nhiều đơn, ship về cùng lúc" data-en="Consolidate multiple orders, ship together">Gom nhiều đơn, ship về cùng lúc</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="Kiểm tra hàng trước khi gửi" data-en="Inspect items before shipping">Kiểm tra hàng trước khi gửi</span></div>
+ <div class="svc-feat"><span class="fi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--orange);flex-shrink:0;margin-top:1px;"><polyline points="20 6 9 17 4 12"/></svg></span><span data-vi="Thanh toán sau khi có báo giá" data-en="Pay after you receive the quote">Thanh toán sau khi có báo giá</span></div>
+ </div>
+ <div class="service-card-footer"><a href="mua-ho.html" class="svc-cta" data-vi="Gửi yêu cầu →" data-en="Send request →">Gửi yêu cầu →</a></div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+ <div class="how-inner">
+ <div class="section-title">
+ <h2 data-vi="Cách <span>Thức Hoạt Động</span>" data-en="How <span>It Works</span>">Cách <span>Thức Hoạt Động</span></h2>
+ <p data-vi="Quy trình đơn giản — chỉ 3 bước là xong" data-en="A simple process — just 3 steps">Quy trình đơn giản — chỉ 3 bước là xong</p>
+ </div>
+ <div class="how-tabs">
+ <div class="how-tab active" onclick="switchHow('mvv',this)" data-vi=" Mỹ - Việt" data-en=" US – Vietnam"> Mỹ - Việt</div>
+ <div class="how-tab" onclick="switchHow('label',this)" data-vi=" Label Nội địa" data-en=" Domestic Label"> Label Nội địa</div>
+ <div class="how-tab" onclick="switchHow('mh',this)" data-vi=" Mua hộ" data-en=" Shop For Me"> Mua hộ</div>
+ </div>
+ <div class="how-panel active" id="how-mvv">
+ <div class="how-step-card"><div class="step-n">1</div><div class="step-icon"></div><h4 data-vi="Tạo đơn online" data-en="Create order online">Tạo đơn online</h4><p data-vi="Điền thông tin người gửi, người nhận và chọn gói bảo hiểm trong 5 phút trên website." data-en="Fill in sender and recipient details and pick an insurance plan in 5 minutes on the website.">Điền thông tin người gửi, người nhận và chọn gói bảo hiểm trong 5 phút trên website.</p></div>
+ <div class="how-step-card"><div class="step-n">2</div><div class="step-icon"></div><h4 data-vi="Drop-off hoặc Pickup" data-en="Drop-off or Pickup">Drop-off hoặc Pickup</h4><p data-vi="Mang hàng đến kho hoặc đặt pickup — nhân viên đến lấy tận nơi từ Thứ 2 đến Thứ 6." data-en="Bring items to our warehouse or book a pickup — our staff collects them at your door, Monday to Friday.">Mang hàng đến kho hoặc đặt pickup — nhân viên đến lấy tận nơi từ Thứ 2 đến Thứ 6.</p></div>
+ <div class="how-step-card"><div class="step-n">3</div><div class="step-icon"></div><h4 data-vi="Nhận hàng tại VN" data-en="Receive in Vietnam">Nhận hàng tại VN</h4><p data-vi="Hàng về đến kho Việt Nam trong 7–10 ngày. Giao tận nhà đến 63 tỉnh thành." data-en="Goods arrive at our Vietnam warehouse in 7–10 days. Home delivery to all 63 provinces.">Hàng về đến kho Việt Nam trong 7–10 ngày. Giao tận nhà đến 63 tỉnh thành.</p></div>
+ </div>
+ <div class="how-panel" id="how-label">
+ <div class="how-step-card"><div class="step-n">1</div><div class="step-icon"></div><h4 data-vi="Chọn hãng & điền form" data-en="Choose carrier & fill the form">Chọn hãng & điền form</h4><p data-vi="Chọn UPS / FedEx / USPS, nhập cân nặng, địa chỉ người gửi và người nhận." data-en="Choose UPS / FedEx / USPS, enter the weight and the sender and recipient addresses.">Chọn UPS / FedEx / USPS, nhập cân nặng, địa chỉ người gửi và người nhận.</p></div>
+ <div class="how-step-card"><div class="step-n">2</div><div class="step-icon"></div><h4 data-vi="Nhận label qua email" data-en="Get the label by email">Nhận label qua email</h4><p data-vi="Cuckoo Cargo xử lý và gửi file label PDF về email trong 30–60 phút làm việc." data-en="Cuckoo Cargo processes it and emails you the PDF label within 30–60 business minutes.">Cuckoo Cargo xử lý và gửi file label PDF về email trong 30–60 phút làm việc.</p></div>
+ <div class="how-step-card"><div class="step-n">3</div><div class="step-icon"></div><h4 data-vi="In & gửi hàng" data-en="Print & ship">In & gửi hàng</h4><p data-vi="In label, dán lên kiện hàng rồi drop-off tại bưu điện gần nhất hoặc đặt pickup." data-en="Print the label, stick it on the package, then drop it off at the nearest post office or book a pickup.">In label, dán lên kiện hàng rồi drop-off tại bưu điện gần nhất hoặc đặt pickup.</p></div>
+ </div>
+ <div class="how-panel" id="how-mh">
+ <div class="how-step-card"><div class="step-n">1</div><div class="step-icon"></div><h4 data-vi="Gửi link sản phẩm" data-en="Send the product link">Gửi link sản phẩm</h4><p data-vi="Copy link từ Amazon, Walmart, Target... và điền form yêu cầu mua hộ trên website." data-en="Copy a link from Amazon, Walmart, Target... and fill in the Shop-For-Me request form on the website.">Copy link từ Amazon, Walmart, Target... và điền form yêu cầu mua hộ trên website.</p></div>
+ <div class="how-step-card"><div class="step-n">2</div><div class="step-icon"></div><h4 data-vi="Nhận báo giá 24h" data-en="Get a quote in 24h">Nhận báo giá 24h</h4><p data-vi="Cuckoo Cargo kiểm tra và báo giá tổng: giá hàng + phí mua hộ + phí ship." data-en="Cuckoo Cargo reviews it and quotes the total: item price + buying fee + shipping.">Cuckoo Cargo kiểm tra và báo giá tổng: giá hàng + phí mua hộ + phí ship.</p></div>
+ <div class="how-step-card"><div class="step-n">3</div><div class="step-icon"></div><h4 data-vi="Xác nhận & nhận hàng" data-en="Confirm & receive">Xác nhận & nhận hàng</h4><p data-vi="Thanh toán QR → Cuckoo Cargo đặt hàng → ship về Việt Nam trong 7–10 ngày." data-en="Pay by QR → Cuckoo Cargo places the order → ships to Vietnam in 7–10 days.">Thanh toán QR → Cuckoo Cargo đặt hàng → ship về Việt Nam trong 7–10 ngày.</p></div>
+ </div>
+ </div>
+</section>
+
+<!-- WHY US -->
+<section class="why-section">
+ <div class="why-inner">
+
+ <!-- Header -->
+ <div class="why-header">
+ <div class="why-header-left">
+ <div class="why-eyebrow" data-vi="Lý do chọn chúng tôi" data-en="Why Choose Us">Lý do chọn chúng tôi</div>
+ <h2 data-vi="Tại Sao Chọn<br><span>Cuckoo Cargo?</span>" data-en="Why Choose<br><span>Cuckoo Cargo?</span>">Tại Sao Chọn<br><span>Cuckoo Cargo?</span></h2>
+ </div>
+ <div class="why-header-right">
+ <div class="why-stat">
+ <div class="ws-num">7–10</div>
+ <div class="ws-lbl" data-vi="Ngày giao hàng" data-en="Days to deliver">Ngày giao hàng</div>
+ </div>
+ <div class="why-stat-divider"></div>
+ <div class="why-stat">
+ <div class="ws-num">50</div>
+ <div class="ws-lbl" data-vi="Tiểu bang phủ sóng" data-en="US states covered">Tiểu bang phủ sóng</div>
+ </div>
+ <div class="why-stat-divider"></div>
+ <div class="why-stat">
+ <div class="ws-num">63</div>
+ <div class="ws-lbl" data-vi="Tỉnh thành VN" data-en="VN provinces">Tỉnh thành VN</div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Cards -->
+ <div class="why-grid">
+
+ <div class="why-card featured">
+ <div class="wc-icon-box">
+ <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+ </div>
+ <h4 data-vi="Giao hàng 7–10 ngày" data-en="7–10 day delivery">Giao hàng 7–10 ngày</h4>
+ <p data-vi="Lộ trình tối ưu từ kho Mỹ về 63 tỉnh thành Việt Nam. Không delay vô lý do." data-en="Optimised route from US warehouse to all 63 provinces. No unnecessary delays.">Lộ trình tối ưu từ kho Mỹ về 63 tỉnh thành Việt Nam. Không delay vô lý do.</p>
+ </div>
+
+ <div class="why-card">
+ <div class="wc-icon-box">
+ <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+ </div>
+ <h4 data-vi="Bảo hiểm đầy đủ" data-en="Full insurance">Bảo hiểm đầy đủ</h4>
+ <p data-vi="4 gói bảo hiểm từ Free đến Max. Đền bù nhanh trong 7–14 ngày nếu có sự cố." data-en="4 insurance plans from Free to Max. Fast compensation within 7–14 days if needed.">4 gói bảo hiểm từ Free đến Max. Đền bù nhanh trong 7–14 ngày nếu có sự cố.</p>
+ </div>
+
+ <div class="why-card">
+ <div class="wc-icon-box">
+ <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+ </div>
+ <h4 data-vi="50 Tiểu bang phủ sóng" data-en="All 50 US states">50 Tiểu bang phủ sóng</h4>
+ <p data-vi="Pickup tận nơi hoặc drop-off tại điểm Cuckoo Cargo gần nhất trên toàn nước Mỹ." data-en="Door pickup or drop-off at the nearest Cuckoo Cargo point across the US.">Pickup tận nơi hoặc drop-off tại điểm Cuckoo Cargo gần nhất trên toàn nước Mỹ.</p>
+ </div>
+
+ <div class="why-card">
+ <div class="wc-icon-box">
+ <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+ </div>
+ <h4 data-vi="Hỗ trợ tiếng Việt" data-en="Vietnamese support">Hỗ trợ tiếng Việt</h4>
+ <p data-vi="Đội ngũ người Việt qua Facebook, Zalo, hotline — 7 ngày / tuần." data-en="Vietnamese-speaking team via Facebook, Zalo, hotline — 7 days a week.">Đội ngũ người Việt qua Facebook, Zalo, hotline — 7 ngày / tuần.</p>
+ </div>
+
+ <div class="why-card">
+ <div class="wc-icon-box">
+ <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+ </div>
+ <h4 data-vi="Hỗ trợ đóng gói" data-en="Packaging support">Hỗ trợ đóng gói</h4>
+ <p data-vi="Thùng carton chắc chắn, đóng gói cẩn thận tại kho Mỹ. Không phát sinh thêm." data-en="Sturdy carton boxes, carefully packed at US warehouse. No extra charges.">Thùng carton chắc chắn, đóng gói cẩn thận tại kho Mỹ. Không phát sinh thêm.</p>
+ </div>
+
+ <div class="why-card">
+ <div class="wc-icon-box">
+ <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+ </div>
+ <h4 data-vi="Tracking minh bạch" data-en="Transparent tracking">Tracking minh bạch</h4>
+ <p data-vi="Tra cứu đơn hàng 24/7 trên website. Cập nhật từng bước từ khi nhận đến khi giao." data-en="Track orders 24/7 on the website. Step-by-step updates from receipt to delivery.">Tra cứu đơn hàng 24/7 trên website. Cập nhật từng bước từ khi nhận đến khi giao.</p>
+ </div>
+
+ </div>
+ </div>
+</section>
+
+<!-- CAM KET -->
+<section class="camket-section">
+ <div class="camket-inner">
+
+ <!-- LEFT -->
+ <div class="camket-left">
+ <div class="camket-eyebrow" data-vi="Cam kết của Cuckoo Cargo" data-en="Cuckoo Cargo Commitments">Cam kết của Cuckoo Cargo</div>
+ <h2 data-vi="Chúng tôi<br><span class='hl'>KHÔNG BAO GIO</span><br>làm điều này" data-en="We will<br><span class='hl'>NEVER</span><br>do this">Chúng tôi<br><span class="hl">KHÔNG BAO GIO</span><br>làm điều này</h2>
+ <p data-vi="Cuckoo Cargo xây dựng uy tín từ sự trung thực. Những cam kết dưới đây là nền tảng hoạt động — không phải khẩu hiệu." data-en="Cuckoo Cargo builds trust through honesty. The commitments below are our operating foundation — not just slogans.">Cuckoo Cargo xây dựng uy tín từ sự trung thực. Những cam kết dưới đây là nền tảng hoạt động — không phải khẩu hiệu.</p>
+ <div class="camket-stats">
+ <div class="ck-stat">
+ <div class="ck-val"><span>100</span>%</div>
+ <div class="ck-lbl" data-vi="Minh bạch chi phí" data-en="Transparent pricing">Minh bạch chi phí</div>
+ </div>
+ <div class="ck-stat">
+ <div class="ck-val" data-vi="<span>30</span> phút" data-en="<span>30</span> min"><span>30</span> phút</div>
+ <div class="ck-lbl" data-vi="Phản hồi sự cố" data-en="Incident response">Phản hồi sự cố</div>
+ </div>
+ <div class="ck-stat">
+ <div class="ck-val" data-vi="<span>7</span> ngày" data-en="<span>7</span> days"><span>7</span> ngày</div>
+ <div class="ck-lbl" data-vi="Hỗ trợ mỗi tuần" data-en="Support per week">Hỗ trợ mỗi tuần</div>
+ </div>
+ </div>
+ <div class="camket-deco">
+ <div class="camket-deco-line"></div>
+ <div class="camket-deco-text">CUCKOO CARGO</div>
+ <div class="camket-deco-line"></div>
+ </div>
+ </div>
+
+ <!-- RIGHT: danh sách cam kết -->
+ <div class="camket-list">
+
+ <div class="camket-item">
+ <div class="camket-icon">
+ <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+ </div>
+ <div class="camket-text">
+ <strong data-vi="Không dùng dịch vụ kém chất lượng" data-en="No low-quality carriers">Không dùng dịch vụ kém chất lượng</strong>
+ <span data-vi="Chỉ hợp tác với đối tác vận chuyển uy tín, đảm bảo an toàn cho hàng hóa." data-en="We only partner with trusted carriers to ensure your goods are safe.">Chỉ hợp tác với đối tác vận chuyển uy tín, đảm bảo an toàn cho hàng hóa.</span>
+ </div>
+ <div class="camket-check">
+ <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+ </div>
+ </div>
+
+ <div class="camket-item">
+ <div class="camket-icon">
+ <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+ </div>
+ <div class="camket-text">
+ <strong data-vi="Không gian lận chi phí" data-en="No hidden fees">Không gian lận chi phí</strong>
+ <span data-vi="Báo giá rõ ràng, công khai. Không phát sinh phí ẩn sau khi xác nhận đơn." data-en="Clear, transparent quotes. No hidden fees after order confirmation.">Báo giá rõ ràng, công khai. Không phát sinh phí ẩn sau khi xác nhận đơn.</span>
+ </div>
+ <div class="camket-check">
+ <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+ </div>
+ </div>
+
+ <div class="camket-item">
+ <div class="camket-icon">
+ <svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+ </div>
+ <div class="camket-text">
+ <strong data-vi="Không gian lận khối lượng hàng" data-en="No weight fraud">Không gian lận khối lượng hàng</strong>
+ <span data-vi="Cân đúng — chụp ảnh cân thực tế gửi khách xem trước khi tính phí." data-en="Accurate weighing — photo of actual scale sent to you before charging.">Cân đúng — chụp ảnh cân thực tế gửi khách xem trước khi tính phí.</span>
+ </div>
+ <div class="camket-check">
+ <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+ </div>
+ </div>
+
+ <div class="camket-item">
+ <div class="camket-icon">
+ <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+ </div>
+ <div class="camket-text">
+ <strong data-vi="Không im lặng khi có vấn đề" data-en="No silence on issues">Không im lặng khi có vấn đề</strong>
+ <span data-vi="Mọi sự cố được phản hồi trong 30 phút qua Zalo hoặc Messenger." data-en="All incidents responded to within 30 minutes via Zalo or Messenger.">Mọi sự cố được phản hồi trong 30 phút qua Zalo hoặc Messenger.</span>
+ </div>
+ <div class="camket-check">
+ <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+ </div>
+ </div>
+
+ <div class="camket-item">
+ <div class="camket-icon">
+ <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+ </div>
+ <div class="camket-text">
+ <strong data-vi="Không bỏ rơi khách hàng" data-en="Never abandon customers">Không bỏ rơi khách hàng</strong>
+ <span data-vi="Đồng hành từ khi đặt đơn đến khi hàng tới tay người nhận — 7 ngày/tuần." data-en="With you from order creation to delivery — 7 days a week.">Đồng hành từ khi đặt đơn đến khi hàng tới tay người nhận — 7 ngày/tuần.</span>
+ </div>
+ <div class="camket-check">
+ <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+ </div>
+ </div>
+
+ </div>
+ </div>
+</section>
+
+<!-- TRACKING PREVIEW -->
+<section class="tracking-preview">
+ <div class="tp-inner">
+ <div class="tp-left">
+ <h2 data-vi="Tra Cứu <span>Đơn Hàng</span>" data-en="Track <span>Your Order</span>">Tra Cứu <span>Đơn Hàng</span></h2>
+ <p data-vi="Nhập mã vận đơn để xem trạng thái kiện hàng theo thời gian thực. Cập nhật liên tục từ khi nhận đến khi giao." data-en="Enter your order code to view shipment status in real time. Continuously updated from receipt to delivery.">Nhập mã vận đơn để xem trạng thái kiện hàng theo thời gian thực. Cập nhật liên tục từ khi nhận đến khi giao.</p>
+ <div class="tp-row">
+ <input type="text" id="tp-code" placeholder="VD: CC-202606-001" style="text-transform:uppercase;" />
+ <button class="tp-btn" onclick="goTracking()" data-vi="Tra cứu →" data-en="Track →">Tra cứu →</button>
+ </div>
+ </div>
+ <div class="mini-tl">
+ <div class="mini-tl-item">
+ <div class="mini-tl-left"><div class="mini-dot done"></div><div class="mini-line"></div></div>
+ <div class="mini-content"><div class="mini-label" data-vi=" Đã nhận tại kho Mỹ" data-en=" Received at US warehouse"> Đã nhận tại kho Mỹ</div><div class="mini-sub">01/06/2026 · Los Angeles, CA</div></div>
+ </div>
+ <div class="mini-tl-item">
+ <div class="mini-tl-left"><div class="mini-dot done"></div><div class="mini-line"></div></div>
+ <div class="mini-content"><div class="mini-label" data-vi=" Xuất kho — đang bay" data-en=" Departed — in flight"> Xuất kho — đang bay</div><div class="mini-sub">03/06/2026 · LAX Airport</div></div>
+ </div>
+ <div class="mini-tl-item">
+ <div class="mini-tl-left"><div class="mini-dot active"></div><div class="mini-line"></div></div>
+ <div class="mini-content"><div class="mini-label" style="color:var(--orange);" data-vi=" Đang vận chuyển quốc tế" data-en=" International transit"> Đang vận chuyển quốc tế</div><div class="mini-sub" data-vi="Đang cập nhật..." data-en="Updating...">Đang cập nhật...</div></div>
+ </div>
+ <div class="mini-tl-item">
+ <div class="mini-tl-left"><div class="mini-dot pending"></div><div class="mini-line"></div></div>
+ <div class="mini-content"><div class="mini-label" style="color:#555;" data-vi="Thông quan Việt Nam" data-en="Vietnam customs">Thông quan Việt Nam</div></div>
+ </div>
+ <div class="mini-tl-item">
+ <div class="mini-tl-left"><div class="mini-dot pending"></div><div class="mini-line"></div></div>
+ <div class="mini-content"><div class="mini-label" style="color:#555;" data-vi="Giao hàng tận nhà " data-en="Home delivery ">Giao hàng tận nhà </div></div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products-section">
+ <div class="products-inner">
+ <div class="section-title">
+ <h2 data-vi="Sản Phẩm <span>Nổi Bật</span>" data-en="<span>Featured</span> Products">Sản Phẩm <span>Nổi Bật</span></h2>
+ <p data-vi="Hàng Mỹ chính hãng — ship về Việt Nam, giao tận nhà" data-en="Authentic US products — shipped to Vietnam, delivered to your door">Hàng Mỹ chính hãng — ship về Việt Nam, giao tận nhà</p>
+ </div>
+ <div class="prod-grid">
+ <div class="prod-card">
+ <div class="prod-img"><img src="assets/images/sua-ensure-my.png" alt="Sữa Ensure Original Mỹ" /></div>
+ <div class="prod-info">
+ <div class="prod-tag" data-vi="Dinh dưỡng" data-en="Nutrition">Dinh dưỡng</div>
+ <div class="prod-name" data-vi="Sữa Ensure Original Mỹ" data-en="Ensure Original US">Sữa Ensure Original Mỹ</div>
+ <div class="prod-desc" data-vi="Ensure chính hãng Abbott Mỹ. Hàng nguyên thùng, date dài, nhập khẩu trực tiếp." data-en="Genuine Abbott US Ensure. Original case, long expiry, directly imported.">Ensure chính hãng Abbott Mỹ. Hàng nguyên thùng, date dài, nhập khẩu trực tiếp.</div>
+ <div class="prod-price" data-vi="Liên hệ <span class='u'>/ thùng</span>" data-en="Contact us <span class='u'>/ case</span>">Liên hệ <span class="u">/ thùng</span></div>
+ <a href="san-pham.html" class="prod-cta" data-vi="Đặt ngay →" data-en="Order now →">Đặt ngay →</a>
+ </div>
+ </div>
+ <div class="prod-card">
+ <div class="prod-img"><img src="assets/images/dau-gio-my.webp" alt="Dầu Gió Eagle Brand" /></div>
+ <div class="prod-info">
+ <div class="prod-tag" data-vi="Sức khỏe" data-en="Health">Sức khỏe</div>
+ <div class="prod-name" data-vi="Dầu Gió Eagle Brand" data-en="Eagle Brand Medicated Oil">Dầu Gió Eagle Brand</div>
+ <div class="prod-desc" data-vi="Dầu gió con ó Eagle Brand chính hãng Mỹ. Hộp/thùng số lượng lớn. Giá tốt nhất." data-en="Authentic US Eagle Brand medicated oil. Bulk boxes/cases available. Best price.">Dầu gió con ó Eagle Brand chính hãng Mỹ. Hộp/thùng số lượng lớn. Giá tốt nhất.</div>
+ <div class="prod-price" data-vi="Liên hệ <span class='u'>/ hộp</span>" data-en="Contact us <span class='u'>/ box</span>">Liên hệ <span class="u">/ hộp</span></div>
+ <a href="san-pham.html" class="prod-cta" data-vi="Đặt ngay →" data-en="Order now →">Đặt ngay →</a>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- BLOG -->
+<section class="blog-section">
+ <div class="blog-inner">
+ <div class="blog-head">
+ <div>
+ <h2 data-vi="Blog & <span>Hướng Dẫn</span>" data-en="Blog & <span>Guides</span>">Blog & <span>Hướng Dẫn</span></h2>
+ <p data-vi="Kinh nghiệm gửi hàng, tips tiết kiệm và cập nhật dịch vụ" data-en="Shipping experience, money-saving tips and service updates">Kinh nghiệm gửi hàng, tips tiết kiệm và cập nhật dịch vụ</p>
+ </div>
+ <a href="blog.html" class="btn btn-secondary btn-sm" data-vi="Xem tất cả →" data-en="View all →">Xem tất cả →</a>
+ </div>
+ <div class="blog-grid-home">
+ <a href="blog.html" class="blog-card-home">
+ <div class="blog-img-home"><div class="blog-cat-tag" data-vi="Hướng dẫn" data-en="Guide">Hướng dẫn</div></div>
+ <div class="blog-card-body-home"><div class="blog-title-home" data-vi="Hướng dẫn gửi hàng Mỹ về Việt Nam từ A đến Z năm 2026" data-en="Complete guide to shipping from US to Vietnam A–Z in 2026">Hướng dẫn gửi hàng Mỹ về Việt Nam từ A đến Z năm 2026</div><div class="blog-meta-home"><span>01/06/2026</span><span class="blog-read-more" data-vi="5 phút đọc" data-en="5 min read">5 phút đọc</span></div></div>
+ </a>
+ <a href="blog.html" class="blog-card-home">
+ <div class="blog-img-home"><div class="blog-cat-tag" data-vi="Tiết kiệm" data-en="Save money">Tiết kiệm</div></div>
+ <div class="blog-card-body-home"><div class="blog-title-home" data-vi="So sánh UPS vs FedEx vs USPS — Chọn hãng nào tiết kiệm nhất?" data-en="UPS vs FedEx vs USPS comparison — Which carrier saves the most?">So sánh UPS vs FedEx vs USPS — Chọn hãng nào tiết kiệm nhất?</div><div class="blog-meta-home"><span>28/05/2026</span><span class="blog-read-more" data-vi="4 phút đọc" data-en="4 min read">4 phút đọc</span></div></div>
+ </a>
+ <a href="blog.html" class="blog-card-home">
+ <div class="blog-img-home"><div class="blog-cat-tag" data-vi="Mua hộ" data-en="Shopping">Mua hộ</div></div>
+ <div class="blog-card-body-home"><div class="blog-title-home" data-vi="Top 10 sản phẩm Mỹ được người Việt mua hộ nhiều nhất" data-en="Top 10 US products most requested by Vietnamese shoppers">Top 10 sản phẩm Mỹ được người Việt mua hộ nhiều nhất</div><div class="blog-meta-home"><span>20/05/2026</span><span class="blog-read-more" data-vi="6 phút đọc" data-en="6 min read">6 phút đọc</span></div></div>
+ </a>
+ </div>
+ </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+ <div class="nl-inner">
+ <h2>Nhận <span>Ưu Đãi</span> Mới Nhất</h2>
+ <p>Đăng ký nhận thông báo khuyến mãi, mã giảm giá và tin tức dịch vụ mỗi tuần.</p>
+ <div class="nl-form">
+ <input type="email" id="nl-email" placeholder="Nhập email của bạn..." />
+ <button onclick="subscribeNewsletter()">Đăng ký →</button>
+ </div>
+ <div class="nl-note"> Không spam. Hủy đăng ký bất kỳ lúc nào.</div>
+ </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+ <div class="faq-wrap">
+
+ <!-- LEFT -->
+ <div class="faq-left">
+ <div class="faq-eyebrow" data-vi="Hỗ trợ khách hàng" data-en="Customer Support">Hỗ trợ khách hàng</div>
+ <h2 data-vi="Câu hỏi <span>Thường Gặp</span>" data-en="Frequently Asked <span>Questions</span>">Câu hỏi <span>Thường Gặp</span></h2>
+ <p data-vi="Giải đáp những thắc mắc phổ biến nhất về dịch vụ gửi hàng, bảo hiểm, hải quan và thanh toán." data-en="Answers to the most common questions about shipping, insurance, customs and payment.">Giải đáp những thắc mắc phổ biến nhất về dịch vụ gửi hàng, bảo hiểm, hải quan và thanh toán.</p>
+ <div class="faq-contact-box">
+ <p data-vi="Chưa tìm thấy câu trả lời? Đội ngũ Cuckoo Cargo hỗ trợ 7 ngày/tuần." data-en="Can't find an answer? Cuckoo Cargo's team supports you 7 days a week.">Chưa tìm thấy câu trả lời? Đội ngũ Cuckoo Cargo hỗ trợ 7 ngày/tuần.</p>
+ <div class="faq-contact-btns">
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="faq-cta-btn fb">
+ <div class="faq-cta-icon">
+   <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M18 2C9.163 2 2 8.97 2 17.5c0 5.207 2.61 9.824 6.639 12.741V36l5.986-3.313A17.46 17.46 0 0 0 18 33c8.837 0 16-6.97 16-15.5S26.837 2 18 2z"/><path fill="#1877F2" d="M19.5 22.5l-4-4.5-7.5 4.5L16 13l4 4.5 7.5-4.5z"/></svg>
+ </div>
+ Facebook Messenger
+ </a>
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="faq-cta-btn zalo">
+ <div class="faq-cta-icon">
+   <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><rect width="50" height="50" rx="12" fill="#0068FF"/><rect x="7" y="10" width="36" height="26" rx="8" fill="white"/><text x="25" y="29" text-anchor="middle" font-size="14" font-weight="900" fill="#0068FF" font-family="Arial,sans-serif">Zalo</text><polygon points="10,36 18,36 10,44" fill="white"/></svg>
+ </div>
+ Zalo
+ </a>
+ </div>
+ </div>
+ </div>
+
+ <!-- RIGHT -->
+ <div class="faq-list">
+
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <div class="faq-q-left">
+ <div class="faq-q-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+ <span class="faq-q-text" data-vi="Thời gian nhận hàng tại Việt Nam trong bao lâu?" data-en="How long does delivery to Vietnam take?">Thời gian nhận hàng tại Việt Nam trong bao lâu?</span>
+ </div>
+ <div class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+ </div>
+ <div class="faq-a">
+ <p data-vi="Kiện hàng thường về đến tay bạn trong <strong>7–15 ngày làm việc</strong> kể từ khi nhập kho Cuckoo Cargo tại Mỹ. Thời gian cụ thể phụ thuộc vào:" data-en="Packages typically arrive within <strong>7–15 business days</strong> from when they enter Cuckoo Cargo's US warehouse. Actual time depends on:">Kiện hàng thường về đến tay bạn trong <strong>7–15 ngày làm việc</strong> kể từ khi nhập kho Cuckoo Cargo tại Mỹ. Thời gian cụ thể phụ thuộc vào:</p>
+ <ul>
+ <li data-vi="Lịch bay: xuất hàng vào <strong>Thứ 3 và Thứ 6</strong> hàng tuần" data-en="Flight schedule: departures on <strong>Tue &amp; Fri</strong> each week">Lịch bay: xuất hàng vào <strong>Thứ 3 và Thứ 6</strong> hàng tuần</li>
+ <li data-vi="Hải quan Việt Nam: thường <strong>1–3 ngày</strong> làm việc" data-en="Vietnam customs: usually <strong>1–3 business days</strong>">Hải quan Việt Nam: thường <strong>1–3 ngày</strong> làm việc</li>
+ <li data-vi="Giao nội địa (Viettel Post / J&T): <strong>1–3 ngày</strong> tùy tỉnh" data-en="Domestic delivery (Viettel Post / J&T): <strong>1–3 days</strong> depending on province">Giao nội địa (Viettel Post / J&T): <strong>1–3 ngày</strong> tùy tỉnh</li>
+ </ul>
+ <p data-vi="Cuckoo Cargo cập nhật trạng thái qua Zalo/Messenger trong suốt hành trình." data-en="Cuckoo Cargo updates you via Zalo/Messenger throughout the journey.">Cuckoo Cargo cập nhật trạng thái qua Zalo/Messenger trong suốt hành trình.</p>
+ </div>
+ </div>
+
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <div class="faq-q-left">
+ <div class="faq-q-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+ <span class="faq-q-text" data-vi="Chính sách đền bù hàng hóa khi xảy ra sự cố?" data-en="What is the compensation policy if something goes wrong?">Chính sách đền bù hàng hóa khi xảy ra sự cố?</span>
+ </div>
+ <div class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+ </div>
+ <div class="faq-a">
+ <p data-vi="Cuckoo Cargo có 4 gói bảo hiểm:" data-en="Cuckoo Cargo offers 4 insurance plans:">Cuckoo Cargo có 4 gói bảo hiểm:</p>
+ <ul>
+ <li data-vi="<strong>FREE:</strong> Đền bù $5/lbs, tối đa $100" data-en="<strong>FREE:</strong> $5/lbs compensation, max $100"><strong>FREE:</strong> Đền bù $5/lbs, tối đa $100</li>
+ <li data-vi="<strong>PRO ($19.99):</strong> Đền bù $12/lbs, tối đa $500" data-en="<strong>PRO ($19.99):</strong> $12/lbs compensation, max $500"><strong>PRO ($19.99):</strong> Đền bù $12/lbs, tối đa $500</li>
+ <li data-vi="<strong>PRO MAX ($59.99):</strong> Đền bù $20/lbs, tối đa $800" data-en="<strong>PRO MAX ($59.99):</strong> $20/lbs compensation, max $800"><strong>PRO MAX ($59.99):</strong> Đền bù $20/lbs, tối đa $800</li>
+ <li data-vi="<strong>SPECIAL (10% giá trị):</strong> Đền bù 70–100% giá trị thực tế, bao gồm thuế hải quan" data-en="<strong>SPECIAL (10% of value):</strong> 70–100% of actual value, including customs tax"><strong>SPECIAL (10% giá trị):</strong> Đền bù 70–100% giá trị thực tế, bao gồm thuế hải quan</li>
+ </ul>
+ <p data-vi="<strong>100% phí vận chuyển được hoàn</strong> nếu hàng bị mất do lỗi của Cuckoo Cargo. Xử lý bồi thường trong 7–14 ngày làm việc." data-en="<strong>100% shipping fee refunded</strong> if the package is lost due to Cuckoo Cargo's fault. Claims processed within 7–14 business days."><strong>100% phí vận chuyển được hoàn</strong> nếu hàng bị mất do lỗi của Cuckoo Cargo. Xử lý bồi thường trong 7–14 ngày làm việc.</p>
+ </div>
+ </div>
+
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <div class="faq-q-left">
+ <div class="faq-q-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+ <span class="faq-q-text" data-vi="Các mặt hàng nào bị phụ thu thuế hải quan?" data-en="Which items are subject to customs surcharges?">Các mặt hàng nào bị phụ thu thuế hải quan?</span>
+ </div>
+ <div class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+ </div>
+ <div class="faq-a">
+ <p data-vi="Theo quy định hải quan Việt Nam, các mặt hàng thường bị phụ thu:" data-en="Under Vietnamese customs regulations, items commonly subject to surcharges:">Theo quy định hải quan Việt Nam, các mặt hàng thường bị phụ thu:</p>
+ <ul>
+ <li data-vi="<strong>Rượu:</strong> $14/chai · <strong>Cigar:</strong> $20/hộp · <strong>Nước hoa:</strong> $7/chai" data-en="<strong>Alcohol:</strong> $14/bottle · <strong>Cigars:</strong> $20/box · <strong>Perfume:</strong> $7/bottle"><strong>Rượu:</strong> $14/chai · <strong>Cigar:</strong> $20/hộp · <strong>Nước hoa:</strong> $7/chai</li>
+ <li data-vi="<strong>Vitamin / Mỹ phẩm</strong> (≥50% kiện): +$0.99/lbs" data-en="<strong>Vitamins / Cosmetics</strong> (≥50% of shipment): +$0.99/lbs"><strong>Vitamin / Mỹ phẩm</strong> (≥50% kiện): +$0.99/lbs</li>
+ <li data-vi="<strong>Điện thoại, Tablet, Macbook mới:</strong> $60/cái · Cũ: $90/cái" data-en="<strong>Phone, Tablet, Macbook (new):</strong> $60/unit · Old gen: $90/unit"><strong>Điện thoại, Tablet, Macbook mới:</strong> $60/cái · Cũ: $90/cái</li>
+ <li data-vi="<strong>Thiết bị điện tử khác:</strong> 10% giá trị khai báo" data-en="<strong>Other electronics:</strong> 10% of declared value"><strong>Thiết bị điện tử khác:</strong> 10% giá trị khai báo</li>
+ <li data-vi="<strong>Máy y tế, vaccine, xe máy:</strong> Thuế 20% giá trị" data-en="<strong>Medical devices, vaccines, motorbikes:</strong> 20% tax on value"><strong>Máy y tế, vaccine, xe máy:</strong> Thuế 20% giá trị</li>
+ </ul>
+ <p data-vi="Cuckoo Cargo sẽ thông báo trước nếu kiện hàng thuộc diện phụ thu thuế." data-en="Cuckoo Cargo will notify you in advance if your shipment is subject to customs surcharges.">Cuckoo Cargo sẽ thông báo trước nếu kiện hàng thuộc diện phụ thu thuế.</p>
+ </div>
+ </div>
+
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <div class="faq-q-left">
+ <div class="faq-q-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+ <span class="faq-q-text" data-vi="Làm thế nào để nhận hàng tại Việt Nam?" data-en="How do I receive my package in Vietnam?">Làm thế nào để nhận hàng tại Việt Nam?</span>
+ </div>
+ <div class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+ </div>
+ <div class="faq-a">
+ <p data-vi="Quy trình nhận hàng rất đơn giản:" data-en="The receiving process is simple:">Quy trình nhận hàng rất đơn giản:</p>
+ <ul>
+ <li data-vi="Khi hàng về kho VN, Cuckoo Cargo thông báo qua <strong>Zalo/Messenger</strong>" data-en="When goods arrive at VN warehouse, Cuckoo Cargo notifies via <strong>Zalo/Messenger</strong>">Khi hàng về kho VN, Cuckoo Cargo thông báo qua <strong>Zalo/Messenger</strong></li>
+ <li data-vi="<strong>Viettel Post / J&amp;T</strong> liên hệ người nhận trước khi giao" data-en="<strong>Viettel Post / J&amp;T</strong> contacts the receiver before delivery"><strong>Viettel Post / J&T</strong> liên hệ người nhận trước khi giao</li>
+ <li data-vi="Giao tận nhà toàn quốc — <strong>TP.HCM &amp; Hà Nội miễn phí</strong> giao nội thành" data-en="Nationwide home delivery — <strong>HCMC &amp; Hanoi free</strong> within city">Giao tận nhà toàn quốc — <strong>TP.HCM & Hà Nội miễn phí</strong> giao nội thành</li>
+ <li data-vi="Tỉnh thành khác phụ thu <strong>+$0.99/lbs</strong>" data-en="Other provinces surcharge <strong>+$0.99/lbs</strong>">Tỉnh thành khác phụ thu <strong>+$0.99/lbs</strong></li>
+ </ul>
+ <p data-vi="Theo dõi đơn bất kỳ lúc nào tại <a href='tracking.html' style='color:var(--orange);font-weight:700;'>Tra cứu đơn</a>." data-en="Track your order anytime at <a href='tracking.html' style='color:var(--orange);font-weight:700;'>Order Tracking</a>.">Theo dõi đơn bất kỳ lúc nào tại <a href="tracking.html" style="color:var(--orange);font-weight:700;">Tra cứu đơn</a>.</p>
+ </div>
+ </div>
+
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <div class="faq-q-left">
+ <div class="faq-q-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+ <span class="faq-q-text" data-vi="Gửi hàng Mỹ về Việt Nam có phát sinh thêm chi phí không?" data-en="Are there any additional costs for US to Vietnam shipping?">Gửi hàng Mỹ về Việt Nam có phát sinh thêm chi phí không?</span>
+ </div>
+ <div class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+ </div>
+ <div class="faq-a">
+ <p data-vi="Ngoài cước vận chuyển theo cân, có thể phát sinh thêm:" data-en="In addition to weight-based shipping rates, the following may apply:">Ngoài cước vận chuyển theo cân, có thể phát sinh thêm:</p>
+ <ul>
+ <li data-vi="<strong>Giao tỉnh xa:</strong> +$0.99/lbs (TP.HCM & Hà Nội miễn phí)" data-en="<strong>Remote province delivery:</strong> +$0.99/lbs (HCMC & Hanoi free)"><strong>Giao tỉnh xa:</strong> +$0.99/lbs (TP.HCM & Hà Nội miễn phí)</li>
+ <li data-vi="<strong>Bảo hiểm:</strong> Tùy gói Free / PRO / PRO MAX / SPECIAL" data-en="<strong>Insurance:</strong> Depends on plan Free / PRO / PRO MAX / SPECIAL"><strong>Bảo hiểm:</strong> Tùy gói Free / PRO / PRO MAX / SPECIAL</li>
+ <li data-vi="<strong>Đóng gói:</strong> Tiêu chuẩn +$0.39/lbs · Nâng cao +$0.69/lbs" data-en="<strong>Packaging:</strong> Standard +$0.39/lbs · Premium +$0.69/lbs"><strong>Đóng gói:</strong> Tiêu chuẩn +$0.39/lbs · Nâng cao +$0.69/lbs</li>
+ <li data-vi="<strong>Thuế hải quan:</strong> Chỉ áp dụng một số mặt hàng đặc thù" data-en="<strong>Customs tax:</strong> Only for certain specific items"><strong>Thuế hải quan:</strong> Chỉ áp dụng một số mặt hàng đặc thù</li>
+ <li data-vi="<strong>Phụ phí cân sai lệch:</strong> $19.25/kiện nếu khai báo không đúng" data-en="<strong>Weight discrepancy surcharge:</strong> $19.25/package if declared incorrectly"><strong>Phụ phí cân sai lệch:</strong> $19.25/kiện nếu khai báo không đúng</li>
+ </ul>
+ <p data-vi="Cuckoo Cargo cam kết <strong>minh bạch 100%</strong> — mọi chi phí thông báo trước khi tính phí." data-en="Cuckoo Cargo guarantees <strong>100% transparency</strong> — all costs disclosed before charging.">Cuckoo Cargo cam kết <strong>minh bạch 100%</strong> — mọi chi phí thông báo trước khi tính phí.</p>
+ </div>
+ </div>
+
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <div class="faq-q-left">
+ <div class="faq-q-icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+ <span class="faq-q-text" data-vi="Có hỗ trợ lấy hàng tận nhà (pick-up) tại Mỹ không?" data-en="Is there door pick-up service in the US?">Có hỗ trợ lấy hàng tận nhà (pick-up) tại Mỹ không?</span>
+ </div>
+ <div class="faq-arrow"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+ </div>
+ <div class="faq-a">
+ <p data-vi="Có! Cuckoo Cargo hỗ trợ pick-up tận nhà cho dịch vụ <strong>Label Nội địa Mỹ</strong>:" data-en="Yes! Cuckoo Cargo offers door pick-up for <strong>US Domestic Label</strong> service:">Có! Cuckoo Cargo hỗ trợ pick-up tận nhà cho dịch vụ <strong>Label Nội địa Mỹ</strong>:</p>
+ <ul>
+ <li data-vi="<strong>UPS:</strong> +$9.65/lần (nhà riêng) · +$16.15/lần (căn hộ/tòa nhà)" data-en="<strong>UPS:</strong> +$9.65/pickup (house) · +$16.15/pickup (apartment/building)"><strong>UPS:</strong> +$9.65/lần (nhà riêng) · +$16.15/lần (căn hộ/tòa nhà)</li>
+ <li><strong>FedEx & USPS:</strong> Pick-up miễn phí</li>
+ <li data-vi="Đặt lịch <strong>Thứ 2 – Thứ 6</strong>, trước ít nhất 1 ngày" data-en="Schedule <strong>Mon – Fri</strong>, at least 1 day in advance">Đặt lịch <strong>Thứ 2 – Thứ 6</strong>, trước ít nhất 1 ngày</li>
+ <li data-vi="Khung giờ: 9AM–2PM · 10AM–3PM · 11AM–4PM · 12PM–5PM" data-en="Time slots: 9AM–2PM · 10AM–3PM · 11AM–4PM · 12PM–5PM">Khung giờ: 9AM–2PM · 10AM–3PM · 11AM–4PM · 12PM–5PM</li>
+ </ul>
+ <p data-vi="Dịch vụ <strong>Mỹ – Việt Nam</strong>: tự gửi kiện đến kho tại <strong>13122 Newell St, Garden Grove, CA 92843</strong>." data-en="<strong>US – Vietnam</strong> service: self-drop at warehouse: <strong>13122 Newell St, Garden Grove, CA 92843</strong>.">Dịch vụ <strong>Mỹ – Việt Nam</strong>: tự gửi kiện đến kho tại <strong>13122 Newell St, Garden Grove, CA 92843</strong>.</p>
+ </div>
+ </div>
+
+ </div>
+
+ </div>
+ </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="cc-footer" class="cc-footer"></footer>
+
+<!-- Floating buttons -->
+
+<div id="cc-toast" class="cc-toast"><span id="cc-toast-msg"></span></div>
+
+<script src="assets/js/lang.js"></script>
+<script src="assets/js/global.js"></script>
+<script src="assets/js/pricing.js"></script>
+<script>
+ injectNav('home');
+ injectFooter();
+
+ function quickCalc() {
+ const svc = document.getElementById('calc-service').value;
+ const weight = parseFloat(document.getElementById('calc-weight').value) || 0;
+ const el = document.getElementById('calc-price');
+ if (weight <= 0) { el.textContent = '$0.00'; return; }
+ let price = svc === 'mvv' ? calcMVVPrice(weight) : calcLabelPrice(svc, weight);
+ el.textContent = formatPrice(price);
+ }
+
+ function switchHow(id, el) {
+ document.querySelectorAll('.how-tab').forEach(t => t.classList.remove('active'));
+ document.querySelectorAll('.how-panel').forEach(p => p.classList.remove('active'));
+ el.classList.add('active');
+ document.getElementById('how-' + id).classList.add('active');
+ }
+
+ function goTracking() {
+ const code = document.getElementById('tp-code').value.trim();
+ if (!code) { showToast('error','Vui lòng nhập mã vận đơn'); return; }
+ window.location.href = 'tracking.html?id=' + encodeURIComponent(code.toUpperCase());
+ }
+ document.getElementById('tp-code').addEventListener('keydown', e => {
+ if (e.key === 'Enter') goTracking();
+ });
+
+ function subscribeNewsletter() {
+ const email = document.getElementById('nl-email').value.trim();
+ if (!email || !email.includes('@')) { showToast('error',' Vui lòng nhập email hợp lệ'); return; }
+ showToast('success',' Đăng ký thành công! Cảm ơn bạn đã theo dõi Cuckoo Cargo.');
+ document.getElementById('nl-email').value = '';
+ }
+
+ // FAQ 
+ function toggleFaq(el) {
+ const item = el.closest('.faq-item');
+ const isOpen = item.classList.contains('open');
+ // Close all others
+ document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+ if (!isOpen) item.classList.add('open');
+ }
+
+ window.addEventListener('scroll', () => {
+ const btn = document.getElementById('float-top');
+ if (btn) btn.classList.toggle('show', window.scrollY > 400);
+ });
+</script>
+<!-- FLOATING BUTTONS -->
+<div id="cc-fab-wrap">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="cc-fab cc-fab-zalo" aria-label="Zalo">
+  <svg viewBox="0 0 50 50" width="28" height="28"><rect x="3" y="3" width="44" height="38" rx="10" fill="white"/><text x="25" y="28" text-anchor="middle" font-size="18" font-weight="900" fill="#0068FF" font-family="Arial,sans-serif">Zalo</text><polygon points="10,41 18,41 10,50" fill="white"/></svg>
+ </a>
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="cc-fab cc-fab-fb" aria-label="Facebook">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+ </a>
+ <a href="https://www.tiktok.com/@cuckoo.cargo6" target="_blank" class="cc-fab cc-fab-tiktok" aria-label="TikTok">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-6.34 6.29 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+ </a>
+ <button class="cc-fab cc-fab-top" id="cc-fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Lên đầu" style="display:none">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+ </button>
+</div>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Liên Hệ — Cuckoo Cargo</title>
+ <meta name="description" content="Liên hệ Cuckoo Cargo qua Zalo, Messenger, điện thoại hoặc email. Hỗ trợ 7 ngày / tuần." />
+ <link rel="stylesheet" href="assets/css/global.css" />
+ <link rel="stylesheet" href="assets/css/pages.css" />
+ <style>
+ .lh-hero {
+ background: var(--black); padding: 72px 24px 56px; text-align: center; position: relative; overflow: hidden;
+ }
+ .lh-hero::before {
+ content:''; position:absolute; inset:0;
+ background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(244,123,32,.18) 0%, transparent 70%);
+ pointer-events:none;
+ }
+ .lh-hero h1 { font-size: clamp(28px,4vw,48px); font-weight:900; color:var(--white); margin-bottom:12px; position:relative; }
+ .lh-hero h1 span { color:var(--orange); }
+ .lh-hero p { font-size:16px; color:rgba(255,255,255,.55); max-width:440px; margin:0 auto; line-height:1.7; position:relative; }
+
+ /* Contact channels */
+ .contact-channels { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-bottom:48px; }
+ @media(max-width:900px){ .contact-channels { grid-template-columns:repeat(2,1fr); } }
+ @media(max-width:480px){ .contact-channels { grid-template-columns:1fr 1fr; } }
+
+ .channel-card {
+ border-radius:var(--radius-lg); border:1.5px solid var(--gray-border);
+ padding:28px 20px; text-align:center;
+ transition:transform .25s, box-shadow .25s, border-color .25s;
+ text-decoration:none; color:inherit; display:block;
+ }
+ .channel-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-lg); }
+ .channel-card.zalo:hover { border-color:#0068FF; }
+ .channel-card.fb:hover { border-color:#1877F2; }
+ .channel-card.phone:hover { border-color:var(--orange); }
+ .channel-card.email:hover { border-color:#22C55E; }
+
+ .channel-icon { font-size:44px; margin-bottom:14px; }
+ .channel-name { font-size:17px; font-weight:800; margin-bottom:6px; }
+ .channel-detail { font-size:13px; color:var(--text-muted); line-height:1.6; }
+ .channel-tag {
+ display:inline-block; margin-top:10px;
+ padding:4px 12px; border-radius:20px; font-size:11px; font-weight:800;
+ }
+ .channel-tag.fast { background:#F0FFF4; color:#16A34A; }
+ .channel-tag.always { background:var(--orange-bg); color:var(--orange); }
+ .channel-tag.biz { background:#EFF6FF; color:#1D4ED8; }
+
+ /* Main layout */
+ .lh-layout { display:grid; grid-template-columns:1fr 420px; gap:40px; align-items:start; }
+ @media(max-width:900px){ .lh-layout { grid-template-columns:1fr; } }
+
+ /* Contact form */
+ .lh-form-card { background:var(--white); border-radius:var(--radius-lg); border:1.5px solid var(--gray-border); padding:32px; }
+ .lh-form-title { font-size:22px; font-weight:900; margin-bottom:6px; }
+ .lh-form-sub { font-size:14px; color:var(--text-muted); margin-bottom:24px; line-height:1.6; }
+
+ .topic-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+ .topic-btn {
+ padding:10px 14px; border-radius:10px; border:1.5px solid var(--gray-border);
+ background:var(--white); font-size:13px; font-weight:700; cursor:pointer;
+ font-family:inherit; text-align:left; transition:all .2s; color:var(--text-primary);
+ display:flex; align-items:center; gap:8px;
+ }
+ .topic-btn.selected { background:var(--orange-bg); border-color:var(--orange); color:var(--orange); }
+ .topic-btn:hover:not(.selected) { border-color:var(--orange-light); }
+
+ .btn-submit-lh {
+ width:100%; padding:15px; background:var(--grad-orange); color:#fff;
+ border:none; border-radius:12px; font-size:16px; font-weight:800;
+ cursor:pointer; font-family:inherit; transition:all .2s;
+ display:flex; align-items:center; justify-content:center; gap:10px;
+ }
+ .btn-submit-lh:hover { transform:translateY(-2px); box-shadow:var(--shadow-orange); }
+ .btn-submit-lh:disabled { background:var(--gray-border); color:var(--gray); cursor:not-allowed; transform:none; box-shadow:none; }
+
+ /* Sidebar info */
+ .lh-info-card { border-radius:var(--radius-lg); border:1.5px solid var(--gray-border); padding:28px; margin-bottom:20px; }
+ .lh-info-card h4 { font-size:17px; font-weight:800; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--gray-border); }
+ .info-row { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--gray-border); align-items:flex-start; }
+ .info-row:last-child { border-bottom:none; }
+ .info-icon { font-size:20px; flex-shrink:0; margin-top:1px; }
+ .info-content {}
+ .info-label { font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
+ .info-value { font-size:14px; font-weight:700; }
+ .info-value a { color:var(--orange); text-decoration:none; }
+ .info-value a:hover { text-decoration:underline; }
+
+ /* Hours table */
+ .hours-table { width:100%; font-size:13px; }
+ .hours-table tr td { padding:6px 0; border-bottom:1px solid var(--gray-border); }
+ .hours-table tr:last-child td { border-bottom:none; }
+ .hours-table td:last-child { text-align:right; font-weight:700; color:var(--black); }
+ .hours-open { color:var(--green); }
+ .hours-closed { color:var(--text-muted); }
+
+ /* Map placeholder */
+ .map-placeholder {
+ border-radius:var(--radius-md); background:var(--gray-light);
+ height:200px; display:flex; align-items:center; justify-content:center;
+ font-size:48px; margin-bottom:16px; border:1.5px solid var(--gray-border);
+ flex-direction:column; gap:10px;
+ }
+ .map-placeholder p { font-size:14px; color:var(--text-muted); }
+
+ /* Quick actions */
+ .quick-actions { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+ .qa-btn {
+ padding:16px 14px; border-radius:12px; text-align:center;
+ font-size:14px; font-weight:800; text-decoration:none;
+ display:flex; flex-direction:column; align-items:center; gap:8px;
+ transition:opacity .2s;
+ }
+ .qa-btn:hover { opacity:.85; }
+ .qa-btn .qa-icon { font-size:28px; }
+ .qa-btn.zalo { background:#0068FF; color:#fff; }
+ .qa-btn.fb { background:#1877F2; color:#fff; }
+ .qa-btn.whatsapp { background:#25D366; color:#fff; }
+ .qa-btn.call { background:var(--orange); color:#fff; }
+
+ /* FAQ mini */
+ .faq-mini-list { display:flex; flex-direction:column; gap:10px; }
+ .faq-mini {
+ border-radius:10px; border:1.5px solid var(--gray-border); overflow:hidden;
+ }
+ .faq-mini-q {
+ padding:13px 16px; font-size:14px; font-weight:700; cursor:pointer;
+ display:flex; justify-content:space-between; align-items:center;
+ user-select:none; transition:background .2s;
+ }
+ .faq-mini-q:hover { background:var(--gray-light); }
+ .faq-mini-a { display:none; padding:0 16px 14px; font-size:13px; color:var(--text-muted); line-height:1.6; }
+ .faq-mini.open .faq-mini-a { display:block; }
+ .faq-mini-arrow { font-size:11px; transition:transform .2s; }
+ .faq-mini.open .faq-mini-arrow { transform:rotate(180deg); }
+ </style>
+ <link rel="stylesheet" href="assets/css/mobile.css" />
+</head>
+<body>
+
+<header id="cc-nav" class="cc-nav"></header>
+
+<!-- HERO -->
+<section class="lh-hero">
+ <div class="cc-hero-badge" style="position:relative;display:inline-flex;margin-bottom:16px;" data-vi=" Liên hệ &amp; Hỗ trợ" data-en=" Contact &amp; Support"> Liên hệ &amp; Hỗ trợ</div>
+ <h1 data-vi="Chúng tôi luôn<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>lt;br<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>gt;<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>lt;span<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>gt;sẵn sàng hỗ trợ<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>lt;/span<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>gt;" data-en="We are always<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>lt;br<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>gt;<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>lt;span<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>gt;here to help<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>lt;/span<h1>Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>gt;">Chúng tôi luôn<br><span>sẵn sàng hỗ trợ</span></h1>
+ <p>Hỗ trợ tiếng Việt 7 ngày/tuần. Phản hồi trong vòng 30 phút trong giờ làm việc.</p>
+</section>
+
+<!-- CONTACT CHANNELS -->
+<section class="section" style="padding-bottom:0;">
+ <div class="container">
+ <div class="contact-channels">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="channel-card zalo">
+ <div class="channel-icon"></div>
+ <div class="channel-name">Zalo</div>
+ <div class="channel-detail">Cách nhanh nhất<br>để chat với chúng tôi</div>
+ <div class="channel-tag fast"> Nhanh nhất</div>
+ </a>
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="channel-card fb">
+ <div class="channel-icon"></div>
+ <div class="channel-name">Facebook Messenger</div>
+ <div class="channel-detail">Chat qua trang<br>Facebook Cuckoo Cargo</div>
+ <div class="channel-tag always">7 ngày/tuần</div>
+ </a>
+ <a href="tel:+17143984817" class="channel-card phone">
+ <div class="channel-icon"></div>
+ <div class="channel-name">Điện thoại</div>
+ <div class="channel-detail">+1 (714) 398-4817<br>T2–T7: 9am–6pm PST</div>
+ <div class="channel-tag biz">Giờ làm việc</div>
+ </a>
+ <a href="mailto:cuckoocargo.us@gmail.com" class="channel-card email">
+ <div class="channel-icon"></div>
+ <div class="channel-name">Email</div>
+ <div class="channel-detail">cuckoocargo.us@gmail.com<br>Phản hồi trong 24h</div>
+ <div class="channel-tag biz">Phản hồi 24h</div>
+ </a>
+ </div>
+ </div>
+</section>
+
+<!-- MAIN SECTION -->
+<section class="section">
+ <div class="container">
+ <div class="lh-layout">
+
+ <!-- FORM -->
+ <div class="lh-form-card">
+ <div class="lh-form-title">Gửi tin nhắn cho chúng tôi</div>
+ <div class="lh-form-sub">Điền form bên dưới — chúng tôi phản hồi qua Zalo/email trong vòng 24h.</div>
+
+ <form id="lh-form" novalidate>
+ <!-- Topic selection -->
+ <div style="margin-bottom:20px;">
+ <div class="form-label" style="margin-bottom:10px;">Bạn cần hỗ trợ về? *</div>
+ <div class="topic-grid">
+ <button type="button" class="topic-btn" onclick="selectTopic(this,'Gửi hàng Mỹ - Việt Nam')"> Gửi hàng Mỹ → VN</button>
+ <button type="button" class="topic-btn" onclick="selectTopic(this,'Label nội địa Mỹ')"> Label nội địa Mỹ</button>
+ <button type="button" class="topic-btn" onclick="selectTopic(this,'Mua hộ hàng Mỹ')"> Mua hộ hàng Mỹ</button>
+ <button type="button" class="topic-btn" onclick="selectTopic(this,'Sản phẩm (Ensure, dầu gió)')"> Sản phẩm</button>
+ <button type="button" class="topic-btn" onclick="selectTopic(this,'Tra cứu đơn hàng')"> Tra cứu đơn hàng</button>
+ <button type="button" class="topic-btn" onclick="selectTopic(this,'Khác')"> Khác</button>
+ </div>
+ <input type="hidden" id="lh-topic" />
+ </div>
+
+ <div class="form-row col2">
+ <div class="form-group">
+ <label class="form-label">Họ và tên *</label>
+ <input type="text" class="cc-input" id="lh-name" placeholder="Nguyễn Văn A" required />
+ </div>
+ <div class="form-group">
+ <label class="form-label">Số điện thoại *</label>
+ <input type="tel" class="cc-input" id="lh-phone" placeholder="+1 hoặc 09xx" required />
+ </div>
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">Email</label>
+ <input type="email" class="cc-input" id="lh-email" placeholder="email@example.com" />
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">Zalo / Facebook *</label>
+ <input type="text" class="cc-input" id="lh-zalo" placeholder="Tên Zalo hoặc Facebook để liên hệ lại" required />
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">Nội dung *</label>
+ <textarea class="cc-input" id="lh-msg" rows="5" placeholder="Mô tả chi tiết câu hỏi hoặc yêu cầu của bạn..." required></textarea>
+ </div>
+
+ <!-- Mã đơn (optional) -->
+ <div class="form-group">
+ <label class="form-label">Mã đơn hàng (nếu có)</label>
+ <input type="text" class="cc-input" id="lh-orderid" placeholder="CC-YYYYMM-XXX" />
+ </div>
+
+ <button type="submit" class="btn-submit-lh" id="lh-submit">
+ Gửi tin nhắn
+ </button>
+ </form>
+ </div>
+
+ <!-- SIDEBAR -->
+ <div>
+
+ <!-- Quick chat -->
+ <div style="margin-bottom:20px;">
+ <div style="font-size:15px;font-weight:800;margin-bottom:12px;"> Chat ngay — không cần điền form</div>
+ <div class="quick-actions">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="qa-btn zalo">
+ <span class="qa-icon"></span> Zalo
+ </a>
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="qa-btn fb">
+ <span class="qa-icon"></span> Messenger
+ </a>
+ <a href="tel:+17143984817" class="qa-btn call">
+ <span class="qa-icon"></span> Gọi điện
+ </a>
+ <a href="mailto:cuckoocargo.us@gmail.com" class="qa-btn whatsapp">
+ <span class="qa-icon"></span> Email
+ </a>
+ </div>
+ </div>
+
+ <!-- Business info -->
+ <div class="lh-info-card">
+ <h4> Thông tin liên lạc</h4>
+ <div class="info-row">
+ <div class="info-icon"></div>
+ <div class="info-content">
+ <div class="info-label">Điện thoại (Mỹ)</div>
+ <div class="info-value"><a href="tel:+17143984817">+1 (714) 398-4817</a></div>
+ </div>
+ </div>
+ <div class="info-row">
+ <div class="info-icon">📞</div>
+ <div class="info-content">
+ <div class="info-label">Hotline (Mỹ)</div>
+ <div class="info-value"><a href="tel:+17143984817">+1 (714) 398-4817</a></div>
+ </div>
+ </div>
+ <div class="info-row">
+ <div class="info-icon"></div>
+ <div class="info-content">
+ <div class="info-label">Email</div>
+ <div class="info-value"><a href="mailto:cuckoocargo.us@gmail.com">cuckoocargo.us@gmail.com</a></div>
+ </div>
+ </div>
+ <div class="info-row">
+ <div class="info-icon"></div>
+ <div class="info-content">
+ <div class="info-label">Zalo</div>
+ <div class="info-value"><a href="https://zalo.me/cuckoocargo" target="_blank">zalo.me/cuckoocargo</a></div>
+ </div>
+ </div>
+ <div class="info-row">
+ <div class="info-icon"></div>
+ <div class="info-content">
+ <div class="info-label">Facebook</div>
+ <div class="info-value"><a href="https://www.facebook.com/61582783740459/" target="_blank">facebook.com/cuckoocargo</a></div>
+ </div>
+ </div>
+ <div class="info-row">
+ <div class="info-icon"></div>
+ <div class="info-content">
+ <div class="info-label">Kho hàng (Mỹ)</div>
+ <div class="info-value">8075 Westminster Blvd<br>Westminster, CA 92683, USA</div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Hours -->
+ <div class="lh-info-card">
+ <h4> Giờ hỗ trợ</h4>
+ <table class="hours-table">
+ <tr><td>Thứ 2 – Thứ 6</td><td class="hours-open">9:00am – 6:00pm PST</td></tr>
+ <tr><td>Thứ 7</td><td class="hours-open">9:00am – 4:00pm PST</td></tr>
+ <tr><td>Chủ nhật</td><td class="hours-open">Trực Zalo / Messenger</td></tr>
+ </table>
+ <div style="font-size:12px;color:var(--text-muted);margin-top:12px;line-height:1.6;">
+ * Ngoài giờ: nhắn tin Zalo/Messenger — phản hồi trong vòng 2–4 giờ.
+ </div>
+ </div>
+
+ <!-- Map placeholder -->
+ <div class="lh-info-card">
+ <h4> Vị trí kho Mỹ</h4>
+ <div class="map-placeholder">
+ 
+ <p>Los Angeles, California</p>
+ </div>
+ <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">
+ Địa chỉ kho chính xác sẽ được cung cấp sau khi xác nhận đơn hàng để đảm bảo an toàn.
+ </div>
+ </div>
+
+ </div>
+ </div>
+
+ <!-- FAQ -->
+ <div style="margin-top:48px;">
+ <div class="section-title" style="margin-bottom:24px;">
+ <h2>Câu hỏi thường gặp</h2>
+ </div>
+ <div class="faq-mini-list" style="max-width:700px;margin:0 auto;">
+ <div class="faq-mini">
+ <div class="faq-mini-q" onclick="this.closest('.faq-mini').classList.toggle('open')">
+ Tôi có thể gửi hàng từ bất kỳ tiểu bang nào không? <span class="faq-mini-arrow"></span>
+ </div>
+ <div class="faq-mini-a">Có. Cuckoo Cargo nhận hàng từ tất cả 50 tiểu bang của Mỹ. Bạn cần ship hàng về kho Cuckoo Cargo tại Westminster, CA, hoặc dùng dịch vụ label nội địa để chúng tôi nhận trực tiếp.</div>
+ </div>
+ <div class="faq-mini">
+ <div class="faq-mini-q" onclick="this.closest('.faq-mini').classList.toggle('open')">
+ Thanh toán qua kênh nào? An toàn không? <span class="faq-mini-arrow"></span>
+ </div>
+ <div class="faq-mini-a">Chúng tôi nhận thanh toán qua chuyển khoản ngân hàng VN (Vietcombank, MB, Techcombank...) và Zelle/Cash App (tại Mỹ). Mọi giao dịch đều được xác nhận qua Zalo/email với mã đơn hàng rõ ràng.</div>
+ </div>
+ <div class="faq-mini">
+ <div class="faq-mini-q" onclick="this.closest('.faq-mini').classList.toggle('open')">
+ Nếu hàng bị mất hoặc hỏng — giải quyết thế nào? <span class="faq-mini-arrow"></span>
+ </div>
+ <div class="faq-mini-a">Cuckoo Cargo có bảo hiểm hàng hóa theo yêu cầu. Trường hợp hàng bị mất/hỏng trong quá trình vận chuyển của chúng tôi, chúng tôi sẽ bồi thường theo mức bảo hiểm đã đăng ký. Liên hệ ngay trong 48h kể từ khi nhận hàng.</div>
+ </div>
+ <div class="faq-mini">
+ <div class="faq-mini-q" onclick="this.closest('.faq-mini').classList.toggle('open')">
+ Tôi ở Việt Nam có đặt được không? <span class="faq-mini-arrow"></span>
+ </div>
+ <div class="faq-mini-a">Hoàn toàn có thể! Bạn ở Việt Nam có thể đặt dịch vụ mua hộ (chúng tôi mua tại Mỹ và gửi về VN cho bạn) hoặc nhờ người thân ở Mỹ gửi hàng. Liên hệ qua Zalo để được hướng dẫn chi tiết.</div>
+ </div>
+ <div class="faq-mini">
+ <div class="faq-mini-q" onclick="this.closest('.faq-mini').classList.toggle('open')">
+ Có thể lấy hóa đơn (invoice) cho hàng không? <span class="faq-mini-arrow"></span>
+ </div>
+ <div class="faq-mini-a">Có. Với dịch vụ mua hộ, chúng tôi cung cấp hóa đơn gốc từ Amazon/Walmart/... khi yêu cầu. Hóa đơn này dùng để khai báo hải quan hoặc làm chứng từ bảo hành.</div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<footer id="cc-footer" class="cc-footer"></footer>
+
+<script src="assets/js/lang.js"></script>
+<script src="assets/js/global.js"></script>
+<script src="assets/js/pricing.js"></script>
+<script>
+ injectNav('');
+ injectFooter();
+
+ // Topic selection
+ let selectedTopic = '';
+ function selectTopic(btn, topic) {
+ document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('selected'));
+ btn.classList.add('selected');
+ selectedTopic = topic;
+ document.getElementById('lh-topic').value = topic;
+ }
+
+ // Form submit
+ document.getElementById('lh-form').addEventListener('submit', async function(e) {
+ e.preventDefault();
+ if(!selectedTopic) { showToast('error','Vui lòng chọn chủ đề cần hỗ trợ'); return; }
+
+ const btn = document.getElementById('lh-submit');
+ btn.disabled = true; btn.textContent = '⏳ Đang gửi...';
+
+ const data = {
+ type: 'contact',
+ topic: selectedTopic,
+ fullName: document.getElementById('lh-name').value,
+ phone: document.getElementById('lh-phone').value,
+ email: document.getElementById('lh-email').value,
+ zalo: document.getElementById('lh-zalo').value,
+ message: document.getElementById('lh-msg').value,
+ orderId: document.getElementById('lh-orderid').value,
+ submittedAt: new Date().toISOString(),
+ };
+
+ try {
+ const result = await submitToSheet(data);
+ if(result.success) {
+ showToast('success', ' Tin nhắn đã gửi! Chúng tôi sẽ phản hồi qua Zalo/email trong 24h.', 8000);
+ e.target.reset();
+ document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('selected'));
+ selectedTopic = '';
+ } else throw new Error(result.message);
+ } catch(err) {
+ showToast('error', ' Gửi thất bại: ' + err.message);
+ }
+ btn.disabled = false; btn.innerHTML = ' Gửi tin nhắn';
+ });
+</script>
+<!-- FLOATING BUTTONS -->
+<div id="cc-fab-wrap">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="cc-fab cc-fab-zalo" aria-label="Zalo">
+  <svg viewBox="0 0 50 50" width="28" height="28"><rect x="3" y="3" width="44" height="38" rx="10" fill="white"/><text x="25" y="28" text-anchor="middle" font-size="18" font-weight="900" fill="#0068FF" font-family="Arial,sans-serif">Zalo</text><polygon points="10,41 18,41 10,50" fill="white"/></svg>
+ </a>
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="cc-fab cc-fab-fb" aria-label="Facebook">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+ </a>
+ <a href="https://www.tiktok.com/@cuckoo.cargo6" target="_blank" class="cc-fab cc-fab-tiktok" aria-label="TikTok">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-6.34 6.29 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+ </a>
+ <button class="cc-fab cc-fab-top" id="cc-fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Lên đầu" style="display:none">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+ </button>
+</div>
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Sản Phẩm — Cuckoo Cargo</title>
+ <meta name="description" content="Mua sữa Ensure Mỹ chính hãng, dầu gió Eagle Brand. Giao về Việt Nam hoặc nội địa Mỹ." />
+ <link rel="stylesheet" href="assets/css/global.css" />
+ <link rel="stylesheet" href="assets/css/pages.css" />
+ <style>
+ .sp-hero {
+ background: var(--black); padding: 72px 24px 56px; text-align: center; position: relative; overflow: hidden;
+ }
+ .sp-hero::before {
+ content:''; position:absolute; inset:0;
+ background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(244,123,32,.18) 0%, transparent 70%);
+ pointer-events:none;
+ }
+ .sp-hero h1 { font-size: clamp(28px,4vw,48px); font-weight:900; color:var(--white); margin-bottom:12px; position:relative; }
+ .sp-hero h1 span { color:var(--orange); }
+ .sp-hero p { font-size:16px; color:rgba(255,255,255,.55); max-width:480px; margin:0 auto 28px; line-height:1.7; position:relative; }
+
+ /* Category tabs */
+ .cat-tabs { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:36px; }
+ .cat-tab {
+ padding:9px 20px; border-radius:20px; font-size:14px; font-weight:700; cursor:pointer;
+ border:1.5px solid var(--gray-border); background:var(--white); color:var(--text-muted);
+ transition:all .2s; font-family:inherit;
+ }
+ .cat-tab.active { background:var(--orange); border-color:var(--orange); color:#fff; }
+ .cat-tab:hover:not(.active) { border-color:var(--orange); color:var(--orange); }
+
+ /* Product grid */
+ .sp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+ @media(max-width:900px){ .sp-grid { grid-template-columns:repeat(2,1fr); gap:16px; } }
+ @media(max-width:560px){
+   .sp-grid { grid-template-columns:1fr; gap:12px; }
+   .sp-card { flex-direction:row !important; min-height:130px; }
+   .sp-card-img { width:120px !important; height:auto !important; min-height:130px; flex-shrink:0; border-radius:var(--radius-lg) 0 0 var(--radius-lg); }
+   .sp-card-body { padding:12px 14px 14px !important; }
+   .sp-card-name { font-size:15px !important; margin-bottom:4px !important; }
+   .sp-card-desc { font-size:12px !important; -webkit-line-clamp:2; display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:8px !important; }
+   .sp-card-price { font-size:18px !important; margin-bottom:2px !important; }
+   .sp-card-origin { display:none; }
+   .sp-card-actions { gap:6px; }
+   .sp-card-actions .btn { padding:8px 12px; font-size:12px; }
+ }
+
+ .sp-card {
+ border-radius:var(--radius-lg); border:1.5px solid var(--gray-border);
+ background:var(--white); overflow:hidden;
+ transition:transform .25s, box-shadow .25s, border-color .25s;
+ display:flex; flex-direction:column;
+ }
+ .sp-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-lg); border-color:var(--orange-light); }
+
+ .sp-card-img {
+ height:220px; background:#fff;
+ display:flex; align-items:center; justify-content:center;
+ position:relative; overflow:hidden;
+ }
+ .sp-card-img img { width:100%; height:100%; object-fit:contain; padding:12px; display:block; }
+ .sp-badge {
+ position:absolute; top:12px; left:12px; z-index:2;
+ background:var(--orange); color:#fff;
+ font-size:11px; font-weight:800; padding:4px 10px; border-radius:20px;
+ }
+ .sp-badge.new { background:#22C55E; }
+ .sp-badge.hot { background:#EF4444; }
+
+ .sp-card-body { padding:18px 20px 22px; flex:1; display:flex; flex-direction:column; }
+ .sp-card-tag { font-size:11px; font-weight:700; color:var(--orange); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+ .sp-card-name { font-size:17px; font-weight:800; margin-bottom:6px; line-height:1.35; }
+ .sp-card-desc { font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:14px; flex:1; }
+ .sp-card-price { font-size:24px; font-weight:900; color:var(--orange); margin-bottom:4px; }
+ .sp-card-price .unit { font-size:14px; font-weight:400; color:var(--text-muted); }
+ .sp-card-origin { font-size:12px; color:var(--text-muted); margin-bottom:16px; }
+ .sp-card-actions { display:flex; gap:8px; }
+ .btn-order-sp {
+ flex:1; padding:11px; background:var(--grad-orange); color:#fff;
+ border:none; border-radius:10px; font-size:14px; font-weight:800;
+ cursor:pointer; font-family:inherit; transition:all .2s; text-align:center; text-decoration:none;
+ display:flex; align-items:center; justify-content:center; gap:6px;
+ }
+ .btn-order-sp:hover { transform:translateY(-1px); box-shadow:var(--shadow-orange); }
+ .btn-contact-sp {
+ padding:11px 14px; background:transparent; border:1.5px solid var(--gray-border);
+ border-radius:10px; font-size:14px; cursor:pointer; font-family:inherit; transition:border-color .2s;
+ text-decoration:none; display:flex; align-items:center; justify-content:center;
+ }
+ .btn-contact-sp:hover { border-color:var(--orange); }
+
+ /* Product detail modal */
+ .sp-modal-overlay {
+ display:none; position:fixed; inset:0; background:rgba(0,0,0,.6);
+ z-index:9000; align-items:center; justify-content:center; padding:20px;
+ }
+ .sp-modal-overlay.open { display:flex; }
+ .sp-modal {
+ background:var(--white); border-radius:var(--radius-lg);
+ max-width:640px; width:100%; max-height:90vh; overflow-y:auto;
+ animation: slideUp .3s ease;
+ }
+ @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+ .sp-modal-header {
+ padding:24px 28px 0; display:flex; justify-content:space-between; align-items:flex-start;
+ }
+ .sp-modal-close {
+ width:44px; height:44px; border-radius:50%;
+ background:var(--gray-light); border:none; cursor:pointer;
+ font-size:20px; display:flex; align-items:center; justify-content:center;
+ flex-shrink:0; color:var(--text-primary); transition:background .2s;
+ }
+ .sp-modal-close:hover { background:var(--gray-border); }
+ .sp-modal-body { padding:20px 28px 28px; }
+ @media(max-width:560px){
+   .sp-modal { border-radius:var(--radius-lg) var(--radius-lg) 0 0; max-height:92vh; margin-top:auto; }
+   .sp-modal-overlay { align-items:flex-end; padding:0; }
+   .sp-modal-header { padding:16px 18px 0; position:sticky; top:0; background:#fff; z-index:2; border-bottom:1px solid var(--gray-border); padding-bottom:12px; }
+   .sp-modal-body { padding:16px 18px 32px; }
+   .sp-modal-specs { grid-template-columns:1fr 1fr; }
+ }
+ .sp-modal-img { height:180px; background:var(--gray-light); border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:72px; margin-bottom:20px; }
+ .sp-modal-specs { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0; }
+ .sp-spec { background:var(--gray-light); border-radius:8px; padding:10px 14px; }
+ .sp-spec-label { font-size:11px; color:var(--text-muted); font-weight:700; margin-bottom:3px; }
+ .sp-spec-value { font-size:14px; font-weight:800; }
+
+ /* Why section */
+ .why-sp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+ @media(max-width:640px){ .why-sp-grid { grid-template-columns:1fr 1fr; } }
+ .why-sp-card { background:var(--white); border-radius:var(--radius-md); border:1.5px solid var(--gray-border); padding:22px 18px; text-align:center; }
+ .why-sp-card .icon { font-size:32px; margin-bottom:10px; }
+ .why-sp-card h4 { font-size:15px; font-weight:800; margin-bottom:6px; }
+ .why-sp-card p { font-size:13px; color:var(--text-muted); line-height:1.6; }
+
+ /* Order form */
+ .sp-order-form { max-width:600px; margin:0 auto; }
+ 
+ /* NAV */
+ nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-border);padding:0 24px;}
+ .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px;}
+ .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+ .nav-links{display:flex;gap:4px;flex:1;}
+ .nav-links a{padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;color:var(--text-primary);text-decoration:none;transition:background .2s;}
+ .nav-links a:hover,.nav-links a.active{background:var(--orange-bg);color:var(--orange);}
+ .nav-right{display:flex;align-items:center;gap:10px;}
+ .lang-toggle{display:flex;border:1px solid var(--gray-border);border-radius:20px;overflow:hidden;}
+ .lang-btn{padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;background:transparent;border:none;font-family:inherit;}
+ .lang-btn.active{background:var(--orange);color:#fff;}
+ .nav-cta{background:var(--orange);color:#fff;padding:9px 18px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;transition:background .2s;}
+ .nav-cta:hover{background:var(--orange-deep);}
+ </style>
+ <link rel="stylesheet" href="assets/css/mobile.css" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+ <div class="nav-inner">
+ <a href="index.html" class="nav-logo">
+ <img src="assets/images/logo.png" alt="Cuckoo Cargo" style="height:38px;width:auto;display:block;" />
+ </a>
+ <div class="nav-links" id="cc-nav-links">
+ <a href="index.html" data-vi="Trang chủ" data-en="Home">Trang chủ</a>
+ <a href="my-ve-viet.html" data-vi="Mỹ - Việt" data-en="US to Vietnam">Mỹ - Việt</a>
+ <a href="noi-dia-my.html" data-vi="Label Nội địa" data-en="Domestic Label">Label Nội địa</a>
+ <a href="mua-ho.html" data-vi="Mua hộ" data-en="Shop For Me">Mua hộ</a>
+ <a href="tracking.html" data-vi="Tra cứu" data-en="Track Order">Tra cứu</a>
+ <a href="san-pham.html" class="active" data-vi="Sản phẩm" data-en="Products">Sản phẩm</a>
+ <a href="blog.html" data-vi="Blog" data-en="Blog">Blog</a>
+ </div>
+ <div class="nav-right">
+ <div class="cc-search-wrap" id="cc-search-wrap">
+ <button class="cc-search-icon-btn" onclick="toggleNavSearch()" aria-label="Tìm kiếm">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+ </button>
+ <div class="cc-search-box" id="cc-search-box">
+  <input type="text" id="cc-search-input" placeholder="Tìm dịch vụ, thông tin..." autocomplete="off"
+   oninput="doNavSearch(this.value)" onkeydown="if(event.key===\'Escape\')closeNavSearch()" />
+  <div class="cc-search-results" id="cc-search-results"></div>
+ </div>
+</div>
+<div class="lang-toggle">
+ <button class="lang-btn active" onclick="setLang('vi')">VN</button>
+ <button class="lang-btn" onclick="setLang('en')">EN</button>
+ </div>
+ <a href="my-ve-viet.html" class="nav-cta" data-vi="Tạo đơn →" data-en="Create Order →">Tạo đơn →</a>
+ <button class="mobile-nav-toggle" id="mobile-toggle-btn" onclick="toggleMobileNav()" aria-label="Menu">
+  <svg class="hbg-open" width="20" height="14" viewBox="0 0 20 14" fill="none"><rect width="20" height="2" rx="1" fill="currentColor"/><rect y="6" width="20" height="2" rx="1" fill="currentColor"/><rect y="12" width="20" height="2" rx="1" fill="currentColor"/></svg>
+  <svg class="hbg-close" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none"><line x1="1" y1="1" x2="15" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="15" y1="1" x2="1" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+ </button>
+ </div>
+ </div>
+</nav>
+
+<!-- HERO -->
+<section class="sp-hero">
+ <div class="cc-hero-badge" style="position:relative;" data-vi=" Sản phẩm chính hãng Mỹ" data-en=" Authentic US Products"> Sản phẩm chính hãng Mỹ</div>
+ <h1 style="margin-top:16px;" data-vi="Hàng <span>Chính Hãng Mỹ</span><br>Giá Tốt Nhất" data-en="Authentic <span>US Products</span><br>Best Price">Hàng <span>Chính Hãng Mỹ</span><br>Giá Tốt Nhất</h1>
+ <p data-vi="Sữa Ensure, dầu gió Eagle Brand và nhiều sản phẩm Mỹ chính hãng. Giao về Việt Nam hoặc nội địa Mỹ." data-en="Ensure milk, Eagle Brand medicated oil and more authentic US products. Delivered to Vietnam or US domestic.">Sữa Ensure, dầu gió Eagle Brand và nhiều sản phẩm Mỹ chính hãng. Giao về Việt Nam hoặc nội địa Mỹ.</p>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section">
+ <div class="container">
+ <div class="cat-tabs">
+ <button class="cat-tab active" onclick="filterCat('all',this)" data-vi=" Tất cả" data-en=" All"> Tất cả</button>
+ <button class="cat-tab" onclick="filterCat('sua',this)" data-vi=" Sữa dinh dưỡng" data-en=" Nutrition Milk"> Sữa dinh dưỡng</button>
+ <button class="cat-tab" onclick="filterCat('daugió',this)" data-vi=" Dầu gió" data-en=" Medicated Oil"> Dầu gió</button>
+ <button class="cat-tab" onclick="filterCat('vitamin',this)" data-vi=" Vitamin &amp; TPCN" data-en=" Vitamins &amp; Supplements"> Vitamin &amp; TPCN</button>
+ </div>
+
+ <div class="sp-grid" id="sp-grid">
+
+ <!-- Ensure Original -->
+ <div class="sp-card" data-cat="sua">
+ <div class="sp-card-img">
+ <img src="assets/images/sua-ensure-my.png" alt="Ensure Original" />
+ <div class="sp-badge hot" data-vi="Bán chạy" data-en="Bestseller">Bán chạy</div>
+ </div>
+ <div class="sp-card-body">
+ <div class="sp-card-tag" data-vi="Sữa dinh dưỡng" data-en="Nutrition Milk">Sữa dinh dưỡng</div>
+ <div class="sp-card-name">Ensure Original Nutrition Shake</div>
+ <div class="sp-card-desc" data-vi="Sữa bổ sung dinh dưỡng hoàn chỉnh. 27 vitamin &amp; khoáng chất thiết yếu. Phù hợp người lớn tuổi, hồi phục sức khỏe." data-en="Complete nutritional supplement. 27 essential vitamins &amp; minerals. Ideal for seniors and recovery.">Sữa bổ sung dinh dưỡng hoàn chỉnh. 27 vitamin &amp; khoáng chất thiết yếu. Phù hợp người lớn tuổi, hồi phục sức khỏe.</div>
+ <div class="sp-card-price" data-vi="Liên hệ <span class='unit'>/ hộp</span>" data-en="Contact us <span class='unit'>/ can</span>">Liên hệ <span class="unit">/ hộp</span></div>
+ <div class="sp-card-origin" data-vi=" Xuất xứ Mỹ · Abbott Laboratories" data-en=" Made in USA · Abbott Laboratories"> Xuất xứ Mỹ · Abbott Laboratories</div>
+ <div class="sp-card-actions">
+ <a href="#dat-hang" class="btn-order-sp" onclick="prefillProduct('Ensure Original')" data-vi=" Đặt hàng" data-en=" Order Now"> Đặt hàng</a>
+ <button class="btn-contact-sp" onclick="openModal('ensure-original')" title="Chi tiết">ℹ</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Ensure Plus -->
+ <div class="sp-card" data-cat="sua">
+ <div class="sp-card-img">
+ <img src="assets/images/sua-ensure-my.png" alt="Ensure Plus" />
+ <div class="sp-badge" data-vi="Phổ biến" data-en="Popular">Phổ biến</div>
+ </div>
+ <div class="sp-card-body">
+ <div class="sp-card-tag" data-vi="Sữa dinh dưỡng" data-en="Nutrition Milk">Sữa dinh dưỡng</div>
+ <div class="sp-card-name">Ensure Plus Nutrition Shake</div>
+ <div class="sp-card-desc" data-vi="Hàm lượng calo và protein cao hơn Ensure Original. Dành cho người cần tăng cân, hồi phục sau phẫu thuật hoặc bệnh nặng." data-en="Higher calories and protein than Ensure Original. For those needing weight gain or recovery after surgery.">Hàm lượng calo và protein cao hơn Ensure Original. Dành cho người cần tăng cân, hồi phục sau phẫu thuật hoặc bệnh nặng.</div>
+ <div class="sp-card-price" data-vi="Liên hệ <span class='unit'>/ hộp</span>" data-en="Contact us <span class='unit'>/ can</span>">Liên hệ <span class="unit">/ hộp</span></div>
+ <div class="sp-card-origin" data-vi=" Xuất xứ Mỹ · Abbott Laboratories" data-en=" Made in USA · Abbott Laboratories"> Xuất xứ Mỹ · Abbott Laboratories</div>
+ <div class="sp-card-actions">
+ <a href="#dat-hang" class="btn-order-sp" onclick="prefillProduct('Ensure Plus')" data-vi=" Đặt hàng" data-en=" Order Now"> Đặt hàng</a>
+ <button class="btn-contact-sp" onclick="openModal('ensure-plus')" title="Chi tiết">ℹ</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Ensure Max Protein -->
+ <div class="sp-card" data-cat="sua">
+ <div class="sp-card-img">
+ <img src="assets/images/sua-ensure-my.png" alt="Ensure Max Protein" />
+ <div class="sp-badge new" data-vi="Mới" data-en="New">Mới</div>
+ </div>
+ <div class="sp-card-body">
+ <div class="sp-card-tag" data-vi="Sữa dinh dưỡng" data-en="Nutrition Milk">Sữa dinh dưỡng</div>
+ <div class="sp-card-name">Ensure Max Protein</div>
+ <div class="sp-card-desc" data-vi="30g protein / hộp. Ít đường. Dành cho người tập gym, vận động viên, người cần phục hồi cơ bắp nhanh." data-en="30g protein per can. Low sugar. For gym-goers, athletes and fast muscle recovery.">30g protein / hộp. Ít đường. Dành cho người tập gym, vận động viên, người cần phục hồi cơ bắp nhanh.</div>
+ <div class="sp-card-price" data-vi="Liên hệ <span class='unit'>/ hộp</span>" data-en="Contact us <span class='unit'>/ can</span>">Liên hệ <span class="unit">/ hộp</span></div>
+ <div class="sp-card-origin" data-vi=" Xuất xứ Mỹ · Abbott Laboratories" data-en=" Made in USA · Abbott Laboratories"> Xuất xứ Mỹ · Abbott Laboratories</div>
+ <div class="sp-card-actions">
+ <a href="#dat-hang" class="btn-order-sp" onclick="prefillProduct('Ensure Max Protein')" data-vi=" Đặt hàng" data-en=" Order Now"> Đặt hàng</a>
+ <button class="btn-contact-sp" onclick="openModal('ensure-max')" title="Chi tiết">ℹ</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Eagle Brand Medicated Oil -->
+ <div class="sp-card" data-cat="daugió">
+ <div class="sp-card-img">
+ <img src="assets/images/dau-gio-my.webp" alt="Eagle Brand Medicated Oil" />
+ <div class="sp-badge hot">Bestseller</div>
+ </div>
+ <div class="sp-card-body">
+ <div class="sp-card-tag" data-vi="Dầu gió" data-en="Medicated Oil">Dầu gió</div>
+ <div class="sp-card-name">Eagle Brand Medicated Oil (Dầu Con Ó)</div>
+ <div class="sp-card-desc" data-vi="Dầu gió nổi tiếng của Mỹ. Giảm đau cơ bắp, đau đầu, cảm lạnh, côn trùng đốt. Hương thơm dễ chịu." data-en="Famous US medicated oil. Relieves muscle pain, headaches, colds, and insect bites. Pleasant fragrance.">Dầu gió nổi tiếng của Mỹ. Giảm đau cơ bắp, đau đầu, cảm lạnh, côn trùng đốt. Hương thơm dễ chịu.</div>
+ <div class="sp-card-price" data-vi="Liên hệ <span class='unit'>/ chai</span>" data-en="Contact us <span class='unit'>/ bottle</span>">Liên hệ <span class="unit">/ chai</span></div>
+ <div class="sp-card-origin" data-vi=" Xuất xứ Mỹ · Eagle Brand" data-en=" Made in USA · Eagle Brand"> Xuất xứ Mỹ · Eagle Brand</div>
+ <div class="sp-card-actions">
+ <a href="#dat-hang" class="btn-order-sp" onclick="prefillProduct('Eagle Brand Medicated Oil')" data-vi=" Đặt hàng" data-en=" Order Now"> Đặt hàng</a>
+ <button class="btn-contact-sp" onclick="openModal('eagle-oil')" title="Chi tiết">ℹ</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Eagle Brand White Flower -->
+ <div class="sp-card" data-cat="daugió">
+ <div class="sp-card-img"><img src="assets/images/dau-gio-my.webp" alt="White Flower Oil" /></div>
+ <div class="sp-card-body">
+ <div class="sp-card-tag" data-vi="Dầu gió" data-en="Medicated Oil">Dầu gió</div>
+ <div class="sp-card-name">White Flower Embrocation Oil</div>
+ <div class="sp-card-desc" data-vi="Dầu Hoa Trắng kinh điển. Giảm đau đầu, khó chịu, say tàu xe. Được tin dùng nhiều thế hệ." data-en="Classic White Flower Oil. Relieves headaches, discomfort, and motion sickness. Trusted for generations.">Dầu Hoa Trắng kinh điển. Giảm đau đầu, khó chịu, say tàu xe. Được tin dùng nhiều thế hệ.</div>
+ <div class="sp-card-price" data-vi="Liên hệ <span class='unit'>/ chai</span>" data-en="Contact us <span class='unit'>/ bottle</span>">Liên hệ <span class="unit">/ chai</span></div>
+ <div class="sp-card-origin" data-vi=" Phân phối tại Mỹ" data-en=" Distributed in USA"> Phân phối tại Mỹ</div>
+ <div class="sp-card-actions">
+ <a href="#dat-hang" class="btn-order-sp" onclick="prefillProduct('White Flower Embrocation Oil')" data-vi=" Đặt hàng" data-en=" Order Now"> Đặt hàng</a>
+ <button class="btn-contact-sp" onclick="openModal('white-flower')" title="Chi tiết">ℹ</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Vitamin D3 -->
+ <div class="sp-card" data-cat="vitamin">
+ <div class="sp-card-img"></div>
+ <div class="sp-card-body">
+ <div class="sp-card-tag" data-vi="Vitamin &amp; TPCN" data-en="Vitamins &amp; Supplements">Vitamin &amp; TPCN</div>
+ <div class="sp-card-name">Vitamin D3 5000 IU — Nature Made</div>
+ <div class="sp-card-desc" data-vi="Vitamin D3 hàm lượng cao từ thương hiệu Nature Made uy tín. Hỗ trợ xương, hệ miễn dịch, tâm trạng." data-en="High-dose Vitamin D3 from trusted Nature Made brand. Supports bones, immune system and mood.">Vitamin D3 hàm lượng cao từ thương hiệu Nature Made uy tín. Hỗ trợ xương, hệ miễn dịch, tâm trạng.</div>
+ <div class="sp-card-price" data-vi="Liên hệ <span class='unit'>/ hộp</span>" data-en="Contact us <span class='unit'>/ can</span>">Liên hệ <span class="unit">/ hộp</span></div>
+ <div class="sp-card-origin" data-vi=" Xuất xứ Mỹ · Nature Made" data-en=" Made in USA · Nature Made"> Xuất xứ Mỹ · Nature Made</div>
+ <div class="sp-card-actions">
+ <a href="#dat-hang" class="btn-order-sp" onclick="prefillProduct('Vitamin D3 5000IU Nature Made')" data-vi=" Đặt hàng" data-en=" Order Now"> Đặt hàng</a>
+ <button class="btn-contact-sp" title="Chi tiết">ℹ</button>
+ </div>
+ </div>
+ </div>
+
+ </div>
+ </div>
+</section>
+
+<!-- WHY BUY FROM US -->
+<section class="section" style="background:var(--gray-light);">
+ <div class="container">
+ <div class="section-title">
+ <h2 data-vi="Tại sao mua tại Cuckoo Cargo?" data-en="Why Buy from Cuckoo Cargo?">Tại sao mua tại Cuckoo Cargo?</h2>
+ </div>
+ <div class="why-sp-grid">
+ <div class="why-sp-card">
+ <div class="icon"></div>
+ <h4 data-vi="Hàng chính hãng 100%" data-en="100% Authentic Products">Hàng chính hãng 100%</h4>
+ <p data-vi="Mua trực tiếp từ siêu thị Mỹ (Walmart, Costco, CVS). Có hóa đơn gốc khi yêu cầu." data-en="Purchased directly from US supermarkets (Walmart, Costco, CVS). Original receipt available on request.">Mua trực tiếp từ siêu thị Mỹ (Walmart, Costco, CVS). Có hóa đơn gốc khi yêu cầu.</p>
+ </div>
+ <div class="why-sp-card">
+ <div class="icon"></div>
+ <h4 data-vi="Ảnh thực tế trước khi gửi" data-en="Real Photos Before Shipping">Ảnh thực tế trước khi gửi</h4>
+ <p data-vi="Chụp ảnh hộp, date, tem nhãn gửi cho bạn kiểm tra trước khi đóng gói." data-en="We photograph the box, date, and label for your inspection before packaging.">Chụp ảnh hộp, date, tem nhãn gửi cho bạn kiểm tra trước khi đóng gói.</p>
+ </div>
+ <div class="why-sp-card">
+ <div class="icon"></div>
+ <h4 data-vi="Giao nhanh về Việt Nam" data-en="Fast Delivery to Vietnam">Giao nhanh về Việt Nam</h4>
+ <p data-vi="7–15 ngày về tới tay. Hoặc giao nội địa Mỹ 1–5 ngày qua UPS/FedEx." data-en="7–15 days to your door. Or US domestic 1–5 days via UPS/FedEx.">7–15 ngày về tới tay. Hoặc giao nội địa Mỹ 1–5 ngày qua UPS/FedEx.</p>
+ </div>
+ <div class="why-sp-card">
+ <div class="icon"></div>
+ <h4 data-vi="Giá tốt hơn nhập riêng lẻ" data-en="Better Price Than Buying Alone">Giá tốt hơn nhập riêng lẻ</h4>
+ <p data-vi="Gộp đơn, tối ưu phí ship. Tư vấn combo tiết kiệm nhất cho bạn." data-en="Bundled orders optimize shipping costs. We advise on the most cost-effective combo.">Gộp đơn, tối ưu phí ship. Tư vấn combo tiết kiệm nhất cho bạn.</p>
+ </div>
+ <div class="why-sp-card">
+ <div class="icon"></div>
+ <h4 data-vi="Đóng gói cẩn thận" data-en="Careful Packaging">Đóng gói cẩn thận</h4>
+ <p data-vi="Hàng lỏng, dễ vỡ được wrap bubble riêng. Đảm bảo nguyên vẹn khi nhận." data-en="Liquids and fragile items are bubble-wrapped individually. Guaranteed intact on arrival.">Hàng lỏng, dễ vỡ được wrap bubble riêng. Đảm bảo nguyên vẹn khi nhận.</p>
+ </div>
+ <div class="why-sp-card">
+ <div class="icon"></div>
+ <h4 data-vi="Hỗ trợ 7 ngày / tuần" data-en="Support 7 Days a Week">Hỗ trợ 7 ngày / tuần</h4>
+ <p data-vi="Zalo, Messenger, hotline — luôn có người trả lời trong vòng 30 phút." data-en="Zalo, Messenger, hotline — always someone to reply within 30 minutes.">Zalo, Messenger, hotline — luôn có người trả lời trong vòng 30 phút.</p>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- ORDER FORM -->
+<section id="dat-hang" class="section">
+ <div class="container">
+ <div class="section-title">
+ <h2 data-vi="Đặt hàng sản phẩm" data-en="Order Products">Đặt hàng sản phẩm</h2>
+ <p data-vi="Điền form — chúng tôi báo giá và xác nhận trong 24h" data-en="Fill the form — we quote and confirm within 24h">Điền form — chúng tôi báo giá và xác nhận trong 24h</p>
+ </div>
+
+ <div class="sp-order-form">
+ <form id="sp-form" novalidate>
+
+ <div class="cc-card" style="margin-bottom:20px;">
+ <h3 style="font-size:17px;font-weight:800;margin-bottom:16px;" data-vi=" Thông tin liên hệ" data-en=" Contact Information"> Thông tin liên hệ</h3>
+ <div class="form-row col2">
+ <div class="form-group">
+ <label class="form-label" data-vi="Họ và tên *" data-en="Full Name *">Họ và tên *</label>
+ <input type="text" class="cc-input" id="sp-name" required placeholder="Nguyễn Văn A" />
+ </div>
+ <div class="form-group">
+ <label class="form-label" data-vi="Số điện thoại *" data-en="Phone Number *">Số điện thoại *</label>
+ <input type="tel" class="cc-input" id="sp-phone" required placeholder="+1 hoặc 09xx" />
+ </div>
+ </div>
+ <div class="form-group">
+ <label class="form-label" data-vi="Facebook / Zalo *" data-en="Facebook / Zalo *">Facebook / Zalo *</label>
+ <input type="text" class="cc-input" id="sp-fb" required placeholder="Tên Facebook hoặc Zalo để liên hệ" />
+ </div>
+ </div>
+
+ <div class="cc-card" style="margin-bottom:20px;">
+ <h3 style="font-size:17px;font-weight:800;margin-bottom:16px;" data-vi=" Sản phẩm cần mua" data-en=" Products to Order"> Sản phẩm cần mua</h3>
+ <div class="form-group">
+ <label class="form-label" data-vi="Tên sản phẩm *" data-en="Product Name *">Tên sản phẩm *</label>
+ <input type="text" class="cc-input" id="sp-product" required placeholder="VD: Ensure Original, Eagle Brand..." />
+ </div>
+ <div class="form-row col2">
+ <div class="form-group">
+ <label class="form-label" data-vi="Số lượng *" data-en="Quantity *">Số lượng *</label>
+ <input type="number" class="cc-input" id="sp-qty" value="1" min="1" required />
+ </div>
+ <div class="form-group">
+ <label class="form-label" data-vi="Điểm giao hàng" data-en="Delivery Destination">Điểm giao hàng</label>
+ <select class="cc-input" id="sp-dest">
+ <option value="vn" data-vi=" Việt Nam" data-en=" Vietnam"> Việt Nam</option>
+ <option value="us" data-vi=" Nội địa Mỹ" data-en=" US Domestic"> Nội địa Mỹ</option>
+ </select>
+ </div>
+ </div>
+ <div class="form-group">
+ <label class="form-label" data-vi="Ghi chú (màu, size, hương vị...)" data-en="Notes (color, size, flavor...)">Ghi chú (màu, size, hương vị...)</label>
+ <textarea class="cc-input" id="sp-note" rows="2" placeholder="VD: Vanilla 8oz hộp 24 chai, hộp nguyên seal..."></textarea>
+ </div>
+ </div>
+
+ <button type="submit" class="btn btn-primary btn-full btn-lg" id="sp-submit">
+ <span data-vi="Gửi yêu cầu đặt hàng" data-en="Submit Order Request">Gửi yêu cầu đặt hàng</span>
+ </button>
+ </form>
+ </div>
+ </div>
+</section>
+
+<!-- MODAL -->
+<div class="sp-modal-overlay" id="sp-modal" onclick="closeModalOutside(event)">
+ <div class="sp-modal" id="sp-modal-inner">
+ <div class="sp-modal-header">
+ <h3 id="modal-title" style="font-size:18px;font-weight:800;"></h3>
+ <button class="sp-modal-close" onclick="closeModal()"></button>
+ </div>
+ <div class="sp-modal-body" id="modal-body"></div>
+ </div>
+</div>
+
+<footer id="cc-footer" class="cc-footer"></footer>
+
+<script src="assets/js/lang.js"></script>
+<script>
+ function toggleMobileNav() {
+   var nav = document.getElementById('cc-nav-links');
+   var btn = document.getElementById('mobile-toggle-btn');
+   if (!nav) return;
+   var isOpen = nav.classList.toggle('open');
+   if (btn) {
+     var open = btn.querySelector('.hbg-open');
+     var close = btn.querySelector('.hbg-close');
+     if (open)  open.style.display  = isOpen ? 'none'  : 'block';
+     if (close) close.style.display = isOpen ? 'block' : 'none';
+   }
+ }
+ document.addEventListener('click', function(e) {
+   var nav = document.getElementById('cc-nav-links');
+   var btn = document.getElementById('mobile-toggle-btn');
+   if (nav && nav.classList.contains('open') && btn && !nav.contains(e.target) && !btn.contains(e.target)) {
+     nav.classList.remove('open');
+     var open = btn.querySelector('.hbg-open');
+     var close = btn.querySelector('.hbg-close');
+     if (open)  open.style.display = 'block';
+     if (close) close.style.display = 'none';
+   }
+ });
+</script>
+<script src="assets/js/global.js"></script>
+<script src="assets/js/pricing.js"></script>
+<script>
+ injectFooter();
+
+ // Category filter
+ function filterCat(cat, btn) {
+ document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+ btn.classList.add('active');
+ document.querySelectorAll('.sp-card').forEach(c => {
+ c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
+ });
+ }
+
+ // Prefill product in order form
+ function prefillProduct(name) {
+ setTimeout(() => {
+ const el = document.getElementById('sp-product');
+ if (el) el.value = name;
+ }, 100);
+ }
+
+ // Modal data
+ const MODALS = {
+ 'ensure-original': {
+ title: 'Ensure Original Nutrition Shake',
+ imgSrc: 'assets/images/sua-ensure-my.png',
+ icon: '',
+ specs: [
+ {label:'Thương hiệu', value:'Abbott Laboratories'},
+ {label:'Xuất xứ', value:'Hoa Kỳ '},
+ {label:'Hương vị', value:'Vanilla, Chocolate, Strawberry, Butter Pecan'},
+ {label:'Kích cỡ', value:'8 fl oz / chai · Hộp 24 chai'},
+ {label:'Protein', value:'9g / chai'},
+ {label:'Calo', value:'220 kcal / chai'},
+ ],
+ desc: 'Ensure Original là sản phẩm dinh dưỡng hoàn chỉnh được bác sĩ tin dùng. Chứa 27 vitamin và khoáng chất thiết yếu, phù hợp cho người lớn tuổi, người cần bổ sung dinh dưỡng trong quá trình hồi phục.',
+ },
+ 'ensure-plus': {
+ title: 'Ensure Plus Nutrition Shake',
+ imgSrc: 'assets/images/sua-ensure-my.png',
+ icon: '',
+ specs: [
+ {label:'Thương hiệu', value:'Abbott Laboratories'},
+ {label:'Xuất xứ', value:'Hoa Kỳ '},
+ {label:'Hương vị', value:'Vanilla, Chocolate, Strawberry, Homemade Vanilla'},
+ {label:'Kích cỡ', value:'8 fl oz / chai · Hộp 24 chai'},
+ {label:'Protein', value:'13g / chai'},
+ {label:'Calo', value:'350 kcal / chai'},
+ ],
+ desc: 'Ensure Plus có hàm lượng calo và protein cao hơn Ensure Original. Lý tưởng cho người cần tăng cân, người già suy dinh dưỡng, hoặc đang trong giai đoạn phục hồi sau phẫu thuật.',
+ },
+ 'ensure-max': {
+ title: 'Ensure Max Protein',
+ imgSrc: 'assets/images/sua-ensure-my.png',
+ icon: '',
+ specs: [
+ {label:'Thương hiệu', value:'Abbott Laboratories'},
+ {label:'Xuất xứ', value:'Hoa Kỳ '},
+ {label:'Hương vị', value:'Milk Chocolate, Cafe Mocha, Mixed Berry, Vanilla'},
+ {label:'Kích cỡ', value:'11 fl oz / chai · Hộp 12 chai'},
+ {label:'Protein', value:'30g / chai'},
+ {label:'Đường', value:'1g / chai (ít đường)'},
+ ],
+ desc: 'Ensure Max Protein cung cấp 30g protein/chai với chỉ 1g đường. Phù hợp cho người tập luyện, vận động viên, người cần phục hồi cơ bắp nhanh chóng sau chấn thương hoặc bệnh tật.',
+ },
+ 'eagle-oil': {
+ title: 'Eagle Brand Medicated Oil',
+ imgSrc: 'assets/images/dau-gio-my.webp',
+ icon: '',
+ specs: [
+ {label:'Thương hiệu', value:'Eagle Brand'},
+ {label:'Xuất xứ', value:'Hoa Kỳ '},
+ {label:'Dung tích', value:'0.8 fl oz (24ml) / chai'},
+ {label:'Công dụng', value:'Giảm đau, kháng viêm, làm ấm'},
+ {label:'Thành phần', value:'Camphor, Menthol, Methyl Salicylate, Clove Oil'},
+ {label:'Phù hợp', value:'Người lớn &amp; trẻ em trên 2 tuổi'},
+ ],
+ desc: 'Dầu Con Ó nổi tiếng tại Mỹ và cộng đồng người Việt. Hiệu quả với đau cơ, đau lưng, đau đầu, cảm lạnh, côn trùng đốt. Mùi thơm dịu, thấm nhanh, không nhờn rít.',
+ },
+ 'white-flower': {
+ title: 'White Flower Embrocation Oil',
+ imgSrc: 'assets/images/dau-gio-my.webp',
+ icon: '',
+ specs: [
+ {label:'Xuất xứ', value:'Singapore / Phân phối tại Mỹ'},
+ {label:'Dung tích', value:'0.67 fl oz (20ml) / chai'},
+ {label:'Công dụng', value:'Đau đầu, say tàu xe, cảm lạnh'},
+ {label:'Thành phần chính', value:'Lavender, Eucalyptus, Peppermint Oil'},
+ {label:'Phù hợp', value:'Mọi độ tuổi (tránh trẻ dưới 6 tháng)'},
+ {label:'Kháng nước', value:'Không'},
+ ],
+ desc: 'Dầu Hoa Trắng là sản phẩm dân gian kinh điển, được tin dùng nhiều thế hệ. Đặc biệt hiệu quả cho say tàu xe, khó chịu, đau đầu nhẹ. Hương thơm thư giãn.',
+ },
+ };
+
+ function openModal(id) {
+ const data = MODALS[id]; if(!data) return;
+ document.getElementById('modal-title').textContent = data.title;
+ const specsHTML = data.specs.map(s => `
+ <div class="sp-spec"><div class="sp-spec-label">${s.label}</div><div class="sp-spec-value">${s.value}</div></div>
+ `).join('');
+ document.getElementById('modal-body').innerHTML = `
+ <div class="sp-modal-img" style="text-align:center;margin-bottom:16px;">${data.imgSrc ? '<img src="'+data.imgSrc+'" alt="'+data.title+'" style="max-height:180px;max-width:100%;object-fit:contain;" />' : ''}</div>
+ <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:16px;">${data.desc}</p>
+ <div class="sp-modal-specs">${specsHTML}</div>
+ <a href="#dat-hang" class="btn btn-primary btn-full" onclick="closeModal();prefillProduct('${data.title}')"> Đặt hàng ngay</a>
+ `;
+ document.getElementById('sp-modal').classList.add('open');
+ document.body.style.overflow = 'hidden';
+ }
+ function closeModal() {
+ document.getElementById('sp-modal').classList.remove('open');
+ document.body.style.overflow = '';
+ }
+ function closeModalOutside(e) {
+ if(e.target === document.getElementById('sp-modal')) closeModal();
+ }
+
+ // Form submit
+ document.getElementById('sp-form').addEventListener('submit', async function(e) {
+ e.preventDefault();
+ const btn = document.getElementById('sp-submit');
+ btn.disabled = true; btn.textContent = '⏳ Đang gửi...';
+ const data = {
+ type: 'shopping',
+ orderId: generateHTS(),
+ fullName: document.getElementById('sp-name').value,
+ phone: document.getElementById('sp-phone').value,
+ fbName: document.getElementById('sp-fb').value,
+ items: JSON.stringify([{
+ name: document.getElementById('sp-product').value,
+ qty: document.getElementById('sp-qty').value,
+ price: ''
+ }]),
+ destination: document.getElementById('sp-dest').value === 'vn' ? 'Vietnam' : 'US Domestic',
+ notes: document.getElementById('sp-note').value,
+ submittedAt: new Date().toISOString(),
+ };
+ try {
+ const result = await submitToSheet(data);
+ if(result.success) {
+ showToast('success', ` Đặt hàng thành công! Mã: ${result.orderId}. Chúng tôi liên hệ trong 24h.`, 8000);
+ e.target.reset();
+ }
+ } catch(err) {
+ showToast('error', ' Lỗi: ' + err.message);
+ }
+ btn.disabled = false; btn.textContent = ' Gửi yêu cầu đặt hàng';
+ });
+</script>
+<!-- FLOATING BUTTONS -->
+<div id="cc-fab-wrap">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="cc-fab cc-fab-zalo" aria-label="Zalo">
+  <svg viewBox="0 0 50 50" width="28" height="28"><rect x="3" y="3" width="44" height="38" rx="10" fill="white"/><text x="25" y="28" text-anchor="middle" font-size="18" font-weight="900" fill="#0068FF" font-family="Arial,sans-serif">Zalo</text><polygon points="10,41 18,41 10,50" fill="white"/></svg>
+ </a>
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="cc-fab cc-fab-fb" aria-label="Facebook">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+ </a>
+ <a href="https://www.tiktok.com/@cuckoo.cargo6" target="_blank" class="cc-fab cc-fab-tiktok" aria-label="TikTok">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-6.34 6.29 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+ </a>
+ <button class="cc-fab cc-fab-top" id="cc-fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Lên đầu" style="display:none">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+ </button>
+</div>
+</body>
+</html>

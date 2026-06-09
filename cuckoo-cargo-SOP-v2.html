@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuckoo Cargo — SOP Website v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+ /* CUCKOO CARGO OFFICIAL BRAND COLORS */
+ --orange: #F47B20;
+ --orange-deep: #D4650E;
+ --orange-light: #FFB366;
+ --orange-bg: #FFF3E8;
+ --black: #0F0F10;
+ --surface: #1A1A1E;
+ --elevated: #2A2A2E;
+ --white: #FFFFFF;
+ --gray: #8E8E93;
+ --gray-light: #F5F5F7;
+ --gray-border: #E5E5EA;
+ --text-primary: #0F0F10;
+ --text-secondary:#3A3A3C;
+ --text-muted: #8E8E93;
+ /* Gradients */
+ --grad-orange: linear-gradient(135deg, #F47B20 0%, #D4650E 100%);
+ --grad-dark: linear-gradient(135deg, #1A1A1E 0%, #0F0F10 100%);
+ --grad-brand: linear-gradient(135deg, #F47B20 0%, #0F0F10 100%);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+ background: var(--gray-light);
+ color: var(--text-primary);
+ font-family: 'Inter', sans-serif;
+ font-size: 14px;
+ line-height: 1.7;
+}
+
+/* SIDEBAR */
+.sidebar {
+ position: fixed;
+ left:0; top:0; bottom:0;
+ width: 260px;
+ background: var(--black);
+ overflow-y: auto;
+ z-index: 100;
+}
+.sidebar-brand {
+ padding: 28px 24px 24px;
+ border-bottom: 1px solid var(--elevated);
+}
+.sidebar-logo {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ margin-bottom: 6px;
+}
+.sidebar-icon {
+ width: 40px; height: 40px;
+ background: var(--grad-orange);
+ border-radius: 8px;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 20px;
+}
+.sidebar-name {
+ font-family: 'Bebas Neue', cursive;
+ font-size: 22px;
+ letter-spacing: 1.5px;
+ color: var(--white);
+}
+.sidebar-sub {
+ font-size: 10px;
+ letter-spacing: 2px;
+ text-transform: uppercase;
+ color: var(--gray);
+}
+.nav-section { padding: 16px 0 4px; }
+.nav-section-title {
+ font-size: 9px;
+ letter-spacing: 2.5px;
+ text-transform: uppercase;
+ color: var(--elevated);
+ padding: 0 24px;
+ margin-bottom: 4px;
+ /* override: use lighter gray */
+ color: #555;
+}
+.nav-link {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ padding: 8px 24px;
+ color: var(--gray);
+ text-decoration: none;
+ font-size: 13px;
+ transition: all 0.15s;
+}
+.nav-link:hover { color: var(--orange); background: rgba(244,123,32,0.07); }
+.nav-num {
+ font-family: 'DM Mono', monospace;
+ font-size: 11px;
+ color: var(--elevated);
+ min-width: 24px;
+}
+
+/* MAIN */
+.main { margin-left: 260px; min-height: 100vh; }
+
+/* COVER */
+.cover {
+ background: var(--black);
+ padding: 80px 64px 72px;
+ position: relative;
+ overflow: hidden;
+}
+.cover::before {
+ content: '';
+ position: absolute;
+ top: -20%; right: -5%;
+ width: 600px; height: 600px;
+ background: radial-gradient(circle, rgba(244,123,32,0.15) 0%, transparent 70%);
+ pointer-events: none;
+}
+.cover::after {
+ content: '';
+ position: absolute;
+ bottom: 0; left: 0; right: 0;
+ height: 1px;
+ background: var(--grad-orange);
+}
+.cover-eyebrow {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ border: 1px solid rgba(244,123,32,0.35);
+ color: var(--orange);
+ font-size: 11px;
+ letter-spacing: 2.5px;
+ text-transform: uppercase;
+ padding: 6px 14px;
+ border-radius: 3px;
+ margin-bottom: 28px;
+}
+.cover-title {
+ font-family: 'Bebas Neue', cursive;
+ font-size: 72px;
+ letter-spacing: 3px;
+ color: var(--white);
+ line-height: 0.95;
+ margin-bottom: 8px;
+}
+.cover-title span { color: var(--orange); }
+.cover-tagline {
+ font-family: 'Bebas Neue', cursive;
+ font-size: 20px;
+ letter-spacing: 4px;
+ color: var(--gray);
+ margin-bottom: 40px;
+}
+.cover-meta {
+ display: flex;
+ gap: 48px;
+ flex-wrap: wrap;
+ margin-bottom: 48px;
+}
+.meta-item .meta-label {
+ font-size: 9px;
+ letter-spacing: 2px;
+ text-transform: uppercase;
+ color: #444;
+ margin-bottom: 4px;
+}
+.meta-item .meta-value {
+ font-size: 14px;
+ color: #aaa;
+}
+
+/* brand chips on cover */
+.brand-chips {
+ display: flex;
+ gap: 10px;
+ flex-wrap: wrap;
+ margin-bottom: 48px;
+}
+.chip {
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ background: var(--surface);
+ border: 1px solid var(--elevated);
+ color: var(--gray);
+ font-size: 11px;
+ padding: 6px 14px;
+ border-radius: 100px;
+ letter-spacing: 0.3px;
+}
+.chip-dot {
+ width: 8px; height: 8px;
+ border-radius: 50%;
+}
+
+/* color swatches on cover */
+.color-row {
+ display: flex;
+ gap: 12px;
+ flex-wrap: wrap;
+ margin-bottom: 48px;
+}
+.swatch {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+}
+.swatch-dot {
+ width: 28px; height: 28px;
+ border-radius: 6px;
+ border: 1px solid rgba(255,255,255,0.1);
+}
+.swatch-info {}
+.swatch-name { font-size: 11px; color: var(--white); font-weight: 500; }
+.swatch-hex { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray); }
+
+/* TOC on cover */
+.toc-grid {
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 0;
+ border: 1px solid var(--elevated);
+ border-radius: 8px;
+ overflow: hidden;
+}
+.toc-row {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ padding: 11px 20px;
+ border-bottom: 1px solid var(--elevated);
+ border-right: 1px solid var(--elevated);
+ text-decoration: none;
+ color: var(--gray);
+ font-size: 12px;
+ transition: all 0.15s;
+}
+.toc-row:hover { background: var(--surface); color: var(--orange); }
+.toc-row:nth-child(even) { border-right: none; }
+.toc-row:nth-last-child(-n+2) { border-bottom: none; }
+.toc-num { font-family: 'DM Mono', monospace; font-size: 11px; color: #444; min-width: 24px; }
+
+/* CONTENT */
+.content { padding: 0 64px 80px; }
+
+/* SECTION */
+.section {
+ padding-top: 60px;
+ border-top: 1px solid var(--gray-border);
+ margin-top: 60px;
+}
+.section:first-child { border-top: none; margin-top: 48px; }
+.section-header {
+ display: flex;
+ align-items: flex-start;
+ gap: 20px;
+ margin-bottom: 32px;
+}
+.section-num {
+ font-family: 'DM Mono', monospace;
+ font-size: 10px;
+ color: var(--orange);
+ background: var(--orange-bg);
+ border: 1px solid rgba(244,123,32,0.2);
+ padding: 4px 10px;
+ border-radius: 3px;
+ margin-top: 8px;
+ white-space: nowrap;
+}
+.section-title {
+ font-family: 'Bebas Neue', cursive;
+ font-size: 36px;
+ letter-spacing: 2px;
+ color: var(--black);
+ line-height: 1;
+ margin-bottom: 4px;
+}
+.section-desc { color: var(--text-muted); font-size: 13px; }
+
+/* CARDS */
+.card-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+ gap: 16px;
+ margin-bottom: 24px;
+}
+.card {
+ background: var(--white);
+ border: 1px solid var(--gray-border);
+ border-radius: 12px;
+ padding: 24px;
+}
+.card-icon { font-size: 22px; margin-bottom: 12px; }
+.card-title {
+ font-family: 'Bebas Neue', cursive;
+ font-size: 18px;
+ letter-spacing: 1px;
+ color: var(--black);
+ margin-bottom: 8px;
+}
+.card-body { color: var(--text-muted); font-size: 13px; line-height: 1.65; }
+
+/* TABLES */
+.table-wrap { overflow-x: auto; margin-bottom: 24px; border-radius: 10px; border: 1px solid var(--gray-border); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+ background: var(--black);
+ color: var(--gray);
+ padding: 11px 16px;
+ text-align: left;
+ font-size: 10px;
+ letter-spacing: 1.5px;
+ text-transform: uppercase;
+ font-weight: 500;
+ font-family: 'Inter', sans-serif;
+}
+tbody td {
+ padding: 12px 16px;
+ border-bottom: 1px solid var(--gray-border);
+ vertical-align: top;
+ background: var(--white);
+}
+tbody tr:hover td { background: var(--gray-light); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* BADGES */
+.badge {
+ display: inline-block;
+ padding: 3px 9px;
+ border-radius: 3px;
+ font-size: 10px;
+ font-weight: 600;
+ letter-spacing: 0.5px;
+ text-transform: uppercase;
+}
+.badge-fe { background: #e8f5ef; color: #1a6b4a; }
+.badge-be { background: #e8eef8; color: #1a3a6b; }
+.badge-db { background: #f8e8e8; color: #8b2020; }
+.badge-seo { background: var(--orange-bg); color: var(--orange-deep); }
+.badge-infra { background: var(--elevated); color: var(--gray); }
+.badge-must { background: var(--orange); color: var(--white); }
+.badge-p1 { background: var(--black); color: var(--orange); border: 1px solid var(--orange); }
+.badge-p2 { background: var(--gray-light); color: var(--text-muted); border: 1px solid var(--gray-border); }
+
+/* CODE */
+.code-block {
+ background: var(--black);
+ border-radius: 10px;
+ padding: 20px 24px;
+ font-family: 'DM Mono', monospace;
+ font-size: 12px;
+ color: #86efac;
+ overflow-x: auto;
+ margin-bottom: 16px;
+ line-height: 1.7;
+ border: 1px solid var(--elevated);
+}
+.code-comment { color: #555; }
+.code-key { color: #93c5fd; }
+.code-val { color: #fcd34d; }
+
+/* STEPS */
+.step-list { display: flex; flex-direction: column; }
+.step {
+ display: flex;
+ gap: 20px;
+ padding: 20px 0;
+ border-bottom: 1px solid var(--gray-border);
+}
+.step:last-child { border-bottom: none; }
+.step-circle {
+ min-width: 36px; height: 36px;
+ border-radius: 50%;
+ background: var(--black);
+ color: var(--orange);
+ display: flex; align-items: center; justify-content: center;
+ font-family: 'Bebas Neue', cursive;
+ font-size: 15px;
+ letter-spacing: 1px;
+ flex-shrink: 0;
+ margin-top: 2px;
+}
+.step-title { font-weight: 600; color: var(--black); font-size: 14px; margin-bottom: 4px; }
+.step-desc { color: var(--text-muted); font-size: 13px; }
+
+/* SITEMAP */
+.sitemap { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+.sm-item {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ background: var(--white);
+ border: 1px solid var(--gray-border);
+ border-radius: 8px;
+ padding: 11px 16px;
+ font-size: 13px;
+}
+.sm-item.child {
+ margin-left: 28px;
+ background: var(--gray-light);
+ border-style: dashed;
+}
+.sm-route {
+ font-family: 'DM Mono', monospace;
+ font-size: 11px;
+ color: var(--orange-deep);
+ background: var(--orange-bg);
+ border: 1px solid rgba(244,123,32,0.15);
+ padding: 2px 9px;
+ border-radius: 3px;
+ min-width: 210px;
+ white-space: nowrap;
+}
+.sm-name { font-weight: 500; color: var(--black); flex: 1; }
+.sm-desc { color: var(--text-muted); font-size: 12px; }
+
+/* SPEC BOX */
+.spec-box {
+ background: var(--white);
+ border: 1px solid var(--gray-border);
+ border-radius: 12px;
+ overflow: hidden;
+ margin-bottom: 20px;
+}
+.spec-header {
+ background: var(--black);
+ padding: 14px 20px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+}
+.spec-header-title {
+ font-family: 'Bebas Neue', cursive;
+ font-size: 17px;
+ letter-spacing: 1px;
+ color: var(--white);
+ flex: 1;
+}
+.spec-body { padding: 20px; }
+.spec-row {
+ display: grid;
+ grid-template-columns: 180px 1fr;
+ gap: 12px;
+ padding: 10px 0;
+ border-bottom: 1px solid var(--gray-border);
+ font-size: 13px;
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-label { color: var(--text-muted); font-weight: 500; }
+.spec-value { color: var(--text-secondary); }
+
+/* CALLOUT */
+.callout {
+ border-radius: 8px;
+ padding: 14px 18px;
+ margin-bottom: 16px;
+ display: flex;
+ gap: 12px;
+ font-size: 13px;
+ line-height: 1.65;
+}
+.callout-orange { background: var(--orange-bg); border-left: 3px solid var(--orange); }
+.callout-dark { background: var(--black); border-left: 3px solid var(--orange); color: var(--gray); }
+.callout-green { background: #e8f5ef; border-left: 3px solid #1a6b4a; }
+.callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.callout-text strong { color: var(--black); }
+.callout-dark .callout-text strong { color: var(--orange); }
+
+/* DB SCHEMA */
+.schema-table {
+ background: var(--black);
+ border-radius: 10px;
+ overflow: hidden;
+ margin-bottom: 16px;
+ border: 1px solid var(--elevated);
+}
+.schema-header {
+ padding: 12px 20px;
+ background: var(--surface);
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ border-bottom: 1px solid var(--elevated);
+}
+.schema-tname {
+ font-family: 'DM Mono', monospace;
+ font-size: 13px;
+ color: var(--orange);
+ font-weight: 500;
+}
+.schema-tdesc { font-size: 11px; color: #555; }
+.schema-row {
+ display: grid;
+ grid-template-columns: 200px 150px 70px 1fr;
+ gap: 8px;
+ padding: 8px 20px;
+ border-bottom: 1px solid var(--surface);
+ font-family: 'DM Mono', monospace;
+ font-size: 11px;
+}
+.schema-row:last-child { border-bottom: none; }
+.sf { color: #93c5fd; }
+.st { color: #fcd34d; }
+.sk { color: var(--orange); font-size: 10px; }
+.sc { color: #555; }
+
+/* ENDPOINTS */
+.endpoint {
+ display: flex;
+ align-items: flex-start;
+ gap: 12px;
+ background: var(--white);
+ border: 1px solid var(--gray-border);
+ border-radius: 8px;
+ padding: 11px 16px;
+ margin-bottom: 8px;
+ font-size: 13px;
+}
+.method {
+ font-family: 'DM Mono', monospace;
+ font-size: 10px;
+ padding: 3px 8px;
+ border-radius: 3px;
+ font-weight: 700;
+ min-width: 52px;
+ text-align: center;
+}
+.get { background: #d1fae5; color: #065f46; }
+.post { background: #dbeafe; color: #1e40af; }
+.put { background: #fef3c7; color: #92400e; }
+.delete { background: #fee2e2; color: #991b1b; }
+.ep-route { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--orange-deep); min-width: 260px; }
+.ep-desc { color: var(--text-muted); }
+
+/* KW TAG */
+.kw { display: inline-block; background: var(--gray-light); border: 1px solid var(--gray-border); color: var(--text-muted); padding: 3px 9px; border-radius: 3px; font-size: 11px; margin: 2px; }
+
+/* ROADMAP */
+.roadmap-grid {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ border: 1px solid var(--gray-border);
+ border-radius: 12px;
+ overflow: hidden;
+ margin-bottom: 24px;
+}
+.phase-col {
+ background: var(--white);
+ padding: 24px 20px;
+ border-right: 1px solid var(--gray-border);
+}
+.phase-col:last-child { border-right: none; }
+.phase-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+.phase-name { font-family: 'Bebas Neue', cursive; font-size: 20px; letter-spacing: 1px; margin-bottom: 2px; }
+.phase-weeks { font-size: 11px; color: var(--text-muted); margin-bottom: 16px; }
+.phase-task { font-size: 12px; color: var(--text-secondary); padding: 5px 0; border-bottom: 1px solid var(--gray-border); display: flex; align-items: flex-start; gap: 6px; line-height: 1.4; }
+.phase-task::before { content: '›'; color: var(--orange); flex-shrink: 0; font-weight: 700; }
+.phase-task:last-child { border-bottom: none; }
+
+/* STAT ROW */
+.stat-row { display: flex; gap: 0; border: 1px solid var(--gray-border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+.stat-item { flex: 1; padding: 20px 24px; border-right: 1px solid var(--gray-border); background: var(--white); }
+.stat-item:last-child { border-right: none; }
+.stat-num { font-family: 'Bebas Neue', cursive; font-size: 36px; letter-spacing: 2px; color: var(--orange); line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 12px; color: var(--text-muted); }
+
+/* FONT DEMO */
+.font-demo { background: var(--white); border: 1px solid var(--gray-border); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+.font-row { display: flex; align-items: center; gap: 24px; padding: 16px 20px; border-bottom: 1px solid var(--gray-border); }
+.font-row:last-child { border-bottom: none; }
+.font-tag { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); min-width: 70px; }
+.font-size-tag { font-size: 10px; color: var(--text-muted); min-width: 100px; }
+.font-sample { flex: 1; }
+
+/* COLOR PALETTE */
+.palette { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+.color-card { background: var(--white); border: 1px solid var(--gray-border); border-radius: 10px; overflow: hidden; width: 160px; }
+.color-swatch { height: 72px; }
+.color-info { padding: 12px; }
+.color-name { font-weight: 600; font-size: 12px; color: var(--black); margin-bottom: 2px; }
+.color-hex { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); }
+
+/* CTA PREVIEW */
+.cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+.btn-primary { background: var(--orange); color: var(--white); padding: 12px 28px; border-radius: 4px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; border: none; cursor: pointer; }
+.btn-outline { background: transparent; color: var(--orange); border: 2px solid var(--orange); padding: 10px 26px; border-radius: 4px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; }
+.btn-dark { background: var(--black); color: var(--white); padding: 12px 28px; border-radius: 4px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+ <div class="sidebar-brand">
+ <div class="sidebar-logo">
+ <div class="sidebar-icon"></div>
+ <span class="sidebar-name">CUCKOO CARGO</span>
+ </div>
+ <div class="sidebar-sub">SOP Website — v2.0 · 2026</div>
+ </div>
+ <div class="nav-section">
+ <div class="nav-section-title">Tổng quan</div>
+ <a class="nav-link" href="#overview"><span class="nav-num">01</span>Project Overview</a>
+ <a class="nav-link" href="#brand"><span class="nav-num">02</span>Brand System</a>
+ <a class="nav-link" href="#sitemap"><span class="nav-num">03</span>Sitemap & URLs</a>
+ <a class="nav-link" href="#tech"><span class="nav-num">04</span>Tech Stack</a>
+ </div>
+ <div class="nav-section">
+ <div class="nav-section-title">Thiết kế & SEO</div>
+ <a class="nav-link" href="#design"><span class="nav-num">05</span>Design System</a>
+ <a class="nav-link" href="#seo"><span class="nav-num">06</span>SEO Strategy</a>
+ <a class="nav-link" href="#pages"><span class="nav-num">07</span>Page Specs</a>
+ </div>
+ <div class="nav-section">
+ <div class="nav-section-title">Kỹ thuật</div>
+ <a class="nav-link" href="#database"><span class="nav-num">08</span>Database (MySQL)</a>
+ <a class="nav-link" href="#api"><span class="nav-num">09</span>API Endpoints</a>
+ <a class="nav-link" href="#security"><span class="nav-num">10</span>Security</a>
+ </div>
+ <div class="nav-section">
+ <div class="nav-section-title">Triển khai</div>
+ <a class="nav-link" href="#workflow"><span class="nav-num">11</span>Dev Workflow</a>
+ <a class="nav-link" href="#deploy"><span class="nav-num">12</span>Deployment</a>
+ <a class="nav-link" href="#roadmap"><span class="nav-num">13</span>Roadmap</a>
+ </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- COVER -->
+<div class="cover">
+ <div class="cover-eyebrow"> Standard Operating Procedure · v2.0</div>
+ <div class="cover-title">CUCKOO<br><span>CARGO</span></div>
+ <div class="cover-tagline">US — VIỆT EXPRESS SHIPPING · WEBSITE SOP</div>
+
+ <!-- Stats từ brand guideline -->
+ <div class="brand-chips" style="margin-bottom:32px;">
+ <div class="chip"><span style="font-family:'Bebas Neue';font-size:16px;color:var(--orange);letter-spacing:1px;">2</span> Countries</div>
+ <div class="chip"><span style="font-family:'Bebas Neue';font-size:16px;color:var(--orange);letter-spacing:1px;">10K+</span> Packages/Month</div>
+ <div class="chip"><span style="font-family:'Bebas Neue';font-size:16px;color:var(--orange);letter-spacing:1px;">7–10</span> Day Delivery</div>
+ <div class="chip"><span style="font-family:'Bebas Neue';font-size:16px;color:var(--orange);letter-spacing:1px;">99.5%</span> Success Rate</div>
+ </div>
+
+ <!-- Official Colors Preview -->
+ <div style="margin-bottom:8px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;">Official Brand Colors</div>
+ <div class="color-row">
+ <div class="swatch"><div class="swatch-dot" style="background:#F47B20;"></div><div class="swatch-info"><div class="swatch-name">Premium Orange</div><div class="swatch-hex">#F47B20</div></div></div>
+ <div class="swatch"><div class="swatch-dot" style="background:#0F0F10;border-color:rgba(255,255,255,0.2);"></div><div class="swatch-info"><div class="swatch-name">Deep Black</div><div class="swatch-hex">#0F0F10</div></div></div>
+ <div class="swatch"><div class="swatch-dot" style="background:#FFFFFF;"></div><div class="swatch-info"><div class="swatch-name">Pure White</div><div class="swatch-hex">#FFFFFF</div></div></div>
+ <div class="swatch"><div class="swatch-dot" style="background:#8E8E93;"></div><div class="swatch-info"><div class="swatch-name">Metallic Gray</div><div class="swatch-hex">#8E8E93</div></div></div>
+ <div class="swatch"><div class="swatch-dot" style="background:#D4650E;"></div><div class="swatch-info"><div class="swatch-name">Deep Orange</div><div class="swatch-hex">#D4650E</div></div></div>
+ <div class="swatch"><div class="swatch-dot" style="background:#1A1A1E;"></div><div class="swatch-info"><div class="swatch-name">Dark Surface</div><div class="swatch-hex">#1A1A1E</div></div></div>
+ </div>
+
+ <!-- Meta -->
+ <div class="cover-meta">
+ <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">v2.0 — Brand Updated 2026</div></div>
+ <div class="meta-item"><div class="meta-label">Market</div><div class="meta-value">Los Angeles, California</div></div>
+ <div class="meta-item"><div class="meta-label">Languages</div><div class="meta-value">Tiếng Việt + English</div></div>
+ <div class="meta-item"><div class="meta-label">Stack</div><div class="meta-value">Next.js · Node.js · MySQL</div></div>
+ </div>
+
+ <!-- TOC -->
+ <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:12px;">Table of Contents</div>
+ <div class="toc-grid">
+ <a class="toc-row" href="#overview"><span class="toc-num">01</span>Project Overview</a>
+ <a class="toc-row" href="#database"><span class="toc-num">08</span>Database Schema (MySQL)</a>
+ <a class="toc-row" href="#brand"><span class="toc-num">02</span>Brand System</a>
+ <a class="toc-row" href="#api"><span class="toc-num">09</span>API Endpoints</a>
+ <a class="toc-row" href="#sitemap"><span class="toc-num">03</span>Sitemap & URLs</a>
+ <a class="toc-row" href="#security"><span class="toc-num">10</span>Security</a>
+ <a class="toc-row" href="#tech"><span class="toc-num">04</span>Tech Stack</a>
+ <a class="toc-row" href="#workflow"><span class="toc-num">11</span>Dev Workflow</a>
+ <a class="toc-row" href="#design"><span class="toc-num">05</span>Design System</a>
+ <a class="toc-row" href="#deploy"><span class="toc-num">12</span>Deployment</a>
+ <a class="toc-row" href="#seo"><span class="toc-num">06</span>SEO Strategy</a>
+ <a class="toc-row" href="#roadmap"><span class="toc-num">13</span>Roadmap</a>
+ </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- 01 OVERVIEW -->
+<div class="section" id="overview">
+ <div class="section-header">
+ <span class="section-num">01</span>
+ <div><div class="section-title">PROJECT OVERVIEW</div><div class="section-desc">Mục tiêu, đối tượng và định vị thương hiệu</div></div>
+ </div>
+
+ <div class="stat-row">
+ <div class="stat-item"><div class="stat-num">2</div><div class="stat-label">Quốc gia phục vụ</div></div>
+ <div class="stat-item"><div class="stat-num">10K+</div><div class="stat-label">Gói hàng / tháng</div></div>
+ <div class="stat-item"><div class="stat-num">7–10</div><div class="stat-label">Ngày giao hàng</div></div>
+ <div class="stat-item"><div class="stat-num">99.5%</div><div class="stat-label">Tỷ lệ thành công</div></div>
+ </div>
+
+ <div class="card-grid">
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">Mission</div>
+ <div class="card-body">Cung cấp dịch vụ vận chuyển <strong>nhanh, tin cậy, cao cấp</strong> kết nối cộng đồng người Việt tại Mỹ với quê hương — seamless & trustworthy.</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">Vision</div>
+ <div class="card-body">Trở thành thương hiệu logistics <strong>đáng tin cậy nhất</strong> cho vận chuyển Mỹ–Việt, được công nhận toàn cầu về premium service.</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">Positioning</div>
+ <div class="card-body"><strong>"The premium choice"</strong> — nơi luxury service kết hợp logistics efficiency. Không chỉ ship hàng — là cầu nối văn hóa.</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">Target Audience</div>
+ <div class="card-body">Người Việt tại Mỹ · Việt kiều / du học sinh · Người Mỹ tại Los Angeles cần ship hàng về Việt Nam.</div>
+ </div>
+ </div>
+
+ <div class="card-grid">
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">Speed — Tốc độ</div>
+ <div class="card-body">Thời gian giao hàng siêu tốc vượt tiêu chuẩn ngành. Hàng hóa đến nơi nhanh hơn.</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">Trust — Tin cậy</div>
+ <div class="card-body">Mỗi lô hàng được xử lý cẩn thận, theo dõi realtime, giao hàng với trách nhiệm.</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">Innovation — Đổi mới</div>
+ <div class="card-body">Tận dụng technology để tạo trải nghiệm vận chuyển thông minh, hiệu quả hơn.</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">Community — Cộng đồng</div>
+ <div class="card-body">Được xây dựng bởi và dành cho cộng đồng người Mỹ gốc Việt. Thấu hiểu nhu cầu.</div>
+ </div>
+ </div>
+</div>
+
+<!-- 02 BRAND SYSTEM -->
+<div class="section" id="brand">
+ <div class="section-header">
+ <span class="section-num">02</span>
+ <div><div class="section-title">BRAND SYSTEM</div><div class="section-desc">Màu sắc, font chữ và ngôn ngữ hình ảnh chính thức từ Brand Guidelines 2026</div></div>
+ </div>
+
+ <div class="callout callout-dark">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Brand Guideline đã được tích hợp.</strong> Tất cả màu sắc, font, CTA trong SOP này đã được cập nhật theo Brand Guidelines 2026 chính thức của Cuckoo Cargo.</span>
+ </div>
+
+ <!-- Colors -->
+ <div style="font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;color:var(--black);margin:24px 0 16px;">COLOR PALETTE</div>
+ <div class="palette">
+ <div class="color-card">
+ <div class="color-swatch" style="background:#F47B20;"></div>
+ <div class="color-info"><div class="color-name">Premium Orange</div><div class="color-hex">#F47B20</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Primary · CTA · Accent</div></div>
+ </div>
+ <div class="color-card">
+ <div class="color-swatch" style="background:#0F0F10;"></div>
+ <div class="color-info"><div class="color-name">Deep Black</div><div class="color-hex">#0F0F10</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Backgrounds · Headers</div></div>
+ </div>
+ <div class="color-card">
+ <div class="color-swatch" style="background:#FFFFFF;border:1px solid #e5e5ea;"></div>
+ <div class="color-info"><div class="color-name">Pure White</div><div class="color-hex">#FFFFFF</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Cards · Content areas</div></div>
+ </div>
+ <div class="color-card">
+ <div class="color-swatch" style="background:#8E8E93;"></div>
+ <div class="color-info"><div class="color-name">Metallic Gray</div><div class="color-hex">#8E8E93</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Secondary text · UI</div></div>
+ </div>
+ <div class="color-card">
+ <div class="color-swatch" style="background:#D4650E;"></div>
+ <div class="color-info"><div class="color-name">Deep Orange</div><div class="color-hex">#D4650E</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Hover states · Links</div></div>
+ </div>
+ <div class="color-card">
+ <div class="color-swatch" style="background:#FFB366;"></div>
+ <div class="color-info"><div class="color-name">Light Orange</div><div class="color-hex">#FFB366</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Backgrounds · Tints</div></div>
+ </div>
+ <div class="color-card">
+ <div class="color-swatch" style="background:#1A1A1E;"></div>
+ <div class="color-info"><div class="color-name">Dark Surface</div><div class="color-hex">#1A1A1E</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Dark mode surfaces</div></div>
+ </div>
+ <div class="color-card">
+ <div class="color-swatch" style="background:#2A2A2E;"></div>
+ <div class="color-info"><div class="color-name">Elevated</div><div class="color-hex">#2A2A2E</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Cards on dark bg</div></div>
+ </div>
+ </div>
+
+ <!-- Typography -->
+ <div style="font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;color:var(--black);margin:32px 0 16px;">TYPOGRAPHY SYSTEM</div>
+ <div class="font-demo">
+ <div class="font-row" style="background:#0F0F10;">
+ <span class="font-tag" style="color:#555;">PRIMARY</span>
+ <span class="font-size-tag" style="color:#555;">Bebas Neue</span>
+ <span class="font-sample" style="font-family:'Bebas Neue';font-size:32px;color:#F47B20;letter-spacing:3px;">FAST. RELIABLE. PREMIUM.</span>
+ </div>
+ <div class="font-row">
+ <span class="font-tag" style="color:var(--text-muted);">H1</span>
+ <span class="font-size-tag" style="color:var(--text-muted);">Bebas Neue 56px</span>
+ <span class="font-sample" style="font-family:'Bebas Neue';font-size:40px;letter-spacing:2px;color:var(--black);">EXPRESS SHIPPING</span>
+ </div>
+ <div class="font-row">
+ <span class="font-tag" style="color:var(--text-muted);">H2</span>
+ <span class="font-size-tag" style="color:var(--text-muted);">Bebas Neue 40px</span>
+ <span class="font-sample" style="font-family:'Bebas Neue';font-size:30px;letter-spacing:2px;color:var(--black);">TRACK YOUR CARGO</span>
+ </div>
+ <div class="font-row">
+ <span class="font-tag" style="color:var(--text-muted);">H3</span>
+ <span class="font-size-tag" style="color:var(--text-muted);">Bebas Neue 28px</span>
+ <span class="font-sample" style="font-family:'Bebas Neue';font-size:22px;letter-spacing:1.5px;color:var(--black);">DELIVERY STATUS</span>
+ </div>
+ <div class="font-row">
+ <span class="font-tag" style="color:var(--text-muted);">Body</span>
+ <span class="font-size-tag" style="color:var(--text-muted);">Inter Regular 16px</span>
+ <span class="font-sample" style="font-family:'Inter';font-size:15px;color:var(--text-secondary);">Your package is on its way from Los Angeles to Ho Chi Minh City.</span>
+ </div>
+ <div class="font-row">
+ <span class="font-tag" style="color:var(--text-muted);">Small</span>
+ <span class="font-size-tag" style="color:var(--text-muted);">Inter 14px</span>
+ <span class="font-sample" style="font-family:'Inter';font-size:13px;color:var(--text-muted);">Estimated delivery: 7-10 business days · Los Angeles → Ho Chi Minh City</span>
+ </div>
+ <div class="font-row">
+ <span class="font-tag" style="color:var(--text-muted);">Caption</span>
+ <span class="font-size-tag" style="color:var(--text-muted);">Inter Mono 12px</span>
+ <span class="font-sample" style="font-family:'DM Mono';font-size:11px;color:var(--orange);">TRACKING ID: CC-2026-VN-00421</span>
+ </div>
+ </div>
+
+ <!-- CTA System -->
+ <div style="font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;color:var(--black);margin:32px 0 16px;">CTA BUTTON SYSTEM</div>
+ <div class="cta-row">
+ <button class="btn-primary">GET A QUOTE · Nhận báo giá</button>
+ <button class="btn-primary" style="background:var(--grad-orange);">TRACK PACKAGE · Tra mã vận đơn</button>
+ <button class="btn-outline">LEARN MORE · Tìm hiểu thêm</button>
+ <button class="btn-dark">Contact Us · Liên hệ</button>
+ </div>
+
+ <!-- Logo Rules -->
+ <div style="font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;color:var(--black);margin:32px 0 16px;">LOGO USAGE RULES</div>
+ <div class="table-wrap">
+ <table>
+ <thead><tr><th>Quy tắc</th><th>Thông số</th></tr></thead>
+ <tbody>
+ <tr><td>Mascot</td><td>Bird (Cuckoo) + Delivery Scooter + Cargo Boxes + Motion Lines + Wordmark</td></tr>
+ <tr><td>Min size Print</td><td>30mm</td></tr>
+ <tr><td>Min size Digital</td><td>80px</td></tr>
+ <tr><td>Favicon</td><td>32px</td></tr>
+ <tr><td>Clear space</td><td>= chiều cao chữ "C" trong CUCKOO ở tất cả các cạnh</td></tr>
+ <tr><td> Không được</td><td>Stretch · Rotate · Giảm opacity · Đổi màu · Thêm effects · Đặt trên nền rối</td></tr>
+ </tbody>
+ </table>
+ </div>
+</div>
+
+<!-- 03 SITEMAP -->
+<div class="section" id="sitemap">
+ <div class="section-header">
+ <span class="section-num">03</span>
+ <div><div class="section-title">SITEMAP & URLs</div><div class="section-desc">Toàn bộ trang và cấu trúc URL chuẩn SEO · Domain: cuckoocargo.com</div></div>
+ </div>
+
+ <div class="callout callout-orange">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>i18n:</strong> Tiếng Việt tại <code>/vi/...</code> (mặc định), Tiếng Anh tại <code>/en/...</code>. Ví dụ: <code>cuckoocargo.com/en/services/shipping-to-vietnam</code></span>
+ </div>
+
+ <div class="sitemap">
+ <div class="sm-item"><span class="sm-route">/</span><span class="sm-name"> Trang chủ — Homepage</span><span><span class="badge badge-must">Ưu tiên #1</span></span></div>
+
+ <div class="sm-item"><span class="sm-route">/dich-vu</span><span class="sm-name"> Dịch vụ tổng quan — Services</span><span><span class="badge badge-must">Ưu tiên #1</span></span></div>
+ <div class="sm-item child"><span class="sm-route">/dich-vu/gui-hang-my-ve-viet-nam</span><span class="sm-name"> Gửi hàng Mỹ → Việt Nam</span><span><span class="badge badge-seo">SEO #1</span></span></div>
+ <div class="sm-item child"><span class="sm-route">/dich-vu/ship-noi-dia-my</span><span class="sm-name"> Ship nội địa Mỹ</span><span><span class="badge badge-seo">SEO High</span></span></div>
+ <div class="sm-item child"><span class="sm-route">/dich-vu/mua-ho-hang-my</span><span class="sm-name"> Mua hộ hàng Mỹ — Buy for Me</span><span><span class="badge badge-seo">SEO High</span></span></div>
+
+ <div class="sm-item"><span class="sm-route">/tinh-cuoc</span><span class="sm-name"> Tính giá cước — Price Calculator</span><span><span class="badge badge-must">Ưu tiên #1</span></span></div>
+ <div class="sm-item"><span class="sm-route">/dat-don</span><span class="sm-name"> Đặt đơn online — Book Shipment</span><span><span class="badge badge-must">Ưu tiên #1</span></span></div>
+ <div class="sm-item"><span class="sm-route">/theo-doi</span><span class="sm-name"> Theo dõi vận đơn — Track Package</span><span><span class="badge badge-must">Ưu tiên #1</span></span></div>
+
+ <div class="sm-item"><span class="sm-route">/huong-dan</span><span class="sm-name"> Hướng dẫn gửi hàng</span><span><span class="badge badge-seo">SEO Content</span></span></div>
+ <div class="sm-item child"><span class="sm-route">/huong-dan/cach-dong-goi</span><span class="sm-name"> Cách đóng gói hàng</span></div>
+ <div class="sm-item child"><span class="sm-route">/huong-dan/hang-cam-hang-han-che</span><span class="sm-name"> Hàng cấm & hạn chế</span></div>
+ <div class="sm-item child"><span class="sm-route">/huong-dan/thue-hai-quan</span><span class="sm-name"> Thuế hải quan Mỹ–Việt</span></div>
+
+ <div class="sm-item"><span class="sm-route">/shop</span><span class="sm-name"> Shop sản phẩm (Ensure, Dầu gió...)</span><span><span class="badge badge-p1">Phase 2</span></span></div>
+ <div class="sm-item"><span class="sm-route">/blog</span><span class="sm-name"> Blog / Tin tức SEO</span><span><span class="badge badge-seo">SEO Long-term</span></span></div>
+ <div class="sm-item"><span class="sm-route">/lien-he</span><span class="sm-name"> Liên hệ — Contact</span><span><span class="badge badge-must">Ưu tiên #1</span></span></div>
+ <div class="sm-item"><span class="sm-route">/tai-khoan</span><span class="sm-name"> Tài khoản khách hàng</span><span><span class="badge badge-p2">Phase 3</span></span></div>
+ </div>
+</div>
+
+<!-- 04 TECH -->
+<div class="section" id="tech">
+ <div class="section-header">
+ <span class="section-num">04</span>
+ <div><div class="section-title">TECH STACK</div><div class="section-desc">Công nghệ được chọn và lý do</div></div>
+ </div>
+ <div class="table-wrap">
+ <table>
+ <thead><tr><th>Tầng</th><th>Công nghệ</th><th>Version</th><th>Lý do</th><th>Chi phí</th></tr></thead>
+ <tbody>
+ <tr><td><span class="badge badge-fe">Front-end</span></td><td><strong>Next.js 14</strong></td><td>14.x App Router</td><td>SSR/SSG → SEO tốt nhất · i18n tích hợp · Bebas Neue + Inter render đẹp</td><td>Free (Vercel)</td></tr>
+ <tr><td><span class="badge badge-fe">Front-end</span></td><td><strong>Tailwind CSS</strong></td><td>3.x</td><td>Build nhanh UI luxury · Responsive mobile-first · Custom brand colors</td><td>Free</td></tr>
+ <tr><td><span class="badge badge-be">Back-end</span></td><td><strong>Node.js + Express</strong></td><td>Node 20 LTS</td><td>Nhanh · Ecosystem lớn · Dễ tuyển dev</td><td>~$5/tháng</td></tr>
+ <tr><td><span class="badge badge-db">Database</span></td><td><strong>MySQL 8.0</strong></td><td>8.0</td><td>Ổn định · Phổ biến · Dễ thuê dev VN · Phù hợp logistics data</td><td>~$7/tháng</td></tr>
+ <tr><td><span class="badge badge-db">Database</span></td><td><strong>Redis</strong></td><td>7.x</td><td>Session cache · Rate limiting · Tracking realtime</td><td>Free tier</td></tr>
+ <tr><td><span class="badge badge-infra">Infra</span></td><td><strong>Vercel</strong></td><td>—</td><td>Next.js native · CDN toàn cầu · Auto deploy từ GitHub</td><td>Free → $20/tháng</td></tr>
+ <tr><td><span class="badge badge-infra">Infra</span></td><td><strong>Railway</strong></td><td>—</td><td>Node.js API + MySQL cùng 1 platform · Đơn giản</td><td>~$10/tháng</td></tr>
+ <tr><td><span class="badge badge-infra">Infra</span></td><td><strong>Cloudflare</strong></td><td>—</td><td>CDN · DDoS · SSL auto · Domain DNS</td><td>Free</td></tr>
+ <tr><td><span class="badge badge-infra">Infra</span></td><td><strong>Cloudinary</strong></td><td>—</td><td>Ảnh hàng hóa · PDF invoice · Tự động optimize WebP</td><td>Free 25GB</td></tr>
+ </tbody>
+ </table>
+ </div>
+ <div class="code-block">
+<span class="code-comment"># Cấu trúc thư mục dự án — Cuckoo Cargo</span>
+cuckoo-cargo/
+ <span class="code-key">frontend/</span> <span class="code-comment"># Next.js 14 (Bebas Neue + Inter)</span>
+ app/
+ [locale]/ <span class="code-comment"># vi | en</span>
+ page.tsx <span class="code-comment"># Homepage</span>
+ dich-vu/ <span class="code-comment"># Service pages</span>
+ tinh-cuoc/ <span class="code-comment"># Price calculator</span>
+ dat-don/ <span class="code-comment"># Order form</span>
+ theo-doi/ <span class="code-comment"># Tracking</span>
+ shop/ <span class="code-comment"># Products</span>
+ blog/
+ components/
+ ui/ <span class="code-comment"># Button, Card, Input (brand colors)</span>
+ layout/ <span class="code-comment"># Navbar, Footer</span>
+ features/
+ public/
+ brand/ <span class="code-comment"># Logo files từ brand guideline</span>
+ messages/
+ vi.json <span class="code-comment"># Tiếng Việt</span>
+ en.json <span class="code-comment"># English</span>
+
+ <span class="code-key">backend/</span> <span class="code-comment"># Node.js + Express</span>
+ src/
+ routes/
+ controllers/
+ models/
+ middleware/
+ services/
+ prisma/
+ schema.prisma <span class="code-comment"># MySQL schema</span>
+
+ <span class="code-key">docker-compose.yml</span>
+ </div>
+</div>
+
+<!-- 05 DESIGN SYSTEM -->
+<div class="section" id="design">
+ <div class="section-header">
+ <span class="section-num">05</span>
+ <div><div class="section-title">DESIGN SYSTEM</div><div class="section-desc">Nguyên tắc triển khai Brand Guidelines vào code</div></div>
+ </div>
+
+ <div class="table-wrap">
+ <table>
+ <thead><tr><th>Component</th><th>Spec (theo Brand Guideline)</th><th>Note</th></tr></thead>
+ <tbody>
+ <tr><td><strong>Hero / Banner</strong></td><td>Bg: #0F0F10 · Headline: Bebas Neue 56–72px · Accent: #F47B20 · Sub: Inter 16px #8E8E93</td><td>Gradient overlay từ brand</td></tr>
+ <tr><td><strong>Button Primary</strong></td><td>Bg: #F47B20 · Text: white · Font: Inter 700 · Radius: 4px · Hover: #D4650E</td><td>Text UPPERCASE</td></tr>
+ <tr><td><strong>Button Outline</strong></td><td>Border: #F47B20 2px · Text: #F47B20 · Hover: filled #F47B20</td><td>Ghost style</td></tr>
+ <tr><td><strong>Card</strong></td><td>Bg: #FFFFFF · Border: 1px #E5E5EA · Radius: 12px · Shadow: sm</td><td>Hover: shadow-md + translateY(-2px)</td></tr>
+ <tr><td><strong>Navigation</strong></td><td>Bg: #0F0F10 (dark) hoặc white/blur · Logo left · CTA "GET A QUOTE" orange right · Height: 72px</td><td>Sticky top, transparent trên hero</td></tr>
+ <tr><td><strong>Section Headings</strong></td><td>Bebas Neue · Letter-spacing: 2–3px · Always UPPERCASE</td><td>Accent word: color #F47B20</td></tr>
+ <tr><td><strong>Tracking ID</strong></td><td>Font: DM Mono · Color: #F47B20 · Format: CC-2026-VN-XXXXX</td><td>Monospace cho dễ đọc</td></tr>
+ <tr><td><strong>Footer</strong></td><td>Bg: #0F0F10 · Top border: 1px solid #F47B20 · 4 col: Logo / Services / Support / Contact</td><td>Social icons + Google Maps</td></tr>
+ </tbody>
+ </table>
+ </div>
+
+ <div class="card-grid">
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">MOBILE FIRST</div>
+ <div class="card-body">70%+ khách Việt dùng mobile. CTA "GET A QUOTE" nổi bật thumb-zone. Form đặt đơn 1 cột trên mobile. Floating Zalo button <strong style="color:var(--orange);">#F47B20</strong> luôn hiển thị.</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">PERFORMANCE</div>
+ <div class="card-body">LCP &lt; 2.5s · CLS &lt; 0.1. Ảnh: WebP format. Font Bebas Neue + Inter preload. Tailwind purge unused CSS. Core Web Vitals: xanh toàn bộ.</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">DARK / LIGHT MODE</div>
+ <div class="card-body">Hero sections: dark bg (#0F0F10) với orange accent. Content sections: white bg. Mix tạo contrast theo brand — không toàn light, không toàn dark.</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">BILINGUAL LAYOUT</div>
+ <div class="card-body">English: Bebas Neue impact. Tiếng Việt: Inter 600 cho heading (Bebas Neue không hỗ trợ dấu tiếng Việt). Consistent spacing giữa 2 ngôn ngữ.</div>
+ </div>
+ </div>
+
+ <div class="callout callout-orange">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Lưu ý quan trọng:</strong> Font <strong>Bebas Neue không hỗ trợ dấu tiếng Việt</strong>. Dùng Bebas Neue cho headlines tiếng Anh và số. Dùng <strong>Inter SemiBold/Bold</strong> cho headlines tiếng Việt để giữ đúng brand feel nhưng hiển thị đúng ký tự.</span>
+ </div>
+</div>
+
+<!-- 06 SEO -->
+<div class="section" id="seo">
+ <div class="section-header">
+ <span class="section-num">06</span>
+ <div><div class="section-title">SEO STRATEGY</div><div class="section-desc">Chiến lược SEO cho thị trường Los Angeles · người Việt tại Mỹ</div></div>
+ </div>
+
+ <div class="card-grid" style="grid-template-columns:1fr 1fr;">
+ <div class="card">
+ <div class="card-title"> English Keywords (LA)</div>
+ <div style="margin-top:10px;">
+ <span class="kw">Vietnamese shipping Los Angeles</span>
+ <span class="kw">ship to Vietnam from LA</span>
+ <span class="kw">freight forwarding Vietnam California</span>
+ <span class="kw">ship Amazon to Vietnam</span>
+ <span class="kw">Vietnam cargo express LA</span>
+ <span class="kw">package forwarding Vietnam</span>
+ <span class="kw">buy and ship to Vietnam</span>
+ <span class="kw">domestic US shipping service</span>
+ </div>
+ </div>
+ <div class="card">
+ <div class="card-title"> Tiếng Việt Keywords</div>
+ <div style="margin-top:10px;">
+ <span class="kw">gửi hàng từ Mỹ về Việt Nam</span>
+ <span class="kw">ship hàng Mỹ về Việt Nam</span>
+ <span class="kw">mua hộ hàng Mỹ</span>
+ <span class="kw">gửi hàng Los Angeles về Việt Nam</span>
+ <span class="kw">cước phí gửi hàng Mỹ về Việt Nam</span>
+ <span class="kw">dịch vụ chuyển phát Mỹ Việt</span>
+ <span class="kw">mua hàng Amazon ship về Việt Nam</span>
+ <span class="kw">Cuckoo Cargo vận chuyển</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="table-wrap">
+ <table>
+ <thead><tr><th>SEO Item</th><th>Yêu cầu kỹ thuật</th><th>Priority</th></tr></thead>
+ <tbody>
+ <tr><td><strong>Meta Tags</strong></td><td>Title 50–60 ký tự · Description 150–160 ký tự · Unique mỗi trang · Include "Los Angeles"</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td><strong>hreflang</strong></td><td><code>&lt;link rel="alternate" hreflang="vi"&gt;</code> và <code>hreflang="en"</code> trên tất cả trang</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td><strong>Structured Data</strong></td><td>LocalBusiness (địa chỉ LA) · Service · FAQPage · BreadcrumbList</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td><strong>Open Graph</strong></td><td>og:image 1200×630 với brand orange · og:title · og:description song ngữ</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td><strong>Google Business</strong></td><td>Đăng ký "Cuckoo Cargo" tại LA · Category: Freight Forwarding · Ảnh uniform + kho</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td><strong>Sitemap XML</strong></td><td>Auto-generate từ Next.js · Submit Google Search Console · 2 language versions</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td><strong>Page Speed</strong></td><td>Google PageSpeed ≥ 90 mobile · Bebas Neue + Inter preloaded</td><td><span class="badge badge-p1">Cao</span></td></tr>
+ <tr><td><strong>Blog</strong></td><td>2–4 bài/tháng · ≥ 800 từ · Target long-tail · Song ngữ Việt–Anh</td><td><span class="badge badge-p1">Cao</span></td></tr>
+ </tbody>
+ </table>
+ </div>
+</div>
+
+<!-- 07 PAGES -->
+<div class="section" id="pages">
+ <div class="section-header">
+ <span class="section-num">07</span>
+ <div><div class="section-title">PAGE SPECIFICATIONS</div><div class="section-desc">Chi tiết từng trang — layout, sections, nội dung theo brand</div></div>
+ </div>
+
+ <div class="spec-box">
+ <div class="spec-header"><span></span><span class="spec-header-title">HOMEPAGE — /</span><span class="badge badge-must">Ưu tiên #1</span></div>
+ <div class="spec-body">
+ <div class="step-list">
+ <div class="step"><div class="step-circle">S1</div><div class="step-content"><div class="step-title">Hero Section (Dark bg #0F0F10)</div><div class="step-desc">Bebas Neue 72px: "SHIP FROM US TO VIETNAM" · Sub Inter 16px · 2 CTA orange: [GET A QUOTE] [TRACK PACKAGE] · Ảnh hero: hàng hóa / kho premium · Stats bar: 10K+ packages · 99.5% success · 7-10 days</div></div></div>
+ <div class="step"><div class="step-circle">S2</div><div class="step-content"><div class="step-title">Quick Quote Widget (nền trắng)</div><div class="step-desc">Mini form inline: [Từ tiểu bang] [Cân nặng lbs] → [GET QUOTE orange button]. Kết quả hiển thị ngay không reload.</div></div></div>
+ <div class="step"><div class="step-circle">S3</div><div class="step-content"><div class="step-title">3 Core Services (cards nền trắng)</div><div class="step-desc">Card 1: US → Vietnam · Card 2: Domestic US · Card 3: Buy For Me. Icon cam, hover border #F47B20.</div></div></div>
+ <div class="step"><div class="step-circle">S4</div><div class="step-content"><div class="step-title">How It Works — 4 bước (dark section)</div><div class="step-desc">Bg #0F0F10 · Steps: Book → Drop Off → We Ship → Delivered. Số step màu #F47B20. Animation scroll reveal.</div></div></div>
+ <div class="step"><div class="step-circle">S5</div><div class="step-content"><div class="step-title">Trust Section</div><div class="step-desc">Logo FedEx · UPS · USPS (đối tác). Stats lớn Bebas Neue: "99.5% SUCCESS RATE". Google Reviews widget.</div></div></div>
+ <div class="step"><div class="step-circle">S6</div><div class="step-content"><div class="step-title">CTA Banner cuối (orange gradient)</div><div class="step-desc">Bg: gradient #F47B20 → #D4650E · Bebas Neue: "SHIP YOUR FIRST PACKAGE TODAY" · Button: dark [GET STARTED]</div></div></div>
+ </div>
+ </div>
+ </div>
+
+ <div class="spec-box">
+ <div class="spec-header"><span></span><span class="spec-header-title">FORM ĐẶT ĐƠN — /dat-don</span><span class="badge badge-must">Ưu tiên #1</span></div>
+ <div class="spec-body">
+ <div class="table-wrap" style="border:none;border-radius:0;margin-bottom:0;">
+ <table>
+ <thead><tr><th>Bước</th><th>Fields</th><th>Validate</th></tr></thead>
+ <tbody>
+ <tr><td><strong>1 — Dịch vụ</strong></td><td>Dropdown: US→VN / Nội địa / Mua hộ · Số kiện · Mô tả hàng</td><td>Required</td></tr>
+ <tr><td><strong>2 — Kiện hàng</strong></td><td>Cân nặng (lbs) · Dài × Rộng × Cao (inch) · Upload ảnh hàng</td><td>Số dương · Ảnh &lt;10MB</td></tr>
+ <tr><td><strong>3 — Người gửi</strong></td><td>Họ tên · SĐT Mỹ · Email · Địa chỉ tại Mỹ · Zipcode</td><td>US phone · Email valid</td></tr>
+ <tr><td><strong>4 — Người nhận</strong></td><td>Họ tên · SĐT VN · Tỉnh/Thành · Quận · Phường · Số nhà</td><td>VN phone format</td></tr>
+ <tr><td><strong>5 — Xác nhận</strong></td><td>Tóm tắt đơn · Giá ước tính · Phương thức thanh toán</td><td>—</td></tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
+
+ <div class="spec-box">
+ <div class="spec-header"><span></span><span class="spec-header-title">TRACKING — /theo-doi</span><span class="badge badge-must">Ưu tiên #1</span></div>
+ <div class="spec-body">
+ <div class="spec-row"><div class="spec-label">Search</div><div class="spec-value">Input DM Mono: "ENTER TRACKING ID: CC-2026-VN-XXXXX" · Button orange [TRACK]</div></div>
+ <div class="spec-row"><div class="spec-label">Timeline states</div><div class="spec-value">Đã nhận → Lấy hàng → Kho Mỹ → Đang bay → Thông quan → Đang giao → Đã giao</div></div>
+ <div class="spec-row"><div class="spec-label">Trạng thái active</div><div class="spec-value">Dot màu #F47B20 · Line cam · State text Bebas Neue</div></div>
+ <div class="spec-row"><div class="spec-label">Share URL</div><div class="spec-value"><code>/theo-doi?ma=CC-2026-VN-00421</code> — khách gửi cho gia đình ở VN</div></div>
+ </div>
+ </div>
+</div>
+
+<!-- 08 DATABASE -->
+<div class="section" id="database">
+ <div class="section-header">
+ <span class="section-num">08</span>
+ <div><div class="section-title">DATABASE SCHEMA (MySQL)</div><div class="section-desc">Cấu trúc cơ sở dữ liệu đầy đủ · Prisma ORM</div></div>
+ </div>
+
+ <div class="schema-table">
+ <div class="schema-header"><span class="schema-tname">users</span><span class="schema-tdesc">— Khách hàng & nhân viên</span></div>
+ <div class="schema-row"><span class="sf">id</span><span class="st">BIGINT UNSIGNED</span><span class="sk">PK · AI</span><span class="sc">-- Primary key</span></div>
+ <div class="schema-row"><span class="sf">uuid</span><span class="st">VARCHAR(36)</span><span class="sk">UNIQUE</span><span class="sc">-- UUID cho URL public</span></div>
+ <div class="schema-row"><span class="sf">full_name</span><span class="st">VARCHAR(150)</span><span></span><span class="sc">-- Họ và tên đầy đủ</span></div>
+ <div class="schema-row"><span class="sf">email</span><span class="st">VARCHAR(255)</span><span class="sk">UNIQUE</span><span class="sc">-- Email đăng nhập</span></div>
+ <div class="schema-row"><span class="sf">phone_us</span><span class="st">VARCHAR(20)</span><span></span><span class="sc">-- SĐT Mỹ (+1...)</span></div>
+ <div class="schema-row"><span class="sf">phone_vn</span><span class="st">VARCHAR(20)</span><span></span><span class="sc">-- SĐT Việt Nam</span></div>
+ <div class="schema-row"><span class="sf">password_hash</span><span class="st">VARCHAR(255)</span><span></span><span class="sc">-- bcrypt, salt 12+</span></div>
+ <div class="schema-row"><span class="sf">role</span><span class="st">ENUM</span><span></span><span class="sc">-- 'customer','staff_us','staff_vn','admin'</span></div>
+ <div class="schema-row"><span class="sf">lang_pref</span><span class="st">VARCHAR(5)</span><span></span><span class="sc">-- 'vi' | 'en'</span></div>
+ <div class="schema-row"><span class="sf">created_at</span><span class="st">TIMESTAMP</span><span></span><span class="sc">-- DEFAULT CURRENT_TIMESTAMP</span></div>
+ </div>
+
+ <div class="schema-table">
+ <div class="schema-header"><span class="schema-tname">orders</span><span class="schema-tdesc">— Đơn hàng vận chuyển</span></div>
+ <div class="schema-row"><span class="sf">id</span><span class="st">BIGINT UNSIGNED</span><span class="sk">PK · AI</span><span class="sc"></span></div>
+ <div class="schema-row"><span class="sf">order_code</span><span class="st">VARCHAR(20)</span><span class="sk">UNIQUE</span><span class="sc">-- 'CC-2026-VN-00001'</span></div>
+ <div class="schema-row"><span class="sf">user_id</span><span class="st">BIGINT UNSIGNED</span><span class="sk">FK</span><span class="sc">-- Ref: users.id</span></div>
+ <div class="schema-row"><span class="sf">service_type</span><span class="st">ENUM</span><span></span><span class="sc">-- 'us_to_vn','domestic_us','buy_for_me'</span></div>
+ <div class="schema-row"><span class="sf">status</span><span class="st">ENUM</span><span></span><span class="sc">-- pending→confirmed→picked→warehouse→transit→customs→delivering→delivered</span></div>
+ <div class="schema-row"><span class="sf">weight_lbs</span><span class="st">DECIMAL(8,2)</span><span></span><span class="sc">-- Cân nặng thực tế</span></div>
+ <div class="schema-row"><span class="sf">dim_l / dim_w / dim_h</span><span class="st">DECIMAL(8,2)</span><span></span><span class="sc">-- Kích thước inch</span></div>
+ <div class="schema-row"><span class="sf">volumetric_weight</span><span class="st">DECIMAL(8,2)</span><span></span><span class="sc">-- (L×W×H)/139 — để tính phí</span></div>
+ <div class="schema-row"><span class="sf">price_usd</span><span class="st">DECIMAL(10,2)</span><span></span><span class="sc">-- Giá tính cho khách</span></div>
+ <div class="schema-row"><span class="sf">payment_status</span><span class="st">ENUM</span><span></span><span class="sc">-- 'unpaid','partial','paid'</span></div>
+ <div class="schema-row"><span class="sf">payment_method</span><span class="st">VARCHAR(50)</span><span></span><span class="sc">-- 'zelle','venmo','stripe','cash'</span></div>
+ <div class="schema-row"><span class="sf">note</span><span class="st">TEXT</span><span></span><span class="sc">-- Ghi chú khách hàng</span></div>
+ <div class="schema-row"><span class="sf">created_at</span><span class="st">TIMESTAMP</span><span></span><span class="sc">-- Thời gian đặt đơn</span></div>
+ <div class="schema-row"><span class="sf">updated_at</span><span class="st">TIMESTAMP</span><span></span><span class="sc">-- ON UPDATE CURRENT_TIMESTAMP</span></div>
+ </div>
+
+ <div class="schema-table">
+ <div class="schema-header"><span class="schema-tname">recipients</span><span class="schema-tdesc">— Thông tin người nhận</span></div>
+ <div class="schema-row"><span class="sf">id</span><span class="st">BIGINT UNSIGNED</span><span class="sk">PK · AI</span><span class="sc"></span></div>
+ <div class="schema-row"><span class="sf">order_id</span><span class="st">BIGINT UNSIGNED</span><span class="sk">FK</span><span class="sc">-- Ref: orders.id</span></div>
+ <div class="schema-row"><span class="sf">full_name</span><span class="st">VARCHAR(150)</span><span></span><span class="sc">-- Tên người nhận tại VN</span></div>
+ <div class="schema-row"><span class="sf">phone</span><span class="st">VARCHAR(20)</span><span></span><span class="sc">-- SĐT Việt Nam</span></div>
+ <div class="schema-row"><span class="sf">province</span><span class="st">VARCHAR(100)</span><span></span><span class="sc">-- Tỉnh/Thành phố</span></div>
+ <div class="schema-row"><span class="sf">district</span><span class="st">VARCHAR(100)</span><span></span><span class="sc">-- Quận/Huyện</span></div>
+ <div class="schema-row"><span class="sf">ward</span><span class="st">VARCHAR(100)</span><span></span><span class="sc">-- Phường/Xã</span></div>
+ <div class="schema-row"><span class="sf">address_detail</span><span class="st">VARCHAR(255)</span><span></span><span class="sc">-- Số nhà, tên đường</span></div>
+ <div class="schema-row"><span class="sf">is_hcm</span><span class="st">TINYINT(1)</span><span></span><span class="sc">-- 1=TPHCM (free) · 0=tỉnh khác (+phụ phí)</span></div>
+ </div>
+
+ <div class="schema-table">
+ <div class="schema-header"><span class="schema-tname">tracking_events</span><span class="schema-tdesc">— Lịch sử trạng thái vận đơn</span></div>
+ <div class="schema-row"><span class="sf">id</span><span class="st">BIGINT UNSIGNED</span><span class="sk">PK · AI</span><span class="sc"></span></div>
+ <div class="schema-row"><span class="sf">order_id</span><span class="st">BIGINT UNSIGNED</span><span class="sk">FK</span><span class="sc">-- Ref: orders.id</span></div>
+ <div class="schema-row"><span class="sf">status</span><span class="st">VARCHAR(50)</span><span></span><span class="sc">-- Trạng thái tại thời điểm</span></div>
+ <div class="schema-row"><span class="sf">location</span><span class="st">VARCHAR(150)</span><span></span><span class="sc">-- 'Kho LA', 'Sân bay LAX', 'Đang giao HCMC'</span></div>
+ <div class="schema-row"><span class="sf">note_vi</span><span class="st">TEXT</span><span></span><span class="sc">-- Ghi chú tiếng Việt</span></div>
+ <div class="schema-row"><span class="sf">note_en</span><span class="st">TEXT</span><span></span><span class="sc">-- Ghi chú tiếng Anh</span></div>
+ <div class="schema-row"><span class="sf">photo_url</span><span class="st">VARCHAR(500)</span><span></span><span class="sc">-- Cloudinary URL ảnh check-in</span></div>
+ <div class="schema-row"><span class="sf">created_by</span><span class="st">BIGINT UNSIGNED</span><span class="sk">FK</span><span class="sc">-- Ref: users.id (staff)</span></div>
+ <div class="schema-row"><span class="sf">created_at</span><span class="st">TIMESTAMP</span><span></span><span class="sc">-- Thời điểm cập nhật</span></div>
+ </div>
+
+ <div class="schema-table">
+ <div class="schema-header"><span class="schema-tname">pricing_rules</span><span class="schema-tdesc">— Bảng giá cước (từ tài liệu dịch vụ)</span></div>
+ <div class="schema-row"><span class="sf">id</span><span class="st">INT UNSIGNED</span><span class="sk">PK · AI</span><span class="sc"></span></div>
+ <div class="schema-row"><span class="sf">service_type</span><span class="st">ENUM</span><span></span><span class="sc">-- 'us_to_vn','domestic_us','buy_for_me'</span></div>
+ <div class="schema-row"><span class="sf">from_state</span><span class="st">VARCHAR(50)</span><span></span><span class="sc">-- Tiểu bang Mỹ (NULL = tất cả)</span></div>
+ <div class="schema-row"><span class="sf">to_province</span><span class="st">VARCHAR(100)</span><span></span><span class="sc">-- NULL = HCMC (free) · có = tỉnh khác</span></div>
+ <div class="schema-row"><span class="sf">price_per_lb</span><span class="st">DECIMAL(8,2)</span><span></span><span class="sc">-- Giá USD/lbs</span></div>
+ <div class="schema-row"><span class="sf">surcharge_province</span><span class="st">DECIMAL(8,2)</span><span></span><span class="sc">-- 0.99 USD/lbs ra tỉnh (từ tài liệu)</span></div>
+ <div class="schema-row"><span class="sf">heavy_fee</span><span class="st">DECIMAL(8,2)</span><span></span><span class="sc">-- 20–30 USD nếu > 50lbs (từ tài liệu)</span></div>
+ <div class="schema-row"><span class="sf">base_price</span><span class="st">DECIMAL(8,2)</span><span></span><span class="sc">-- Phí tối thiểu</span></div>
+ <div class="schema-row"><span class="sf">est_days_min/max</span><span class="st">TINYINT</span><span></span><span class="sc">-- 7–14 ngày (từ tài liệu)</span></div>
+ <div class="schema-row"><span class="sf">is_active</span><span class="st">TINYINT(1)</span><span></span><span class="sc">-- 1 = đang áp dụng</span></div>
+ </div>
+
+ <div class="schema-table">
+ <div class="schema-header"><span class="schema-tname">products</span><span class="schema-tdesc">— Sản phẩm bán (Ensure, Dầu gió...)</span></div>
+ <div class="schema-row"><span class="sf">id</span><span class="st">BIGINT UNSIGNED</span><span class="sk">PK · AI</span><span class="sc"></span></div>
+ <div class="schema-row"><span class="sf">name_vi</span><span class="st">VARCHAR(255)</span><span></span><span class="sc">-- Tên tiếng Việt</span></div>
+ <div class="schema-row"><span class="sf">name_en</span><span class="st">VARCHAR(255)</span><span></span><span class="sc">-- Tên tiếng Anh</span></div>
+ <div class="schema-row"><span class="sf">desc_vi / desc_en</span><span class="st">TEXT</span><span></span><span class="sc">-- Mô tả song ngữ</span></div>
+ <div class="schema-row"><span class="sf">price_usd</span><span class="st">DECIMAL(10,2)</span><span></span><span class="sc">-- Giá bán USD</span></div>
+ <div class="schema-row"><span class="sf">stock_qty</span><span class="st">INT UNSIGNED</span><span></span><span class="sc">-- Tồn kho</span></div>
+ <div class="schema-row"><span class="sf">images</span><span class="st">JSON</span><span></span><span class="sc">-- Array Cloudinary URLs</span></div>
+ <div class="schema-row"><span class="sf">weight_lbs</span><span class="st">DECIMAL(8,2)</span><span></span><span class="sc">-- Tự động tính phí ship</span></div>
+ <div class="schema-row"><span class="sf">category</span><span class="st">VARCHAR(100)</span><span></span><span class="sc">-- 'supplement','health','food'</span></div>
+ <div class="schema-row"><span class="sf">is_active</span><span class="st">TINYINT(1)</span><span></span><span class="sc">-- 1 = đang bán</span></div>
+ </div>
+</div>
+
+<!-- 09 API -->
+<div class="section" id="api">
+ <div class="section-header">
+ <span class="section-num">09</span>
+ <div><div class="section-title">API ENDPOINTS</div><div class="section-desc">REST API · Base URL: <code>https://api.cuckoocargo.com/v1</code></div></div>
+ </div>
+
+ <div style="margin-bottom:20px;">
+ <div style="font-family:'Bebas Neue';font-size:18px;letter-spacing:1.5px;color:var(--black);margin-bottom:10px;"> AUTH</div>
+ <div class="endpoint"><span class="method post">POST</span><span class="ep-route">/auth/register</span><span class="ep-desc">Đăng ký tài khoản</span></div>
+ <div class="endpoint"><span class="method post">POST</span><span class="ep-route">/auth/login</span><span class="ep-desc">Đăng nhập → JWT token</span></div>
+ <div class="endpoint"><span class="method post">POST</span><span class="ep-route">/auth/refresh</span><span class="ep-desc">Refresh access token</span></div>
+ </div>
+
+ <div style="margin-bottom:20px;">
+ <div style="font-family:'Bebas Neue';font-size:18px;letter-spacing:1.5px;color:var(--black);margin-bottom:10px;"> ORDERS</div>
+ <div class="endpoint"><span class="method get">GET</span><span class="ep-route">/orders</span><span class="ep-desc">Danh sách đơn của user (pagination)</span></div>
+ <div class="endpoint"><span class="method post">POST</span><span class="ep-route">/orders</span><span class="ep-desc">Tạo đơn hàng mới</span></div>
+ <div class="endpoint"><span class="method get">GET</span><span class="ep-route">/orders/:orderCode</span><span class="ep-desc">Chi tiết đơn theo mã CC-2026-VN-XXXXX</span></div>
+ <div class="endpoint"><span class="method put">PUT</span><span class="ep-route">/orders/:id/status</span><span class="ep-desc">Cập nhật trạng thái (staff/admin)</span></div>
+ <div class="endpoint"><span class="method get">GET</span><span class="ep-route">/orders/:id/tracking</span><span class="ep-desc">Timeline tracking của đơn</span></div>
+ <div class="endpoint"><span class="method post">POST</span><span class="ep-route">/orders/:id/tracking</span><span class="ep-desc">Thêm tracking event (staff)</span></div>
+ </div>
+
+ <div style="margin-bottom:20px;">
+ <div style="font-family:'Bebas Neue';font-size:18px;letter-spacing:1.5px;color:var(--black);margin-bottom:10px;"> PRICING</div>
+ <div class="endpoint"><span class="method post">POST</span><span class="ep-route">/pricing/calculate</span><span class="ep-desc">Tính giá theo service, cân nặng, kích thước, điểm đến</span></div>
+ <div class="endpoint"><span class="method get">GET</span><span class="ep-route">/pricing/rules</span><span class="ep-desc">Bảng giá công khai</span></div>
+ <div class="endpoint"><span class="method put">PUT</span><span class="ep-route">/pricing/rules/:id</span><span class="ep-desc">Cập nhật giá (admin only)</span></div>
+ </div>
+
+ <div style="margin-bottom:20px;">
+ <div style="font-family:'Bebas Neue';font-size:18px;letter-spacing:1.5px;color:var(--black);margin-bottom:10px;"> PRODUCTS (SHOP)</div>
+ <div class="endpoint"><span class="method get">GET</span><span class="ep-route">/products</span><span class="ep-desc">Danh sách sản phẩm (Ensure, Dầu gió...)</span></div>
+ <div class="endpoint"><span class="method get">GET</span><span class="ep-route">/products/:id</span><span class="ep-desc">Chi tiết sản phẩm</span></div>
+ <div class="endpoint"><span class="method post">POST</span><span class="ep-route">/products</span><span class="ep-desc">Thêm sản phẩm (admin)</span></div>
+ </div>
+
+ <div class="callout callout-orange">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Auth Header:</strong> <code>Authorization: Bearer &lt;JWT_TOKEN&gt;</code> — hết hạn 24h. Tracking public không cần auth (khách hàng share link cho gia đình ở VN xem).</span>
+ </div>
+</div>
+
+<!-- 10 SECURITY -->
+<div class="section" id="security">
+ <div class="section-header">
+ <span class="section-num">10</span>
+ <div><div class="section-title">SECURITY</div><div class="section-desc">Bảo mật tối thiểu bắt buộc trước khi launch</div></div>
+ </div>
+ <div class="table-wrap">
+ <table>
+ <thead><tr><th>Hạng mục</th><th>Biện pháp</th><th>Priority</th></tr></thead>
+ <tbody>
+ <tr><td>Mật khẩu</td><td>bcrypt hash, salt rounds ≥ 12. Không bao giờ lưu plain text.</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td>SQL Injection</td><td>Prisma ORM / prepared statements. Không nối chuỗi SQL thủ công.</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td>HTTPS</td><td>SSL bắt buộc. HTTP → redirect HTTPS. Cloudflare Full Strict.</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td>Rate Limiting</td><td>100 req/phút/IP. Redis counter. Đặc biệt bảo vệ /auth/login.</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td>CORS</td><td>Whitelist cuckoocargo.com, api.cuckoocargo.com. Không dùng <code>*</code>.</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td>File Upload</td><td>Chỉ JPG/PNG/PDF · max 10MB · Upload thẳng Cloudinary · Không lưu server.</td><td><span class="badge badge-p1">Cao</span></td></tr>
+ <tr><td>Env Variables</td><td>Không commit .env vào git. Dùng Railway Secrets + Vercel Env.</td><td><span class="badge badge-must">Bắt buộc</span></td></tr>
+ <tr><td>Privacy</td><td>Privacy Policy page · Cookie consent banner · Không bán data khách hàng.</td><td><span class="badge badge-p1">Cao</span></td></tr>
+ </tbody>
+ </table>
+ </div>
+</div>
+
+<!-- 11 WORKFLOW -->
+<div class="section" id="workflow">
+ <div class="section-header">
+ <span class="section-num">11</span>
+ <div><div class="section-title">DEV WORKFLOW</div><div class="section-desc">Quy trình làm việc từ code đến production</div></div>
+ </div>
+ <div class="step-list">
+ <div class="step"><div class="step-circle">1</div><div class="step-content"><div class="step-title">Setup Local</div><div class="step-desc"><code>git clone → npm install → copy .env.example → docker-compose up → npx prisma migrate dev → npm run seed</code>. MySQL + Redis chạy qua Docker local.</div></div></div>
+ <div class="step"><div class="step-circle">2</div><div class="step-content"><div class="step-title">Git Branching</div><div class="step-desc"><code>main</code> = production · <code>develop</code> = staging · <code>feature/tên-tính-năng</code> = dev branch. PR vào <code>develop</code> → test OK → merge <code>main</code>.</div></div></div>
+ <div class="step"><div class="step-circle">3</div><div class="step-content"><div class="step-title">Commit Convention</div><div class="step-desc"><code>feat: thêm form đặt đơn</code> · <code>fix: sửa pricing calculator</code> · <code>style: cập nhật màu brand #F47B20</code> · <code>docs: update SOP</code></div></div></div>
+ <div class="step"><div class="step-circle">4</div><div class="step-content"><div class="step-title">Pre-merge Checklist</div><div class="step-desc"> ESLint + Prettier pass · Mobile Safari + Chrome test · Cả 2 ngôn ngữ (vi + en) hiển thị đúng · Brand colors đúng #F47B20 · Lighthouse ≥ 90</div></div></div>
+ <div class="step"><div class="step-circle">5</div><div class="step-content"><div class="step-title">Code Review</div><div class="step-desc">Mỗi PR cần 1 người approve. Checklist: security · performance · mobile responsive · brand consistency (Bebas Neue · #F47B20 · #0F0F10).</div></div></div>
+ </div>
+</div>
+
+<!-- 12 DEPLOY -->
+<div class="section" id="deploy">
+ <div class="section-header">
+ <span class="section-num">12</span>
+ <div><div class="section-title">DEPLOYMENT</div><div class="section-desc">Quy trình deploy lên production · cuckoocargo.com</div></div>
+ </div>
+ <div class="card-grid">
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">FRONTEND (VERCEL)</div>
+ <div class="card-body">Push <code>main</code> → Vercel auto build · Production: <code>cuckoocargo.com</code> · Env vars trong Vercel Dashboard · Rollback 1 click</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">BACKEND (RAILWAY)</div>
+ <div class="card-body">GitHub connect → auto deploy · MySQL + Redis cùng Railway · Health: <code>/api/health</code> · Backup MySQL daily</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">DOMAIN & CDN</div>
+ <div class="card-body"><code>cuckoocargo.com</code> → Vercel · <code>api.cuckoocargo.com</code> → Railway · Cloudflare DNS + DDoS + SSL auto</div>
+ </div>
+ <div class="card">
+ <div class="card-icon"></div>
+ <div class="card-title">MONITORING</div>
+ <div class="card-body">UptimeRobot (uptime) · Google Analytics 4 · Search Console · Sentry (errors) · Alert email khi downtime</div>
+ </div>
+ </div>
+</div>
+
+<!-- 13 ROADMAP -->
+<div class="section" id="roadmap">
+ <div class="section-header">
+ <span class="section-num">13</span>
+ <div><div class="section-title">ROADMAP</div><div class="section-desc">Kế hoạch từ 0 đến launch theo 4 giai đoạn</div></div>
+ </div>
+
+ <div class="roadmap-grid">
+ <div class="phase-col">
+ <div class="phase-label">Phase 01</div>
+ <div class="phase-name" style="color:var(--orange);">FOUNDATION</div>
+ <div class="phase-weeks">⏱ Tuần 1–4</div>
+ <div class="phase-task">Setup repo · CI/CD · Docker</div>
+ <div class="phase-task">Database MySQL schema</div>
+ <div class="phase-task">Auth API (register/login)</div>
+ <div class="phase-task">Trang chủ Hero + brand</div>
+ <div class="phase-task">3 trang dịch vụ</div>
+ <div class="phase-task">Trang liên hệ + footer</div>
+ <div class="phase-task">SEO meta tags cơ bản</div>
+ </div>
+ <div class="phase-col">
+ <div class="phase-label">Phase 02</div>
+ <div class="phase-name" style="color:var(--black);">CORE FEATURES</div>
+ <div class="phase-weeks">⏱ Tuần 5–8</div>
+ <div class="phase-task">Form đặt đơn 5 bước</div>
+ <div class="phase-task">Pricing calculator</div>
+ <div class="phase-task">Trang tracking vận đơn</div>
+ <div class="phase-task">Admin dashboard</div>
+ <div class="phase-task">Email notifications</div>
+ <div class="phase-task">Hướng dẫn gửi hàng</div>
+ <div class="phase-task">i18n Việt + English</div>
+ </div>
+ <div class="phase-col">
+ <div class="phase-label">Phase 03</div>
+ <div class="phase-name" style="color:var(--orange-deep);">LAUNCH & SEO</div>
+ <div class="phase-weeks">⏱ Tuần 9–12</div>
+ <div class="phase-task">Google Analytics 4</div>
+ <div class="phase-task">Search Console · Sitemap</div>
+ <div class="phase-task">Google Business LA</div>
+ <div class="phase-task">Blog + 5 bài SEO đầu</div>
+ <div class="phase-task">Performance optimize</div>
+ <div class="phase-task">Lighthouse ≥ 90</div>
+ <div class="phase-task"> SOFT LAUNCH</div>
+ </div>
+ <div class="phase-col">
+ <div class="phase-label">Phase 04</div>
+ <div class="phase-name" style="color:var(--gray);">EXPAND</div>
+ <div class="phase-weeks">⏱ Tháng 4+</div>
+ <div class="phase-task">Shop Ensure · Dầu gió</div>
+ <div class="phase-task">Tài khoản khách hàng</div>
+ <div class="phase-task">Stripe payment</div>
+ <div class="phase-task">Mua hộ full workflow</div>
+ <div class="phase-task">SMS (Twilio)</div>
+ <div class="phase-task">Mobile app (Phase 5)</div>
+ <div class="phase-task">Loyalty program</div>
+ </div>
+ </div>
+
+ <div class="callout callout-dark">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Mục tiêu:</strong> Phase 1–3 = 12 tuần → Website cuckoocargo.com live đầy đủ với brand #F47B20 · Bebas Neue · form đặt đơn · tracking · SEO Los Angeles.</span>
+ </div>
+
+ <div class="callout callout-orange" style="margin-top:12px;">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Bước tiếp theo:</strong> Xác nhận bảng giá cước thực tế để seed vào bảng <code>pricing_rules</code>. Sau đó bắt đầu code <strong>Homepage</strong> với đúng Bebas Neue + #F47B20 + layout theo brand.</span>
+ </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+</body>
+</html>

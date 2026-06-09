@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hướng Dẫn Xây Website Full-Stack với Claude Code — Cuckoo Cargo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+ --orange: #F47B20; --orange-deep: #D4650E; --orange-bg: #FFF3E8;
+ --black: #0F0F10; --surface: #1A1A1E; --elevated: #2A2A2E;
+ --white: #FFFFFF; --gray: #8E8E93; --gray-light: #F5F5F7;
+ --gray-border: #E5E5EA; --text-primary: #0F0F10;
+ --text-secondary: #3A3A3C; --text-muted: #8E8E93;
+ --green: #1a6b4a; --green-bg: #e8f5ef;
+ --blue: #1e40af; --blue-bg: #dbeafe;
+ --red: #991b1b; --red-bg: #fee2e2;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--gray-light); font-family:'Inter',sans-serif; font-size:14px; line-height:1.7; color:var(--text-primary); }
+
+/* SIDEBAR */
+.sidebar { position:fixed; left:0; top:0; bottom:0; width:270px; background:var(--black); overflow-y:auto; z-index:100; }
+.sidebar-brand { padding:24px; border-bottom:1px solid var(--elevated); }
+.sb-logo { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
+.sb-icon { width:38px; height:38px; background:linear-gradient(135deg,#F47B20,#D4650E); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+.sb-name { font-family:'Bebas Neue'; font-size:20px; letter-spacing:2px; color:var(--white); }
+.sb-sub { font-size:10px; color:var(--gray); letter-spacing:1.5px; text-transform:uppercase; }
+.nav-group { padding:12px 0 4px; }
+.nav-group-title { font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:#444; padding:0 20px; margin-bottom:4px; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:8px 20px; color:var(--gray); text-decoration:none; font-size:12px; transition:all 0.15s; cursor:pointer; }
+.nav-item:hover { color:var(--orange); background:rgba(244,123,32,0.07); }
+.nav-item.active { color:var(--orange); }
+.nav-num { font-family:'DM Mono'; font-size:10px; color:#444; min-width:22px; }
+
+/* MAIN */
+.main { margin-left:270px; }
+
+/* COVER */
+.cover { background:var(--black); padding:72px 60px 60px; position:relative; overflow:hidden; }
+.cover::before { content:''; position:absolute; top:-20%; right:-5%; width:600px; height:600px; background:radial-gradient(circle, rgba(244,123,32,0.12) 0%, transparent 70%); pointer-events:none; }
+.cover::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(135deg,#F47B20,#D4650E); }
+.cover-label { display:inline-flex; align-items:center; gap:8px; border:1px solid rgba(244,123,32,0.35); color:var(--orange); font-size:10px; letter-spacing:2.5px; text-transform:uppercase; padding:6px 14px; border-radius:3px; margin-bottom:24px; }
+.cover-title { font-family:'Bebas Neue'; font-size:64px; letter-spacing:3px; color:var(--white); line-height:0.95; margin-bottom:8px; }
+.cover-title span { color:var(--orange); }
+.cover-sub { font-family:'Bebas Neue'; font-size:18px; letter-spacing:3px; color:var(--gray); margin-bottom:36px; }
+.cover-alert { background:rgba(244,123,32,0.1); border:1px solid rgba(244,123,32,0.3); border-radius:10px; padding:16px 20px; font-size:13px; color:#ccc; margin-bottom:36px; max-width:640px; line-height:1.7; }
+.cover-alert strong { color:var(--orange); }
+.meta-row { display:flex; gap:40px; flex-wrap:wrap; }
+.meta-item .ml { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#444; margin-bottom:3px; }
+.meta-item .mv { font-size:13px; color:#999; }
+
+/* CONTENT */
+.content { padding:0 60px 80px; }
+
+/* SECTION */
+.section { padding-top:56px; border-top:1px solid var(--gray-border); margin-top:56px; }
+.section:first-child { border-top:none; margin-top:44px; }
+.section-header { display:flex; align-items:flex-start; gap:16px; margin-bottom:28px; }
+.section-num { font-family:'DM Mono'; font-size:10px; color:var(--orange); background:var(--orange-bg); border:1px solid rgba(244,123,32,0.2); padding:4px 10px; border-radius:3px; white-space:nowrap; margin-top:6px; }
+.section-title { font-family:'Bebas Neue'; font-size:32px; letter-spacing:2px; color:var(--black); line-height:1; margin-bottom:4px; }
+.section-desc { color:var(--text-muted); font-size:13px; }
+
+/* BIG PICTURE DIAGRAM */
+.arch-diagram { background:var(--black); border-radius:14px; padding:36px; margin-bottom:24px; border:1px solid var(--elevated); }
+.arch-row { display:flex; align-items:center; justify-content:center; gap:0; flex-wrap:wrap; }
+.arch-box { background:var(--surface); border:1px solid var(--elevated); border-radius:10px; padding:16px 20px; text-align:center; min-width:140px; }
+.arch-box.highlight { border-color:var(--orange); background:rgba(244,123,32,0.07); }
+.arch-box-icon { font-size:24px; margin-bottom:8px; }
+.arch-box-title { font-family:'Bebas Neue'; font-size:16px; letter-spacing:1px; color:var(--white); margin-bottom:3px; }
+.arch-box-sub { font-size:10px; color:var(--gray); }
+.arch-arrow { font-size:20px; color:var(--orange); padding:0 12px; }
+.arch-label { text-align:center; margin:16px 0 8px; font-size:10px; color:var(--gray); letter-spacing:1.5px; text-transform:uppercase; }
+
+/* CHECKLIST CARDS */
+.check-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:16px; margin-bottom:24px; }
+.check-card { background:var(--white); border:1px solid var(--gray-border); border-radius:12px; padding:22px; }
+.check-card-header { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.check-card-icon { font-size:22px; }
+.check-card-title { font-family:'Bebas Neue'; font-size:17px; letter-spacing:1px; color:var(--black); }
+.check-item { display:flex; align-items:flex-start; gap:10px; padding:7px 0; border-bottom:1px solid var(--gray-border); font-size:13px; }
+.check-item:last-child { border-bottom:none; }
+.check-box { width:18px; height:18px; border:2px solid var(--gray-border); border-radius:4px; flex-shrink:0; margin-top:1px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
+.check-box:hover { border-color:var(--orange); }
+.check-box.done { background:var(--orange); border-color:var(--orange); color:white; font-size:11px; }
+.check-text { flex:1; }
+.check-text .ct { color:var(--text-secondary); }
+.check-text .cs { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.check-text a { color:var(--orange); text-decoration:none; }
+
+/* STEP LIST */
+.steps { display:flex; flex-direction:column; gap:0; }
+.step { display:flex; gap:20px; padding:20px 0; border-bottom:1px solid var(--gray-border); }
+.step:last-child { border-bottom:none; }
+.step-num { min-width:40px; height:40px; border-radius:50%; background:var(--black); color:var(--orange); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue'; font-size:16px; flex-shrink:0; margin-top:1px; }
+.step-body {}
+.step-title { font-weight:700; color:var(--black); font-size:14px; margin-bottom:4px; }
+.step-desc { color:var(--text-muted); font-size:13px; margin-bottom:8px; }
+
+/* CODE */
+.code { background:var(--black); border-radius:10px; padding:16px 20px; font-family:'DM Mono',monospace; font-size:12px; color:#86efac; overflow-x:auto; margin:8px 0; line-height:1.8; border:1px solid var(--elevated); }
+.code .cm { color:#555; }
+.code .ck { color:#93c5fd; }
+.code .cv { color:#fcd34d; }
+.code .co { color:var(--orange); }
+
+/* CALLOUTS */
+.callout { border-radius:8px; padding:14px 18px; margin-bottom:14px; display:flex; gap:12px; font-size:13px; line-height:1.65; }
+.callout-orange { background:var(--orange-bg); border-left:3px solid var(--orange); }
+.callout-green { background:var(--green-bg); border-left:3px solid var(--green); }
+.callout-blue { background:var(--blue-bg); border-left:3px solid var(--blue); }
+.callout-dark { background:var(--black); border-left:3px solid var(--orange); color:var(--gray); }
+.callout-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.callout-text strong { color:var(--black); }
+.callout-dark .callout-text strong { color:var(--orange); }
+.callout-green .callout-text strong { color:var(--green); }
+
+/* TABLE */
+.table-wrap { overflow-x:auto; margin-bottom:20px; border-radius:10px; border:1px solid var(--gray-border); overflow:hidden; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+thead th { background:var(--black); color:var(--gray); padding:10px 16px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; font-weight:500; }
+tbody td { padding:11px 16px; border-bottom:1px solid var(--gray-border); vertical-align:top; background:var(--white); }
+tbody tr:hover td { background:var(--gray-light); }
+tbody tr:last-child td { border-bottom:none; }
+
+/* BADGES */
+.badge { display:inline-block; padding:3px 9px; border-radius:3px; font-size:10px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; }
+.badge-free { background:var(--green-bg); color:var(--green); }
+.badge-paid { background:var(--orange-bg); color:var(--orange-deep); }
+.badge-must { background:var(--orange); color:var(--white); }
+.badge-opt { background:var(--gray-light); color:var(--gray); border:1px solid var(--gray-border); }
+
+/* WORKFLOW TIMELINE */
+.timeline { display:flex; flex-direction:column; gap:0; }
+.tl-item { display:flex; gap:20px; padding:16px 0; }
+.tl-left { display:flex; flex-direction:column; align-items:center; gap:0; min-width:48px; }
+.tl-dot { width:12px; height:12px; border-radius:50%; background:var(--orange); flex-shrink:0; }
+.tl-line { width:2px; flex:1; background:var(--gray-border); margin:4px 0; min-height:20px; }
+.tl-item:last-child .tl-line { display:none; }
+.tl-body { padding-bottom:12px; flex:1; }
+.tl-time { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--orange); margin-bottom:4px; }
+.tl-title { font-weight:700; color:var(--black); font-size:14px; margin-bottom:4px; }
+.tl-desc { font-size:13px; color:var(--text-muted); line-height:1.65; }
+
+/* INFO CARD */
+.info-card { background:var(--white); border:1px solid var(--gray-border); border-radius:12px; overflow:hidden; margin-bottom:16px; }
+.info-card-header { background:var(--black); padding:12px 20px; display:flex; align-items:center; gap:10px; }
+.info-card-title { font-family:'Bebas Neue'; font-size:17px; letter-spacing:1.5px; color:var(--white); }
+.info-card-body { padding:20px; }
+.info-row { display:grid; grid-template-columns:180px 1fr; gap:12px; padding:9px 0; border-bottom:1px solid var(--gray-border); font-size:13px; }
+.info-row:last-child { border-bottom:none; }
+.info-label { color:var(--text-muted); font-weight:500; }
+.info-value { color:var(--text-secondary); }
+
+/* DATA MAP */
+.data-map { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:24px; }
+.data-box { background:var(--white); border:1px solid var(--gray-border); border-radius:12px; padding:20px; }
+.data-box-icon { font-size:28px; margin-bottom:10px; }
+.data-box-title { font-family:'Bebas Neue'; font-size:18px; letter-spacing:1px; color:var(--black); margin-bottom:8px; }
+.data-box-where { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--orange); margin-bottom:8px; }
+.data-box-items { font-size:12px; color:var(--text-muted); line-height:1.8; }
+
+/* PROMPT EXAMPLES */
+.prompt-example { background:var(--black); border-radius:10px; padding:20px 24px; margin-bottom:12px; border:1px solid var(--elevated); }
+.prompt-you { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gray); margin-bottom:8px; }
+.prompt-text { font-family:'DM Mono'; font-size:12px; color:#86efac; line-height:1.8; }
+.prompt-result { margin-top:10px; padding-top:10px; border-top:1px solid var(--elevated); font-size:12px; color:#93c5fd; }
+
+/* ROADMAP */
+.phase-grid { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--gray-border); border-radius:12px; overflow:hidden; margin-bottom:24px; }
+.phase-col { background:var(--white); padding:20px; border-right:1px solid var(--gray-border); }
+.phase-col:last-child { border-right:none; }
+.phase-lbl { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px; }
+.phase-name { font-family:'Bebas Neue'; font-size:18px; letter-spacing:1px; margin-bottom:2px; }
+.phase-weeks { font-size:11px; color:var(--text-muted); margin-bottom:14px; }
+.phase-task { font-size:12px; color:var(--text-secondary); padding:5px 0; border-bottom:1px solid var(--gray-border); display:flex; align-items:flex-start; gap:6px; line-height:1.4; }
+.phase-task::before { content:'›'; color:var(--orange); flex-shrink:0; font-weight:700; }
+.phase-task:last-child { border-bottom:none; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+ <div class="sidebar-brand">
+ <div class="sb-logo">
+ <div class="sb-icon"></div>
+ <span class="sb-name">CUCKOO CARGO</span>
+ </div>
+ <div class="sb-sub">Hướng dẫn lập trình Full-Stack</div>
+ </div>
+
+ <div class="nav-group">
+ <div class="nav-group-title">Tổng quan</div>
+ <a class="nav-item" href="#big-picture"><span class="nav-num">01</span>Bức tranh toàn cảnh</a>
+ <a class="nav-item" href="#tools"><span class="nav-num">02</span>Cài đặt công cụ</a>
+ <a class="nav-item" href="#accounts"><span class="nav-num">03</span>Tạo tài khoản</a>
+ </div>
+ <div class="nav-group">
+ <div class="nav-group-title">Thiết lập dự án</div>
+ <a class="nav-item" href="#project-setup"><span class="nav-num">04</span>Khởi tạo dự án</a>
+ <a class="nav-item" href="#data-storage"><span class="nav-num">05</span>Dữ liệu lưu ở đâu?</a>
+ <a class="nav-item" href="#database"><span class="nav-num">06</span>Setup Database</a>
+ </div>
+ <div class="nav-group">
+ <div class="nav-group-title">Làm việc với AI</div>
+ <a class="nav-item" href="#claude-workflow"><span class="nav-num">07</span>Workflow Claude Code</a>
+ <a class="nav-item" href="#prompt-guide"><span class="nav-num">08</span>Cách ra lệnh cho AI</a>
+ <a class="nav-item" href="#daily-routine"><span class="nav-num">09</span>Routine hàng ngày</a>
+ </div>
+ <div class="nav-group">
+ <div class="nav-group-title">Triển khai</div>
+ <a class="nav-item" href="#info-needed"><span class="nav-num">10</span>Thông tin cần chuẩn bị</a>
+ <a class="nav-item" href="#deploy"><span class="nav-num">11</span>Đưa website lên mạng</a>
+ <a class="nav-item" href="#roadmap"><span class="nav-num">12</span>Lộ trình 12 tuần</a>
+ </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- COVER -->
+<div class="cover">
+ <div class="cover-label"> Full-Stack Development Guide · Dành cho người không biết code</div>
+ <div class="cover-title">HƯỚNG DẪN XÂY<br>WEBSITE <span>CUCKOO CARGO</span><br>CÙNG AI</div>
+ <div class="cover-sub">Full-Stack · Next.js · Node.js · MySQL · Claude Code</div>
+ <div class="cover-alert">
+ <strong> Tài liệu này dành cho bạn — người không biết lập trình.</strong><br>
+ Tôi sẽ giải thích mọi thứ bằng ngôn ngữ đơn giản nhất. Bạn chỉ cần làm đúng từng bước,
+ còn toàn bộ việc viết code sẽ do <strong>Claude Code (AI)</strong> thực hiện.
+ Bạn là <strong>người chỉ đạo</strong>, AI là <strong>người thực thi</strong>.
+ </div>
+ <div class="meta-row">
+ <div class="meta-item"><div class="ml">Dành cho</div><div class="mv">Người không biết code</div></div>
+ <div class="meta-item"><div class="ml">AI hỗ trợ</div><div class="mv">Claude Code (Terminal)</div></div>
+ <div class="meta-item"><div class="ml">Tech Stack</div><div class="mv">Next.js · Node.js · MySQL</div></div>
+ <div class="meta-item"><div class="ml">Thời gian setup</div><div class="mv">2–3 giờ ban đầu</div></div>
+ </div>
+</div>
+
+<div class="content">
+
+<!-- 01 BIG PICTURE -->
+<div class="section" id="big-picture">
+ <div class="section-header">
+ <span class="section-num">01</span>
+ <div><div class="section-title">BỨC TRANH TOÀN CẢNH</div><div class="section-desc">Website hoạt động như thế nào? Các phần nối với nhau ra sao?</div></div>
+ </div>
+
+ <div class="callout callout-orange">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Hãy hình dung website như một nhà hàng:</strong> Khách hàng (người dùng) nhìn thấy <strong>phòng ăn đẹp</strong> (Frontend). Bếp phía sau là <strong>server xử lý logic</strong> (Backend). Kho lạnh lưu nguyên liệu là <strong>Database</strong>. Ba phần này phải phối hợp với nhau để website hoạt động.</span>
+ </div>
+
+ <div class="arch-diagram">
+ <div class="arch-label" style="color:#555;margin-top:0;"> NGƯỜI DÙNG THẤY GÌ?</div>
+ <div class="arch-row">
+ <div class="arch-box highlight">
+ <div class="arch-box-icon"></div>
+ <div class="arch-box-title">KHÁCH HÀNG</div>
+ <div class="arch-box-sub">Mở cuckoocargo.com<br>trên điện thoại / máy tính</div>
+ </div>
+ <div class="arch-arrow">→</div>
+ <div class="arch-box highlight">
+ <div class="arch-box-icon"></div>
+ <div class="arch-box-title">FRONTEND</div>
+ <div class="arch-box-sub">Next.js — Giao diện đẹp<br>Bebas Neue · #F47B20<br>Deploy trên <strong>Vercel</strong></div>
+ </div>
+ <div class="arch-arrow">↔</div>
+ <div class="arch-box">
+ <div class="arch-box-icon"></div>
+ <div class="arch-box-title">BACKEND / API</div>
+ <div class="arch-box-sub">Node.js + Express<br>Xử lý đơn hàng, tính giá<br>Deploy trên <strong>Railway</strong></div>
+ </div>
+ <div class="arch-arrow">↔</div>
+ <div class="arch-box">
+ <div class="arch-box-icon"></div>
+ <div class="arch-box-title">DATABASE</div>
+ <div class="arch-box-sub">MySQL 8.0<br>Lưu đơn hàng, khách hàng<br>Trên <strong>Railway</strong></div>
+ </div>
+ </div>
+ <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--elevated);">
+ <div class="arch-label"> CÁC DỊCH VỤ PHỤ TRỢ</div>
+ <div class="arch-row" style="gap:16px;">
+ <div class="arch-box" style="min-width:120px;">
+ <div class="arch-box-icon"></div>
+ <div class="arch-box-title">CLOUDINARY</div>
+ <div class="arch-box-sub">Lưu ảnh hàng hóa<br>PDF invoice</div>
+ </div>
+ <div class="arch-box" style="min-width:120px;">
+ <div class="arch-box-icon"></div>
+ <div class="arch-box-title">SENDGRID</div>
+ <div class="arch-box-sub">Gửi email thông báo<br>cho khách hàng</div>
+ </div>
+ <div class="arch-box" style="min-width:120px;">
+ <div class="arch-box-icon"></div>
+ <div class="arch-box-title">CLOUDFLARE</div>
+ <div class="arch-box-sub">Domain · SSL · CDN<br>cuckoocargo.com</div>
+ </div>
+ <div class="arch-box" style="min-width:120px;">
+ <div class="arch-box-icon"></div>
+ <div class="arch-box-title">GITHUB</div>
+ <div class="arch-box-sub">Lưu code · Lịch sử<br>thay đổi</div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="callout callout-blue">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Vai trò của bạn vs Claude Code:</strong><br>
+ <strong>Bạn:</strong> Mô tả tính năng cần làm → Ra lệnh cho Claude bằng tiếng Việt → Kiểm tra kết quả<br>
+ <strong>Claude Code:</strong> Viết toàn bộ code → Sửa lỗi → Giải thích từng bước</span>
+ </div>
+</div>
+
+
+<!-- 02 TOOLS -->
+<div class="section" id="tools">
+ <div class="section-header">
+ <span class="section-num">02</span>
+ <div><div class="section-title">CÀI ĐẶT CÔNG CỤ</div><div class="section-desc">Cài 1 lần duy nhất — sau đó dùng mãi mãi</div></div>
+ </div>
+
+ <div class="callout callout-green">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Thứ tự quan trọng!</strong> Cài theo đúng thứ tự bên dưới để tránh lỗi. Mỗi bước tôi đã ghi link download và lệnh cài đặt cụ thể.</span>
+ </div>
+
+ <div class="steps">
+
+ <div class="step">
+ <div class="step-num">1</div>
+ <div class="step-body">
+ <div class="step-title"> Homebrew (chỉ Mac) — Trình quản lý phần mềm</div>
+ <div class="step-desc">Homebrew giúp cài các phần mềm lập trình trên Mac dễ dàng hơn nhiều.</div>
+ <div class="callout callout-dark" style="margin:8px 0;">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Mở Terminal</strong> (Command + Space → gõ "Terminal" → Enter) rồi paste lệnh sau:<br>
+ <code style="color:#86efac;">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></span>
+ </div>
+ <div class="step-desc">Gõ mật khẩu Mac khi được hỏi. Chờ khoảng 3–5 phút.</div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">2</div>
+ <div class="step-body">
+ <div class="step-title"> Node.js — "Máy chạy" JavaScript</div>
+ <div class="step-desc">Node.js cho phép chạy JavaScript (ngôn ngữ lập trình web) trên máy tính của bạn.</div>
+ <div class="code">
+<span class="cm"># Cài Node.js phiên bản ổn định (LTS)</span>
+brew install node@20
+
+<span class="cm"># Kiểm tra đã cài thành công chưa</span>
+node --version <span class="cm"># Phải hiện: v20.x.x</span>
+npm --version <span class="cm"># Phải hiện: 10.x.x</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">3</div>
+ <div class="step-body">
+ <div class="step-title"> Git — Hệ thống lưu lịch sử code</div>
+ <div class="step-desc">Git như "Ctrl+Z không giới hạn" cho code — bạn có thể quay lại bất kỳ phiên bản nào trong quá khứ.</div>
+ <div class="code">
+brew install git
+
+<span class="cm"># Đặt tên và email (dùng email GitHub của bạn)</span>
+git config --global user.name "Tuan Vo"
+git config --global user.email "vohoangtuan0601@gmail.com"
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">4</div>
+ <div class="step-body">
+ <div class="step-title"> VS Code — Trình soạn thảo code (Editor)</div>
+ <div class="step-desc">VS Code là nơi bạn xem và chỉnh sửa code. Dù Claude Code tự viết, bạn vẫn cần VS Code để xem kết quả.</div>
+ <div class="callout callout-dark">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Download:</strong> <a href="https://code.visualstudio.com" style="color:var(--orange);">code.visualstudio.com</a> → Chọn "Download for Mac" → Cài như app thường.</span>
+ </div>
+ <div class="step-desc" style="margin-top:8px;"><strong>Extensions cần cài trong VS Code:</strong></div>
+ <div class="code">
+<span class="cm"># Mở VS Code → nhấn Ctrl+P (hoặc Cmd+P trên Mac) → paste từng dòng</span>
+ext install bradlc.vscode-tailwindcss
+ext install esbenp.prettier-vscode
+ext install dbaeumer.vscode-eslint
+ext install Prisma.prisma
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">5</div>
+ <div class="step-body">
+ <div class="step-title"> Claude Code — AI viết code cho bạn</div>
+ <div class="step-desc">Đây là công cụ quan trọng nhất! Claude Code chạy trong Terminal và sẽ viết toàn bộ code theo lệnh của bạn bằng tiếng Việt.</div>
+ <div class="code">
+<span class="cm"># Cài Claude Code qua npm</span>
+npm install -g @anthropic-ai/claude-code
+
+<span class="cm"># Kiểm tra đã cài chưa</span>
+claude --version
+ </div>
+ <div class="callout callout-orange" style="margin-top:8px;">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Cần API Key của Anthropic.</strong> Đăng ký tại <a href="https://console.anthropic.com" style="color:var(--orange-deep);">console.anthropic.com</a> → Tạo API Key → Chạy <code>claude login</code> và paste key vào.</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">6</div>
+ <div class="step-body">
+ <div class="step-title"> MySQL Workbench — Xem dữ liệu trực quan</div>
+ <div class="step-desc">MySQL Workbench giúp bạn xem bảng dữ liệu trực quan như Excel — không cần gõ lệnh phức tạp.</div>
+ <div class="callout callout-dark">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Download:</strong> <a href="https://dev.mysql.com/downloads/workbench/" style="color:var(--orange);">dev.mysql.com/downloads/workbench</a> → Chọn macOS → Download.</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">7</div>
+ <div class="step-body">
+ <div class="step-title"> Docker Desktop — Chạy database trên máy local</div>
+ <div class="step-desc">Docker tạo ra một "máy tính ảo" nhỏ trong máy bạn để chạy MySQL và Redis mà không cần cài phức tạp.</div>
+ <div class="callout callout-dark">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Download:</strong> <a href="https://www.docker.com/products/docker-desktop/" style="color:var(--orange);">docker.com/products/docker-desktop</a> → Chọn "Download for Mac".</span>
+ </div>
+ <div class="code">
+<span class="cm"># Kiểm tra Docker đã hoạt động</span>
+docker --version <span class="cm"># Phải hiện: Docker version 24.x.x</span>
+ </div>
+ </div>
+ </div>
+
+ </div>
+</div>
+
+
+<!-- 03 ACCOUNTS -->
+<div class="section" id="accounts">
+ <div class="section-header">
+ <span class="section-num">03</span>
+ <div><div class="section-title">TẠO TÀI KHOẢN</div><div class="section-desc">Các dịch vụ cần đăng ký — hầu hết miễn phí</div></div>
+ </div>
+
+ <div class="table-wrap">
+ <table>
+ <thead><tr><th>Dịch vụ</th><th>Dùng để làm gì?</th><th>Chi phí</th><th>Link đăng ký</th></tr></thead>
+ <tbody>
+ <tr>
+ <td><strong> GitHub</strong></td>
+ <td>Lưu trữ code — như Google Drive nhưng cho code. Bắt buộc phải có.</td>
+ <td><span class="badge badge-free">Miễn phí</span></td>
+ <td>github.com</td>
+ </tr>
+ <tr>
+ <td><strong> Vercel</strong></td>
+ <td>Hosting cho Frontend (Next.js). Tự động deploy khi bạn push code lên GitHub.</td>
+ <td><span class="badge badge-free">Miễn phí</span></td>
+ <td>vercel.com</td>
+ </tr>
+ <tr>
+ <td><strong> Railway</strong></td>
+ <td>Hosting cho Backend (Node.js) và Database (MySQL). Đơn giản nhất cho người mới.</td>
+ <td><span class="badge badge-paid">~$10/tháng</span></td>
+ <td>railway.app</td>
+ </tr>
+ <tr>
+ <td><strong> Cloudinary</strong></td>
+ <td>Lưu ảnh hàng hóa, ảnh tracking. Tự động tối ưu ảnh WebP.</td>
+ <td><span class="badge badge-free">Miễn phí 25GB</span></td>
+ <td>cloudinary.com</td>
+ </tr>
+ <tr>
+ <td><strong> SendGrid (Twilio)</strong></td>
+ <td>Gửi email thông báo đơn hàng, tracking cho khách hàng.</td>
+ <td><span class="badge badge-free">Miễn phí 100 email/ngày</span></td>
+ <td>sendgrid.com</td>
+ </tr>
+ <tr>
+ <td><strong> Namecheap/GoDaddy</strong></td>
+ <td>Mua domain cuckoocargo.com (~$10/năm)</td>
+ <td><span class="badge badge-paid">~$10/năm</span></td>
+ <td>namecheap.com</td>
+ </tr>
+ <tr>
+ <td><strong> Cloudflare</strong></td>
+ <td>DNS, SSL (HTTPS), CDN, chống tấn công. Kết nối domain với website.</td>
+ <td><span class="badge badge-free">Miễn phí</span></td>
+ <td>cloudflare.com</td>
+ </tr>
+ <tr>
+ <td><strong> Anthropic Console</strong></td>
+ <td>API Key để dùng Claude Code. Cần nạp tiền để dùng ($5–20/tháng tùy dùng nhiều ít).</td>
+ <td><span class="badge badge-paid">$5–20/tháng</span></td>
+ <td>console.anthropic.com</td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+
+ <div class="callout callout-green">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Chi phí tổng mỗi tháng khi mới bắt đầu:</strong> Railway (~$10) + Anthropic (~$10) + domain ($1/tháng) = khoảng <strong>$20–25/tháng</strong>. Khi website lớn hơn mới cần nâng cấp.</span>
+ </div>
+</div>
+
+
+<!-- 04 PROJECT SETUP -->
+<div class="section" id="project-setup">
+ <div class="section-header">
+ <span class="section-num">04</span>
+ <div><div class="section-title">KHỞI TẠO DỰ ÁN</div><div class="section-desc">Tạo cấu trúc thư mục và kết nối GitHub — làm 1 lần duy nhất</div></div>
+ </div>
+
+ <div class="callout callout-orange">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Tạo một thư mục chính cho toàn bộ dự án.</strong> Mọi code, file, database đều sẽ nằm trong thư mục này. Đề xuất: <code>~/Desktop/cuckoo-cargo/</code></span>
+ </div>
+
+ <div class="steps">
+ <div class="step">
+ <div class="step-num">1</div>
+ <div class="step-body">
+ <div class="step-title">Tạo thư mục dự án</div>
+ <div class="code">
+<span class="cm"># Mở Terminal → paste từng dòng</span>
+cd ~/Desktop
+mkdir cuckoo-cargo
+cd cuckoo-cargo
+
+<span class="cm"># Tạo 2 thư mục con: frontend và backend</span>
+mkdir frontend backend
+ls <span class="cm"># Kiểm tra: phải thấy "frontend" và "backend"</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">2</div>
+ <div class="step-body">
+ <div class="step-title">Tạo Repository trên GitHub</div>
+ <div class="step-desc">Repository = "kho chứa code" trên GitHub. Mỗi khi bạn thay đổi code, GitHub lưu lại lịch sử.</div>
+ <div class="steps" style="margin-left:20px;">
+ <div style="padding:8px 0;border-bottom:1px solid var(--gray-border);font-size:13px;">1. Mở <strong>github.com</strong> → Đăng nhập → Nhấn nút <strong>"New"</strong> (màu xanh)</div>
+ <div style="padding:8px 0;border-bottom:1px solid var(--gray-border);font-size:13px;">2. Repository name: <strong>cuckoo-cargo</strong></div>
+ <div style="padding:8px 0;border-bottom:1px solid var(--gray-border);font-size:13px;">3. Chọn <strong>Private</strong> (không public code)</div>
+ <div style="padding:8px 0;font-size:13px;">4. Nhấn <strong>"Create repository"</strong></div>
+ </div>
+ <div class="code" style="margin-top:12px;">
+<span class="cm"># Kết nối thư mục local với GitHub</span>
+cd ~/Desktop/cuckoo-cargo
+git init
+git remote add origin https://github.com/TÊN_GITHUB_CỦA_BẠN/cuckoo-cargo.git
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">3</div>
+ <div class="step-body">
+ <div class="step-title">Tạo dự án Next.js (Frontend) — Claude Code làm hộ</div>
+ <div class="step-desc">Mở Terminal, điều hướng vào thư mục frontend, rồi khởi động Claude Code:</div>
+ <div class="code">
+<span class="cm"># Vào thư mục frontend</span>
+cd ~/Desktop/cuckoo-cargo/frontend
+
+<span class="cm"># Khởi động Claude Code</span>
+claude
+
+<span class="cm"># Rồi gõ lệnh cho Claude (bằng tiếng Việt):</span>
+<span class="co">> Hãy tạo project Next.js 14 với App Router, Tailwind CSS.
+ Tên project là cuckoo-cargo-frontend.
+ Cài thêm: next-intl (để hỗ trợ 2 ngôn ngữ vi/en).
+ Tạo cấu trúc thư mục theo SOP của Cuckoo Cargo.</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">4</div>
+ <div class="step-body">
+ <div class="step-title">Tạo dự án Backend (Node.js + Express)</div>
+ <div class="code">
+cd ~/Desktop/cuckoo-cargo/backend
+claude
+
+<span class="co">> Tạo project Node.js với Express, Prisma ORM kết nối MySQL.
+ Cài: express, prisma, @prisma/client, cors, helmet, express-rate-limit,
+ bcryptjs, jsonwebtoken, multer, dotenv.
+ Tạo cấu trúc: src/routes, src/controllers, src/models, src/middleware, src/services.</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">5</div>
+ <div class="step-body">
+ <div class="step-title">Tạo file docker-compose.yml — Chạy MySQL và Redis local</div>
+ <div class="code">
+cd ~/Desktop/cuckoo-cargo
+claude
+
+<span class="co">> Tạo file docker-compose.yml để chạy:
+ - MySQL 8.0 với database tên "cuckoo_cargo", user "cargo_user", password "CargoPass2026!"
+ - Redis 7 để cache
+ - Expose MySQL port 3306, Redis port 6379</span>
+ </div>
+ <div class="code" style="margin-top:8px;">
+<span class="cm"># Khởi động MySQL và Redis (mỗi lần bắt đầu làm việc)</span>
+docker-compose up -d
+
+<span class="cm"># Kiểm tra đang chạy</span>
+docker ps
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <div class="callout callout-green">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Sau bước này bạn có:</strong> Thư mục dự án đầy đủ + code frontend + code backend + MySQL đang chạy trên máy. Đây là "môi trường phát triển" (development environment) của bạn.</span>
+ </div>
+</div>
+
+
+<!-- 05 DATA STORAGE -->
+<div class="section" id="data-storage">
+ <div class="section-header">
+ <span class="section-num">05</span>
+ <div><div class="section-title">DỮ LIỆU LƯU Ở ĐÂU?</div><div class="section-desc">Giải thích rõ từng loại dữ liệu được lưu ở đâu và tại sao</div></div>
+ </div>
+
+ <div class="callout callout-blue">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Có 3 "nơi lưu trữ" khác nhau:</strong> (1) Máy tính của bạn — dùng khi đang làm việc, (2) GitHub — lưu code, (3) Railway/Cloudinary — khi website đã live trên internet.</span>
+ </div>
+
+ <div class="data-map">
+ <div class="data-box">
+ <div class="data-box-icon"></div>
+ <div class="data-box-title">TRÊN MÁY BẠN<br>(Local)</div>
+ <div class="data-box-where"> ~/Desktop/cuckoo-cargo/</div>
+ <div class="data-box-items">
+ • Toàn bộ source code<br>
+ • MySQL database (qua Docker)<br>
+ • File .env (mật khẩu, API keys)<br>
+ • <em>Chỉ bạn mới thấy</em>
+ </div>
+ </div>
+ <div class="data-box">
+ <div class="data-box-icon"></div>
+ <div class="data-box-title">GITHUB<br>(Cloud Code)</div>
+ <div class="data-box-where"> github.com/bạn/cuckoo-cargo</div>
+ <div class="data-box-items">
+ • Code (không có .env)<br>
+ • Lịch sử thay đổi<br>
+ • Backup code tự động<br>
+ • <em>Private — chỉ bạn thấy</em>
+ </div>
+ </div>
+ <div class="data-box">
+ <div class="data-box-icon"></div>
+ <div class="data-box-title">PRODUCTION<br>(Internet)</div>
+ <div class="data-box-where"> Vercel + Railway</div>
+ <div class="data-box-items">
+ • Frontend → Vercel<br>
+ • Backend + MySQL → Railway<br>
+ • Ảnh → Cloudinary<br>
+ • <em>Cả thế giới truy cập được</em>
+ </div>
+ </div>
+ </div>
+
+ <div class="table-wrap">
+ <table>
+ <thead><tr><th>Loại dữ liệu</th><th>Lưu ở đâu?</th><th>Công nghệ</th><th>Ghi chú</th></tr></thead>
+ <tbody>
+ <tr><td><strong>Đơn hàng khách</strong></td><td>MySQL Database</td><td>Bảng <code>orders</code></td><td>Tên, địa chỉ, cân nặng, giá, trạng thái</td></tr>
+ <tr><td><strong>Thông tin khách hàng</strong></td><td>MySQL Database</td><td>Bảng <code>users</code></td><td>Email, SĐT, mật khẩu đã mã hóa</td></tr>
+ <tr><td><strong>Lịch sử tracking</strong></td><td>MySQL Database</td><td>Bảng <code>tracking_events</code></td><td>Cập nhật mỗi khi hàng qua checkpoint</td></tr>
+ <tr><td><strong>Ảnh hàng hóa</strong></td><td>Cloudinary</td><td>CDN + Storage</td><td>Link ảnh lưu trong MySQL, file ảnh ở Cloudinary</td></tr>
+ <tr><td><strong>Bảng giá cước</strong></td><td>MySQL Database</td><td>Bảng <code>pricing_rules</code></td><td>Admin chỉnh giá → tự động cập nhật trên web</td></tr>
+ <tr><td><strong>Session đăng nhập</strong></td><td>Redis (cache)</td><td>Key-Value store</td><td>Hết hạn sau 24 giờ</td></tr>
+ <tr><td><strong>Source code</strong></td><td>GitHub + Máy bạn</td><td>Git</td><td>Không bao giờ lưu mật khẩu trong code!</td></tr>
+ <tr><td><strong>API Keys, mật khẩu</strong></td><td>File .env (KHÔNG push lên GitHub)</td><td>Environment Variables</td><td>Trên production: Railway Secrets + Vercel Env</td></tr>
+ </tbody>
+ </table>
+ </div>
+</div>
+
+
+<!-- 06 DATABASE -->
+<div class="section" id="database">
+ <div class="section-header">
+ <span class="section-num">06</span>
+ <div><div class="section-title">SETUP DATABASE (MySQL)</div><div class="section-desc">Tạo các bảng dữ liệu theo SOP — Claude Code làm hết</div></div>
+ </div>
+
+ <div class="steps">
+ <div class="step">
+ <div class="step-num">1</div>
+ <div class="step-body">
+ <div class="step-title">Tạo file .env — Cấu hình kết nối Database</div>
+ <div class="step-desc">File .env chứa thông tin nhạy cảm (mật khẩu, API keys). <strong>TUYỆT ĐỐI không chia sẻ file này với ai.</strong></div>
+ <div class="code">
+<span class="cm"># File: backend/.env</span>
+<span class="ck">DATABASE_URL</span>=<span class="cv">"mysql://cargo_user:CargoPass2026!@localhost:3306/cuckoo_cargo"</span>
+<span class="ck">REDIS_URL</span>=<span class="cv">"redis://localhost:6379"</span>
+<span class="ck">JWT_SECRET</span>=<span class="cv">"thay-bang-chuoi-ngau-nhien-dai-64-ky-tu"</span>
+<span class="ck">CLOUDINARY_CLOUD_NAME</span>=<span class="cv">"tên-cloud-của-bạn"</span>
+<span class="ck">CLOUDINARY_API_KEY</span>=<span class="cv">"api-key-từ-cloudinary"</span>
+<span class="ck">CLOUDINARY_API_SECRET</span>=<span class="cv">"api-secret-từ-cloudinary"</span>
+<span class="ck">SENDGRID_API_KEY</span>=<span class="cv">"SG.xxxxxxxxxxxxx"</span>
+<span class="ck">PORT</span>=<span class="cv">3001</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">2</div>
+ <div class="step-body">
+ <div class="step-title">Tạo Database Schema — Claude Code viết hết</div>
+ <div class="step-desc">Nói với Claude Code tạo toàn bộ database theo SOP:</div>
+ <div class="code">
+cd ~/Desktop/cuckoo-cargo/backend
+claude
+
+<span class="co">> Tạo Prisma schema cho MySQL với đầy đủ các bảng theo SOP Cuckoo Cargo:
+ - users (id, uuid, full_name, email, phone_us, phone_vn, password_hash, role, lang_pref, created_at)
+ - orders (id, order_code CC-2026-VN-XXXXX, user_id, service_type, status, weight_lbs, dimensions, price_usd, payment_status, payment_method, note)
+ - recipients (id, order_id, full_name, phone, province, district, ward, address_detail, is_hcm)
+ - tracking_events (id, order_id, status, location, note_vi, note_en, photo_url, created_by, created_at)
+ - pricing_rules (id, service_type, from_state, to_province, price_per_lb, surcharge_province, heavy_fee, base_price, est_days_min, est_days_max, is_active)
+ - products (id, name_vi, name_en, desc_vi, desc_en, price_usd, stock_qty, images JSON, weight_lbs, category, is_active)
+
+ Sau đó chạy migration để tạo các bảng trong MySQL local.</span>
+ </div>
+ <div class="callout callout-green" style="margin-top:8px;">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Claude sẽ tự động:</strong> Viết file schema.prisma → Chạy <code>npx prisma migrate dev</code> → Tạo đầy đủ các bảng trong MySQL → Bạn chỉ cần xác nhận.</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">3</div>
+ <div class="step-body">
+ <div class="step-title">Nhập dữ liệu ban đầu (Seed Data)</div>
+ <div class="code">
+<span class="co">> Tạo seed data cho database:
+ - Bảng pricing_rules: giá US→VN là $X/lbs, phụ thu tỉnh $0.99/lbs, phí nặng >50lbs $25
+ - Tài khoản admin: email admin@cuckoocargo.com, password Admin2026!
+ - 3 sản phẩm mẫu: Ensure Original, Dầu gió Eagle, Glucosamine
+
+ Chạy seed file luôn sau khi tạo xong.</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">4</div>
+ <div class="step-body">
+ <div class="step-title">Kiểm tra Database bằng MySQL Workbench</div>
+ <div class="step-desc">Mở MySQL Workbench → New Connection → Điền:</div>
+ <div class="info-card">
+ <div class="info-card-header"><span></span><span class="info-card-title">Thông tin kết nối MySQL Local</span></div>
+ <div class="info-card-body">
+ <div class="info-row"><div class="info-label">Hostname</div><div class="info-value">127.0.0.1</div></div>
+ <div class="info-row"><div class="info-label">Port</div><div class="info-value">3306</div></div>
+ <div class="info-row"><div class="info-label">Username</div><div class="info-value">cargo_user</div></div>
+ <div class="info-row"><div class="info-label">Password</div><div class="info-value">CargoPass2026!</div></div>
+ <div class="info-row"><div class="info-label">Database</div><div class="info-value">cuckoo_cargo</div></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+
+
+<!-- 07 CLAUDE WORKFLOW -->
+<div class="section" id="claude-workflow">
+ <div class="section-header">
+ <span class="section-num">07</span>
+ <div><div class="section-title">WORKFLOW CLAUDE CODE</div><div class="section-desc">Cách làm việc hàng ngày với AI — quy trình chuẩn</div></div>
+ </div>
+
+ <div class="callout callout-orange">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Vòng lặp làm việc cơ bản:</strong> Bạn MÔ TẢ tính năng → Claude CODE → Bạn KIỂM TRA trên trình duyệt → Bạn PHẢN HỒI → Claude SỬA → Lặp lại. Đơn giản vậy thôi!</span>
+ </div>
+
+ <div class="info-card">
+ <div class="info-card-header"><span></span><span class="info-card-title">Cách khởi động Claude Code mỗi ngày</span></div>
+ <div class="info-card-body">
+ <div class="code" style="margin:0;">
+<span class="cm"># Bước 1: Khởi động Docker (MySQL + Redis)</span>
+cd ~/Desktop/cuckoo-cargo
+docker-compose up -d
+
+<span class="cm"># Bước 2: Mở Terminal 1 — Chạy Frontend</span>
+cd ~/Desktop/cuckoo-cargo/frontend
+npm run dev <span class="cm"># → Mở http://localhost:3000</span>
+
+<span class="cm"># Bước 3: Mở Terminal 2 — Chạy Backend</span>
+cd ~/Desktop/cuckoo-cargo/backend
+npm run dev <span class="cm"># → API chạy tại http://localhost:3001</span>
+
+<span class="cm"># Bước 4: Mở Terminal 3 — Gọi Claude Code</span>
+cd ~/Desktop/cuckoo-cargo
+claude <span class="cm"># → Gõ lệnh bằng tiếng Việt</span>
+ </div>
+ </div>
+ </div>
+
+ <div style="margin-top:24px;">
+ <div style="font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;color:var(--black);margin-bottom:16px;">QUY TRÌNH CHO MỖI TÍNH NĂNG MỚI</div>
+ <div class="timeline">
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-body">
+ <div class="tl-time">Bước 1</div>
+ <div class="tl-title">Mô tả tính năng cho Claude</div>
+ <div class="tl-desc">Nói Claude biết bạn muốn làm gì. Càng chi tiết càng tốt — màu sắc, layout, dữ liệu nào cần hiển thị, validation gì.</div>
+ </div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-body">
+ <div class="tl-time">Bước 2</div>
+ <div class="tl-title">Claude viết code và giải thích</div>
+ <div class="tl-desc">Claude sẽ tạo/sửa các file cần thiết, giải thích từng bước. Nếu không hiểu chỗ nào, cứ hỏi thêm.</div>
+ </div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-body">
+ <div class="tl-time">Bước 3</div>
+ <div class="tl-title">Mở trình duyệt kiểm tra</div>
+ <div class="tl-desc">Xem kết quả tại localhost:3000. Thử click, điền form, kiểm tra trên mobile (F12 → Toggle device toolbar).</div>
+ </div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-body">
+ <div class="tl-time">Bước 4</div>
+ <div class="tl-title">Phản hồi cho Claude</div>
+ <div class="tl-desc">Nếu có lỗi hoặc muốn thay đổi, mô tả cho Claude: "Nút này màu sai", "Form bị lỗi khi nhập...", "Thêm animation vào đây". Claude sẽ sửa ngay.</div>
+ </div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-body">
+ <div class="tl-time">Bước 5</div>
+ <div class="tl-title">Lưu code lên GitHub</div>
+ <div class="tl-desc">Mỗi khi hoàn thành 1 tính năng, lưu lại để không mất code.</div>
+ <div class="code" style="margin-top:8px;">
+git add .
+git commit -m "feat: thêm trang tracking vận đơn"
+git push origin main
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+
+
+<!-- 08 PROMPT GUIDE -->
+<div class="section" id="prompt-guide">
+ <div class="section-header">
+ <span class="section-num">08</span>
+ <div><div class="section-title">CÁCH RA LỆNH CHO AI</div><div class="section-desc">Các mẫu câu prompt hiệu quả — copy & dùng ngay</div></div>
+ </div>
+
+ <div class="callout callout-orange">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Nguyên tắc vàng:</strong> Prompt tốt = <strong>Ai làm gì</strong> + <strong>Trông như thế nào</strong> + <strong>Dữ liệu nào</strong> + <strong>Điều kiện gì</strong>. Đừng ngắn quá — càng chi tiết Claude làm càng đúng ý bạn.</span>
+ </div>
+
+ <div style="font-family:'Bebas Neue';font-size:18px;letter-spacing:1.5px;color:var(--black);margin:20px 0 12px;"> Tạo trang / giao diện mới</div>
+ <div class="prompt-example">
+ <div class="prompt-you">Bạn gõ vào Claude:</div>
+ <div class="prompt-text">Tạo trang /dich-vu/gui-hang-my-ve-viet-nam với:
+- Hero section: nền đen #0F0F10, tiêu đề Bebas Neue "GỬI HÀNG MỸ → VIỆT NAM", màu cam #F47B20
+- Section giải thích quy trình 5 bước (icon → text)
+- Bảng giá hiển thị từ API /pricing/rules
+- FAQ accordion (5 câu hỏi thường gặp)
+- CTA cuối trang: nút "ĐẶT ĐƠN NGAY" màu cam
+- Responsive hoàn toàn trên mobile
+- SEO meta tags đầy đủ, keyword "gửi hàng Mỹ về Việt Nam Los Angeles"</div>
+ <div class="prompt-result"> Claude sẽ: Tạo file trang mới → Viết component → Gọi API → Responsive CSS → Meta tags</div>
+ </div>
+
+ <div style="font-family:'Bebas Neue';font-size:18px;letter-spacing:1.5px;color:var(--black);margin:20px 0 12px;"> Tạo API / Backend</div>
+ <div class="prompt-example">
+ <div class="prompt-you">Bạn gõ vào Claude:</div>
+ <div class="prompt-text">Tạo API endpoint POST /api/orders để khách hàng đặt đơn hàng:
+- Nhận dữ liệu: service_type, weight_lbs, dimensions, thông tin người gửi, thông tin người nhận
+- Validate: weight phải > 0, email đúng format, SĐT VN bắt đầu bằng 0
+- Tự động tính giá theo bảng pricing_rules trong database
+- Tự động tạo order_code theo format CC-2026-VN-XXXXX (số tăng dần)
+- Lưu vào database MySQL
+- Gửi email xác nhận đến khách qua SendGrid
+- Trả về JSON: { success: true, order_code: "...", price_usd: 45.50 }</div>
+ <div class="prompt-result"> Claude sẽ: Viết controller → Validation → Logic tính giá → Lưu DB → Gửi email → Test với Postman</div>
+ </div>
+
+ <div style="font-family:'Bebas Neue';font-size:18px;letter-spacing:1.5px;color:var(--black);margin:20px 0 12px;"> Sửa lỗi</div>
+ <div class="prompt-example">
+ <div class="prompt-you">Bạn gõ vào Claude:</div>
+ <div class="prompt-text">Trang /theo-doi bị lỗi: khi tôi nhập mã vận đơn CC-2026-VN-00421 và nhấn nút TRACK thì console hiện lỗi:
+"TypeError: Cannot read properties of undefined (reading 'status')"
+Đây là lỗi gì và fix như thế nào?</div>
+ <div class="prompt-result"> Claude sẽ: Phân tích lỗi → Tìm file gây lỗi → Sửa → Giải thích tại sao lỗi</div>
+ </div>
+
+ <div style="font-family:'Bebas Neue';font-size:18px;letter-spacing:1.5px;color:var(--black);margin:20px 0 12px;"> Chỉnh giao diện</div>
+ <div class="prompt-example">
+ <div class="prompt-you">Bạn gõ vào Claude:</div>
+ <div class="prompt-text">Trong trang chủ (index.html hoặc page.tsx):
+- Nút "Đặt đơn ngay" đang màu xanh, đổi thành màu cam #F47B20 với gradient sang #D4650E
+- Thêm hiệu ứng hover: nút nổi lên 3px khi di chuột vào
+- Font tiêu đề đang là Arial, đổi thành Bebas Neue letter-spacing 3px
+- Trên mobile (< 768px): 2 nút CTA xếp theo chiều dọc thay vì ngang</div>
+ <div class="prompt-result"> Claude sẽ: Sửa đúng các file CSS/component → Không động vào phần khác</div>
+ </div>
+
+ <div class="callout callout-green" style="margin-top:20px;">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Mẹo quan trọng:</strong> Nếu Claude làm sai, đừng xóa và làm lại từ đầu. Chỉ cần nói: <em>"Kết quả chưa đúng. Tôi muốn [mô tả lại]. Hãy sửa file [tên file] thôi, không được động vào các file khác."</em></span>
+ </div>
+</div>
+
+
+<!-- 09 DAILY ROUTINE -->
+<div class="section" id="daily-routine">
+ <div class="section-header">
+ <span class="section-num">09</span>
+ <div><div class="section-title">ROUTINE HÀNG NGÀY</div><div class="section-desc">Lịch làm việc điển hình trong một ngày phát triển website</div></div>
+ </div>
+
+ <div class="timeline">
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-body">
+ <div class="tl-time">Bắt đầu buổi làm việc (5 phút)</div>
+ <div class="tl-title">Khởi động môi trường</div>
+ <div class="tl-desc"><code>docker-compose up -d</code> → <code>npm run dev</code> frontend + backend → Mở trình duyệt localhost:3000</div>
+ </div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-body">
+ <div class="tl-time">Làm việc chính (2–4 giờ)</div>
+ <div class="tl-title">Code tính năng với Claude Code</div>
+ <div class="tl-desc">Chọn 1–2 tính năng từ danh sách SOP → Mô tả cho Claude → Kiểm tra → Phản hồi → Hoàn thiện. Đừng cố làm quá nhiều trong 1 ngày.</div>
+ </div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-body">
+ <div class="tl-time">Giữa buổi (15 phút)</div>
+ <div class="tl-title">Test trên mobile</div>
+ <div class="tl-desc">Mở Chrome → F12 → Toggle device toolbar → Chọn iPhone 14 → Kiểm tra giao diện trên mobile. 70%+ khách Cuckoo Cargo dùng điện thoại!</div>
+ </div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-body">
+ <div class="tl-time">Kết thúc buổi (10 phút)</div>
+ <div class="tl-title">Lưu code lên GitHub</div>
+ <div class="code">
+git add .
+git commit -m "feat: [mô tả ngắn gọn hôm nay làm gì]"
+git push origin main
+ </div>
+ </div>
+ </div>
+ <div class="tl-item">
+ <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+ <div class="tl-body">
+ <div class="tl-time">Cuối tuần (30 phút)</div>
+ <div class="tl-title">Deploy thử lên staging</div>
+ <div class="tl-desc">Push code lên GitHub → Vercel tự động build và deploy trong 2 phút → Gửi link staging cho người thân xem thử → Ghi chú phản hồi</div>
+ </div>
+ </div>
+ </div>
+</div>
+
+
+<!-- 10 INFO NEEDED -->
+<div class="section" id="info-needed">
+ <div class="section-header">
+ <span class="section-num">10</span>
+ <div><div class="section-title">THÔNG TIN CẦN CHUẨN BỊ</div><div class="section-desc">Những gì Claude Code cần từ bạn — chuẩn bị trước để tiết kiệm thời gian</div></div>
+ </div>
+
+ <div class="check-grid">
+ <div class="check-card">
+ <div class="check-card-header">
+ <div class="check-card-icon"></div>
+ <div class="check-card-title">Bảng giá cước</div>
+ </div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Giá USD/lbs cho US→VN (vd: $3.50/lbs)</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Phụ thu ra tỉnh (SOP ghi $0.99/lbs — đúng?)</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Phí hàng nặng >50lbs ($20, $25, hay $30?)</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Giá nội địa Mỹ ($/lbs)</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Phí mua hộ (% giá sản phẩm hay $/lbs?)</div></div></div>
+ </div>
+
+ <div class="check-card">
+ <div class="check-card-header">
+ <div class="check-card-icon"></div>
+ <div class="check-card-title">Thông tin liên hệ</div>
+ </div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Số điện thoại Mỹ chính thức</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Số Zalo (để nút chat Zalo)</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Email chính thức: hello@cuckoocargo.com</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Địa chỉ kho tại Los Angeles</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Giờ làm việc (PST)</div></div></div>
+ </div>
+
+ <div class="check-card">
+ <div class="check-card-header">
+ <div class="check-card-icon"></div>
+ <div class="check-card-title">Tài sản hình ảnh</div>
+ </div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">File logo PNG nền trong suốt (từ brand guideline)</div><div class="cs">Kích thước tối thiểu 500px</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Ảnh kho hàng tại LA (3–5 ảnh)</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Ảnh nhân viên đồng phục (từ brand guideline)</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Ảnh hàng hóa mẫu (hộp đóng gói)</div></div></div>
+ </div>
+
+ <div class="check-card">
+ <div class="check-card-header">
+ <div class="check-card-icon"></div>
+ <div class="check-card-title">Nội dung / Content</div>
+ </div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Danh sách hàng cấm & hạn chế</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">FAQ — 10 câu hỏi thường gặp nhất</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Điều khoản dịch vụ (Terms)</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Chính sách bảo mật (Privacy Policy)</div></div></div>
+ </div>
+
+ <div class="check-card">
+ <div class="check-card-header">
+ <div class="check-card-icon"></div>
+ <div class="check-card-title">Sản phẩm bán (Shop)</div>
+ </div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Danh sách sản phẩm: tên, giá, trọng lượng</div><div class="cs">Ensure, Dầu gió, Glucosamine...</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Ảnh từng sản phẩm</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Mô tả sản phẩm tiếng Việt + tiếng Anh</div></div></div>
+ </div>
+
+ <div class="check-card">
+ <div class="check-card-header">
+ <div class="check-card-icon"></div>
+ <div class="check-card-title">Tài khoản & API Keys</div>
+ </div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">GitHub account đã tạo</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Vercel account kết nối với GitHub</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Railway account + project đã tạo</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Cloudinary API Key + Secret</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">SendGrid API Key</div></div></div>
+ <div class="check-item"><div class="check-box" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'':''"></div><div class="check-text"><div class="ct">Anthropic API Key (Claude Code)</div></div></div>
+ </div>
+ </div>
+</div>
+
+
+<!-- 11 DEPLOY -->
+<div class="section" id="deploy">
+ <div class="section-header">
+ <span class="section-num">11</span>
+ <div><div class="section-title">ĐƯA WEBSITE LÊN MẠNG</div><div class="section-desc">Từ localhost → cuckoocargo.com — khi đã sẵn sàng launch</div></div>
+ </div>
+
+ <div class="steps">
+ <div class="step">
+ <div class="step-num">A</div>
+ <div class="step-body">
+ <div class="step-title">Deploy Frontend lên Vercel (Tự động)</div>
+ <div class="step-desc">Đây là bước đơn giản nhất — Vercel tự làm hết khi bạn kết nối GitHub:</div>
+ <div class="steps" style="margin-left:16px;font-size:13px;">
+ <div style="padding:7px 0;border-bottom:1px solid var(--gray-border);">1. Mở <strong>vercel.com</strong> → Đăng nhập bằng GitHub</div>
+ <div style="padding:7px 0;border-bottom:1px solid var(--gray-border);">2. Nhấn "New Project" → Chọn repo <strong>cuckoo-cargo</strong></div>
+ <div style="padding:7px 0;border-bottom:1px solid var(--gray-border);">3. Root Directory: chọn <strong>frontend</strong></div>
+ <div style="padding:7px 0;border-bottom:1px solid var(--gray-border);">4. Điền Environment Variables (copy từ file .env)</div>
+ <div style="padding:7px 0;">5. Nhấn <strong>Deploy</strong> → 2 phút sau website live!</div>
+ </div>
+ <div class="callout callout-green" style="margin-top:8px;">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Từ đây trở đi:</strong> Mỗi khi bạn <code>git push</code>, Vercel tự động build và deploy trong 2 phút. Không cần làm gì thêm!</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">B</div>
+ <div class="step-body">
+ <div class="step-title">Deploy Backend + Database lên Railway</div>
+ <div class="steps" style="margin-left:16px;font-size:13px;">
+ <div style="padding:7px 0;border-bottom:1px solid var(--gray-border);">1. Mở <strong>railway.app</strong> → Đăng nhập → New Project</div>
+ <div style="padding:7px 0;border-bottom:1px solid var(--gray-border);">2. Thêm service: <strong>MySQL</strong> → Railway tự tạo database</div>
+ <div style="padding:7px 0;border-bottom:1px solid var(--gray-border);">3. Thêm service: <strong>GitHub Repo</strong> → Chọn repo/backend</div>
+ <div style="padding:7px 0;border-bottom:1px solid var(--gray-border);">4. Điền Environment Variables → Nhấn Deploy</div>
+ <div style="padding:7px 0;">5. Railway cấp URL dạng: <strong>api-production.up.railway.app</strong></div>
+ </div>
+ </div>
+ </div>
+
+ <div class="step">
+ <div class="step-num">C</div>
+ <div class="step-body">
+ <div class="step-title">Kết nối Domain cuckoocargo.com</div>
+ <div class="code">
+<span class="cm"># Cấu hình DNS tại Cloudflare (sau khi mua domain)</span>
+<span class="cm"># A Record:</span>
+cuckoocargo.com → [Vercel IP]
+
+<span class="cm"># CNAME Record:</span>
+www → cname.vercel-dns.com
+api → [Railway domain]
+
+<span class="cm"># SSL được Cloudflare + Vercel tự cấp — không cần làm gì thêm</span>
+ </div>
+ <div class="callout callout-dark">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Nhờ Claude Code giúp:</strong> Nói với Claude <em>"Hướng dẫn tôi kết nối domain cuckoocargo.com với Vercel và Railway, tôi đang dùng Cloudflare DNS"</em> — Claude sẽ hướng dẫn từng bước cụ thể.</span>
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+
+
+<!-- 12 ROADMAP -->
+<div class="section" id="roadmap">
+ <div class="section-header">
+ <span class="section-num">12</span>
+ <div><div class="section-title">LỘ TRÌNH 12 TUẦN</div><div class="section-desc">Kế hoạch thực tế từ setup đến launch cuckoocargo.com</div></div>
+ </div>
+
+ <div class="phase-grid">
+ <div class="phase-col">
+ <div class="phase-lbl">Tuần 1–2</div>
+ <div class="phase-name" style="color:var(--orange);">SETUP</div>
+ <div class="phase-weeks"> Nền tảng kỹ thuật</div>
+ <div class="phase-task">Cài đầy đủ tools (bước 2)</div>
+ <div class="phase-task">Tạo tài khoản (bước 3)</div>
+ <div class="phase-task">Khởi tạo dự án + GitHub</div>
+ <div class="phase-task">Setup MySQL + Docker</div>
+ <div class="phase-task">Tạo đầy đủ database schema</div>
+ <div class="phase-task">Chuẩn bị thông tin (bước 10)</div>
+ </div>
+ <div class="phase-col">
+ <div class="phase-lbl">Tuần 3–6</div>
+ <div class="phase-name" style="color:var(--text-primary);">GIAO DIỆN</div>
+ <div class="phase-weeks"> Frontend hoàn chỉnh</div>
+ <div class="phase-task">Trang chủ (đã có)</div>
+ <div class="phase-task">3 trang dịch vụ</div>
+ <div class="phase-task">Navbar + Footer chuẩn</div>
+ <div class="phase-task">Tính cước realtime</div>
+ <div class="phase-task">Form đặt đơn 5 bước</div>
+ <div class="phase-task">Trang tracking vận đơn</div>
+ </div>
+ <div class="phase-col">
+ <div class="phase-lbl">Tuần 7–10</div>
+ <div class="phase-name" style="color:var(--orange-deep);">BACKEND</div>
+ <div class="phase-weeks"> Logic + Database</div>
+ <div class="phase-task">API đặt đơn + pricing</div>
+ <div class="phase-task">API tracking</div>
+ <div class="phase-task">Email thông báo</div>
+ <div class="phase-task">Admin dashboard</div>
+ <div class="phase-task">Cập nhật trạng thái đơn</div>
+ <div class="phase-task">Upload ảnh Cloudinary</div>
+ </div>
+ <div class="phase-col">
+ <div class="phase-lbl">Tuần 11–12</div>
+ <div class="phase-name" style="color:var(--gray);">LAUNCH</div>
+ <div class="phase-weeks"> Đưa lên internet</div>
+ <div class="phase-task">Deploy Vercel + Railway</div>
+ <div class="phase-task">Kết nối domain</div>
+ <div class="phase-task">SEO + Google Analytics</div>
+ <div class="phase-task">Google Business LA</div>
+ <div class="phase-task">Test toàn bộ tính năng</div>
+ <div class="phase-task"> SOFT LAUNCH</div>
+ </div>
+ </div>
+
+ <div class="callout callout-dark">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Mỗi buổi làm việc chỉ cần 2–3 giờ.</strong> Không cần ngồi cả ngày. Claude Code giúp bạn tiến nhanh hơn developer tay mơ thông thường gấp 5–10 lần. Quan trọng là làm đều đặn mỗi ngày.</span>
+ </div>
+
+ <div class="callout callout-orange" style="margin-top:12px;">
+ <span class="callout-icon"></span>
+ <span class="callout-text"><strong>Bước đầu tiên cần làm NGAY BÂY GIỜ:</strong><br>
+ 1. Cài <strong>Homebrew + Node.js + Git + VS Code</strong> (Bước 02 bên trên)<br>
+ 2. Tạo tài khoản <strong>GitHub</strong> (miễn phí)<br>
+ 3. Cài <strong>Claude Code</strong> và tạo API Key Anthropic<br>
+ 4. Chuẩn bị <strong>bảng giá cước</strong> thực tế của bạn<br><br>
+ Sau đó mở Terminal và gọi <code>claude</code> — từ đó trở đi AI làm hết phần còn lại!</span>
+ </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// Active nav on scroll
+const sections = document.querySelectorAll('.section[id]');
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+ let current = '';
+ sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+ navItems.forEach(n => {
+ n.classList.remove('active');
+ if (n.getAttribute('href') === '#' + current) n.classList.add('active');
+ });
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+ a.addEventListener('click', e => {
+ const t = document.querySelector(a.getAttribute('href'));
+ if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+ });
+});
+</script>
+</body>
+</html>

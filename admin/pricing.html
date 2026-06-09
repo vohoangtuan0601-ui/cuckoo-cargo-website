@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quản lý Bảng Giá — Cuckoo Cargo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0F0F10; color: #f0f0f0; min-height: 100vh; }
+
+  /* ── LOGIN ── */
+  #login-screen { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:24px; }
+  .login-box { background:#1a1a1e; border:1.5px solid #2a2a30; border-radius:16px; padding:40px 36px; width:100%; max-width:380px; text-align:center; }
+  .login-box h1 { font-size:22px; margin-bottom:6px; }
+  .login-box p { font-size:13px; color:#888; margin-bottom:28px; }
+  .login-box input { width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid #333; background:#111; color:#fff; font-size:15px; margin-bottom:14px; font-family:inherit; letter-spacing:3px; text-align:center; }
+  .login-box input:focus { outline:none; border-color:#F47B20; }
+  .btn-login { width:100%; padding:13px; border-radius:10px; border:none; background:#F47B20; color:#fff; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; transition:background .2s; }
+  .btn-login:hover { background:#d4650e; }
+  .login-err { color:#ef4444; font-size:13px; margin-top:10px; display:none; }
+
+  /* ── MAIN APP ── */
+  #app { display:none; }
+  .top-bar { background:#1a1a1e; border-bottom:1px solid #2a2a30; padding:14px 28px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+  .top-bar-left { display:flex; align-items:center; gap:12px; }
+  .top-bar-left h1 { font-size:17px; font-weight:800; }
+  .badge-saved { background:#22c55e22; color:#22c55e; border:1px solid #22c55e44; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; display:none; }
+  .btn-logout { padding:7px 14px; border-radius:8px; border:1.5px solid #333; background:transparent; color:#888; font-size:12px; cursor:pointer; font-family:inherit; transition:all .2s; }
+  .btn-logout:hover { border-color:#ef4444; color:#ef4444; }
+
+  .main-content { max-width:1000px; margin:0 auto; padding:32px 24px 100px; }
+
+  .page-tabs { display:flex; gap:8px; margin-bottom:28px; background:#1a1a1e; border:1.5px solid #2a2a30; border-radius:12px; padding:5px; }
+  .page-tab { flex:1; padding:10px; border-radius:8px; border:none; cursor:pointer; font-size:14px; font-weight:700; font-family:inherit; background:transparent; color:#888; transition:all .2s; }
+  .page-tab.active { background:#F47B20; color:#fff; }
+
+  .section { background:#1a1a1e; border:1.5px solid #2a2a30; border-radius:14px; margin-bottom:16px; overflow:hidden; }
+  .section-head { padding:14px 20px; border-bottom:1px solid #2a2a30; display:flex; align-items:center; justify-content:space-between; }
+  .section-head h3 { font-size:14px; font-weight:800; }
+  .section-head span { font-size:12px; color:#888; }
+  .section-body { padding:18px 20px; }
+
+  /* ── CARRIER BLOCK ── */
+  .carrier-block { margin-bottom:20px; }
+  .carrier-title {
+    display:flex; align-items:center; gap:10px;
+    font-size:13px; font-weight:800; color:#fff;
+    padding:10px 16px; border-radius:10px; margin-bottom:12px;
+    letter-spacing:.5px;
+  }
+  .carrier-title.ups   { background:#1E3A6E; }
+  .carrier-title.fedex { background:linear-gradient(135deg,#4D148C,#F47B20); }
+  .carrier-title.usps  { background:#004B87; }
+
+  /* ── SERVICE TABLE ── */
+  .svc-table-wrap { overflow-x:auto; margin-bottom:10px; }
+  .svc-table { width:100%; border-collapse:collapse; font-size:13px; min-width:600px; }
+  .svc-table th { padding:8px 10px; font-size:11px; font-weight:700; text-align:center; color:#888; text-transform:uppercase; letter-spacing:.5px; border-bottom:1px solid #2a2a30; }
+  .svc-table th:first-child { text-align:left; }
+  .svc-table td { padding:6px 8px; border-bottom:1px solid #1e1e24; vertical-align:middle; }
+  .svc-table td:first-child { font-size:13px; font-weight:700; color:#ccc; white-space:nowrap; padding-left:12px; }
+  .svc-table tr:last-child td { border-bottom:none; }
+  .svc-table tr:hover td { background:#1e1e24; }
+
+  .fi { /* field input */
+    width:100%; padding:8px 10px; border-radius:7px;
+    border:1.5px solid #333; background:#111; color:#fff;
+    font-size:14px; font-family:inherit; font-weight:700; text-align:center;
+    transition:border-color .2s;
+  }
+  .fi:focus { outline:none; border-color:#F47B20; }
+  .fi:disabled { color:#555; cursor:not-allowed; background:#0a0a0a; }
+  .fi.perLbs { border-color:#444; }
+  .fi.perLbs:focus { border-color:#22c55e; }
+
+  .col-header-flat { color:#F47B20 !important; }
+  .col-header-pl   { color:#22c55e  !important; }
+  .null-cell { text-align:center; color:#444; font-size:18px; }
+
+  /* ── MVV FIELDS ── */
+  .price-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media(max-width:600px){ .price-grid { grid-template-columns:1fr; } }
+  .field-group { display:flex; flex-direction:column; gap:5px; }
+  .field-group label { font-size:11px; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:.5px; }
+  .field-group input { padding:10px 12px; border-radius:8px; border:1.5px solid #333; background:#111; color:#fff; font-size:15px; font-family:inherit; font-weight:700; transition:border-color .2s; }
+  .field-group input:focus { outline:none; border-color:#F47B20; }
+  .field-hint { font-size:11px; color:#666; margin-top:2px; }
+
+  .tier-table { width:100%; border-collapse:collapse; }
+  .tier-table th { text-align:left; font-size:11px; color:#888; padding:0 8px 10px; font-weight:700; text-transform:uppercase; }
+  .tier-table td { padding:6px 8px; }
+  .tier-table td input { width:100%; padding:8px 10px; border-radius:7px; border:1.5px solid #333; background:#111; color:#fff; font-size:14px; font-family:inherit; font-weight:700; }
+  .tier-table td input:focus { outline:none; border-color:#F47B20; }
+  .tier-table td.tier-range { font-size:13px; color:#aaa; font-weight:600; white-space:nowrap; padding-top:14px; }
+
+  /* ── SAVE BAR ── */
+  .save-bar { position:fixed; bottom:0; left:0; right:0; background:#1a1a1e; border-top:1px solid #2a2a30; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; z-index:200; }
+  .save-bar-info { font-size:13px; color:#888; }
+  .save-bar-btns { display:flex; gap:10px; flex-wrap:wrap; }
+  .btn-save   { padding:11px 28px; border-radius:10px; border:none; background:#F47B20; color:#fff; font-size:14px; font-weight:800; cursor:pointer; font-family:inherit; transition:background .2s; }
+  .btn-save:hover { background:#d4650e; }
+  .btn-export { padding:11px 20px; border-radius:10px; border:1.5px solid #F47B20; background:transparent; color:#F47B20; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all .2s; }
+  .btn-export:hover { background:#F47B2015; }
+  .btn-reset  { padding:11px 16px; border-radius:10px; border:1.5px solid #444; background:transparent; color:#888; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; transition:all .2s; }
+  .btn-reset:hover { border-color:#ef4444; color:#ef4444; }
+
+  .toast { position:fixed; top:20px; right:20px; z-index:9999; background:#22c55e; color:#fff; padding:12px 20px; border-radius:10px; font-size:14px; font-weight:700; box-shadow:0 4px 20px rgba(0,0,0,.4); display:none; }
+
+  .divider { border:none; border-top:1px solid #2a2a30; margin:16px 0; }
+
+  .tip { font-size:12px; color:#666; margin-top:8px; padding:8px 12px; background:#111; border-radius:8px; line-height:1.6; }
+  .tip strong { color:#aaa; }
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>🔒 Quản lý Bảng Giá</h1>
+    <p>Cuckoo Cargo Internal — Nhập mật khẩu để tiếp tục</p>
+    <input type="password" id="pwd-input" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter')doLogin()" />
+    <button class="btn-login" onclick="doLogin()">Đăng nhập</button>
+    <div class="login-err" id="login-err">Sai mật khẩu. Thử lại.</div>
+  </div>
+</div>
+
+<!-- ── MAIN APP ── -->
+<div id="app">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h1>⚡ Quản lý Bảng Giá</h1>
+      <span class="badge-saved" id="saved-badge">✓ Đã lưu</span>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">Đăng xuất</button>
+  </div>
+
+  <div class="main-content">
+    <div class="page-tabs">
+      <button class="page-tab active" onclick="switchTab('mvv',this)">✈️ Mỹ → Việt Nam</button>
+      <button class="page-tab" onclick="switchTab('label',this)">🏷️ Label Nội địa</button>
+    </div>
+
+    <!-- ══════════════ MVV TAB ══════════════ -->
+    <div id="tab-mvv">
+      <!-- Giá cước -->
+      <div class="section">
+        <div class="section-head">
+          <h3>📦 Giá cước vận chuyển (USD/lbs)</h3>
+          <span>Dưới 10 lbs tính tròn lên 10 lbs</span>
+        </div>
+        <div class="section-body">
+          <table class="tier-table">
+            <thead><tr><th>Khoảng cân</th><th>Giá ($/lbs)</th></tr></thead>
+            <tbody>
+              <tr><td class="tier-range">0 – 10 lbs</td><td><input type="number" id="mvv-0" step="0.01" min="0" /></td></tr>
+              <tr><td class="tier-range">10 – 50 lbs</td><td><input type="number" id="mvv-1" step="0.01" min="0" /></td></tr>
+              <tr><td class="tier-range">50 – 90 lbs</td><td><input type="number" id="mvv-2" step="0.01" min="0" /></td></tr>
+              <tr><td class="tier-range">90 – 150 lbs</td><td><input type="number" id="mvv-3" step="0.01" min="0" /></td></tr>
+              <tr><td class="tier-range">Trên 150 lbs</td><td><input type="number" id="mvv-4" step="0.01" min="0" /></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bảo hiểm -->
+      <div class="section">
+        <div class="section-head">
+          <h3>🛡️ Bảo hiểm hàng hoá</h3>
+          <span>Giá & mức bồi thường (USD)</span>
+        </div>
+        <div class="section-body">
+          <!-- FREE -->
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:800;color:#22c55e;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding:6px 10px;background:#111;border-radius:8px;">Gói FREE (Miễn phí)</div>
+            <div class="price-grid" style="grid-template-columns:1fr 1fr;">
+              <div class="field-group">
+                <label>Bồi thường ($/lbs)</label>
+                <input type="number" id="ins-free-perlbs" step="0.01" min="0" />
+                <span class="field-hint">Mức đền mỗi lbs</span>
+              </div>
+              <div class="field-group">
+                <label>Tối đa ($)</label>
+                <input type="number" id="ins-free-maxcover" step="1" min="0" />
+                <span class="field-hint">Giới hạn đền tối đa</span>
+              </div>
+            </div>
+          </div>
+          <!-- PRO -->
+          <div style="margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:800;color:#F47B20;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding:6px 10px;background:#111;border-radius:8px;">Gói PRO</div>
+            <div class="price-grid" style="grid-template-columns:1fr 1fr 1fr;">
+              <div class="field-group">
+                <label>Giá mua gói ($)</label>
+                <input type="number" id="ins-pro" step="0.01" min="0" />
+                <span class="field-hint">Ví dụ: 19.99</span>
+              </div>
+              <div class="field-group">
+                <label>Bồi thường ($/lbs)</label>
+                <input type="number" id="ins-pro-perlbs" step="0.01" min="0" />
+                <span class="field-hint">Mức đền mỗi lbs</span>
+              </div>
+              <div class="field-group">
+                <label>Tối đa ($)</label>
+                <input type="number" id="ins-pro-maxcover" step="1" min="0" />
+                <span class="field-hint">Giới hạn đền tối đa</span>
+              </div>
+            </div>
+          </div>
+          <!-- PRO MAX -->
+          <div>
+            <div style="font-size:12px;font-weight:800;color:#a855f7;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding:6px 10px;background:#111;border-radius:8px;">Gói PRO MAX</div>
+            <div class="price-grid" style="grid-template-columns:1fr 1fr 1fr;">
+              <div class="field-group">
+                <label>Giá mua gói ($)</label>
+                <input type="number" id="ins-promax" step="0.01" min="0" />
+                <span class="field-hint">Ví dụ: 59.99</span>
+              </div>
+              <div class="field-group">
+                <label>Bồi thường ($/lbs)</label>
+                <input type="number" id="ins-promax-perlbs" step="0.01" min="0" />
+                <span class="field-hint">Mức đền mỗi lbs</span>
+              </div>
+              <div class="field-group">
+                <label>Tối đa ($)</label>
+                <input type="number" id="ins-promax-maxcover" step="1" min="0" />
+                <span class="field-hint">Giới hạn đền tối đa</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Đóng gói -->
+      <div class="section">
+        <div class="section-head">
+          <h3>📦 Phí đóng gói (USD/lbs)</h3>
+          <span>Phụ phí thêm vào cước</span>
+        </div>
+        <div class="section-body">
+          <div class="price-grid">
+            <div class="field-group">
+              <label>Tiêu chuẩn ($/lbs)</label>
+              <input type="number" id="pkg-std" step="0.01" min="0" />
+            </div>
+            <div class="field-group">
+              <label>Nâng cao ($/lbs)</label>
+              <input type="number" id="pkg-adv" step="0.01" min="0" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mua hộ -->
+      <div class="section">
+        <div class="section-head">
+          <h3>🛒 Phí mua hộ</h3>
+          <span>% giá trị hàng</span>
+        </div>
+        <div class="section-body">
+          <div class="price-grid">
+            <div class="field-group">
+              <label>Tỉ lệ phí mua hộ (%)</label>
+              <input type="number" id="muaho-rate" step="0.1" min="0" max="100" />
+              <span class="field-hint">Ví dụ: 5 = 5% giá trị hàng</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <!-- Phụ phí giao hàng nội địa VN -->
+      <div class="section">
+        <div class="section-head">
+          <h3>🚚 Phụ phí giao hàng nội địa Việt Nam</h3>
+          <span>Cộng thêm vào mỗi lbs khi giao tới VN</span>
+        </div>
+        <div class="section-body">
+          <div class="price-grid">
+            <div class="field-group">
+              <label>Sài Gòn &amp; Hà Nội ($/lbs)</label>
+              <input type="number" id="delivery-sghn" step="0.01" min="0" />
+              <span class="field-hint">Thường = 0 (miễn phí)</span>
+            </div>
+            <div class="field-group">
+              <label>Tỉnh / Thành khác ($/lbs)</label>
+              <input type="number" id="delivery-province" step="0.01" min="0" />
+              <span class="field-hint">Ví dụ: 0.99</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phụ thu hải quan -->
+      <div class="section">
+        <div class="section-head">
+          <h3>🛃 Phụ thu hải quan</h3>
+          <span>Áp dụng khi kiện hàng có các mặt hàng đặc biệt</span>
+        </div>
+        <div class="section-body">
+          <div class="price-grid" style="grid-template-columns:repeat(3,1fr);">
+            <div class="field-group">
+              <label>Rượu ($/chai)</label>
+              <input type="number" id="customs-ruou" step="0.01" min="0" />
+            </div>
+            <div class="field-group">
+              <label>Cigar / Thuốc lá ($/hộp)</label>
+              <input type="number" id="customs-cigar" step="0.01" min="0" />
+            </div>
+            <div class="field-group">
+              <label>Nước hoa ($/chai)</label>
+              <input type="number" id="customs-nuochoa" step="0.01" min="0" />
+            </div>
+            <div class="field-group">
+              <label>Vitamin / Mỹ phẩm ($/lbs)</label>
+              <input type="number" id="customs-vitamin" step="0.01" min="0" />
+              <span class="field-hint">Khi &gt;50% kiện hàng</span>
+            </div>
+            <div class="field-group">
+              <label>Điện thoại cũ ($/cái)</label>
+              <input type="number" id="customs-dienthoaicu" step="1" min="0" />
+            </div>
+            <div class="field-group">
+              <label>Điện thoại mới ($/cái)</label>
+              <input type="number" id="customs-dienthoaimoi" step="1" min="0" />
+            </div>
+            <div class="field-group">
+              <label>Tai nghe / AirPod / Watch ($/cái)</label>
+              <input type="number" id="customs-tainghne" step="0.01" min="0" />
+            </div>
+            <div class="field-group">
+              <label>Vaccine / Máy y tế (%)</label>
+              <input type="number" id="customs-vaccin" step="0.01" min="0" max="100" />
+              <span class="field-hint">% giá trị (ví dụ: 20 = 20%)</span>
+            </div>
+            <div class="field-group">
+              <label>Điện tử khác (%)</label>
+              <input type="number" id="customs-dientukhac" step="0.01" min="0" max="100" />
+              <span class="field-hint">% giá trị (ví dụ: 10 = 10%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- ══════════════ LABEL TAB ══════════════ -->
+    <div id="tab-label" style="display:none;">
+
+      <!-- Hướng dẫn -->
+      <div class="tip" style="margin-bottom:16px;">
+        <strong>Cách đọc bảng giá:</strong>
+        Cột màu <span style="color:#F47B20">cam</span> = giá cố định (flat fee) cho đơn ≤10 lbs theo 4 khoảng cân.
+        Cột màu <span style="color:#22c55e">xanh</span> = giá $/lbs cho đơn trên 10 lbs.
+        Ô <span style="color:#444">—</span> = dịch vụ không nhận cân nặng đó.
+      </div>
+
+      <!-- UPS -->
+      <div class="section">
+        <div class="section-head">
+          <h3>🟤 UPS — 4 dịch vụ</h3>
+          <span>Phí pickup: nhà riêng / căn hộ / phụ phí nặng ở dưới</span>
+        </div>
+        <div class="section-body">
+          <div id="ups-tables"></div>
+        </div>
+      </div>
+
+      <!-- FedEx -->
+      <div class="section">
+        <div class="section-head">
+          <h3>🟣 FedEx — 4 dịch vụ</h3>
+          <span>FedEx Ground có free pickup</span>
+        </div>
+        <div class="section-body">
+          <div id="fedex-tables"></div>
+        </div>
+      </div>
+
+      <!-- USPS -->
+      <div class="section">
+        <div class="section-head">
+          <h3>🔵 USPS — 3 dịch vụ</h3>
+          <span>Ground & Priority: tối đa 20 lbs · Express: tối đa 10 lbs</span>
+        </div>
+        <div class="section-body">
+          <div id="usps-tables"></div>
+        </div>
+      </div>
+
+      <!-- UPS Pickup & Phụ phí -->
+      <div class="section">
+        <div class="section-head">
+          <h3>🚗 Phí pickup & Phụ phí UPS (USD)</h3>
+          <span>Chỉ áp dụng cho UPS khi chọn pickup tận nơi</span>
+        </div>
+        <div class="section-body">
+          <div class="price-grid">
+            <div class="field-group">
+              <label>Pickup nhà riêng ($)</label>
+              <input type="number" id="ups-pickup-house" step="0.01" min="0" />
+            </div>
+            <div class="field-group">
+              <label>Pickup căn hộ / Tòa nhà ($)</label>
+              <input type="number" id="ups-pickup-apt" step="0.01" min="0" />
+            </div>
+            <div class="field-group">
+              <label>Phụ phí hàng nặng > 50 lbs ($)</label>
+              <input type="number" id="ups-heavy" step="0.01" min="0" />
+              <span class="field-hint">Cộng thêm vào mỗi kiện hàng UPS vượt 50 lbs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-label -->
+  </div>
+
+  <!-- Save bar -->
+  <div class="save-bar">
+    <span class="save-bar-info" id="save-bar-hint">Lưu giá → Cập nhật pricing.js → Đẩy GitHub là xong</span>
+    <div class="save-bar-btns">
+      <button class="btn-reset" onclick="resetDefaults()">↩ Mặc định</button>
+      <button class="btn-export" id="btn-pick-file" onclick="pickPricingFile()" title="Chọn file pricing.js trong thư mục dự án">📁 Chọn file</button>
+      <button class="btn-save" onclick="saveAndUpdate()">💾 Lưu &amp; Cập nhật</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────
+const ADMIN_PASSWORD = 'cuckoo2025'; // ← Đổi mật khẩu tại đây
+
+// ── DEFAULTS (khớp với pricing.js) ───────────────────────────────────────
+const DEFAULTS = {
+  mvv:     [3.89, 3.89, 3.79, 3.59, 3.49],
+  ins: {
+    freePerLbs: 5, freeMaxCover: 100,
+    pro: 19.99, proPerLbs: 12, proMaxCover: 500,
+    promax: 59.99, promaxPerLbs: 20, promaxMaxCover: 800,
+  },
+  deliveryVN: { sgHn: 0, province: 0.99 },
+  customs:    { ruou: 14, cigar: 20, nuocHoa: 7, vitaminMyPham: 0.99, dienThoaiCu: 60, dienThoaiMoi: 90, taiNgheAirpod: 12, vaccinMayYTe: 20, dienTuKhac: 10 },
+  pkg:     { std: 0.39, adv: 0.69 },
+  muaho:   5, // percent
+  // rateData: flat[4 giá cố định], perLbs array [11-20,21-30,31-40,41-50,51-70,71-100,101+] (null = không nhận)
+  rateData: {
+    'ups-Ground':    { flat:[19,  25,  28,  32 ], perLbs:[1.99, 1.99, 1.99, 1.99, 1.99, 1.99, 1.99]   },
+    'ups-3-Day':     { flat:[25,  39,  52,  59 ], perLbs:[4.69, 4.69, 4.69, 4.69, 4.69, 4.69, 4.69]   },
+    'ups-2-Day':     { flat:[31,  55,  72,  82 ], perLbs:[6.49, 6.49, 6.49, 6.49, 6.49, 6.49, 6.49]   },
+    'ups-Overnight': { flat:[89,  109, 129, 142], perLbs:[10.69,10.69,10.69,10.69,10.69,10.69,10.69]   },
+    'fedex-Ground':    { flat:[34,  38,  40,  43 ], perLbs:[2.99, 2.99, 2.99, 2.99, 2.99, 2.99, 2.99]   },
+    'fedex-3-Day':     { flat:[69,  89,  112, 135], perLbs:[12.79,12.79,12.79,12.79,12.79,12.79,12.79] },
+    'fedex-2-Day':     { flat:[82,  103, 135, 159], perLbs:[15.19,15.19,15.19,15.19,15.19,15.19,15.19] },
+    'fedex-Overnight': { flat:[139, 155, 195, 209], perLbs:[19.79,19.79,19.79,19.79,19.79,19.79,19.79] },
+    'usps-Ground':   { flat:[22,  29,  37,  42 ], perLbs:[3.99] },   // max 20 lbs → 1 tier
+    'usps-Priority': { flat:[29,  52,  67,  75 ], perLbs:[5.99] },   // max 20 lbs → 1 tier
+    'usps-Express':  { flat:[129, 179, 229, 265], perLbs:null  },    // không nhận >10 lbs
+  },
+  upsPickup:         9.65,
+  upsPickupApt:     16.15,
+  upsHeavySurcharge: 27.00,
+};
+
+// Tên hiển thị cho mỗi dịch vụ
+const SVC_META = {
+  'ups-Ground':    { label:'UPS Ground',     note:'3–5 ngày · Tiết kiệm nhất' },
+  'ups-3-Day':     { label:'UPS 3-Day',      note:'3 ngày làm việc' },
+  'ups-2-Day':     { label:'UPS 2-Day',      note:'2 ngày làm việc' },
+  'ups-Overnight': { label:'UPS Overnight',  note:'Giao ngày hôm sau' },
+  'fedex-Ground':    { label:'FedEx Ground',    note:'3–5 ngày · Ổn định' },
+  'fedex-3-Day':     { label:'FedEx 3-Day',     note:'Express Saver · 3 ngày' },
+  'fedex-2-Day':     { label:'FedEx 2-Day',     note:'2 ngày làm việc' },
+  'fedex-Overnight': { label:'FedEx Overnight', note:'Priority Overnight' },
+  'usps-Ground':   { label:'USPS Ground',    note:'2–5 ngày · Tối đa 20 lbs' },
+  'usps-Priority': { label:'USPS Priority',  note:'1–3 ngày · Tối đa 20 lbs' },
+  'usps-Express':  { label:'USPS Express',   note:'1–2 ngày · Tối đa 10 lbs' },
+};
+
+const CARRIER_SERVICES = {
+  ups:   ['Ground','3-Day','2-Day','Overnight'],
+  fedex: ['Ground','3-Day','2-Day','Overnight'],
+  usps:  ['Ground','Priority','Express'],
+};
+
+const FLAT_LABELS = ['1–2 lbs','3–5 lbs','6–8 lbs','9–10 lbs'];
+
+// ── AUTH ──────────────────────────────────────────────────────────────────
+function doLogin() {
+  if (document.getElementById('pwd-input').value === ADMIN_PASSWORD) {
+    sessionStorage.setItem('cc-admin', '1');
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    buildLabelTables();
+    loadForm();
+  } else {
+    const err = document.getElementById('login-err');
+    err.style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+    setTimeout(() => err.style.display = 'none', 3000);
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('cc-admin');
+  location.reload();
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────
+function switchTab(tab, btn) {
+  document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-mvv').style.display   = tab === 'mvv'   ? '' : 'none';
+  document.getElementById('tab-label').style.display = tab === 'label' ? '' : 'none';
+}
+
+// ── BUILD LABEL TABLES DYNAMICALLY ────────────────────────────────────────
+function svcKey(carrier, svc) {
+  return carrier + '-' + svc;
+}
+
+function fieldId(carrier, svc, type, idx) {
+  // e.g. rd-ups-3day-f0, rd-fedex-overnight-pl
+  const svcSlug = svc.toLowerCase().replace(/-/g,'');
+  return `rd-${carrier}-${svcSlug}-${type}${idx !== undefined ? idx : ''}`;
+}
+
+function buildLabelTables() {
+  // Weight ranges displayed in >10 lbs section
+  const PERLBS_RANGES = ['11–20','21–30','31–40','41–50','51–70','71–100','101+'];
+  const USPS_RANGES   = ['11–20']; // USPS Ground/Priority max 20 lbs
+
+  ['ups','fedex','usps'].forEach(carrier => {
+    const wrap = document.getElementById(carrier + '-tables');
+    if (!wrap) return;
+
+    const svcs = CARRIER_SERVICES[carrier];
+    let html = '';
+
+    svcs.forEach(svc => {
+      const key = svcKey(carrier, svc);
+      const meta = SVC_META[key] || {};
+      const isExpress  = key === 'usps-Express';
+      const isUSPSLtd  = key === 'usps-Ground' || key === 'usps-Priority'; // max 20 lbs
+      const isUPS      = carrier === 'ups';
+      const ranges = isUSPSLtd ? USPS_RANGES : PERLBS_RANGES;
+
+      // Flat rows
+      const flatRows = ['1–2','3–5','6–8','9–10'].map((lbl,i) => `
+              <tr>
+                <td style="color:#aaa">${lbl} lbs</td>
+                <td style="color:#F47B20;font-size:11px;">cố định/đơn</td>
+                <td><input class="fi" type="number" id="${fieldId(carrier,svc,'f',i)}" step="0.01" min="0" placeholder="0" /></td>
+              </tr>`).join('');
+
+      // PerLbs rows — mỗi khoảng cân có 1 ô nhập riêng
+      let perLbsRows = '';
+      if (isExpress) {
+        perLbsRows = `<tr><td colspan="3" style="text-align:center;color:#ef4444;font-size:12px;padding:8px;">⚠️ Không nhận đơn trên 10 lbs</td></tr>`;
+      } else {
+        ranges.forEach((rng, idx) => {
+          const isHeavy = isUPS && (rng === '51–70' || rng === '71–100' || rng === '101+');
+          perLbsRows += `
+              <tr>
+                <td style="color:#aaa">${rng} lbs</td>
+                <td style="color:#22c55e;font-size:11px;">$/lbs${isHeavy ? ' <span style="color:#F47B20" title="+$27 phụ phí nặng nếu >50 lbs">⚡</span>' : ''}</td>
+                <td><input class="fi perLbs" type="number" id="${fieldId(carrier,svc,'pl',idx)}" step="0.01" min="0" placeholder="0" /></td>
+              </tr>`;
+        });
+        if (isUSPSLtd) {
+          perLbsRows += `<tr><td colspan="3" style="text-align:center;color:#ef4444;font-size:12px;padding:6px 10px;">⚠️ Trên 20 lbs — Không nhận</td></tr>`;
+        }
+      }
+
+      html += `
+      <div style="margin-bottom:22px;">
+        <div style="font-size:13px;font-weight:800;color:#ddd;margin-bottom:8px;padding:6px 10px;background:#111;border-radius:8px;display:flex;justify-content:space-between;align-items:center;">
+          <span>${meta.label || svc}</span>
+          <span style="font-size:11px;color:#666;font-weight:400;">${meta.note || ''}</span>
+        </div>
+        <div class="svc-table-wrap">
+          <table class="svc-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th style="width:35%">Khoảng cân</th>
+                <th style="width:30%">Loại phí</th>
+                <th style="width:35%">Giá ($)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#0d1117;">
+                <td colspan="3" style="font-size:10px;font-weight:800;color:#F47B20;letter-spacing:.8px;text-transform:uppercase;padding:5px 10px;">
+                  📦 GIÁ CỐ ĐỊNH — ĐƠN ≤10 LBS
+                </td>
+              </tr>
+              ${flatRows}
+              <tr style="background:#0d1117;">
+                <td colspan="3" style="font-size:10px;font-weight:800;color:#22c55e;letter-spacing:.8px;text-transform:uppercase;padding:5px 10px;">
+                  ⚖️ TÍNH THEO $/LBS — ĐƠN TRÊN 10 LBS
+                </td>
+              </tr>
+              ${perLbsRows}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+    });
+
+    wrap.innerHTML = html;
+  });
+}
+
+// ── LOAD DATA ─────────────────────────────────────────────────────────────
+function loadForm() {
+  const saved = JSON.parse(localStorage.getItem('cc-pricing') || 'null') || DEFAULTS;
+
+  // MVV
+  (saved.mvv || DEFAULTS.mvv).forEach((p, i) => {
+    const el = document.getElementById(`mvv-${i}`);
+    if (el) el.value = p;
+  });
+
+  // Insurance
+  const ins = saved.ins || DEFAULTS.ins;
+  const insD = DEFAULTS.ins;
+  document.getElementById('ins-free-perlbs').value    = ins.freePerLbs   ?? insD.freePerLbs;
+  document.getElementById('ins-free-maxcover').value  = ins.freeMaxCover  ?? insD.freeMaxCover;
+  document.getElementById('ins-pro').value             = ins.pro            ?? insD.pro;
+  document.getElementById('ins-pro-perlbs').value      = ins.proPerLbs      ?? insD.proPerLbs;
+  document.getElementById('ins-pro-maxcover').value    = ins.proMaxCover    ?? insD.proMaxCover;
+  document.getElementById('ins-promax').value          = ins.promax         ?? insD.promax;
+  document.getElementById('ins-promax-perlbs').value   = ins.promaxPerLbs   ?? insD.promaxPerLbs;
+  document.getElementById('ins-promax-maxcover').value = ins.promaxMaxCover ?? insD.promaxMaxCover;
+
+  // Packaging
+  const pkg = saved.pkg || DEFAULTS.pkg;
+  document.getElementById('pkg-std').value = pkg.std;
+  document.getElementById('pkg-adv').value = pkg.adv;
+
+  // Mua ho
+  document.getElementById('muaho-rate').value = saved.muaho ?? DEFAULTS.muaho;
+
+  // DeliveryVN
+  const dvn = saved.deliveryVN || DEFAULTS.deliveryVN;
+  document.getElementById('delivery-sghn').value     = dvn.sgHn     ?? DEFAULTS.deliveryVN.sgHn;
+  document.getElementById('delivery-province').value = dvn.province  ?? DEFAULTS.deliveryVN.province;
+
+  // Customs
+  const cus = saved.customs || DEFAULTS.customs;
+  const cusD = DEFAULTS.customs;
+  document.getElementById('customs-ruou').value          = cus.ruou           ?? cusD.ruou;
+  document.getElementById('customs-cigar').value         = cus.cigar          ?? cusD.cigar;
+  document.getElementById('customs-nuochoa').value       = cus.nuocHoa        ?? cusD.nuocHoa;
+  document.getElementById('customs-vitamin').value       = cus.vitaminMyPham  ?? cusD.vitaminMyPham;
+  document.getElementById('customs-dienthoaicu').value   = cus.dienThoaiCu    ?? cusD.dienThoaiCu;
+  document.getElementById('customs-dienthoaimoi').value  = cus.dienThoaiMoi   ?? cusD.dienThoaiMoi;
+  document.getElementById('customs-tainghne').value      = cus.taiNgheAirpod  ?? cusD.taiNgheAirpod;
+  document.getElementById('customs-vaccin').value        = cus.vaccinMayYTe   ?? cusD.vaccinMayYTe;
+  document.getElementById('customs-dientukhac').value    = cus.dienTuKhac     ?? cusD.dienTuKhac;
+
+  // UPS pickup
+  document.getElementById('ups-pickup-house').value = saved.upsPickup         ?? DEFAULTS.upsPickup;
+  document.getElementById('ups-pickup-apt').value   = saved.upsPickupApt      ?? DEFAULTS.upsPickupApt;
+  document.getElementById('ups-heavy').value        = saved.upsHeavySurcharge ?? DEFAULTS.upsHeavySurcharge;
+
+  // Label rate data
+  const rd = saved.rateData || DEFAULTS.rateData;
+  ['ups','fedex','usps'].forEach(carrier => {
+    CARRIER_SERVICES[carrier].forEach(svc => {
+      const key = svcKey(carrier, svc);
+      const data = rd[key] || DEFAULTS.rateData[key] || {};
+      const flat = data.flat || [0,0,0,0];
+
+      [0,1,2,3].forEach(i => {
+        const el = document.getElementById(fieldId(carrier, svc, 'f', i));
+        if (el) el.value = flat[i] ?? '';
+      });
+
+      if (key !== 'usps-Express') {
+        const defArr = DEFAULTS.rateData[key]?.perLbs || [];
+        const plArr  = Array.isArray(data.perLbs) ? data.perLbs : defArr;
+        plArr.forEach((val, idx) => {
+          const pl = document.getElementById(fieldId(carrier, svc, 'pl', idx));
+          if (pl) pl.value = val ?? '';
+        });
+      }
+    });
+  });
+}
+
+// ── READ FORM ─────────────────────────────────────────────────────────────
+function readForm() {
+  const rateData = {};
+  ['ups','fedex','usps'].forEach(carrier => {
+    CARRIER_SERVICES[carrier].forEach(svc => {
+      const key = svcKey(carrier, svc);
+      const flat = [0,1,2,3].map(i => {
+        const el = document.getElementById(fieldId(carrier, svc, 'f', i));
+        return parseFloat(el?.value) || 0;
+      });
+
+      let perLbs = null;
+      if (key !== 'usps-Express') {
+        const defArr = DEFAULTS.rateData[key]?.perLbs || [];
+        perLbs = defArr.map((_, idx) => {
+          const pl = document.getElementById(fieldId(carrier, svc, 'pl', idx));
+          return parseFloat(pl?.value) || 0;
+        });
+      }
+
+      rateData[key] = { flat, perLbs };
+    });
+  });
+
+  return {
+    mvv:     [0,1,2,3,4].map(i => parseFloat(document.getElementById(`mvv-${i}`)?.value) || 0),
+    ins: {
+      freePerLbs:       parseFloat(document.getElementById('ins-free-perlbs').value)     || 0,
+      freeMaxCover:     parseFloat(document.getElementById('ins-free-maxcover').value)   || 0,
+      pro:              parseFloat(document.getElementById('ins-pro').value)             || 0,
+      proPerLbs:        parseFloat(document.getElementById('ins-pro-perlbs').value)      || 0,
+      proMaxCover:      parseFloat(document.getElementById('ins-pro-maxcover').value)    || 0,
+      promax:           parseFloat(document.getElementById('ins-promax').value)          || 0,
+      promaxPerLbs:     parseFloat(document.getElementById('ins-promax-perlbs').value)   || 0,
+      promaxMaxCover:   parseFloat(document.getElementById('ins-promax-maxcover').value) || 0,
+    },
+    pkg:     { std: parseFloat(document.getElementById('pkg-std').value) || 0, adv: parseFloat(document.getElementById('pkg-adv').value) || 0 },
+    muaho:   parseFloat(document.getElementById('muaho-rate').value) || 5,
+    rateData,
+    upsPickup:         parseFloat(document.getElementById('ups-pickup-house').value) || 0,
+    upsPickupApt:      parseFloat(document.getElementById('ups-pickup-apt').value)   || 0,
+    upsHeavySurcharge: parseFloat(document.getElementById('ups-heavy').value)        || 0,
+    deliveryVN: {
+      sgHn:     parseFloat(document.getElementById('delivery-sghn').value)     || 0,
+      province: parseFloat(document.getElementById('delivery-province').value) || 0,
+    },
+    customs: {
+      ruou:          parseFloat(document.getElementById('customs-ruou').value)         || 0,
+      cigar:         parseFloat(document.getElementById('customs-cigar').value)        || 0,
+      nuocHoa:       parseFloat(document.getElementById('customs-nuochoa').value)      || 0,
+      vitaminMyPham: parseFloat(document.getElementById('customs-vitamin').value)      || 0,
+      dienThoaiCu:   parseFloat(document.getElementById('customs-dienthoaicu').value)  || 0,
+      dienThoaiMoi:  parseFloat(document.getElementById('customs-dienthoaimoi').value) || 0,
+      taiNgheAirpod: parseFloat(document.getElementById('customs-tainghne').value)     || 0,
+      vaccinMayYTe:  parseFloat(document.getElementById('customs-vaccin').value)       || 0,
+      dienTuKhac:    parseFloat(document.getElementById('customs-dientukhac').value)   || 0,
+    },
+  };
+}
+
+// ── SAVE ──────────────────────────────────────────────────────────────────
+function savePricing() {
+  localStorage.setItem('cc-pricing', JSON.stringify(readForm()));
+  const badge = document.getElementById('saved-badge');
+  badge.style.display = 'inline-block';
+  setTimeout(() => badge.style.display = 'none', 3000);
+  showToast('✅ Đã lưu bảng giá!');
+}
+
+// ── RESET ─────────────────────────────────────────────────────────────────
+function resetDefaults() {
+  if (!confirm('Khôi phục tất cả giá về mặc định?')) return;
+  localStorage.removeItem('cc-pricing');
+  loadForm();
+  showToast('↩ Đã khôi phục giá mặc định');
+}
+
+// ── FILE HANDLE (File System Access API) ──────────────────────────────────
+let _pricingFileHandle = null;
+
+async function pickPricingFile() {
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description: 'pricing.js', accept: { 'text/javascript': ['.js'] } }],
+      multiple: false,
+    });
+    _pricingFileHandle = handle;
+    const btn = document.getElementById('btn-pick-file');
+    btn.textContent = '✅ ' + handle.name;
+    btn.style.background = '#22c55e';
+    document.getElementById('save-bar-hint').textContent = 'File đã chọn — bấm "Lưu & Cập nhật" để ghi thẳng vào pricing.js';
+    showToast('✅ Đã chọn: ' + handle.name);
+  } catch (e) {
+    if (e.name !== 'AbortError') showToast('❌ ' + e.message);
+  }
+}
+
+async function saveAndUpdate() {
+  // Save to localStorage first
+  localStorage.setItem('cc-pricing', JSON.stringify(readForm()));
+  const badge = document.getElementById('saved-badge');
+  if (badge) { badge.style.display = 'inline-block'; setTimeout(() => badge.style.display = 'none', 3000); }
+
+  const content = generatePricingContent();
+
+  if (_pricingFileHandle) {
+    // Write directly to the file
+    try {
+      const perm = await _pricingFileHandle.queryPermission({ mode: 'readwrite' });
+      if (perm !== 'granted') await _pricingFileHandle.requestPermission({ mode: 'readwrite' });
+      const writable = await _pricingFileHandle.createWritable();
+      await writable.write(content);
+      await writable.close();
+      showToast('✅ Đã cập nhật pricing.js — Đẩy GitHub là xong!');
+    } catch (e) {
+      _pricingFileHandle = null;
+      showToast('❌ Lỗi ghi file: ' + e.message);
+      fallbackDownload(content);
+    }
+  } else if ('showSaveFilePicker' in window) {
+    // No handle yet → show save picker
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: 'pricing.js',
+        types: [{ description: 'JavaScript', accept: { 'text/javascript': ['.js'] } }],
+      });
+      _pricingFileHandle = handle;
+      const writable = await handle.createWritable();
+      await writable.write(content);
+      await writable.close();
+      const btn = document.getElementById('btn-pick-file');
+      btn.textContent = '✅ ' + handle.name;
+      btn.style.background = '#22c55e';
+      showToast('✅ Đã lưu pricing.js!');
+    } catch (e) {
+      if (e.name !== 'AbortError') { showToast('❌ ' + e.message); fallbackDownload(content); }
+    }
+  } else {
+    // Fallback: trigger download
+    fallbackDownload(content);
+    showToast('⬇ Tải file xong — thay thế assets/js/pricing.js thủ công');
+  }
+}
+
+function fallbackDownload(content) {
+  const blob = new Blob([content], { type: 'text/javascript' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'pricing.js'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── EXPORT pricing.js ─────────────────────────────────────────────────────
+function generatePricingContent() {
+  const d = readForm();
+  const rd = d.rateData;
+
+  const flatStr = (arr) => arr.map((p, i) => {
+    const maxes = [2, 5, 8, 10];
+    return `{max:${maxes[i]},p:${p}}`;
+  }).join(',');
+
+  const rateLines = Object.keys(rd).map(key => {
+    const entry = rd[key];
+    const perLbsStr = entry.perLbs === null ? 'null' : `[${entry.perLbs.join(', ')}]`;
+    const maxLbs = key.startsWith('usps-Express') ? 10 : key.startsWith('usps-') ? 20 : 'null';
+    return `    '${key}': { flat:[${flatStr(entry.flat)}], perLbs:${perLbsStr}, maxLbs:${maxLbs} },`;
+  }).join('\n');
+
+  const content = `/* ═══════════════════════════════════════════════════════════
+   CUCKOO CARGO — Bảng Giá
+   ⚠️ File này được tạo tự động từ trang Quản lý Bảng Giá
+   Cập nhật: ${new Date().toLocaleString('vi-VN')}
+   ═══════════════════════════════════════════════════════════ */
+
+const CC_PRICING = {
+
+  // ── GỬI HÀNG MỸ → VIỆT ──────────────────────────────────
+  mvv: [
+    { from: 0,    to: 10,   price: ${d.mvv[0]} },
+    { from: 10,   to: 50,   price: ${d.mvv[1]} },
+    { from: 50,   to: 90,   price: ${d.mvv[2]} },
+    { from: 90,   to: 150,  price: ${d.mvv[3]} },
+    { from: 150,  to: 9999, price: ${d.mvv[4]} },
+  ],
+
+  deliveryVN: { sgHn: ${d.deliveryVN.sgHn}, province: ${d.deliveryVN.province} },
+
+  customs: {
+    ruou: ${d.customs.ruou}, cigar: ${d.customs.cigar}, nuocHoa: ${d.customs.nuocHoa},
+    vitaminMyPham: ${d.customs.vitaminMyPham},
+    dienThoaiCu: ${d.customs.dienThoaiCu}, dienThoaiMoi: ${d.customs.dienThoaiMoi},
+    taiNgheAirpod: ${d.customs.taiNgheAirpod},
+    vaccinMayYTe: ${(d.customs.vaccinMayYTe/100).toFixed(4)},
+    dienTuKhac:   ${(d.customs.dienTuKhac/100).toFixed(4)},
+  },
+
+  insurance: {
+    Free:    { price: 0, perLbs: ${d.ins.freePerLbs}, maxCover: ${d.ins.freeMaxCover}, label: 'FREE — Miễn phí' },
+    Pro:     { price: ${d.ins.pro},   perLbs: ${d.ins.proPerLbs},   maxCover: ${d.ins.proMaxCover},  label: 'PRO — Bảo vệ nâng cao' },
+    ProMax:  { price: ${d.ins.promax},perLbs: ${d.ins.promaxPerLbs},maxCover: ${d.ins.promaxMaxCover},label: 'PRO MAX — Bảo vệ tối thượng' },
+    Special: { price: null, perLbs: null, maxCover: null, label: 'SPECIAL — Theo giá trị khai báo' },
+  },
+
+  packaging: {
+    'Miễn phí':   { rate: 0,          label: 'Miễn phí' },
+    'Tiêu chuẩn': { rate: ${d.pkg.std}, label: '+\$${d.pkg.std}/lbs' },
+    'Nâng cao':   { rate: ${d.pkg.adv}, label: '+\$${d.pkg.adv}/lbs' },
+  },
+
+  muaHo: ${(d.muaho / 100).toFixed(4)},
+
+  // ── LABEL NỘI ĐỊA MỸ ────────────────────────────────────
+  upsPickup:         ${d.upsPickup},
+  upsPickupApt:      ${d.upsPickupApt},
+  upsHeavySurcharge: ${d.upsHeavySurcharge},
+
+  rateData: {
+${rateLines}
+  },
+
+};
+
+// ── HÀM TÍNH GIÁ ─────────────────────────────────────────────
+
+function calcLabelPrice(carrier, service, weightLbs, pickupMode = 'dropoff', addrType = 'house') {
+  const key = carrier.toLowerCase() + '-' + service;
+  const data = CC_PRICING.rateData[key];
+  if (!data) return null;
+  const PERLBS_RANGES = [[11,20],[21,30],[31,40],[41,50],[51,70],[71,100],[101,9999]];
+  let cost;
+  if (weightLbs <= 10) {
+    const tier = data.flat.find(f => weightLbs <= f.max);
+    cost = tier ? tier.p : data.flat[data.flat.length - 1].p;
+  } else {
+    if (!data.perLbs) return null;
+    if (data.maxLbs && weightLbs > data.maxLbs) return null;
+    let rate;
+    if (Array.isArray(data.perLbs)) {
+      let idx = data.perLbs.length - 1;
+      for (let i = 0; i < PERLBS_RANGES.length; i++) {
+        if (weightLbs >= PERLBS_RANGES[i][0] && weightLbs <= PERLBS_RANGES[i][1]) {
+          idx = Math.min(i, data.perLbs.length - 1); break;
+        }
+      }
+      rate = data.perLbs[idx];
+    } else {
+      rate = data.perLbs;
+    }
+    if (rate == null) return null;
+    cost = weightLbs * rate;
+  }
+  if (carrier.toLowerCase() === 'ups' && pickupMode === 'pickup') {
+    cost += addrType === 'apt' ? CC_PRICING.upsPickupApt : CC_PRICING.upsPickup;
+  }
+  if (carrier.toLowerCase() === 'ups' && weightLbs > 50) {
+    cost += CC_PRICING.upsHeavySurcharge;
+  }
+  return cost;
+}
+
+function calcMVVPrice(weightLbs) {
+  const effective = weightLbs < 10 ? 10 : weightLbs;
+  const tier = CC_PRICING.mvv.find(t => effective >= t.from && effective < t.to);
+  if (!tier) return null;
+  return effective * tier.price;
+}
+
+function formatPrice(usd) {
+  if (usd === null) return 'Liên hệ báo giá';
+  return '\$' + usd.toFixed(2);
+}
+`;
+
+  return content;
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────
+function showToast(msg, duration = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', duration);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('cc-admin') === '1') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    buildLabelTables();
+    loadForm();
+  }
+});
+</script>
+</body>
+</html>

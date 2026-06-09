@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Tra Cứu Đơn Hàng — Cuckoo Cargo</title>
+ <meta name="description" content="Tra cứu trạng thái đơn hàng Cuckoo Cargo theo mã đơn. Cập nhật realtime từ kho đến tay bạn." />
+ <link rel="stylesheet" href="assets/css/global.css" />
+ <link rel="stylesheet" href="assets/css/pages.css" />
+ <style>
+ /* TRACKING PAGE STYLES */
+
+ /* Hero */
+ .tk-hero {
+ background: var(--black);
+ padding: 80px 24px 72px;
+ text-align: center;
+ position: relative;
+ overflow: hidden;
+ }
+ .tk-hero::before {
+ content: '';
+ position: absolute; inset: 0;
+ background:
+ radial-gradient(ellipse 60% 50% at 50% 0%, rgba(244,123,32,.18) 0%, transparent 70%),
+ repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.03) 39px, rgba(255,255,255,.03) 40px),
+ repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.03) 39px, rgba(255,255,255,.03) 40px);
+ pointer-events: none;
+ }
+ .tk-hero-badge {
+ display: inline-flex; align-items: center; gap: 8px;
+ background: var(--orange-bg); color: var(--orange);
+ border: 1px solid var(--orange); border-radius: 20px;
+ padding: 6px 16px; font-size: 13px; font-weight: 700;
+ margin-bottom: 20px; position: relative;
+ }
+ .tk-hero h1 {
+ font-size: clamp(28px, 4vw, 48px);
+ font-weight: 900; color: var(--white);
+ line-height: 1.15; margin-bottom: 12px; position: relative;
+ }
+ .tk-hero h1 span { color: var(--orange); }
+ .tk-hero p {
+ font-size: 16px; color: rgba(255,255,255,.55);
+ max-width: 500px; margin: 0 auto 36px; line-height: 1.7;
+ position: relative;
+ }
+
+ /* Search box */
+ .tk-search-wrap {
+ max-width: 600px; margin: 0 auto;
+ display: flex; gap: 10px; flex-wrap: wrap;
+ position: relative;
+ }
+ .tk-search-input {
+ flex: 1; min-width: 220px;
+ background: rgba(255,255,255,.08);
+ border: 1.5px solid rgba(255,255,255,.2);
+ border-radius: 12px; padding: 14px 18px;
+ color: var(--white); font-size: 16px; font-family: inherit;
+ transition: border-color .2s;
+ }
+ .tk-search-input::placeholder { color: rgba(255,255,255,.35); }
+ .tk-search-input:focus { outline: none; border-color: var(--orange); }
+ .tk-search-btn {
+ padding: 14px 28px;
+ background: var(--grad-orange); color: #fff;
+ border: none; border-radius: 12px;
+ font-size: 15px; font-weight: 800; cursor: pointer;
+ font-family: inherit; transition: all .2s;
+ display: flex; align-items: center; gap: 8px;
+ white-space: nowrap;
+ }
+ .tk-search-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-orange); }
+ .tk-search-btn:disabled { background: var(--gray-border); color: var(--gray); cursor: not-allowed; transform: none; box-shadow: none; }
+
+
+ /* Result area */
+ .tk-result-area {
+ max-width: 800px; margin: 48px auto 0; padding: 0 24px;
+ }
+
+ /* Loading skeleton */
+ .tk-skeleton { animation: pulse 1.5s ease-in-out infinite; }
+ @keyframes pulse { 0%,100%{opacity:.6} 50%{opacity:.3} }
+ .sk-line {
+ background: var(--gray-border); border-radius: 6px; height: 16px; margin-bottom: 12px;
+ }
+
+ /* Result card */
+ .tk-result-card {
+ background: var(--white); border-radius: var(--radius-lg);
+ border: 1.5px solid var(--gray-border);
+ overflow: hidden; box-shadow: var(--shadow-md);
+ }
+
+ /* Order header */
+ .tk-order-header {
+ background: var(--black); padding: 24px 28px;
+ display: flex; justify-content: space-between; align-items: flex-start;
+ flex-wrap: wrap; gap: 16px;
+ }
+ .tk-order-id { font-size: 22px; font-weight: 900; color: var(--white); }
+ .tk-order-id span { color: var(--orange); }
+ .tk-order-meta { font-size: 13px; color: rgba(255,255,255,.5); margin-top: 4px; }
+ .tk-status-badge {
+ padding: 8px 18px; border-radius: 20px;
+ font-size: 13px; font-weight: 800; white-space: nowrap;
+ }
+ .tk-status-badge.transit { background: rgba(244,123,32,.15); color: var(--orange); border: 1.5px solid var(--orange); }
+ .tk-status-badge.delivered { background: rgba(34,197,94,.12); color: #16A34A; border: 1.5px solid #4ADE80; }
+ .tk-status-badge.pending { background: rgba(255,255,255,.08);color: rgba(255,255,255,.6); border: 1.5px solid rgba(255,255,255,.15); }
+ .tk-status-badge.customs { background: rgba(234,179,8,.12); color: #B45309; border: 1.5px solid #FCD34D; }
+
+ /* Progress bar */
+ .tk-progress-section { padding: 24px 28px; border-bottom: 1px solid var(--gray-border); }
+ .tk-progress-steps {
+ display: flex; justify-content: space-between;
+ position: relative; margin-bottom: 8px;
+ }
+ .tk-progress-steps::before {
+ content: ''; position: absolute;
+ top: 16px; left: 16px; right: 16px;
+ height: 3px; background: var(--gray-border); z-index: 0;
+ }
+ .tk-progress-fill {
+ content: ''; position: absolute;
+ top: 16px; left: 16px;
+ height: 3px; background: var(--orange);
+ z-index: 1; transition: width .6s ease;
+ }
+ .tk-prog-step { text-align: center; position: relative; z-index: 2; flex: 1; }
+ .tk-prog-dot {
+ width: 32px; height: 32px; border-radius: 50%;
+ margin: 0 auto 8px;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 14px; font-weight: 800;
+ transition: all .3s;
+ }
+ .tk-prog-dot.done { background: var(--orange); color: #fff; }
+ .tk-prog-dot.active { background: var(--orange); color: #fff; box-shadow: 0 0 0 4px rgba(244,123,32,.25); }
+ .tk-prog-dot.pending { background: var(--white); border: 2px solid var(--gray-border); color: var(--gray); }
+ .tk-prog-label { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+ .tk-prog-label.active { color: var(--orange); font-weight: 800; }
+
+ /* Timeline */
+ .tk-timeline-section { padding: 24px 28px; }
+ .tk-timeline-title {
+ font-size: 15px; font-weight: 800; margin-bottom: 20px;
+ color: var(--black); display: flex; align-items: center; gap: 8px;
+ }
+ .tk-timeline { display: flex; flex-direction: column; gap: 0; }
+ .tl-item { display: flex; gap: 16px; }
+ .tl-left { display: flex; flex-direction: column; align-items: center; width: 36px; flex-shrink: 0; }
+ .tl-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+ .tl-dot.done { background: var(--green); }
+ .tl-dot.active { background: var(--orange); box-shadow: 0 0 0 3px rgba(244,123,32,.25); }
+ .tl-dot.pending { background: var(--gray-border); }
+ .tl-line { flex: 1; width: 2px; background: var(--gray-border); margin: 4px 0 0; min-height: 24px; }
+ .tl-item:last-child .tl-line { display: none; }
+ .tl-content { padding-bottom: 24px; flex: 1; }
+ .tl-time { font-size: 12px; color: var(--text-muted); margin-bottom: 3px; }
+ .tl-status { font-size: 15px; font-weight: 700; margin-bottom: 3px; color: var(--black); }
+ .tl-status.active { color: var(--orange); }
+ .tl-loc { font-size: 13px; color: var(--text-muted); }
+ .tl-note { font-size: 12px; color: var(--text-muted); margin-top: 4px; font-style: italic; }
+
+ /* Info grid */
+ .tk-info-section {
+ padding: 20px 28px; background: var(--gray-light);
+ display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+ border-top: 1px solid var(--gray-border);
+ }
+ @media (max-width: 600px) { .tk-info-section { grid-template-columns: 1fr 1fr; } }
+ .tk-info-item {}
+ .tk-info-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+ .tk-info-value { font-size: 14px; font-weight: 700; color: var(--black); }
+
+ /* Not found */
+ .tk-not-found {
+ text-align: center; padding: 60px 24px;
+ background: var(--white); border-radius: var(--radius-lg);
+ border: 1.5px solid var(--gray-border);
+ }
+ .tk-not-found .icon { font-size: 56px; margin-bottom: 16px; }
+ .tk-not-found h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+ .tk-not-found p { font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 360px; margin: 0 auto 24px; }
+
+ /* FAQ section */
+ .faq-list { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+ .faq-item {
+ border-radius: var(--radius-md); border: 1.5px solid var(--gray-border);
+ overflow: hidden;
+ }
+ .faq-q {
+ padding: 16px 20px; font-size: 15px; font-weight: 700;
+ cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+ user-select: none; transition: background .2s;
+ }
+ .faq-q:hover { background: var(--gray-light); }
+ .faq-arrow { font-size: 12px; color: var(--text-muted); transition: transform .2s; flex-shrink: 0; }
+ .faq-a {
+ display: none; padding: 0 20px 16px;
+ font-size: 14px; color: var(--text-muted); line-height: 1.7;
+ }
+ .faq-item.open .faq-a { display: block; }
+ .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+ /* Other services CTA */
+ .other-services {
+ display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+ }
+ @media (max-width: 640px) { .other-services { grid-template-columns: 1fr; } }
+ .os-card {
+ border-radius: var(--radius-md); border: 1.5px solid var(--gray-border);
+ padding: 24px 20px; text-align: center;
+ transition: transform .2s, border-color .2s, box-shadow .2s;
+ text-decoration: none; color: inherit; display: block;
+ }
+ .os-card:hover { transform: translateY(-3px); border-color: var(--orange); box-shadow: var(--shadow-md); }
+ .os-card .icon { font-size: 36px; margin-bottom: 10px; }
+ .os-card h4 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+ .os-card p { font-size: 13px; color: var(--text-muted); }
+ 
+ /* NAV */
+ nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-border);padding:0 24px;}
+ .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px;}
+ .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+ .nav-links{display:flex;gap:4px;flex:1;}
+ .nav-links a{padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;color:var(--text-primary);text-decoration:none;transition:background .2s;}
+ .nav-links a:hover,.nav-links a.active{background:var(--orange-bg);color:var(--orange);}
+ .nav-right{display:flex;align-items:center;gap:10px;}
+ .lang-toggle{display:flex;border:1px solid var(--gray-border);border-radius:20px;overflow:hidden;}
+ .lang-btn{padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;background:transparent;border:none;font-family:inherit;}
+ .lang-btn.active{background:var(--orange);color:#fff;}
+ .nav-cta{background:var(--orange);color:#fff;padding:9px 18px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;transition:background .2s;}
+ .nav-cta:hover{background:var(--orange-deep);}
+ </style>
+ <link rel="stylesheet" href="assets/css/mobile.css" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+ <div class="nav-inner">
+ <a href="index.html" class="nav-logo">
+ <img src="assets/images/logo.png" alt="Cuckoo Cargo" style="height:38px;width:auto;display:block;" />
+ </a>
+ <div class="nav-links" id="cc-nav-links">
+ <a href="index.html" data-vi="Trang chủ" data-en="Home">Trang chủ</a>
+ <a href="my-ve-viet.html" data-vi="Mỹ - Việt" data-en="US to Vietnam">Mỹ - Việt</a>
+ <a href="noi-dia-my.html" data-vi="Label Nội địa" data-en="Domestic Label">Label Nội địa</a>
+ <a href="mua-ho.html" data-vi="Mua hộ" data-en="Shop For Me">Mua hộ</a>
+ <a href="tracking.html" class="active" data-vi="Tra cứu" data-en="Track Order">Tra cứu</a>
+ <a href="san-pham.html" data-vi="Sản phẩm" data-en="Products">Sản phẩm</a>
+ <a href="blog.html" data-vi="Blog" data-en="Blog">Blog</a>
+ </div>
+ <div class="nav-right">
+ <div class="cc-search-wrap" id="cc-search-wrap">
+ <button class="cc-search-icon-btn" onclick="toggleNavSearch()" aria-label="Tìm kiếm">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+ </button>
+ <div class="cc-search-box" id="cc-search-box">
+  <input type="text" id="cc-search-input" placeholder="Tìm dịch vụ, thông tin..." autocomplete="off"
+   oninput="doNavSearch(this.value)" onkeydown="if(event.key===\'Escape\')closeNavSearch()" />
+  <div class="cc-search-results" id="cc-search-results"></div>
+ </div>
+</div>
+<div class="lang-toggle">
+ <button class="lang-btn active" onclick="setLang('vi')">VN</button>
+ <button class="lang-btn" onclick="setLang('en')">EN</button>
+ </div>
+ <a href="my-ve-viet.html" class="nav-cta" data-vi="Tạo đơn →" data-en="Create Order →">Tạo đơn →</a>
+ <button class="mobile-nav-toggle" id="mobile-toggle-btn" onclick="toggleMobileNav()" aria-label="Menu">
+  <svg class="hbg-open" width="20" height="14" viewBox="0 0 20 14" fill="none"><rect width="20" height="2" rx="1" fill="currentColor"/><rect y="6" width="20" height="2" rx="1" fill="currentColor"/><rect y="12" width="20" height="2" rx="1" fill="currentColor"/></svg>
+  <svg class="hbg-close" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none"><line x1="1" y1="1" x2="15" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="15" y1="1" x2="1" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+ </button>
+ </div>
+ </div>
+</nav>
+
+<!-- HERO -->
+<section class="tk-hero">
+ <div class="tk-hero-badge" data-vi=" Tra cứu đơn hàng" data-en=" Track Your Order"> Tra cứu đơn hàng</div>
+ <h1 data-vi="Kiểm tra &lt;span&gt;trạng thái&lt;/span&gt;&lt;br&gt;đơn hàng của bạn" data-en="Check your &lt;span&gt;order status&lt;/span&gt;&lt;br&gt;anytime">Kiểm tra <span>trạng thái</span><br>đơn hàng của bạn</h1>
+ <p data-vi="Nhập mã đơn hàng để xem hành trình kiện hàng từ kho Mỹ đến tay bạn" data-en="Enter your order code to track your shipment from the US warehouse to your door">Nhập mã đơn hàng để xem hành trình kiện hàng từ kho Mỹ đến tay bạn</p>
+
+ <div class="tk-search-wrap">
+ <input
+ type="text"
+ class="tk-search-input"
+ id="tk-input"
+ placeholder="VD: HTS202606061234"
+ data-vi-placeholder="VD: HTS202606061234"
+ data-en-placeholder="E.g.: HTS202606061234"
+ maxlength="20"
+ autocomplete="off"
+ oninput="this.value=this.value.toUpperCase()"
+ onkeydown="if(event.key==='Enter') doSearch()"
+ />
+ <button class="tk-search-btn" id="tk-btn" onclick="doSearch()" data-vi=" Tra cứu" data-en=" Search">
+ Tra cứu
+ </button>
+ </div>
+</section>
+
+<!-- RESULT AREA -->
+<div class="tk-result-area" id="tk-result-area">
+ <!-- Results injected here by JS -->
+</div>
+
+<!-- FAQ -->
+<section class="section" style="background: var(--gray-light); margin-top: 64px;">
+ <div class="container">
+ <div class="section-title">
+ <h2 data-vi="Câu hỏi thường gặp" data-en="Frequently Asked Questions">Câu hỏi thường gặp</h2>
+ <p data-vi="Về tra cứu và theo dõi đơn hàng" data-en="About tracking and monitoring your orders">Về tra cứu và theo dõi đơn hàng</p>
+ </div>
+ <div class="faq-list">
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <span data-vi="Mã đơn hàng ở đâu?" data-en="Where is my order code?">Mã đơn hàng ở đâu?</span> <span class="faq-arrow"></span>
+ </div>
+ <div class="faq-a" data-vi="Mã đơn hàng bắt đầu bằng <strong>HTS</strong> theo sau là ngày và 4 số (VD: <strong>HTS202606061234</strong>). Bạn sẽ nhận mã này qua Zalo/Messenger ngay sau khi Cuckoo Cargo xác nhận đơn." data-en="Your order code starts with <strong>HTS</strong> followed by the date and 4 digits (e.g. <strong>HTS202606061234</strong>). You will receive it via Zalo/Messenger once Cuckoo Cargo confirms your order.">
+ Mã đơn hàng bắt đầu bằng <strong>HTS</strong> theo sau là ngày và 4 số (VD: <strong>HTS202606061234</strong>). Bạn sẽ nhận mã này qua Zalo/Messenger ngay sau khi Cuckoo Cargo xác nhận đơn.
+ </div>
+ </div>
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <span data-vi="Bao lâu thì đơn được cập nhật trạng thái?" data-en="How often is my order status updated?">Bao lâu thì đơn được cập nhật trạng thái?</span> <span class="faq-arrow"></span>
+ </div>
+ <div class="faq-a" data-vi="Chúng tôi cập nhật thủ công mỗi khi có sự kiện quan trọng: nhận hàng, xuất kho, thông quan, giao hàng. Thường trong 24h kể từ khi sự kiện xảy ra." data-en="We update manually at each key event: received, dispatched, customs cleared, delivered. Usually within 24h of the event.">
+ Chúng tôi cập nhật thủ công mỗi khi có sự kiện quan trọng: nhận hàng, xuất kho, thông quan, giao hàng. Thường trong 24h kể từ khi sự kiện xảy ra.
+ </div>
+ </div>
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <span data-vi="Hàng bao lâu về tới Việt Nam?" data-en="How long does delivery to Vietnam take?">Hàng bao lâu về tới Việt Nam?</span> <span class="faq-arrow"></span>
+ </div>
+ <div class="faq-a" data-vi="Tuyến <strong>Mỹ - Việt Nam</strong>: 7–15 ngày làm việc tùy dịch vụ và hải quan.<br><strong>Nội địa Mỹ</strong>: 1–5 ngày tùy tuyến (Ground/2-Day/Overnight)." data-en="<strong>US – Vietnam</strong>: 7–15 business days depending on service and customs.<br><strong>US Domestic</strong>: 1–5 days depending on route (Ground/2-Day/Overnight).">
+ Tuyến <strong>Mỹ - Việt Nam</strong>: 7–15 ngày làm việc tùy dịch vụ và hải quan.<br>
+ <strong>Nội địa Mỹ</strong>: 1–5 ngày tùy tuyến (Ground/2-Day/Overnight).
+ </div>
+ </div>
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <span data-vi="Đơn hàng đang bị giữ ở hải quan — phải làm gì?" data-en="My order is held at customs — what should I do?">Đơn hàng đang bị giữ ở hải quan — phải làm gì?</span> <span class="faq-arrow"></span>
+ </div>
+ <div class="faq-a" data-vi="Liên hệ ngay với chúng tôi qua Zalo hoặc Messenger kèm mã đơn hàng. Chúng tôi sẽ hỗ trợ bổ sung giấy tờ hoặc làm việc với cơ quan hải quan." data-en="Contact us immediately via Zalo or Messenger with your order code. We will help with paperwork or liaise with customs authorities.">
+ Liên hệ ngay với chúng tôi qua Zalo hoặc Messenger kèm mã đơn hàng. Chúng tôi sẽ hỗ trợ bổ sung giấy tờ hoặc làm việc với cơ quan hải quan.
+ </div>
+ </div>
+ <div class="faq-item">
+ <div class="faq-q" onclick="toggleFaq(this)">
+ <span data-vi="Tôi không nhớ mã đơn — tra cứu được không?" data-en="I forgot my order code — can I still track it?">Tôi không nhớ mã đơn — tra cứu được không?</span> <span class="faq-arrow"></span>
+ </div>
+ <div class="faq-a" data-vi="Vui lòng liên hệ Cuckoo Cargo qua Zalo hoặc Messenger, cung cấp tên và số điện thoại đặt đơn — chúng tôi sẽ tra giúp bạn trong vài phút." data-en="Please contact Cuckoo Cargo via Zalo or Messenger with your name and phone number — we will look it up for you within minutes.">
+ Vui lòng liên hệ Cuckoo Cargo qua Zalo hoặc Messenger, cung cấp tên và số điện thoại đặt đơn — chúng tôi sẽ tra giúp bạn trong vài phút.
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- OTHER SERVICES -->
+<section class="section">
+ <div class="container">
+ <div class="section-title">
+ <h2 data-vi="Dịch vụ khác" data-en="Other Services">Dịch vụ khác</h2>
+ <p data-vi="Chưa có đơn? Tạo đơn ngay bên dưới" data-en="No order yet? Create one below">Chưa có đơn? Tạo đơn ngay bên dưới</p>
+ </div>
+ <div class="other-services">
+ <a href="my-ve-viet.html" class="os-card">
+ <div class="icon"></div>
+ <h4 data-vi="Gửi hàng Mỹ - Việt" data-en="US to Vietnam Shipping">Gửi hàng Mỹ - Việt</h4>
+ <p data-vi="Tạo đơn gửi hàng quốc tế, wizard 7 bước đơn giản" data-en="International shipping, simple 7-step wizard">Tạo đơn gửi hàng quốc tế, wizard 7 bước đơn giản</p>
+ </a>
+ <a href="noi-dia-my.html" class="os-card">
+ <div class="icon"></div>
+ <h4 data-vi="Label nội địa Mỹ" data-en="US Domestic Label">Label nội địa Mỹ</h4>
+ <p data-vi="UPS · FedEx · USPS — giao khắp 50 tiểu bang" data-en="UPS · FedEx · USPS — delivery across all 50 states">UPS · FedEx · USPS — giao khắp 50 tiểu bang</p>
+ </a>
+ <a href="mua-ho.html" class="os-card">
+ <div class="icon"></div>
+ <h4 data-vi="Mua hộ hàng Mỹ" data-en="US Personal Shopping">Mua hộ hàng Mỹ</h4>
+ <p data-vi="Amazon, Walmart, Target... giao về Việt Nam hoặc Mỹ" data-en="Amazon, Walmart, Target... shipped to Vietnam or the US">Amazon, Walmart, Target... giao về Việt Nam hoặc Mỹ</p>
+ </a>
+ </div>
+ </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="cc-footer" class="cc-footer"></footer>
+
+<!-- SHARED SCRIPTS -->
+<script src="assets/js/lang.js">
+ function toggleMobileNav() {
+   var nav = document.getElementById('cc-nav-links');
+   var btn = document.getElementById('mobile-toggle-btn');
+   if (!nav) return;
+   var isOpen = nav.classList.toggle('open');
+   if (btn) {
+     var open = btn.querySelector('.hbg-open');
+     var close = btn.querySelector('.hbg-close');
+     if (open)  open.style.display  = isOpen ? 'none'  : 'block';
+     if (close) close.style.display = isOpen ? 'block' : 'none';
+   }
+ }
+ document.addEventListener('click', function(e) {
+   var nav = document.getElementById('cc-nav-links');
+   var btn = document.getElementById('mobile-toggle-btn');
+   if (nav && nav.classList.contains('open') && btn && !nav.contains(e.target) && !btn.contains(e.target)) {
+     nav.classList.remove('open');
+     var open = btn.querySelector('.hbg-open');
+     var close = btn.querySelector('.hbg-close');
+     if (open)  open.style.display = 'block';
+     if (close) close.style.display = 'none';
+   }
+ });
+</script>
+<script src="assets/js/global.js"></script>
+<script src="assets/js/pricing.js"></script>
+
+<script>
+ injectFooter();
+
+ // Apps Script URL — fetch dữ liệu thật từ Google Sheet
+ const TRACKING_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53kdguSGjFrD-ipJRTAlVJlCpq28_3C9ZoH5Mb-RBlKTP1lER/exec";
+
+ // Fetch tracking từ Google Sheet qua Apps Script GET endpoint
+ async function fetchTracking(orderId) {
+   const url = `${TRACKING_SCRIPT_URL}?action=getOrder&orderId=${encodeURIComponent(orderId)}`;
+   const res  = await fetch(url, { redirect: 'follow' });
+   const text = await res.text();
+   let data;
+   try { data = JSON.parse(text); } catch(e) { throw new Error('Phản hồi không hợp lệ từ server'); }
+   // Nếu script chưa deploy mới → báo lỗi rõ ràng
+   if (!data.success && data.status) throw new Error('Apps Script chưa được redeploy — vui lòng triển khai lại');
+   if (!data.success) throw new Error(data.error || 'Lỗi kết nối');
+   // Trả về null chỉ khi KHÔNG tìm thấy gì cả
+   if (!data.found && (!data.tracking || data.tracking.length === 0) && !data.order) return null;
+   return data;
+ }
+
+ // Các bước hành trình — phải khớp với trạng thái admin cập nhật
+ const STEPS_MVV   = ['Tạo đơn', 'Kho Mỹ', 'Đang bay', 'Kho VN', 'Hải quan', 'Đã giao'];
+ const STEPS_LABEL = ['Tạo label', 'Hãng nhận', 'Vận chuyển', 'Sắp giao', 'Đã giao'];
+
+ /**
+  * Ánh xạ trạng thái (text) → chỉ số bước trong thanh hành trình
+  * Phải khớp với các quick-btn trong admin-tracking.html
+  */
+ function statusToStep(text, isLabel) {
+   const s = (text || '').toLowerCase();
+
+   if (isLabel) {
+     // STEPS_LABEL: ['Tạo label'=0, 'Hãng nhận'=1, 'Vận chuyển'=2, 'Sắp giao'=3, 'Đã giao'=4]
+     if (s.includes('giao thành công') || s.includes('đã giao'))         return 4;
+     if (s.includes('sắp giao') || s.includes('out for delivery') || s.includes('đang giao')) return 3;
+     if (s.includes('vận chuyển') || s.includes('transit'))              return 2;
+     if (s.includes('nhận hàng') || s.includes('hãng nhận') || s.includes('fedex') || s.includes('ups') || s.includes('usps')) return 1;
+     return 0;
+   }
+
+   // STEPS_MVV: ['Tạo đơn'=0, 'Kho Mỹ'=1, 'Đang bay'=2, 'Kho VN'=3, 'Hải quan'=4, 'Đã giao'=5]
+   if (s.includes('giao thành công') || s.includes('đã giao thành công')) return 5;
+   if (s.includes('giao hàng nội địa') || s.includes('đang giao hàng') || s.includes('đang giao')) return 5;
+   if (s.includes('thông quan') || s.includes('hải quan'))               return 4;
+   if (s.includes('kho việt nam') || s.includes('kho vn') || s.includes('về kho')) return 3;
+   if (s.includes('vận chuyển quốc tế') || s.includes('quốc tế'))       return 2;
+   if (s.includes('xuất kho') || s.includes('đang bay') || s.includes('máy bay') || s.includes('lax')) return 2;
+   if (s.includes('nhận tại kho') || s.includes('kho cuckoo') || s.includes('chuẩn bị hàng') || s.includes('kho mỹ')) return 1;
+   // Tạo đơn / mặc định
+   return 0;
+ }
+
+
+ // SEARCH 
+ async function doSearch() {
+ const raw = document.getElementById('tk-input').value.trim().toUpperCase();
+ if (!raw) { showToast('error', ' Vui lòng nhập mã đơn hàng'); return; }
+ if (!raw.startsWith('HTS') || raw.length < 10) {
+ showToast('error', 'Mã đơn hàng phải bắt đầu bằng HTS — ví dụ: HTS202606061234');
+ return;
+ }
+
+ const area = document.getElementById('tk-result-area');
+ const btn = document.getElementById('tk-btn');
+
+ // Show skeleton
+ btn.disabled = true;
+ area.innerHTML = `
+ <div class="tk-skeleton" style="max-width:800px;margin:0 auto;padding:0 24px;">
+ <div class="sk-line" style="width:40%;height:24px;margin-bottom:20px;"></div>
+ <div class="sk-line" style="width:100%;height:120px;border-radius:12px;"></div>
+ <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
+ <div class="sk-line" style="width:70%;"></div>
+ <div class="sk-line" style="width:90%;"></div>
+ <div class="sk-line" style="width:60%;"></div>
+ </div>
+ </div>
+ `;
+
+ // Simulate async fetch
+ await new Promise(r => setTimeout(r, 700));
+
+ let order = null;
+
+ // Fetch dữ liệu từ Google Sheet
+ try {
+   const sheetData = await fetchTracking(raw);
+   if (sheetData) {
+     order = buildOrderFromSheet(raw, sheetData.tracking || [], sheetData.order);
+   }
+ } catch(e) {
+   console.warn('Sheet fetch failed:', e.message);
+   showToast('error', '⚠️ ' + e.message);
+ }
+
+ btn.disabled = false;
+
+ if (order) {
+   renderResult(order);
+ } else {
+   renderNotFound(raw);
+ }
+ }
+
+ // BUILD FROM SHEET DATA
+ function buildOrderFromSheet(id, rows, orderInfo) {
+   // Timeline: oldest → newest (thứ tự thời gian tự nhiên)
+   const timeline = rows.map((r, i) => ({
+     time:     r.time,
+     status:   r.status,
+     location: r.location,
+     note:     r.note || '',
+     state:    i === rows.length - 1 ? 'active' : 'done',
+   }));
+   const last = rows.length > 0 ? rows[rows.length - 1] : null;
+
+   // Lấy thông tin từ ORDERS/LABELS/SHOPPING sheet
+   const o = orderInfo || {};
+   const sheetType = o._sheet || '';
+   let type = 'Đơn hàng';
+   if (sheetType === 'ORDERS')   type = 'Gửi hàng Mỹ - Việt Nam';
+   if (sheetType === 'LABELS')   type = 'Label nội địa Mỹ';
+   if (sheetType === 'SHOPPING') type = 'Mua hộ hàng Mỹ';
+
+   const isLabel = sheetType === 'LABELS';
+
+   // Xác định bước hiện tại dựa trên trạng thái mới nhất
+   const latestStatus = (last ? last.status : '') || o['Trạng thái'] || '';
+   const currentStep  = statusToStep(latestStatus, isLabel);
+
+   // Xác định statusCode cho badge
+   const s = latestStatus.toLowerCase();
+   let statusCode = 'pending';
+   if (s.includes('giao thành công') || s.includes('đã giao'))           statusCode = 'delivered';
+   else if (s.includes('thông quan') || s.includes('hải quan'))          statusCode = 'customs';
+   else if (s.includes('bay') || s.includes('vận chuyển') || s.includes('giao') || s.includes('xuất kho')) statusCode = 'transit';
+
+   return {
+     id,
+     type,
+     sender:      o['Họ tên người gửi'] || o['Họ tên'] || o['Tên Facebook'] || '—',
+     receiver:    (o['Tên người nhận'] || '—') + (o['Địa chỉ VN'] ? ' — ' + o['Địa chỉ VN'] : ''),
+     weight:      o['Cân nặng (lbs)'] ? o['Cân nặng (lbs)'] + ' lbs' : '—',
+     createdAt:   o['Ngày tạo'] || (rows[0] ? rows[0].time.split(' ')[0] : '—'),
+     statusCode,
+     statusLabel: latestStatus || 'Đang xử lý',
+     currentStep,
+     timeline,
+   };
+ }
+
+ // RENDER RESULT 
+ function renderResult(order) {
+ const isLabel = order.type.includes('Label') || order.type.includes('nội địa');
+ const steps = isLabel ? STEPS_LABEL : STEPS_MVV;
+ const stepPct = Math.min(100, Math.round((order.currentStep / (steps.length - 1)) * 100));
+
+ const stepsHTML = steps.map((s, i) => {
+ const state = i < order.currentStep ? 'done' : i === order.currentStep ? 'active' : 'pending';
+ return `
+ <div class="tk-prog-step">
+ <div class="tk-prog-dot ${state}">${i < order.currentStep ? '' : i + 1}</div>
+ <div class="tk-prog-label ${state === 'active' ? 'active' : ''}">${s}</div>
+ </div>
+ `;
+ }).join('');
+
+ const timelineHTML = order.timeline.map(t => `
+ <div class="tl-item">
+ <div class="tl-left">
+ <div class="tl-dot ${t.state}"></div>
+ <div class="tl-line"></div>
+ </div>
+ <div class="tl-content">
+ <div class="tl-time">${t.time}</div>
+ <div class="tl-status ${t.state === 'active' ? 'active' : ''}">${t.status}</div>
+ <div class="tl-loc">${t.location}</div>
+ ${t.note ? `<div class="tl-note">${t.note}</div>` : ''}
+ </div>
+ </div>
+ `).join('');
+
+ document.getElementById('tk-result-area').innerHTML = `
+ <div class="tk-result-card">
+
+ <div class="tk-order-header">
+ <div>
+ <div class="tk-order-id">Đơn <span>#${order.id}</span></div>
+ <div class="tk-order-meta">${order.type} &nbsp;·&nbsp; Tạo ngày ${order.createdAt}</div>
+ </div>
+ <div class="tk-status-badge ${order.statusCode}">${order.statusLabel}</div>
+ </div>
+
+ <div class="tk-progress-section">
+ <div style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:16px;">HÀNH TRÌNH ĐƠN HÀNG</div>
+ <div class="tk-progress-steps">
+ <div class="tk-progress-fill" style="width: calc(${stepPct}% - 32px);"></div>
+ ${stepsHTML}
+ </div>
+ </div>
+
+ <div class="tk-info-section">
+ <div class="tk-info-item">
+ <div class="tk-info-label">Người gửi</div>
+ <div class="tk-info-value">${order.sender}</div>
+ </div>
+ <div class="tk-info-item">
+ <div class="tk-info-label">Người nhận</div>
+ <div class="tk-info-value">${order.receiver}</div>
+ </div>
+ <div class="tk-info-item">
+ <div class="tk-info-label">Trọng lượng</div>
+ <div class="tk-info-value">${order.weight}</div>
+ </div>
+ </div>
+
+ <div class="tk-timeline-section">
+ <div class="tk-timeline-title"> Lịch sử vận chuyển</div>
+ <div class="tk-timeline">
+ ${timelineHTML}
+ </div>
+ </div>
+
+ </div>
+
+ <div style="text-align:center;margin-top:24px;padding-bottom:24px;">
+ <p style="font-size:14px;color:var(--text-muted);margin-bottom:12px;">Có thắc mắc về đơn hàng này?</p>
+ <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+ <a href="${CC_CONFIG.ZALO}" target="_blank" class="btn btn-primary"> Zalo hỗ trợ</a>
+ <a href="${CC_CONFIG.FACEBOOK}" target="_blank" class="btn btn-secondary"> Messenger</a>
+ </div>
+ </div>
+ `;
+ }
+
+ // RENDER NOT FOUND 
+ function renderNotFound(id) {
+ document.getElementById('tk-result-area').innerHTML = `
+ <div class="tk-not-found">
+ <div class="icon"></div>
+ <h3>Không tìm thấy đơn "<strong>${id}</strong>"</h3>
+ <p>Mã đơn không tồn tại hoặc chưa được cập nhật hệ thống.<br>
+ Mã đơn Cuckoo Cargo bắt đầu bằng <strong>HTS</strong> (VD: HTS202606061234).<br>
+ Vui lòng kiểm tra lại hoặc liên hệ để được tra cứu thủ công.</p>
+ <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+ <a href="${CC_CONFIG.ZALO}" target="_blank" class="btn btn-primary"> Zalo hỗ trợ</a>
+ <a href="${CC_CONFIG.FACEBOOK}" target="_blank" class="btn btn-secondary"> Messenger</a>
+ </div>
+ </div>
+ `;
+ }
+
+ // FAQ TOGGLE 
+ function toggleFaq(el) {
+ el.closest('.faq-item').classList.toggle('open');
+ }
+</script>
+
+<!-- FLOATING BUTTONS -->
+<div id="cc-fab-wrap">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="cc-fab cc-fab-zalo" aria-label="Zalo">
+  <svg viewBox="0 0 50 50" width="28" height="28"><rect x="3" y="3" width="44" height="38" rx="10" fill="white"/><text x="25" y="28" text-anchor="middle" font-size="18" font-weight="900" fill="#0068FF" font-family="Arial,sans-serif">Zalo</text><polygon points="10,41 18,41 10,50" fill="white"/></svg>
+ </a>
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="cc-fab cc-fab-fb" aria-label="Facebook">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+ </a>
+ <a href="https://www.tiktok.com/@cuckoo.cargo6" target="_blank" class="cc-fab cc-fab-tiktok" aria-label="TikTok">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-6.34 6.29 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+ </a>
+ <button class="cc-fab cc-fab-top" id="cc-fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Lên đầu" style="display:none">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+ </button>
+</div>
+</body>
+</html>

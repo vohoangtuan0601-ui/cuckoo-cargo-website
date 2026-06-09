@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — Cập nhật Tracking | Cuckoo Cargo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a1a;min-height:100vh;}
+
+/* TOP BAR */
+.topbar{background:#0F0F10;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-logo{color:#F47B20;font-size:18px;font-weight:800;letter-spacing:1px;}
+.topbar-badge{background:rgba(244,123,32,.15);border:1px solid rgba(244,123,32,.3);color:#F47B20;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;}
+
+.wrap{max-width:900px;margin:0 auto;padding:32px 20px;}
+
+/* SEARCH */
+.search-card{background:#fff;border-radius:16px;padding:28px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
+.search-card h2{font-size:18px;font-weight:800;margin-bottom:6px;}
+.search-card p{font-size:13px;color:#888;margin-bottom:20px;}
+.search-row{display:flex;gap:10px;}
+.search-row input{flex:1;padding:12px 16px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:15px;outline:none;transition:border .2s;font-family:inherit;text-transform:uppercase;}
+.search-row input:focus{border-color:#F47B20;}
+.btn-search{padding:12px 24px;background:#F47B20;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .2s;}
+.btn-search:hover{background:#D4650E;}
+.btn-search:disabled{background:#ccc;cursor:not-allowed;}
+
+/* CUSTOMER INFO */
+.customer-card{background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.07);display:none;}
+.customer-card.show{display:block;}
+.cc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.cc-id{font-size:22px;font-weight:900;color:#F47B20;letter-spacing:1px;}
+.cc-type{background:#FFF3E8;color:#D4650E;border:1.5px solid #F47B20;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:620px){.info-grid{grid-template-columns:1fr 1fr;}}
+.info-item{padding:12px 14px;background:#f9f9fb;border-radius:10px;}
+.info-item label{font-size:11px;color:#999;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px;}
+.info-item span{font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.4;display:block;}
+.info-item.span2{grid-column:span 2;}
+.info-item.span3{grid-column:1/-1;}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:#F47B20;}
+
+/* DIVIDER */
+.section-title{font-size:15px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.section-title::before{content:'';display:block;width:4px;height:18px;background:#F47B20;border-radius:2px;}
+
+/* TIMELINE */
+.timeline-card{background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.07);display:none;}
+.timeline-card.show{display:block;}
+
+.tl{display:flex;flex-direction:column;gap:0;}
+.tl-item{display:flex;gap:14px;position:relative;}
+.tl-left{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0;}
+.tl-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.tl-dot.done{background:#22C55E;}
+.tl-dot.active{background:#F47B20;box-shadow:0 0 0 4px rgba(244,123,32,.2);}
+.tl-dot.pending{background:#e0e0e0;border:2px solid #ccc;}
+.tl-line{flex:1;width:2px;background:#e8e8e8;margin:4px 0;}
+.tl-item:last-child .tl-line{display:none;}
+.tl-content{padding-bottom:18px;flex:1;}
+.tl-status{font-size:14px;font-weight:700;color:#1a1a1a;}
+.tl-meta{font-size:12px;color:#999;margin-top:3px;}
+.tl-note{font-size:12px;color:#666;margin-top:4px;font-style:italic;}
+.tl-empty{font-size:13px;color:#999;padding:16px 0;}
+
+/* ADD UPDATE FORM */
+.add-card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.07);display:none;}
+.add-card.show{display:block;}
+
+.quick-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.quick-btn{padding:8px 14px;border:1.5px solid #e0e0e0;border-radius:20px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;color:#555;}
+.quick-btn:hover,.quick-btn.active{background:#F47B20;border-color:#F47B20;color:#fff;}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+@media(max-width:560px){.form-grid{grid-template-columns:1fr;}}
+.form-group label{display:block;font-size:12px;font-weight:700;color:#666;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;transition:border .2s;font-family:inherit;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#F47B20;}
+.form-group textarea{resize:vertical;min-height:70px;}
+.form-full{grid-column:1/-1;}
+
+.btn-add{width:100%;padding:13px;background:linear-gradient(135deg,#F47B20,#D4650E);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:opacity .2s;}
+.btn-add:hover{opacity:.9;}
+.btn-add:disabled{background:#ccc;cursor:not-allowed;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;z-index:9999;}
+.toast.show{opacity:1;}
+.toast.success{background:#16A34A;}
+.toast.error{background:#DC2626;}
+
+/* NOT FOUND */
+.not-found{background:#fff;border-radius:16px;padding:40px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.07);display:none;}
+.not-found.show{display:block;}
+.not-found p{color:#999;font-size:14px;margin-top:8px;}
+
+/* Loading */
+.loading-overlay{display:none;align-items:center;gap:10px;padding:12px 0;color:#999;font-size:14px;}
+.loading-overlay.show{display:flex;}
+.spinner{width:18px;height:18px;border:2px solid #e0e0e0;border-top-color:#F47B20;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">Cuckoo Cargo — Admin</div>
+  <div class="topbar-badge">Nội bộ</div>
+</div>
+
+<div class="wrap">
+
+  <!-- SEARCH -->
+  <div class="search-card">
+    <h2>Cập nhật Tracking</h2>
+    <p>Nhập mã đơn hàng để xem thông tin khách và thêm cập nhật vận chuyển</p>
+    <div class="search-row">
+      <input type="text" id="inp-id" placeholder="VD: HTS202606068484"
+             oninput="this.value=this.value.toUpperCase()"
+             onkeydown="if(event.key==='Enter') searchOrder()" />
+      <button class="btn-search" id="btn-search" onclick="searchOrder()">Tìm đơn</button>
+    </div>
+    <div class="loading-overlay" id="loading">
+      <div class="spinner"></div> Đang tải dữ liệu từ Google Sheet...
+    </div>
+  </div>
+
+  <!-- CUSTOMER INFO -->
+  <div class="customer-card" id="customer-card">
+    <div class="cc-header">
+      <div class="cc-id" id="cc-id"></div>
+      <div class="cc-type" id="cc-type"></div>
+    </div>
+    <div class="info-grid" id="info-grid"></div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline-card" id="timeline-card">
+    <div class="section-title">Lịch sử vận chuyển</div>
+    <div class="tl" id="tl-list"></div>
+  </div>
+
+  <!-- ADD UPDATE -->
+  <div class="add-card" id="add-card">
+    <div class="section-title">Thêm cập nhật mới</div>
+
+    <div class="quick-btns" id="quick-btns">
+      <button class="quick-btn" onclick="setStatus(this,'Đã nhận tại kho Cuckoo Cargo Mỹ')">📦 Nhận kho Mỹ</button>
+      <button class="quick-btn" onclick="setStatus(this,'Đang chuẩn bị hàng')">🔧 Chuẩn bị hàng</button>
+      <button class="quick-btn" onclick="setStatus(this,'Xuất kho — đang bay')">✈️ Xuất kho / Đang bay</button>
+      <button class="quick-btn" onclick="setStatus(this,'Đang vận chuyển quốc tế')">🌏 Vận chuyển QT</button>
+      <button class="quick-btn" onclick="setStatus(this,'Đã về kho Việt Nam')">🏠 Về kho VN</button>
+      <button class="quick-btn" onclick="setStatus(this,'Đang thông quan hải quan')">🛃 Thông quan</button>
+      <button class="quick-btn" onclick="setStatus(this,'Đang giao hàng nội địa')">🛵 Đang giao</button>
+      <button class="quick-btn" onclick="setStatus(this,'Đã giao hàng thành công')">✅ Đã giao</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Trạng thái *</label>
+        <input type="text" id="f-status" placeholder="VD: Đã nhận tại kho Mỹ" />
+      </div>
+      <div class="form-group">
+        <label>Địa điểm</label>
+        <input type="text" id="f-location" placeholder="VD: Garden Grove, CA" />
+      </div>
+      <div class="form-group">
+        <label>Thời gian</label>
+        <input type="datetime-local" id="f-time" />
+      </div>
+      <div class="form-group">
+        <label>Nhân viên xử lý</label>
+        <input type="text" id="f-staff" placeholder="Tên nhân viên" />
+      </div>
+      <div class="form-group form-full">
+        <label>Ghi chú (hiển thị cho khách)</label>
+        <textarea id="f-note" placeholder="Thông tin thêm cho khách hàng..."></textarea>
+      </div>
+    </div>
+    <button class="btn-add" id="btn-add" onclick="addTracking()">➕ Thêm cập nhật</button>
+  </div>
+
+  <!-- NOT FOUND -->
+  <div class="not-found" id="not-found">
+    <strong style="font-size:16px;">❌ Không tìm thấy đơn hàng</strong>
+    <p>Kiểm tra lại mã đơn hoặc đơn chưa có trong hệ thống.</p>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53kdguSGjFrD-ipJRTAlVJlCpq28_3C9ZoH5Mb-RBlKTP1lER/exec";
+
+let currentOrderId = '';
+
+document.getElementById('f-time').value = new Date().toISOString().slice(0,16);
+
+function toast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function setStatus(btn, status) {
+  document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('f-status').value = status;
+}
+
+function hideAll() {
+  ['customer-card','timeline-card','add-card','not-found'].forEach(x =>
+    document.getElementById(x).classList.remove('show')
+  );
+}
+
+async function searchOrder() {
+  const id = document.getElementById('inp-id').value.trim().toUpperCase();
+  if (!id) { toast('Vui lòng nhập mã đơn hàng', 'error'); return; }
+
+  hideAll();
+
+  const btnSearch = document.getElementById('btn-search');
+  const loading   = document.getElementById('loading');
+  btnSearch.disabled = true;
+  loading.classList.add('show');
+
+  try {
+    // Gọi Apps Script GET để lấy dữ liệu
+    const url = `${SCRIPT_URL}?action=getOrder&orderId=${encodeURIComponent(id)}`;
+    const res  = await fetch(url, { redirect: 'follow' });
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch(e) { throw new Error('Phản hồi không hợp lệ — kiểm tra lại Apps Script URL'); }
+    // Script cũ chưa redeploy → báo lỗi rõ
+    if (!data.success && data.status) throw new Error('⚠️ Apps Script chưa được redeploy với code mới. Vào script.google.com → Deploy → Manage deployments → Update.');
+
+    currentOrderId = id;
+
+    if (!data.found && (!data.tracking || data.tracking.length === 0) && !data.order) {
+      document.getElementById('not-found').classList.add('show');
+      toast('Không tìm thấy đơn hàng', 'error');
+      return;
+    }
+
+    // Hiện thông tin khách hàng / đơn hàng
+    renderCustomerInfo(id, data.order);
+
+    // Hiện timeline
+    renderTimeline(data.tracking || []);
+
+    // Hiện form thêm tracking
+    document.getElementById('add-card').classList.add('show');
+    document.getElementById('f-time').value = new Date().toISOString().slice(0,16);
+
+    const count = (data.tracking || []).length;
+    toast(count > 0 ? `Tìm thấy ${count} sự kiện tracking` : 'Chưa có tracking — thêm cập nhật đầu tiên');
+
+  } catch(err) {
+    toast('Lỗi kết nối Google Sheet: ' + err.message, 'error');
+    console.error(err);
+  } finally {
+    btnSearch.disabled = false;
+    loading.classList.remove('show');
+  }
+}
+
+function renderCustomerInfo(id, order) {
+  const card = document.getElementById('customer-card');
+  document.getElementById('cc-id').textContent = id;
+
+  // Xác định loại đơn
+  let type = 'Đơn hàng';
+  if (order) {
+    const s = order._sheet || '';
+    if (s === 'ORDERS')   type = '🌏 Mỹ → Việt Nam';
+    if (s === 'LABELS')   type = '📦 Label nội địa Mỹ';
+    if (s === 'SHOPPING') type = '🛒 Mua hộ';
+  }
+  document.getElementById('cc-type').textContent = type;
+
+  // Build info grid
+  let html = '';
+  if (order) {
+    const o = order;
+    const fields = [
+      { label: 'Người gửi / Facebook',   val: o['Tên Facebook'] || o['Họ tên người gửi'] || o['Họ tên'] || '—' },
+      { label: 'Email',                   val: o['Email'] || '—' },
+      { label: 'SĐT Mỹ',                 val: o['SĐT Mỹ'] || '—' },
+      { label: 'Người nhận',              val: o['Tên người nhận'] || '—' },
+      { label: 'SĐT người nhận',          val: o['SĐT người nhận'] || '—' },
+      { label: 'Địa chỉ VN',             val: o['Địa chỉ VN'] || o['Địa chỉ người nhận'] || '—', wide: true },
+      { label: 'Mặt hàng',               val: o['Mặt hàng'] || '—', wide: true },
+      { label: 'Cân nặng',               val: o['Cân nặng (lbs)'] ? o['Cân nặng (lbs)'] + ' lbs' : '—' },
+      { label: 'Trạng thái',             val: o['Trạng thái'] || '—', highlight: true },
+      { label: 'Ngày tạo',               val: o['Ngày tạo'] || '—' },
+    ];
+    fields.forEach(f => {
+      const cls = f.wide ? 'info-item span2' : 'info-item';
+      const valStyle = f.highlight ? 'color:#F47B20;font-weight:800;' : '';
+      html += `<div class="${cls}"><label>${f.label}</label><span style="${valStyle}">${f.val}</span></div>`;
+    });
+  } else {
+    html = `<div class="info-item span3"><span style="color:#999;font-size:13px;">Chưa có thông tin đơn hàng trong ORDERS — chỉ có tracking data.</span></div>`;
+  }
+
+  document.getElementById('info-grid').innerHTML = html;
+  card.classList.add('show');
+}
+
+function renderTimeline(events) {
+  const card   = document.getElementById('timeline-card');
+  const tlList = document.getElementById('tl-list');
+
+  if (events.length === 0) {
+    tlList.innerHTML = '<div class="tl-empty">📭 Chưa có sự kiện vận chuyển nào. Thêm cập nhật đầu tiên bên dưới.</div>';
+    card.classList.add('show');
+    return;
+  }
+
+  // Hiện mới nhất lên đầu
+  const reversed = [...events].reverse();
+  tlList.innerHTML = reversed.map((r, i) => `
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-dot ${i === 0 ? 'active' : 'done'}"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-status">${r.status}</div>
+        <div class="tl-meta">${r.time}${r.location ? ' · ' + r.location : ''}</div>
+        ${r.note ? `<div class="tl-note">${r.note}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  card.classList.add('show');
+}
+
+async function addTracking() {
+  const status = document.getElementById('f-status').value.trim();
+  if (!status) { toast('Vui lòng nhập trạng thái', 'error'); return; }
+  if (!currentOrderId) { toast('Chưa tìm đơn hàng', 'error'); return; }
+
+  const btn = document.getElementById('btn-add');
+  btn.disabled = true;
+  btn.textContent = '⏳ Đang gửi...';
+
+  const rawTime = document.getElementById('f-time').value;
+  const timeStr = rawTime
+    ? new Date(rawTime).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})
+    : new Date().toLocaleString('vi-VN');
+
+  const data = {
+    formType:  'addTracking',
+    orderId:   currentOrderId,
+    time:      timeStr,
+    status:    status,
+    location:  document.getElementById('f-location').value.trim(),
+    note:      document.getElementById('f-note').value.trim(),
+    staff:     document.getElementById('f-staff').value.trim(),
+  };
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method:  'POST',
+      headers: {'Content-Type':'text/plain'},
+      body:    JSON.stringify(data),
+    });
+
+    toast('✅ Cập nhật tracking thành công!');
+
+    // Reset form
+    document.getElementById('f-status').value   = '';
+    document.getElementById('f-location').value = '';
+    document.getElementById('f-note').value     = '';
+    document.getElementById('f-time').value     = new Date().toISOString().slice(0,16);
+    document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('active'));
+
+    // Reload tracking sau 1.5s
+    setTimeout(() => searchOrder(), 1500);
+
+  } catch(err) {
+    toast('Lỗi: ' + err.message, 'error');
+  }
+
+  btn.disabled = false;
+  btn.textContent = '➕ Thêm cập nhật';
+}
+</script>
+</body>
+</html>

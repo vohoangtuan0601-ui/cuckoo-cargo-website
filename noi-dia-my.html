@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Label Nội Địa Mỹ — UPS, FedEx, USPS | Cuckoo Cargo</title>
+ <meta name="description" content="Dịch vụ tạo label vận chuyển nội địa Mỹ 50 tiểu bang. UPS $1.99/lbs, FedEx $2.99/lbs, USPS từ $22. Drop-off hoặc pickup tận nơi." />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link href="https://fonts.googleapis.com/css2?family=Faustina:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+ <style>
+ *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+ html{scroll-behavior:smooth;}
+ :root{
+ --orange:#F47B20; --orange-deep:#D4650E; --orange-light:#FFB366;
+ --orange-bg:#FFF3E8; --black:#0F0F10; --white:#FFFFFF;
+ --gray:#8E8E93; --gray-light:#F0F2F5; --gray-border:#E5E5EA;
+ --text-primary:#0F0F10; --text-muted:#8E8E93;
+ --green:#22C55E; --red:#EF4444;
+ --navy:#1E3A6E; --navy-light:#2B4F8E;
+ --ups-color:#1E3A6E; --fedex-color:#4D148C; --usps-color:#004B87;
+ --radius-sm:8px; --radius-md:14px; --radius-lg:20px;
+ }
+ body{font-family:'Faustina',serif;color:var(--text-primary);background:var(--gray-light);overflow-x:hidden;}
+
+ /* NAV */
+ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-border);padding:0 24px;}
+ .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px;}
+ .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+ .nav-logo-icon{width:36px;height:36px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+ .nav-logo-text{font-family:'Faustina',serif;font-size:20px;letter-spacing:2px;color:var(--black);}
+ .nav-links{display:flex;gap:4px;flex:1;}
+ .nav-links a{padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;color:var(--text-primary);text-decoration:none;transition:background .2s;}
+ .nav-links a:hover,.nav-links a.active{background:var(--orange-bg);color:var(--orange);}
+ .nav-right{display:flex;align-items:center;gap:10px;}
+ .lang-toggle{display:flex;border:1px solid var(--gray-border);border-radius:20px;overflow:hidden;}
+ .lang-btn{padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;background:transparent;border:none;}
+ .lang-btn.active{background:var(--orange);color:var(--white);}
+ .nav-cta{background:var(--orange);color:#fff;padding:9px 18px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;transition:background .2s;}
+ .nav-cta:hover{background:var(--orange-deep);}
+
+ /* HERO */
+ .hero{background:var(--black);padding:56px 24px 44px;text-align:center;}
+ .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(244,123,32,.15);border:1px solid rgba(244,123,32,.3);color:var(--orange);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:20px;}
+ .hero h1{font-family:'Faustina',serif;font-size:clamp(34px,6vw,68px);color:#fff;letter-spacing:3px;line-height:1.05;margin-bottom:14px;}
+ .hero h1 span{color:var(--orange);}
+ .hero p{font-size:15px;color:#aaa;max-width:540px;margin:0 auto 28px;line-height:1.7;}
+ .hero-stats{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;}
+ .hero-stat .val{font-size:26px;font-weight:800;color:var(--orange);}
+ .hero-stat .lbl{font-size:11px;color:#666;margin-top:2px;}
+
+ /* CARRIER + SERVICE SELECTOR */
+ .selector-section{background:#fff;border-bottom:1px solid var(--gray-border);padding:28px 24px 0;position:sticky;top:64px;z-index:90;}
+ .selector-inner{max-width:900px;margin:0 auto;}
+ .carrier-tabs{display:flex;justify-content:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+ .ctab{
+ display:flex;align-items:center;gap:9px;
+ padding:11px 28px;border-radius:40px;border:2px solid var(--gray-border);
+ background:#fff;font-size:15px;font-weight:700;color:var(--text-muted);
+ cursor:pointer;transition:all .2s;min-width:140px;justify-content:center;
+ }
+ .ctab:hover{border-color:#aaa;color:var(--text-primary);}
+ .ctab.active.ups {background:var(--ups-color);border-color:var(--ups-color);color:#fff;}
+ .ctab.active.fedex{background:linear-gradient(135deg,var(--fedex-color),var(--orange));border-color:var(--fedex-color);color:#fff;}
+ .ctab.active.usps {background:var(--usps-color);border-color:var(--usps-color);color:#fff;}
+ .ctab-icon{display:inline-flex;align-items:center;}
+ .ctab-icon img{height:26px;width:auto;max-width:80px;object-fit:contain;}
+ 
+ .service-tabs-wrap{display:flex;justify-content:center;gap:8px;padding-bottom:0;}
+ .stab{
+ padding:9px 22px;border-radius:30px 30px 0 0;border:2px solid var(--gray-border);border-bottom:none;
+ background:#fff;font-size:13px;font-weight:700;color:var(--text-muted);
+ cursor:pointer;transition:all .2s;position:relative;bottom:-1px;
+ }
+ .stab:hover{color:var(--text-primary);background:#f8f8f8;}
+ .stab.active{background:var(--gray-light);border-color:var(--gray-border);color:var(--navy);border-bottom:2px solid var(--gray-light);}
+
+ /* PRICING TABLE SECTION */
+ .pricing-section{padding:32px 24px 0;background:var(--gray-light);}
+ .pricing-inner{max-width:900px;margin:0 auto;}
+ .svc-header{
+ background:var(--navy);color:#fff;border-radius:14px 14px 0 0;
+ padding:16px 24px;display:flex;align-items:center;justify-content:space-between;
+ }
+ .svc-header.fedex{background:linear-gradient(135deg,var(--fedex-color),var(--orange));}
+ .svc-header.usps {background:var(--usps-color);}
+ .svc-header-left h3{font-size:17px;font-weight:800;}
+ .svc-header-left p{font-size:12px;opacity:.8;margin-top:2px;}
+ .svc-header-badge{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;}
+ .ptable{width:100%;border-collapse:collapse;background:#fff;overflow:hidden;}
+ .ptable th{padding:10px 16px;font-size:11.5px;font-weight:700;text-align:left;background:#f4f6fb;color:var(--text-muted);letter-spacing:.6px;text-transform:uppercase;border-bottom:2px solid #e8ecf5;}
+ .ptable th:not(:first-child){text-align:right;}
+ .ptable td{padding:11px 16px;border-bottom:1px solid #f0f2f8;font-size:13.5px;vertical-align:middle;}
+ .ptable td:not(:first-child){text-align:right;}
+ .ptable tr:last-child td{border-bottom:none;}
+ .ptable tr:hover td{background:#f8faff;}
+ .ptable .subhead td{background:linear-gradient(90deg,var(--navy) 0%,var(--navy-light) 100%);color:#fff;font-size:11px;font-weight:800;letter-spacing:1px;padding:7px 16px;text-transform:uppercase;}
+ .ptable .subhead-warn td{background:linear-gradient(90deg,#c0392b,#e74c3c);color:#fff;font-size:11px;font-weight:800;letter-spacing:.8px;padding:7px 16px;}
+ .ptable .price-cell{font-weight:900;color:var(--navy);font-size:14.5px;}
+ .ptable .flat-badge{display:inline-flex;align-items:center;background:#e8f0fe;color:var(--navy);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;gap:3px;}
+ .ptable .surcharge-note td{background:#fff8e8;padding:10px 16px;font-size:12px;color:var(--orange-deep);border-top:1.5px dashed #FFD9B3;}
+ .price-table-note{background:#f8f9fb;border:1px solid #e8ecf5;border-radius:0 0 14px 14px;padding:12px 18px;font-size:12px;color:var(--text-muted);line-height:1.7;margin-top:0;border-top:none;}
+
+ /* FORM SECTION */
+ .form-section{padding:28px 24px 60px;background:var(--gray-light);scroll-margin-top:140px;}
+ .form-section-inner{max-width:900px;margin:0 auto;}
+ .form-card{background:#fff;border-radius:var(--radius-lg);box-shadow:0 2px 16px rgba(0,0,0,.06);overflow:hidden;margin-bottom:16px;}
+ .form-card-header{padding:16px 24px;border-bottom:1px solid var(--gray-border);display:flex;align-items:center;gap:10px;}
+ .form-card-header h3{font-size:15px;font-weight:800;color:var(--black);}
+ .form-card-body{padding:20px 24px 24px;}
+ .form-group{margin-bottom:16px;}
+ .form-group:last-child{margin-bottom:0;}
+ .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text-primary);}
+ .form-group label .req{color:var(--orange);}
+ .form-group label .hint{font-weight:400;color:var(--text-muted);font-size:12px;}
+ .form-row{display:grid;gap:14px;}
+ .form-row.col2{grid-template-columns:1fr 1fr;}
+ .form-row.col3{grid-template-columns:1fr 1fr 1fr;}
+ @media(max-width:600px){.form-row.col2,.form-row.col3{grid-template-columns:1fr;}}
+ input[type=text],input[type=email],input[type=tel],input[type=number],select,textarea{
+ width:100%;padding:11px 14px;border:1.5px solid var(--gray-border);border-radius:10px;
+ font-size:14px;font-family:inherit;background:#fff;color:var(--text-primary);outline:none;transition:border .2s;
+ }
+ input:focus,select:focus,textarea:focus{border-color:var(--navy);}
+ textarea{resize:vertical;min-height:80px;}
+ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
+ .input-note{font-size:12px;color:var(--text-muted);margin-top:5px;}
+
+ /* PICKUP TOGGLE */
+ .pickup-toggle{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+ .pickup-opt{border:2px solid var(--gray-border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;}
+ .pickup-opt:hover{border-color:#aaa;}
+ .pickup-opt.active{border-color:var(--navy);background:#f0f4fb;}
+ .pickup-opt .opt-icon{font-size:22px;margin-bottom:5px;}
+ .pickup-opt .opt-name{font-size:13px;font-weight:700;}
+ .pickup-opt .opt-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
+ .pickup-opt.active .opt-sub{color:var(--navy);}
+
+ /* CALENDAR */
+ .cal-wrap{background:#fff;border-radius:16px;padding:18px;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-top:12px;}
+ .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+ .cal-nav-btn{width:38px;height:38px;border-radius:50%;background:#e8f4fd;border:none;cursor:pointer;font-size:20px;color:#4a90d9;display:flex;align-items:center;justify-content:center;transition:background .2s;line-height:1;}
+ .cal-nav-btn:hover{background:#cce5f8;}
+ .cal-month{font-size:17px;font-weight:800;color:var(--black);}
+ .cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:8px;}
+ .cal-dow{text-align:center;font-size:12px;font-weight:700;color:var(--text-muted);padding:4px 0;}
+ .cal-dow.wknd{color:#d1d1d6;}
+ .cal-days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+ .cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:14px;font-weight:600;cursor:pointer;color:var(--text-primary);transition:all .15s;border:none;background:transparent;}
+ .cal-cell:hover:not(.disabled):not(.empty):not(.wknd-cell){background:#e8f4fd;color:#4a90d9;}
+ .cal-cell.selected{background:#4a90d9!important;color:#fff!important;}
+ .cal-cell.today{border:2px solid var(--orange);color:var(--orange);font-weight:800;}
+ .cal-cell.disabled{color:#d1d1d6;cursor:not-allowed;pointer-events:none;}
+ .cal-cell.empty{pointer-events:none;}
+ .cal-cell.wknd-cell{color:#d1d1d6;cursor:not-allowed;pointer-events:none;}
+ .cal-selected-display{text-align:center;font-size:13px;color:var(--text-muted);margin-top:10px;font-weight:600;}
+ .cal-selected-display em{color:#4a90d9;font-style:normal;}
+
+ /* TIME SLOTS */
+ .ts-label{font-size:13px;font-weight:700;color:var(--text-muted);margin:16px 0 10px;}
+ .ts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+ .ts-btn{padding:15px 12px;border-radius:12px;border:2px solid var(--gray-border);font-size:15px;font-weight:700;color:var(--text-primary);cursor:pointer;background:#fff;text-align:center;transition:all .2s;font-family:inherit;}
+ .ts-btn:hover{border-color:#4a90d9;color:#4a90d9;background:#e8f4fd;}
+ .ts-btn.selected{background:#4a90d9;border-color:#4a90d9;color:#fff;}
+
+ /* PICKUP TIMELINE */
+ .pickup-timeline{background:linear-gradient(135deg,#f0f7ff,#e8f4fd);border:1.5px solid #b8d9f5;border-radius:14px;padding:16px 18px;margin-top:14px;display:none;}
+ .pickup-timeline.visible{display:block;}
+ .pkl-title{font-size:13px;font-weight:800;color:#1a6fa8;margin-bottom:14px;}
+ .pkl-row{display:flex;gap:12px;}
+ .pkl-left{display:flex;flex-direction:column;align-items:center;width:18px;flex-shrink:0;}
+ .pkl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;background:#4a90d9;}
+ .pkl-dot.done{background:#22c55e;}
+ .pkl-dot.pending{background:#d1d1d6;border:2px solid #b0b0b0;}
+ .pkl-line{flex:1;width:2px;background:#b8d9f5;margin:2px 0;}
+ .pkl-row:last-child .pkl-line{display:none;}
+ .pkl-text{font-size:12.5px;color:#1a5480;padding-bottom:14px;line-height:1.5;}
+ .pkl-text strong{color:#1a3d5c;font-size:13px;}
+ .pkl-text em{color:#4a90d9;font-style:normal;font-weight:700;}
+
+ /* PACKAGE DETAILS */
+ .pkg-table-wrap{overflow-x:auto;}
+ .pkg-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+ .pkg-table th{padding:10px 12px;font-size:12px;font-weight:700;color:var(--text-muted);background:#f8f9fb;border-bottom:2px solid var(--gray-border);text-align:left;}
+ .pkg-table th.center{text-align:center;}
+ .pkg-table td{padding:10px 12px;border-bottom:1px solid var(--gray-border);vertical-align:middle;}
+ .pkg-table tr:last-child td{border-bottom:none;}
+ .pkg-num{display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:#e8f0fe;color:var(--navy);border-radius:8px;font-weight:800;font-size:14px;}
+ .pkg-input{width:100%;padding:9px 12px;border:1.5px solid var(--gray-border);border-radius:8px;font-size:14px;font-family:inherit;text-align:center;background:#fff;outline:none;transition:border .2s;}
+ .pkg-input:focus{border-color:var(--navy);}
+ .pkg-delete{width:34px;height:34px;background:#fff0f0;border:1.5px solid #ffd0d0;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:16px;}
+ .pkg-delete:hover{background:#ffe0e0;border-color:#f99;}
+ .add-pkg-btn{width:100%;margin-top:12px;padding:13px;border:2px dashed var(--gray-border);border-radius:10px;background:transparent;cursor:pointer;font-size:14px;font-weight:700;color:var(--text-muted);transition:all .2s;font-family:inherit;}
+ .add-pkg-btn:hover{border-color:var(--navy);color:var(--navy);background:#f0f4fb;}
+ .pkg-surcharge-note{background:#fff8e8;border:1px solid #FFD9B3;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--orange-deep);margin-top:10px;display:none;}
+ .pkg-surcharge-note.show{display:block;}
+
+ /* PRICE ESTIMATE */
+ .price-estimate{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:12px;padding:16px 20px;margin-top:14px;color:#fff;}
+ .pe-title{font-size:12px;opacity:.7;margin-bottom:8px;font-weight:600;letter-spacing:.5px;}
+ .pe-rows{display:flex;flex-direction:column;gap:6px;}
+ .pe-row{display:flex;justify-content:space-between;font-size:13px;}
+ .pe-row .pk{opacity:.8;}
+ .pe-row .pv{font-weight:700;}
+ .pe-divider{height:1px;background:rgba(255,255,255,.2);margin:8px 0;}
+ .pe-total{display:flex;justify-content:space-between;font-size:17px;font-weight:800;}
+ .pe-total .tv{color:#FFD166;}
+ .pe-note{font-size:11px;opacity:.65;margin-top:8px;line-height:1.6;}
+
+ /* INSURANCE & SIGNATURE */
+ .option-toggle{display:flex;align-items:flex-start;gap:12px;padding:14px;border:2px solid var(--gray-border);border-radius:12px;cursor:pointer;transition:all .2s;}
+ .option-toggle:hover{border-color:#aaa;}
+ .option-toggle.active{border-color:var(--navy);background:#f0f4fb;}
+ .option-toggle input[type=checkbox]{width:18px;height:18px;min-width:18px;accent-color:var(--navy);cursor:pointer;margin-top:2px;}
+ .opt-label{flex:1;}
+ .opt-label strong{display:block;font-size:14px;font-weight:700;color:var(--text-primary);}
+ .opt-label span{font-size:12px;color:var(--text-muted);margin-top:2px;display:block;}
+ .ins-note{background:#FFF3E8;border:1px solid var(--orange-light);border-radius:8px;padding:10px 14px;font-size:12.5px;color:var(--orange-deep);margin-top:10px;display:none;line-height:1.6;}
+ .ins-note.show{display:block;}
+
+ /* POLICY */
+ .policy-box{background:#FFFBF7;border:1.5px solid #FFD9B3;border-radius:14px;padding:20px 22px;}
+ .policy-title{font-size:15px;font-weight:800;margin-bottom:14px;}
+ .prohibited-toggle{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--orange);cursor:pointer;margin-bottom:8px;user-select:none;}
+ .prohibited-toggle .arr{transition:transform .25s;}
+ .prohibited-toggle.open .arr{transform:rotate(90deg);}
+ .prohibited-list{background:#FFF5F5;border:1px solid #FFCCCC;border-radius:10px;padding:14px;display:none;margin-bottom:12px;}
+ .prohibited-list.show{display:block;}
+ .prohibited-list ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+ .prohibited-list li{font-size:12px;color:#666;display:flex;align-items:center;gap:5px;}
+ .prohibited-list li::before{content:"";font-size:11px;}
+ .policy-checks{display:flex;flex-direction:column;gap:12px;}
+ .pcheck{display:flex;gap:11px;align-items:flex-start;}
+ .pcheck input[type=checkbox]{width:18px;height:18px;min-width:18px;accent-color:var(--navy);cursor:pointer;margin-top:2px;}
+ .pcheck label{font-size:13px;line-height:1.6;cursor:pointer;font-weight:400;margin-bottom:0;}
+ .pcheck label strong{color:var(--black);}
+
+ /* SUMMARY REVIEW */
+ .review-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+ .review-overlay.show{display:flex;}
+ .review-sheet{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:560px;padding:28px 24px 40px;max-height:90vh;overflow-y:auto;animation:slideUp .3s ease;}
+ @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+ .review-handle{width:40px;height:4px;background:#ddd;border-radius:2px;margin:0 auto 20px;}
+ .review-title{font-size:18px;font-weight:800;margin-bottom:20px;color:var(--black);}
+ .review-rows{display:flex;flex-direction:column;gap:0;}
+ .review-row{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--gray-border);font-size:14px;}
+ .review-row:last-of-type{border-bottom:none;}
+ .review-row .rk{color:var(--text-muted);flex-shrink:0;margin-right:16px;}
+ .review-row .rv{font-weight:600;text-align:right;}
+ .review-row .rv.blue{color:#4a90d9;}
+ .review-divider{height:2px;background:var(--gray-border);margin:12px 0;}
+ .review-total{display:flex;justify-content:space-between;font-size:18px;font-weight:800;padding:16px 0;}
+ .review-total .tv{color:#4a90d9;}
+ .review-note{background:#FFF5F5;border:1px solid #ffd0d0;border-radius:10px;padding:12px 14px;font-size:12px;color:#c0392b;margin:12px 0;line-height:1.6;}
+ .review-actions{display:flex;gap:12px;margin-top:20px;}
+ .btn-edit{flex:1;padding:14px;background:transparent;border:2px solid var(--gray-border);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary);}
+ .btn-edit:hover{border-color:var(--navy);color:var(--navy);}
+ .btn-confirm{flex:2;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;font-family:inherit;}
+ .btn-confirm:hover{background:var(--navy-light);transform:translateY(-1px);}
+ .btn-confirm:disabled{background:#ccc;cursor:not-allowed;transform:none;}
+
+ /* SUBMIT SECTION */
+ .submit-wrap{text-align:center;margin-top:8px;}
+ .btn-review{width:100%;padding:16px;background:var(--navy);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;font-family:inherit;}
+ .btn-review:hover{background:var(--navy-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(30,58,110,.3);}
+ .submit-note{font-size:12px;color:var(--text-muted);margin-top:10px;line-height:1.6;}
+
+ /* TOAST */
+ .toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--black);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;transform:translateY(80px);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);max-width:380px;}
+ .toast.show{transform:translateY(0);opacity:1;}
+ .success-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s;}
+ .success-modal-overlay.show{opacity:1;pointer-events:auto;}
+ .success-modal{background:#fff;border-radius:20px;padding:36px 28px;max-width:480px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.25);transform:translateY(20px) scale(.97);transition:transform .3s;}
+ .success-modal-overlay.show .success-modal{transform:translateY(0) scale(1);}
+ .success-modal-icon{width:72px;height:72px;background:#DCFCE7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
+ .success-modal-icon svg{width:36px;height:36px;stroke:#16A34A;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+ .success-modal h3{font-size:22px;font-weight:900;color:#0F0F10;margin-bottom:8px;}
+ .success-modal p{font-size:14px;color:#8E8E93;line-height:1.7;margin-bottom:20px;}
+ .success-modal-close{width:100%;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:background .2s;}
+ .success-modal-close:hover{background:var(--navy-light);}
+
+ /* FOOTER */
+ footer a{color:var(--orange);text-decoration:none;}
+
+ /* MODE SELECTOR */
+ .mode-section{background:#fff;border-bottom:2px solid var(--gray-border);padding:20px 24px;}
+ .mode-inner{max-width:900px;margin:0 auto;}
+ .mode-label{font-size:12px;font-weight:700;color:var(--text-muted);letter-spacing:.8px;text-align:center;margin-bottom:14px;}
+ .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+ .mode-opt{
+ border:2px solid var(--gray-border);border-radius:16px;padding:18px 20px;
+ cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px;
+ background:#fff;
+ }
+ .mode-opt:hover{border-color:#aaa;background:#fafafa;}
+ .mode-opt.active.xuyen{border-color:var(--navy);background:#f0f4fb;}
+ .mode-opt.active.kho {border-color:var(--orange);background:var(--orange-bg);}
+ .mode-icon{font-size:28px;flex-shrink:0;}
+ .mode-info{flex:1;}
+ .mode-info strong{display:block;font-size:15px;font-weight:800;color:var(--text-primary);}
+ .mode-info span{font-size:12px;color:var(--text-muted);margin-top:2px;display:block;line-height:1.5;}
+ .mode-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--gray-border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+ .mode-opt.active.xuyen .mode-check{background:var(--navy);border-color:var(--navy);color:#fff;}
+ .mode-opt.active.kho .mode-check{background:var(--orange);border-color:var(--orange);color:#fff;}
+
+ /* Locked receiver fields */
+ .recv-locked input{background:#f5f5f7;color:var(--text-muted);cursor:not-allowed;}
+ .recv-locked input:focus{border-color:var(--gray-border);}
+ .recv-locked-badge{display:inline-flex;align-items:center;gap:6px;background:#FFF3E8;border:1px solid var(--orange-light);color:var(--orange-deep);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;margin-bottom:14px;}
+
+ /* Tablet / large-phone: svc-header fix + FAB clearance */
+ @media(max-width:900px){
+   .svc-header{padding:12px 14px;border-radius:10px 10px 0 0;gap:8px;}
+   #svc-carrier-logo{min-width:48px!important;padding:4px 6px!important;}
+   #svc-carrier-logo img{height:22px!important;}
+   .svc-header-left{flex:1!important;min-width:0!important;}
+   .svc-header-left>div:last-child{min-width:0;overflow:hidden;}
+   .svc-header-left h3{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+   .svc-header-left p{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+   .svc-header-badge{flex-shrink:0;white-space:nowrap;font-size:12px;padding:4px 12px;}
+   /* Pricing table: padding-right so FAB buttons don't overlap GIÁ BÁN column */
+   .pricing-section{padding-right:68px;}
+   .ptable th:last-child,.ptable td:last-child{padding-right:10px;}
+ }
+
+ @media(max-width:640px){
+   /* Selector section sticky - gọn hơn trên mobile */
+   .selector-section{
+     padding:12px 12px 0;
+     position:sticky;top:56px;z-index:90;
+     background:#fff;
+     box-shadow:0 2px 8px rgba(0,0,0,.06);
+   }
+
+   /* Carrier tabs: đều nhau trên mobile */
+   .carrier-tabs{
+     display:flex;flex-wrap:nowrap;
+     overflow-x:auto;-webkit-overflow-scrolling:touch;
+     justify-content:space-between;
+     gap:8px;margin-bottom:10px;
+     padding-bottom:2px;
+   }
+   .carrier-tabs::-webkit-scrollbar{display:none;}
+   .ctab{
+     padding:9px 12px;font-size:13px;
+     flex:1 1 0;min-width:0;
+     border-radius:30px;
+     justify-content:center;
+   }
+   .ctab-icon img{height:20px;}
+
+   /* Service tabs: đều nhau trên mobile */
+   .service-tabs-wrap{
+     display:flex;flex-wrap:nowrap;
+     overflow-x:auto;-webkit-overflow-scrolling:touch;
+     justify-content:space-between;
+     gap:4px;padding:0 0 0;
+   }
+   .service-tabs-wrap::-webkit-scrollbar{display:none;}
+   .stab{padding:8px 0;font-size:12px;flex:1 1 0;min-width:0;text-align:center;}
+
+   /* Mode grid: 2 cột trên mobile nhỏ */
+   .mode-grid{grid-template-columns:1fr 1fr;gap:8px;}
+   .mode-card{padding:10px 8px;}
+   .mode-card strong{font-size:13px;}
+   .mode-card p{font-size:11px;}
+
+   /* Form card */
+   .form-card-body{padding:14px;}
+   .pkg-table th,.pkg-table td{padding:8px 10px;}
+
+   /* Pricing section — keep 68px right clearance for FABs */
+   .pricing-section{padding:16px 68px 0 12px;}
+   .svc-header{padding:12px 14px;border-radius:10px 10px 0 0;gap:8px;}
+
+   /* svc-header overflow fix — also in 900px block below */
+   #svc-carrier-logo{min-width:48px!important;padding:4px 6px!important;}
+   #svc-carrier-logo img{height:22px!important;}
+   .svc-header-left{flex:1!important;min-width:0!important;}
+   .svc-header-left>div:last-child{min-width:0;overflow:hidden;}
+   .svc-header-left h3{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+   .svc-header-left p{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+   .svc-header-badge{flex-shrink:0;white-space:nowrap;font-size:11px;padding:3px 10px;}
+
+   /* Price table */
+   .ptable{font-size:13px;}
+   .ptable th,.ptable td{padding:9px 12px;}
+ }
+
+ @media(max-width:380px){
+   .mode-grid{grid-template-columns:1fr;}
+   .ctab{min-width:0;padding:8px 10px;font-size:11px;}
+   .stab{font-size:11px;padding:7px 0;}
+ }
+ </style>
+ <link rel="stylesheet" href="assets/css/global.css" />
+ <link rel="stylesheet" href="assets/css/mobile.css" />
+</head>
+<body>
+<!-- NAV -->
+<nav>
+ <div class="nav-inner">
+ <a href="index.html" class="nav-logo">
+ <img src="assets/images/logo.png" alt="Cuckoo Cargo" style="height:38px;width:auto;display:block;" />
+ </a>
+ <div class="nav-links" id="cc-nav-links">
+ <a href="index.html" data-vi="Trang chủ" data-en="Home">Trang chủ</a>
+ <a href="my-ve-viet.html" data-vi="Mỹ - Việt" data-en="US to Vietnam">Mỹ - Việt</a>
+ <a href="noi-dia-my.html" class="active" data-vi="Label Nội địa" data-en="Domestic Label">Label Nội địa</a>
+ <a href="mua-ho.html" data-vi="Mua hộ" data-en="Shop For Me">Mua hộ</a>
+ <a href="tracking.html" data-vi="Tra cứu" data-en="Track Order">Tra cứu</a>
+ <a href="san-pham.html" data-vi="Sản phẩm" data-en="Products">Sản phẩm</a>
+ <a href="blog.html" data-vi="Blog" data-en="Blog">Blog</a>
+ </div>
+ <div class="nav-right">
+ <div class="cc-search-wrap" id="cc-search-wrap">
+ <button class="cc-search-icon-btn" onclick="toggleNavSearch()" aria-label="Tìm kiếm">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+ </button>
+ <div class="cc-search-box" id="cc-search-box">
+  <input type="text" id="cc-search-input" placeholder="Tìm dịch vụ, thông tin..." autocomplete="off"
+   oninput="doNavSearch(this.value)" onkeydown="if(event.key===\'Escape\')closeNavSearch()" />
+  <div class="cc-search-results" id="cc-search-results"></div>
+ </div>
+</div>
+<div class="lang-toggle">
+ <button class="lang-btn active" onclick="setLang('vi')"> VN</button>
+ <button class="lang-btn" onclick="setLang('en')"> EN</button>
+ </div>
+ <a href="#dat-label" class="nav-cta" data-vi="Đặt Label →" data-en="Order Label →">Đặt Label →</a>
+ <button class="mobile-nav-toggle" id="mobile-toggle-btn" onclick="toggleMobileNav()" aria-label="Menu">
+  <svg class="hbg-open" width="20" height="14" viewBox="0 0 20 14" fill="none"><rect width="20" height="2" rx="1" fill="currentColor"/><rect y="6" width="20" height="2" rx="1" fill="currentColor"/><rect y="12" width="20" height="2" rx="1" fill="currentColor"/></svg>
+  <svg class="hbg-close" width="16" height="16" viewBox="0 0 16 16" fill="none" style="display:none"><line x1="1" y1="1" x2="15" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="15" y1="1" x2="1" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+ </div>
+ </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+ <div class="hero-badge" data-vi=" LABEL NỘI ĐỊA MỸ" data-en=" US DOMESTIC LABEL"> LABEL NỘI ĐỊA MỸ</div>
+ <h1 data-vi="Gửi Hàng &lt;span&gt;50 Tiểu Bang&lt;/span&gt;&lt;br&gt;Nhanh — Rẻ — Uy Tín" data-en="Ship Across &lt;span&gt;50 States&lt;/span&gt;&lt;br&gt;Fast — Cheap — Trusted">Gửi Hàng <span>50 Tiểu Bang</span><br>Nhanh — Rẻ — Uy Tín</h1>
+ <p data-vi="UPS, FedEx, USPS — tạo label trong 30 phút. Drop-off hoặc pickup tận nơi. Tiết kiệm 3–4 lần so với gửi trực tiếp." data-en="UPS, FedEx, USPS — get your label in 30 minutes. Drop-off or pickup. Save 3–4× vs. walk-in rates.">UPS, FedEx, USPS — tạo label trong 30 phút. Drop-off hoặc pickup tận nơi. Tiết kiệm 3–4 lần so với gửi trực tiếp.</p>
+ <div class="hero-stats">
+ <div class="hero-stat"><div class="val">50</div><div class="lbl" data-vi="Tiểu bang" data-en="US states">Tiểu bang</div></div>
+ <div class="hero-stat"><div class="val">30'</div><div class="lbl" data-vi="Gửi label" data-en="Get label">Gửi label</div></div>
+ <div class="hero-stat"><div class="val">3×</div><div class="lbl" data-vi="Tiết kiệm hơn" data-en="Cheaper than">Tiết kiệm hơn</div></div>
+ <div class="hero-stat"><div class="val">$1.99</div><div class="lbl" data-vi="UPS từ /lbs" data-en="UPS from /lbs">UPS từ /lbs</div></div>
+ </div>
+</div>
+
+<!-- MODE SELECTOR -->
+<div class="mode-section">
+ <div class="mode-inner">
+ <div class="mode-label" data-vi="CHỌN LOẠI DỊCH VỤ" data-en="SELECT SERVICE TYPE">CHỌN LOẠI DỊCH VỤ</div>
+ <div class="mode-grid">
+ <div class="mode-opt xuyen active" id="mode-xuyen" onclick="setMode('xuyen')">
+ <div class="mode-icon"></div>
+ <div class="mode-info">
+ <strong data-vi="Xuyên bang Mỹ" data-en="Cross-State Shipping">Xuyên bang Mỹ</strong>
+ <span data-vi="Gửi hàng từ địa điểm của bạn đến bất kỳ tiểu bang nào tại Mỹ" data-en="Ship from your location to any US state">Gửi hàng từ địa điểm của bạn đến bất kỳ tiểu bang nào tại Mỹ</span>
+ </div>
+ <div class="mode-check"></div>
+ </div>
+ <div class="mode-opt kho" id="mode-kho" onclick="setMode('kho')">
+ <div class="mode-icon"></div>
+ <div class="mode-info">
+ <strong data-vi="Gửi hàng lên kho Cuckoo Cargo" data-en="Ship to Cuckoo Cargo Warehouse">Gửi hàng lên kho Cuckoo Cargo</strong>
+ <span data-vi="Gửi kiện hàng đến kho Cuckoo Cargo tại Garden Grove, CA trước khi ship về Việt Nam" data-en="Send packages to Cuckoo Cargo warehouse in Garden Grove, CA before shipping to Vietnam">Gửi kiện hàng đến kho Cuckoo Cargo tại Garden Grove, CA trước khi ship về Việt Nam</span>
+ </div>
+ <div class="mode-check"></div>
+ </div>
+ </div>
+ </div>
+</div>
+
+<!-- CARRIER + SERVICE SELECTOR -->
+<div class="selector-section">
+ <div class="selector-inner">
+ <div class="carrier-tabs">
+ <button class="ctab ups active" id="ctab-ups" onclick="selectCarrier('ups')">
+ <span class="ctab-icon"><img src="assets/images/ups-label.png" alt="UPS" /></span> UPS
+ </button>
+ <button class="ctab fedex" id="ctab-fedex" onclick="selectCarrier('fedex')">
+ <span class="ctab-icon"><img src="assets/images/Fedex-label.png" alt="FedEx" /></span> FedEx
+ </button>
+ <button class="ctab usps" id="ctab-usps" onclick="selectCarrier('usps')">
+ <span class="ctab-icon"><img src="assets/images/usps-label.png" alt="USPS" /></span> USPS
+ </button>
+ </div>
+ <div class="service-tabs-wrap" id="service-tabs"></div>
+ </div>
+</div>
+
+<!-- PRICING TABLE -->
+<div class="pricing-section" id="pricing-area">
+ <div class="pricing-inner">
+ <div class="svc-header" id="svc-header">
+ <div class="svc-header-left" style="display:flex;align-items:center;gap:14px;">
+ <div id="svc-carrier-logo" style="background:rgba(255,255,255,.9);border-radius:10px;padding:6px 10px;display:flex;align-items:center;justify-content:center;min-width:64px;"><img src="assets/images/ups-label.png" alt="UPS" style="height:28px;width:auto;object-fit:contain;" /></div>
+ <div><h3 id="svc-header-title">UPS Ground</h3>
+ <p id="svc-header-sub">Giao 3–5 ngày làm việc · Tiết kiệm nhất</p></div>
+ </div>
+ <div class="svc-header-badge" id="svc-header-badge">From $1.99/lbs</div>
+ </div>
+ <table class="ptable" id="price-table-body"></table>
+ <div class="price-table-note" id="price-table-note"></div>
+ </div>
+</div>
+
+<!-- ORDER FORM -->
+<div class="form-section" id="dat-label">
+ <div class="form-section-inner">
+
+ <!-- Selected service banner -->
+ <div class="form-card" style="margin-bottom:16px;">
+ <div class="form-card-body" style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+ <div style="font-size:14px;font-weight:700;color:var(--text-muted);" data-vi="Đặt label cho:" data-en="Creating label for:">Đặt label cho:</div>
+ <div style="font-size:16px;font-weight:800;color:var(--navy);" id="form-svc-label"> UPS Ground — $1.99/lbs</div>
+ </div>
+ </div>
+
+ <!-- 1. NGƯỜI GỬI -->
+ <div class="form-card">
+ <div class="form-card-header">
+ <span style="font-size:20px"></span>
+ <h3 data-vi="Thông tin người gửi" data-en="Sender Information">Thông tin người gửi</h3>
+ </div>
+ <div class="form-card-body">
+ <div class="form-row col2">
+ <div class="form-group">
+ <label data-vi="Tên Facebook <span class='req'>*</span>" data-en="Facebook Name <span class='req'>*</span>">Tên Facebook <span class="req">*</span></label>
+ <input type="text" id="f-fbname" placeholder="Nguyen Van A" required />
+ </div>
+ <div class="form-group">
+ <label data-vi="Mã khách hàng <span class='hint'>(CAC + 4 số)</span>" data-en="Customer Code <span class='hint'>(CAC + 4 digits)</span>">Mã khách hàng <span class="hint">(CAC + 4 số)</span></label>
+ <input type="text" id="f-code" placeholder="CAC0001" maxlength="10" />
+ </div>
+ </div>
+ <div class="form-row col2">
+ <div class="form-group">
+ <label data-vi="Họ tên <span class='req'>*</span>" data-en="Full Name <span class='req'>*</span>">Họ tên <span class="req">*</span></label>
+ <input type="text" id="f-name" placeholder="Nguyễn Văn A" required />
+ </div>
+ <div class="form-group">
+ <label data-vi="SĐT Mỹ <span class='req'>*</span>" data-en="US Phone <span class='req'>*</span>">SĐT Mỹ <span class="req">*</span></label>
+ <input type="tel" id="f-phone" placeholder="+1 213 xxx xxxx" required />
+ </div>
+ </div>
+ <div class="form-group">
+ <label data-vi="Email <span class='req'>*</span> <span class='hint'>— Label gửi về đây</span>" data-en="Email <span class='req'>*</span> <span class='hint'>— Label sent here</span>">Email <span class="req">*</span> <span class="hint">— Label gửi về đây</span></label>
+ <input type="email" id="f-email" placeholder="example@gmail.com" required />
+ </div>
+ <div class="form-group">
+ <label data-vi="Địa chỉ người gửi <span class='req'>*</span>" data-en="Sender Address <span class='req'>*</span>">Địa chỉ người gửi <span class="req">*</span></label>
+ <input type="text" id="f-addr" placeholder="123 Main St, Los Angeles, CA 90001" required />
+ <div class="input-note" style="color:#d97706;font-weight:600;" data-vi="⚠️ Lưu ý: Vui lòng điền đầy đủ ZIP Code (5 số) ở cuối địa chỉ — ví dụ: <em>CA 90001</em>. Thiếu ZIP Code đơn hàng sẽ không xử lý được." data-en="⚠️ Note: Please include the full 5-digit ZIP Code at the end of the address — e.g. <em>CA 90001</em>. Missing ZIP Code will prevent processing.">⚠️ Lưu ý: Vui lòng điền đầy đủ ZIP Code (5 số) ở cuối địa chỉ — ví dụ: <em>CA 90001</em>. Thiếu ZIP Code đơn hàng sẽ không xử lý được.</div>
+ </div>
+ <div class="form-group">
+ <label data-vi="Apt / Suite / Floor <span class='hint'>(nếu có)</span>" data-en="Apt / Suite / Floor <span class='hint'>(if applicable)</span>">Apt / Suite / Floor <span class="hint">(If applicable)</span></label>
+ <input type="text" id="f-apt" placeholder="Apt 4B, Suite 200, Floor 3..." />
+ </div>
+ </div>
+ </div>
+
+ <!-- 2. HÌNH THỨC LẤY HÀNG -->
+ <div class="form-card">
+ <div class="form-card-header">
+ <span style="font-size:20px"></span>
+ <h3 data-vi="Hình thức lấy hàng" data-en="Pickup Method">Hình thức lấy hàng</h3>
+ </div>
+ <div class="form-card-body">
+ <div class="pickup-toggle">
+ <div class="pickup-opt" id="opt-dropoff" onclick="setPickup('dropoff')">
+ <div class="opt-icon"></div>
+ <div class="opt-name">Drop-off</div>
+ <div class="opt-sub" data-vi="Tự mang đến bưu điện — Miễn phí" data-en="Drop off yourself — Free">Tự mang đến bưu điện — Miễn phí</div>
+ </div>
+ <div class="pickup-opt active" id="opt-pickup" onclick="setPickup('pickup')">
+ <div class="opt-icon"></div>
+ <div class="opt-name" data-vi="Pick-up" data-en="Pick-up">Pick-up</div>
+ <div class="opt-sub" id="pickup-price-note" data-vi="UPS: +$9.65 — Thứ 2→Thứ 6" data-en="UPS: +$9.65 — Mon→Fri">UPS: +$9.65 — Thứ 2→Thứ 6</div>
+ </div>
+ </div>
+
+ <!-- Pickup fields -->
+ <div id="pickup-fields" style="margin-top:16px;">
+ <!-- Calendar -->
+ <div class="form-group">
+ <label data-vi="Chọn ngày pick-up <span class='req'>*</span> <span class='hint'>— Thứ 2–Thứ 6, đặt trước ít nhất 1 ngày</span>" data-en="Choose pick-up date <span class='req'>*</span> <span class='hint'>— Mon–Fri, book at least 1 day ahead</span>">Chọn ngày pick-up <span class="req">*</span> <span class="hint">— Thứ 2–Thứ 6, đặt trước ít nhất 1 ngày</span></label>
+ <div class="cal-wrap">
+ <div class="cal-head">
+ <button type="button" class="cal-nav-btn" onclick="calNav(-1)">&#8249;</button>
+ <div class="cal-month" id="cal-month-label"></div>
+ <button type="button" class="cal-nav-btn" onclick="calNav(1)">&#8250;</button>
+ </div>
+ <div class="cal-dow-row">
+ <div class="cal-dow">Mon</div><div class="cal-dow">Tue</div>
+ <div class="cal-dow">Wed</div><div class="cal-dow">Thu</div>
+ <div class="cal-dow">Fri</div>
+ <div class="cal-dow wknd">Sat</div><div class="cal-dow wknd">Sun</div>
+ </div>
+ <div class="cal-days-grid" id="cal-days"></div>
+ <div class="cal-selected-display" id="cal-selected-text" data-vi="Chưa chọn ngày" data-en="No date selected">Chưa chọn ngày</div>
+ </div>
+ <input type="hidden" id="f-pickup-date" />
+ </div>
+
+ <!-- Time slots -->
+ <div id="timeslot-wrap" style="display:none;">
+ <div class="ts-label" data-vi="⏰ Chọn khung giờ pick-up (giờ Mỹ)" data-en="⏰ Choose pick-up time (US time)">⏰ Chọn khung giờ pick-up (giờ Mỹ)</div>
+ <div class="ts-grid">
+ <button type="button" class="ts-btn" onclick="selectTimeslot(this,'9AM - 2PM')">9AM – 2PM</button>
+ <button type="button" class="ts-btn" onclick="selectTimeslot(this,'10AM - 3PM')">10AM – 3PM</button>
+ <button type="button" class="ts-btn" onclick="selectTimeslot(this,'11AM - 4PM')">11AM – 4PM</button>
+ <button type="button" class="ts-btn" onclick="selectTimeslot(this,'12PM - 5PM')">12PM – 5PM</button>
+ </div>
+ <input type="hidden" id="f-pickup-time" />
+ </div>
+
+ <!-- Timeline -->
+ <div class="pickup-timeline" id="pickup-timeline">
+ <div class="pkl-title" data-vi=" Lịch trình pick-up của bạn" data-en=" Your pick-up schedule"> Lịch trình pick-up của bạn</div>
+ <div class="pkl-row">
+ <div class="pkl-left"><div class="pkl-dot done"></div><div class="pkl-line"></div></div>
+ <div class="pkl-text"><strong data-vi=" Đơn đặt pick-up thành công" data-en=" Pick-up order confirmed"> Đơn đặt pick-up thành công</strong><br><span data-vi="Cuckoo Cargo xác nhận qua Zalo/Messenger." data-en="Cuckoo Cargo confirms via Zalo/Messenger.">Cuckoo Cargo xác nhận qua Zalo/Messenger.</span></div>
+ </div>
+ <div class="pkl-row">
+ <div class="pkl-left"><div class="pkl-dot"></div><div class="pkl-line"></div></div>
+ <div class="pkl-text"><strong data-vi=" Nhân viên đến lấy hàng" data-en=" Staff arrives for pick-up"> Nhân viên đến lấy hàng</strong><br><span data-vi="Ngày" data-en="Date">Ngày</span> <em id="pkl-date">—</em>, <span data-vi="khung giờ" data-en="time slot">khung giờ</span> <em id="pkl-time">—</em>.</div>
+ </div>
+ <div class="pkl-row">
+ <div class="pkl-left"><div class="pkl-dot pending"></div><div class="pkl-line"></div></div>
+ <div class="pkl-text" style="color:#999;"><strong style="color:#999;" data-vi=" Scan &amp; nhận vào hệ thống" data-en=" Scanned &amp; entered into system"> Scan & nhận vào hệ thống</strong><br><span data-vi="Tracking cập nhật trong 2–4 giờ." data-en="Tracking updated within 2–4 hours.">Tracking cập nhật trong 2–4 giờ.</span></div>
+ </div>
+ <div class="pkl-row">
+ <div class="pkl-left"><div class="pkl-dot pending"></div><div class="pkl-line"></div></div>
+ <div class="pkl-text" style="color:#999;"><strong style="color:#999;" data-vi=" Bắt đầu vận chuyển" data-en=" Shipment in transit"> Bắt đầu vận chuyển</strong></div>
+ </div>
+ </div>
+
+ <div id="apt-surcharge-note" style="background:#FFF3E8;border:1.5px solid var(--orange);border-radius:10px;padding:12px 14px;font-size:13px;margin-top:12px;display:none;">
+ <span data-vi="<strong>Căn hộ / tòa nhà:</strong> Phí pick-up UPS tăng lên <strong>$16.15</strong>" data-en="<strong>Apartment / building:</strong> UPS pick-up fee increases to <strong>$16.15</strong>"><strong>Căn hộ / tòa nhà:</strong> Phí pick-up UPS tăng lên <strong>$16.15</strong></span>
+ </div>
+ <div class="form-group" style="margin-top:12px;">
+ <label data-vi="Loại địa chỉ" data-en="Address Type">Loại địa chỉ</label>
+ <select id="f-addr-type" onchange="checkAptSurcharge(); calcTotal();">
+ <option value="house" data-vi="Nhà riêng / House" data-en="House / Single Family">Nhà riêng / House</option>
+ <option value="apt" data-vi="APT (Căn hộ / Apartment)" data-en="APT (Apartment)">APT (Căn hộ / Apartment)</option>
+ <option value="apt" data-vi="Suite" data-en="Suite">Suite</option>
+ <option value="apt" data-vi="Unit" data-en="Unit">Unit</option>
+ </select>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- 3. NGƯỜI NHẬN -->
+ <div class="form-card" id="recv-card">
+ <div class="form-card-header">
+ <span style="font-size:20px"></span>
+ <h3 id="recv-card-title">Thông tin người nhận</h3>
+ </div>
+ <div class="form-card-body" id="recv-card-body">
+ <div class="recv-locked-badge" id="recv-locked-badge" style="display:none;">
+ Thông tin kho Cuckoo Cargo — không thể chỉnh sửa
+ </div>
+ <div class="form-row col2" id="recv-fields">
+ <div class="form-group">
+ <label data-vi="Họ tên người nhận <span class='req'>*</span>" data-en="Receiver Full Name <span class='req'>*</span>">Họ tên người nhận <span class="req">*</span></label>
+ <input type="text" id="f-recv-name" placeholder="John Smith" required />
+ </div>
+ <div class="form-group">
+ <label data-vi="SĐT người nhận <span class='req'>*</span>" data-en="Receiver Phone <span class='req'>*</span>">SĐT người nhận <span class="req">*</span></label>
+ <input type="tel" id="f-recv-phone" placeholder="+1 555 xxx xxxx" required />
+ </div>
+ </div>
+ <div class="form-group">
+ <label data-vi="Địa chỉ người nhận <span class='req'>*</span>" data-en="Receiver Address <span class='req'>*</span>">Địa chỉ người nhận <span class="req">*</span></label>
+ <input type="text" id="f-recv-addr" placeholder="456 Oak Ave, New York, NY 10001" required />
+ <div class="input-note" style="color:#d97706;font-weight:600;" data-vi="⚠️ Lưu ý: Vui lòng điền đầy đủ ZIP Code (5 số) ở cuối địa chỉ — ví dụ: <em>NY 10001</em>. Thiếu ZIP Code đơn hàng sẽ không xử lý được." data-en="⚠️ Note: Please include the full 5-digit ZIP Code at the end of the address — e.g. <em>NY 10001</em>. Missing ZIP Code will prevent processing.">⚠️ Lưu ý: Vui lòng điền đầy đủ ZIP Code (5 số) ở cuối địa chỉ — ví dụ: <em>NY 10001</em>. Thiếu ZIP Code đơn hàng sẽ không xử lý được.</div>
+ </div>
+ <div class="form-group" id="recv-apt-group">
+ <label data-vi="Apt / Suite / Floor <span class='hint'>(nếu có)</span>" data-en="Apt / Suite / Floor <span class='hint'>(if applicable)</span>">Apt / Suite / Floor <span class="hint">(If applicable)</span></label>
+ <input type="text" id="f-recv-apt" placeholder="Apt 4B, Suite 200..." />
+ </div>
+ </div>
+ </div>
+
+ <!-- 4. THÔNG TIN KIỆN HÀNG -->
+ <div class="form-card">
+ <div class="form-card-header">
+ <span style="font-size:20px"></span>
+ <h3 data-vi="Thông tin kiện hàng" data-en="Package Information">Thông tin kiện hàng</h3>
+ </div>
+ <div class="form-card-body">
+ <div class="pkg-table-wrap">
+ <table class="pkg-table">
+ <thead>
+ <tr>
+ <th style="width:60px;" class="center">Package</th>
+ <th data-vi="Cân nặng (lbs) <span style='color:var(--orange)'>*</span>" data-en="Weight (lbs) <span style='color:var(--orange)'>*</span>">Cân nặng (lbs) <span style="color:var(--orange)">*</span></th>
+ <th data-vi="Giá trị ($)" data-en="Value ($)">Giá trị ($)</th>
+ <th style="width:44px;"></th>
+ </tr>
+ </thead>
+ <tbody id="pkg-tbody"></tbody>
+ </table>
+ </div>
+ <div class="pkg-surcharge-note" id="surcharge-note">
+ <span data-vi="<strong>Phụ phí hàng nặng:</strong> Kiện hàng &gt;50 lbs (UPS) → +<strong>$27.00/kiện</strong>" data-en="<strong>Heavy package surcharge:</strong> Packages &gt;50 lbs (UPS) → +<strong>$27.00/pkg</strong>"><strong>Phụ phí hàng nặng:</strong> Kiện hàng &gt;50 lbs (UPS) → +<strong>$27.00/kiện</strong></span>
+ </div>
+ <button type="button" class="add-pkg-btn" onclick="addPackage()" data-vi="+ Thêm kiện hàng" data-en="+ Add Package">+ Thêm kiện hàng</button>
+
+ <!-- Price estimate -->
+ <div class="price-estimate" id="price-estimate" style="display:none;">
+ <div class="pe-title">DỰ TÍNH GIÁ LABEL</div>
+ <div class="pe-rows" id="pe-rows"></div>
+ <div class="pe-divider"></div>
+ <div class="pe-total">
+ <span data-vi="Tổng ước tính" data-en="Estimated total">Tổng ước tính</span>
+ <span class="tv" id="pe-total-val">$0.00</span>
+ </div>
+ <div class="pe-note" data-vi=" Cuckoo Cargo cam kết label chính hãng. Chi phí sẽ được thông báo qua Messenger / Zalo và thanh toán trực tiếp trên đó." data-en=" Cuckoo Cargo guarantees authentic labels. Costs will be confirmed via Messenger / Zalo and paid directly there."> Cuckoo Cargo cam kết label chính hãng. Chi phí sẽ được thông báo qua Messenger / Zalo và thanh toán trực tiếp trên đó.</div>
+ </div>
+ </div>
+ </div>
+
+ <!-- 5. BẢO HIỂM & CHỮ KÝ -->
+ <div class="form-card">
+ <div class="form-card-header">
+ <span style="font-size:20px"></span>
+ <h3 data-vi="Tùy chọn thêm" data-en="Add-on Options">Tùy chọn thêm</h3>
+ </div>
+ <div class="form-card-body" style="display:flex;flex-direction:column;gap:12px;">
+ <div class="option-toggle" id="ins-toggle" onclick="toggleInsurance()">
+ <input type="checkbox" id="f-insurance" />
+ <div class="opt-label">
+ <strong data-vi="Mua bảo hiểm hàng hóa" data-en="Purchase Cargo Insurance">Mua bảo hiểm hàng hóa</strong>
+ <span data-vi="Bảo vệ kiện hàng trong trường hợp mất mát hoặc hư hỏng" data-en="Protect your package against loss or damage">Bảo vệ kiện hàng trong trường hợp mất mát hoặc hư hỏng</span>
+ </div>
+ </div>
+ <div class="ins-note" id="ins-note">
+ <span data-vi="Để mua bảo hiểm hàng hóa, vui lòng <strong>kê khai đúng giá trị</strong> của mỗi kiện hàng trong phần &quot;Giá trị ($)&quot; ở mục Thông tin kiện hàng ở trên." data-en="To purchase cargo insurance, please <strong>declare the accurate value</strong> of each package in the &quot;Value ($)&quot; field above.">Để mua bảo hiểm hàng hóa, vui lòng <strong>kê khai đúng giá trị</strong> của mỗi kiện hàng trong phần "Giá trị ($)" ở mục Thông tin kiện hàng ở trên.</span>
+ </div>
+
+ <div class="option-toggle" id="sig-toggle" onclick="toggleSignature()">
+ <input type="checkbox" id="f-signature" />
+ <div class="opt-label">
+ <strong data-vi="Yêu cầu chữ ký khi giao hàng" data-en="Signature Required on Delivery">Yêu cầu chữ ký khi giao hàng</strong>
+ <span data-vi="Signature Required — Người nhận phải ký xác nhận khi nhận kiện" data-en="Signature Required — Recipient must sign upon delivery">Signature Required — Người nhận phải ký xác nhận khi nhận kiện</span>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- 6. GHI CHÚ -->
+ <div class="form-card">
+ <div class="form-card-header">
+ <span style="font-size:20px"></span>
+ <h3 data-vi="Ghi chú" data-en="Notes">Ghi chú</h3>
+ </div>
+ <div class="form-card-body">
+ <div class="form-group">
+ <textarea id="f-note" placeholder="Hàng dễ vỡ, yêu cầu đặc biệt về đóng gói, ghi chú cho nhân viên..."></textarea>
+ </div>
+ </div>
+ </div>
+
+ <!-- 7. ĐIỀU KHOẢN -->
+ <div class="form-card">
+ <div class="form-card-header">
+ <span style="font-size:20px"></span>
+ <h3 data-vi="Xác nhận điều khoản" data-en="Confirm Terms">Xác nhận điều khoản</h3>
+ </div>
+ <div class="form-card-body">
+ <div class="policy-box">
+ <div class="prohibited-toggle" onclick="toggleProhibited(this)">
+ <span class="arr"></span> <span data-vi="Xem danh sách hàng hóa bị cấm vận chuyển" data-en="View list of prohibited items">Xem danh sách hàng hóa bị cấm vận chuyển</span>
+ </div>
+ <div class="prohibited-list" id="prohibited-list">
+ <ul>
+ <li>Vũ khí, đạn dược</li>
+ <li>Chất nổ, pháo hoa</li>
+ <li>Chất lỏng dễ cháy</li>
+ <li>Pin Lithium rời</li>
+ <li>Ma túy hoặc chất cấm</li>
+ <li>Động vật sống</li>
+ <li>Thi hài / bộ phận cơ thể người</li>
+ <li>Kim loại quý, giấy tờ có giá</li>
+ </ul>
+ </div>
+
+ <div class="policy-checks">
+ <div class="pcheck">
+ <input type="checkbox" id="p1" />
+ <label for="p1" data-vi="Tôi xác nhận kiện hàng <strong>không chứa bất kỳ hàng hóa bị cấm</strong> theo quy định của UPS/FedEx/USPS và pháp luật liên bang Mỹ." data-en="I confirm the package <strong>contains no prohibited items</strong> per UPS/FedEx/USPS regulations and US federal law.">Tôi xác nhận kiện hàng <strong>không chứa bất kỳ hàng hóa bị cấm</strong> theo quy định của UPS/FedEx/USPS và pháp luật liên bang Mỹ.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="p2" />
+ <label for="p2" data-vi="Tôi hiểu rằng <strong>label sẽ được gửi trong 30–60 phút</strong> sau khi xác nhận đơn. Cần có máy in để in label trước khi drop-off. Nếu không có máy in, có thể ra trực tiếp store UPS/FedEx/USPS nhờ nhân viên in hộ." data-en="I understand the <strong>label will be sent within 30–60 minutes</strong> after confirmation. A printer is needed to print before drop-off. Without a printer, you may visit a UPS/FedEx/USPS store for printing.">Tôi hiểu rằng <strong>label sẽ được gửi trong 30–60 phút</strong> sau khi xác nhận đơn. Cần có máy in để in label trước khi drop-off. Nếu không có máy in, có thể ra trực tiếp store UPS/FedEx/USPS nhờ nhân viên in hộ.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="p3" />
+ <label for="p3" data-vi="Tôi cam kết <strong>khai đúng kích thước và cân nặng</strong>. Nếu sai lệch, tôi đồng ý chịu phạt <strong>$19,25/kiện hàng</strong> và thanh toán theo cân nặng thực tế." data-en="I commit to <strong>declaring accurate dimensions and weight</strong>. If incorrect, I agree to a <strong>$19.25/package</strong> penalty and payment based on actual weight.">Tôi cam kết <strong>khai đúng kích thước và cân nặng</strong>. Nếu sai lệch, tôi đồng ý chịu phạt <strong>$19,25/kiện hàng</strong> và thanh toán theo cân nặng thực tế.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="p4" />
+ <label for="p4" data-vi="Tôi hiểu Cuckoo Cargo <strong>không chịu trách nhiệm với mọi hư hỏng do đóng gói không an toàn</strong>. Tôi cam kết đóng gói kỹ, chống sốc nhiều lớp với hàng dễ vỡ và thiết bị điện tử." data-en="I understand Cuckoo Cargo is <strong>not liable for damage caused by unsafe packaging</strong>. I commit to careful packing with multiple shock layers for fragile items and electronics.">Tôi hiểu Cuckoo Cargo <strong>không chịu trách nhiệm với mọi hư hỏng do đóng gói không an toàn</strong>. Tôi cam kết đóng gói kỹ, chống sốc nhiều lớp với hàng dễ vỡ và thiết bị điện tử.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="p5" />
+ <label for="p5" data-vi="Tôi đồng ý <strong>thanh toán phí vận chuyển</strong> theo bảng giá Cuckoo Cargo. Phí được thông báo sau khi xác nhận label." data-en="I agree to <strong>pay the shipping fee</strong> per Cuckoo Cargo's rate. Fee will be confirmed after label is issued.">Tôi đồng ý <strong>thanh toán phí vận chuyển</strong> theo bảng giá Cuckoo Cargo. Phí được thông báo sau khi xác nhận label.</label>
+ </div>
+ <div class="pcheck">
+ <input type="checkbox" id="p6" />
+ <label for="p6" data-vi="Tôi xác nhận thông tin người gửi và người nhận <strong>chính xác và hợp lệ</strong>. Cuckoo Cargo không chịu trách nhiệm nếu label giao sai do thông tin lỗi." data-en="I confirm sender and receiver information is <strong>accurate and valid</strong>. Cuckoo Cargo is not liable for incorrect delivery due to wrong information.">Tôi xác nhận thông tin người gửi và người nhận <strong>chính xác và hợp lệ</strong>. Cuckoo Cargo không chịu trách nhiệm nếu label giao sai do thông tin lỗi.</label>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- SUBMIT -->
+ <div class="submit-wrap">
+ <button type="button" class="btn-review" id="btn-review" onclick="showReview()">
+ <span>Xem tóm tắt & Xác nhận label</span>
+ </button>
+ <div class="submit-note">
+ <span data-vi="Cuckoo Cargo sẽ liên hệ qua <strong>Facebook</strong> hoặc <strong>Email</strong> để xác nhận và gửi file label PDF." data-en="Cuckoo Cargo will contact you via <strong>Facebook</strong> or <strong>Email</strong> to confirm and send the PDF label file.">Cuckoo Cargo sẽ liên hệ qua <strong>Facebook</strong> hoặc <strong>Email</strong> để xác nhận và gửi file label PDF.</span><br>
+ Hotline: <a href="tel:+17143984817" style="color:var(--orange)">+1 (714) 398-4817</a>
+ </div>
+ </div>
+
+ </div>
+</div>
+
+<!-- REVIEW SHEET -->
+<div class="review-overlay" id="review-overlay" onclick="closeReview(event)">
+ <div class="review-sheet" id="review-sheet">
+ <div class="review-handle"></div>
+ <div class="review-title" data-vi="Xác nhận thông tin label" data-en="Confirm Label Information">Xác nhận thông tin label</div>
+ <div class="review-rows" id="review-content"></div>
+ <div class="review-note" id="review-note" style="background:#f0f9ff;border-color:#b8d9f5;color:#1a5480;">
+ <span data-vi="Cuckoo Cargo cam kết label <strong>chính hãng</strong>. Chúng tôi sẽ thông báo chi phí trực tiếp qua <strong>Messenger</strong> và <strong>Zalo</strong> — thanh toán chuyển khoản trực tiếp trên đó." data-en="Cuckoo Cargo guarantees <strong>authentic</strong> labels. We will notify the cost via <strong>Messenger</strong> and <strong>Zalo</strong> — payment made directly there.">Cuckoo Cargo cam kết label <strong>chính hãng</strong>. Chúng tôi sẽ thông báo chi phí trực tiếp qua <strong>Messenger</strong> và <strong>Zalo</strong> — thanh toán chuyển khoản trực tiếp trên đó.</span>
+ </div>
+ <div class="review-actions">
+ <button class="btn-edit" onclick="closeReview(null)" data-vi=" Sửa thông tin" data-en=" Edit Information"> Sửa thông tin</button>
+ <button class="btn-confirm" id="btn-confirm" onclick="submitLabel()" data-vi="Xác nhận & Gửi đơn" data-en="Confirm & Submit">Xác nhận & Gửi đơn</button>
+ </div>
+ </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<div class="success-modal-overlay" id="success-modal-overlay">
+ <div class="success-modal">
+   <div class="success-modal-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+   <h3 data-vi="Label đã được đặt thành công!" data-en="Label ordered successfully!">Label đã được đặt thành công!</h3>
+   <p data-vi="Cuckoo Cargo sẽ gửi file label PDF qua <strong>Email / Messenger / Zalo</strong> trong vòng <strong>30–60 phút</strong>. Vui lòng kiểm tra hộp thư." data-en="Cuckoo Cargo will send the PDF label via <strong>Email / Messenger / Zalo</strong> within <strong>30–60 minutes</strong>. Please check your inbox.">Cuckoo Cargo sẽ gửi file label PDF qua <strong>Email / Messenger / Zalo</strong> trong vòng <strong>30–60 phút</strong>. Vui lòng kiểm tra hộp thư.</p>
+   <button class="success-modal-close" onclick="window.location.href='index.html'" data-vi="Đóng" data-en="Close">Đóng</button>
+ </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="cc-footer" class="cc-footer"></footer>
+
+<script src="assets/js/lang.js"></script>
+<script src="assets/js/global.js"></script>
+<script src="assets/js/pricing.js"></script>
+<script>
+ function generateHTS(){var d=new Date();var yyyy=d.getFullYear();var mm=("0"+(d.getMonth()+1)).slice(-2);var dd=("0"+d.getDate()).slice(-2);var rand=Math.floor(1000+Math.random()*9000);return"HTS"+yyyy+mm+dd+rand;}
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53kdguSGjFrD-ipJRTAlVJlCpq28_3C9ZoH5Mb-RBlKTP1lER/exec";
+
+ // AUTO-GENERATE MÃ KHÁCH HÀNG
+ function setupAutoCustomerCode(phoneId, codeId) {
+   const phoneEl = document.getElementById(phoneId);
+   const codeEl  = document.getElementById(codeId);
+   if (!phoneEl || !codeEl) return;
+   let _t = null;
+   const run = async (val) => {
+     const digits = val.replace(/\D/g,'');
+     if (digits.length < 4) return;
+     const cur = codeEl.value.trim();
+     if (cur && !cur.toUpperCase().startsWith('CAC')) return;
+     const localCode = 'CAC' + digits.slice(-4);
+     codeEl.value = localCode;
+     codeEl.style.borderColor = '#F47B20';
+     setTimeout(() => codeEl.style.borderColor = '', 2000);
+     try {
+       const res  = await fetch(`${SCRIPT_URL}?action=generateCode&phone=${encodeURIComponent(digits)}`,{redirect:'follow'});
+       const data = await res.json();
+       if (data.success && data.code && data.code !== localCode) {
+         codeEl.value = data.code;
+         codeEl.style.borderColor = '#22C55E';
+         setTimeout(() => codeEl.style.borderColor = '', 2000);
+       }
+     } catch(e) {}
+   };
+   phoneEl.addEventListener('input',  e => { clearTimeout(_t); _t = setTimeout(() => run(e.target.value), 400); });
+   phoneEl.addEventListener('blur',   e => { clearTimeout(_t); run(e.target.value); });
+ }
+
+ // PRICING DATA
+ const CARRIERS = {
+ ups: { name:'UPS', services:['Ground','3-Day','2-Day','Overnight'] },
+ fedex:{ name:'FedEx', services:['Ground','3-Day','2-Day','Overnight'] },
+ usps: { name:'USPS', services:['Ground','Priority','Express'] },
+ };
+
+ // UI labels per service (pricing numbers come from CC_PRICING.rateData in pricing.js)
+ const RATE_UI = {
+ 'ups-Ground':    { sub_vi:'Giao 3–5 ngày làm việc · Tiết kiệm nhất', sub_en:'3–5 business days · Most economical', from:'$1.99/lbs' },
+ 'ups-3-Day':     { sub_vi:'Giao 3 ngày làm việc', sub_en:'3 business days', from:'Từ $25' },
+ 'ups-2-Day':     { sub_vi:'Giao 2 ngày làm việc', sub_en:'2 business days', from:'Từ $31' },
+ 'ups-Overnight': { sub_vi:'Giao ngày hôm sau', sub_en:'Next day delivery', from:'Từ $89' },
+ 'fedex-Ground':  { sub_vi:'Giao 3–5 ngày · Ổn định', sub_en:'3–5 days · Reliable', from:'$2.99/lbs' },
+ 'fedex-3-Day':   { sub_vi:'Giao 3 ngày làm việc', sub_en:'3 business days', from:'Từ $69' },
+ 'fedex-2-Day':   { sub_vi:'Giao 2 ngày làm việc', sub_en:'2 business days', from:'Từ $82' },
+ 'fedex-Overnight':{ sub_vi:'Giao ngày hôm sau', sub_en:'Next day delivery', from:'Từ $139' },
+ 'usps-Ground':   { sub_vi:'Giao 2–5 ngày · Tối đa 20 lbs', sub_en:'2–5 days · Max 20 lbs', from:'Từ $22' },
+ 'usps-Priority': { sub_vi:'Giao 1–3 ngày · Tối đa 20 lbs', sub_en:'1–3 days · Max 20 lbs', from:'Từ $29' },
+ 'usps-Express':  { sub_vi:'Giao 1–2 ngày · Tối đa 10 lbs', sub_en:'1–2 days · Max 10 lbs', from:'Từ $129' },
+ };
+ // Merge pricing data (from pricing.js) with UI labels
+ const RATE_DATA = {};
+ for (const key in CC_PRICING.rateData) {
+   RATE_DATA[key] = Object.assign({}, CC_PRICING.rateData[key], RATE_UI[key] || {});
+ }
+
+ let currentCarrier = 'ups';
+ let currentService = 'Ground';
+ let currentPickup = 'pickup';
+ let packages = [];
+ let pkgCounter = 0;
+
+ // CARRIER SELECT 
+ function selectCarrier(c) {
+ currentCarrier = c;
+ document.querySelectorAll('.ctab').forEach(b => b.classList.remove('active','ups','fedex','usps'));
+ const btn = document.getElementById('ctab-' + c);
+ btn.classList.add('active', c);
+
+ // Rebuild service tabs
+ const wrap = document.getElementById('service-tabs');
+ wrap.innerHTML = '';
+ CARRIERS[c].services.forEach((s, i) => {
+ const b = document.createElement('button');
+ b.className = 'stab' + (i === 0 ? ' active' : '');
+ b.textContent = s;
+ b.onclick = () => selectService(s, b);
+ wrap.appendChild(b);
+ });
+ currentService = CARRIERS[c].services[0];
+ updatePricingTable();
+ updatePickupNote();
+ calcTotal();
+ }
+
+ function selectService(s, el) {
+ currentService = s;
+ document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+ el.classList.add('active');
+ updatePricingTable();
+ calcTotal();
+ }
+
+ // PRICING TABLE 
+ function updatePricingTable() {
+ const key = currentCarrier + '-' + currentService;
+ const data = RATE_DATA[key];
+ const cname = CARRIERS[currentCarrier].name;
+ const hdr = document.getElementById('svc-header');
+ const hdrCls = currentCarrier === 'fedex' ? 'fedex' : (currentCarrier === 'usps' ? 'usps' : '');
+ hdr.className = 'svc-header' + (hdrCls ? ' ' + hdrCls : '');
+ document.getElementById('svc-header-title').textContent = cname + ' ' + currentService;
+ document.getElementById('svc-header-sub').textContent = (window.currentLang==='en' && data.sub_en) ? data.sub_en : (data.sub_vi || data.sub || '');
+ document.getElementById('svc-header-badge').textContent = data.from;
+
+ // Update form banner
+ const carrierLogos = {
+ ups:   '<img src="assets/images/ups-label.png"   alt="UPS"   style="height:28px;width:auto;object-fit:contain;vertical-align:middle;" />',
+ fedex: '<img src="assets/images/Fedex-label.png" alt="FedEx" style="height:28px;width:auto;object-fit:contain;vertical-align:middle;" />',
+ usps:  '<img src="assets/images/usps-label.png"  alt="USPS"  style="height:28px;width:auto;object-fit:contain;vertical-align:middle;" />',
+ };
+ // Update carrier logo in header
+ const logoEl = document.getElementById('svc-carrier-logo');
+ if (logoEl) logoEl.innerHTML = carrierLogos[currentCarrier] || '';
+ document.getElementById('form-svc-label').textContent =
+ cname + ' ' + currentService + ' — ' + data.from;
+
+ // Build table
+ const tbody = document.getElementById('price-table-body');
+ const isEN = window.currentLang === 'en';
+ let rows = `<thead><tr>
+ <th>${isEN?'Weight':'Cân nặng'}</th>
+ <th>${isEN?'Fee type':'Loại phí'}</th>
+ <th>${isEN?'Price':'Giá bán'}</th>
+ </tr></thead><tbody>`;
+
+ // Flat fee rows
+ rows += `<tr class="subhead"><td colspan="3">${isEN?'📦 FLAT FEE / ORDER — Orders ≤10 lbs':'📦 GIÁ CỐ ĐỊNH / ĐƠN — Đơn ≤10 lbs'}</td></tr>`;
+ const flatLabels = ['1–2 lbs','3–5 lbs','6–8 lbs','9–10 lbs'];
+ data.flat.forEach((f, i) => {
+ rows += `<tr>
+ <td><strong>${flatLabels[i]}</strong></td>
+ <td><span class="flat-badge">⚡ ${isEN?'flat':'cố định'}</span></td>
+ <td class="price-cell">$${f.p}/${isEN?'order':'đơn'}</td>
+ </tr>`;
+ });
+
+ // Per-lbs rows
+ if (data.perLbs) {
+ rows += `<tr class="subhead"><td colspan="3">${isEN?'📏 PER LBS — Orders over 10 lbs':'📏 TÍNH THEO $/LBS — Đơn trên 10 lbs'}</td></tr>`;
+ const ALL_PERLBS = [
+   {label:'11–20 lbs'},{label:'21–30 lbs'},{label:'31–40 lbs'},{label:'41–50 lbs'},
+   {label:'51–70 lbs'},{label:'71–100 lbs'},{label:'101+ lbs'},
+ ];
+ const plRanges = data.maxLbs === 20 ? [ALL_PERLBS[0]] : ALL_PERLBS;
+ const plArr = Array.isArray(data.perLbs) ? data.perLbs : plRanges.map(() => data.perLbs);
+ plRanges.forEach((r, i) => {
+   const rate = plArr[Math.min(i, plArr.length - 1)];
+   rows += `<tr>
+ <td><strong>${r.label}</strong></td>
+ <td><span style="font-size:12px;color:var(--text-muted)">${isEN?'per lbs':'theo lbs'}</span></td>
+ <td class="price-cell">$${(+rate).toFixed(2)}/lbs</td>
+ </tr>`;
+ });
+ }
+
+ // Max weight exceeded
+ if (!data.perLbs || data.maxLbs === 10) {
+ rows += `<tr class="subhead-warn"><td colspan="3">⚠️ ${isEN?'Over 10 lbs — Not accepted, please choose another service':'Trên 10 lbs — Không nhận, vui lòng chọn dịch vụ khác'}</td></tr>`;
+ } else if (data.maxLbs === 20) {
+ rows += `<tr class="subhead-warn"><td colspan="3">⚠️ ${isEN?'Over 20 lbs — Not accepted':'Trên 20 lbs — Không nhận'}</td></tr>`;
+ }
+
+ // UPS heavy surcharge note
+ if (currentCarrier === 'ups') {
+ rows += `<tr class="surcharge-note"><td colspan="3">⚡ <strong>${isEN?'Heavy package surcharge (UPS):':'Phụ phí hàng nặng (UPS):'}</strong> ${isEN?'Packages &gt;50 lbs → add':'Kiện hàng &gt;50 lbs → cộng thêm'} <strong>$27.00/${isEN?'pkg':'kiện'}</strong></td></tr>`;
+ }
+
+ rows += '</tbody>';
+ tbody.innerHTML = rows;
+
+ // Note
+ const notes = {
+ 'ups-Ground':    { vi:'⏱ Thời gian giao hàng 3–5 ngày làm việc. Pickup: +$9.65 (nhà riêng), +$16.15 (căn hộ). Không áp dụng cho Hawaii, Alaska.',   en:'⏱ Delivery 3–5 business days. Pickup: +$9.65 (house), +$16.15 (apartment). Not available for Hawaii, Alaska.' },
+ 'ups-3-Day':     { vi:'⏱ Giao đúng 3 ngày làm việc. Không tính thứ 7, chủ nhật và ngày lễ liên bang.',                                                 en:'⏱ Delivers in exactly 3 business days. Excludes weekends and federal holidays.' },
+ 'ups-2-Day':     { vi:'⏱ Giao đúng 2 ngày làm việc. Lý tưởng cho hàng cần giao nhanh nhưng không khẩn cấp.',                                           en:'⏱ Delivers in exactly 2 business days. Ideal for fast but non-urgent shipments.' },
+ 'ups-Overnight': { vi:'⏱ Giao ngày hôm sau trước 12:00 PM (tuỳ khu vực). Dịch vụ khẩn cấp, giá cao nhất.',                                             en:'⏱ Next day delivery before 12:00 PM (varies by area). Urgent service, highest price.' },
+ 'fedex-Ground':  { vi:'⏱ Giao 3–5 ngày làm việc. FedEx Ground ổn định, ít delay. Free pick-up.',                                                        en:'⏱ 3–5 business days. FedEx Ground is reliable with minimal delays. Free pick-up.' },
+ 'fedex-3-Day':   { vi:'⏱ FedEx Express Saver — Giao đúng 3 ngày làm việc trước 4:30 PM.',                                                               en:'⏱ FedEx Express Saver — Delivers in exactly 3 business days by 4:30 PM.' },
+ 'fedex-2-Day':   { vi:'⏱ FedEx 2Day — Giao đúng 2 ngày làm việc trước 4:30 PM.',                                                                        en:'⏱ FedEx 2Day — Delivers in exactly 2 business days by 4:30 PM.' },
+ 'fedex-Overnight':{ vi:'⏱ FedEx Priority Overnight — Giao ngày hôm sau trước 10:30 AM.',                                                                 en:'⏱ FedEx Priority Overnight — Next day delivery by 10:30 AM.' },
+ 'usps-Ground':   { vi:'⏱ USPS Ground Advantage — Tối đa 20 lbs. Tiết kiệm nhất cho hàng nhỏ nhẹ.',                                                     en:'⏱ USPS Ground Advantage — Max 20 lbs. Most economical for light packages.' },
+ 'usps-Priority': { vi:'⏱ USPS Priority Mail — Tối đa 20 lbs. Giao 1–3 ngày. Bao gồm $100 bảo hiểm cơ bản.',                                           en:'⏱ USPS Priority Mail — Max 20 lbs. 1–3 day delivery. Includes $100 basic insurance.' },
+ 'usps-Express':  { vi:'⏱ USPS Priority Mail Express — Tối đa 10 lbs. Giao 1–2 ngày, bao gồm $100 bảo hiểm.',                                           en:'⏱ USPS Priority Mail Express — Max 10 lbs. 1–2 day delivery with $100 insurance.' },
+ };
+ const noteObj = notes[currentCarrier + '-' + currentService];
+ document.getElementById('price-table-note').textContent = noteObj ? (isEN ? noteObj.en : noteObj.vi) : '';
+ }
+
+ // PICKUP 
+ function setPickup(mode) {
+ currentPickup = mode;
+ document.getElementById('opt-dropoff').classList.toggle('active', mode === 'dropoff');
+ document.getElementById('opt-pickup').classList.toggle('active', mode === 'pickup');
+ document.getElementById('pickup-fields').style.display = mode === 'pickup' ? 'block' : 'none';
+ calcTotal();
+ }
+
+ function updatePickupNote() {
+ const note = document.getElementById('pickup-price-note');
+ if (currentCarrier === 'ups') {
+ note.textContent = 'UPS: +$' + CC_PRICING.upsPickup.toFixed(2) + ' — Thứ 2→Thứ 6';
+ } else {
+ note.textContent = CARRIERS[currentCarrier].name + ': Free pick-up — Thứ 2→Thứ 6';
+ }
+ }
+
+ function checkAptSurcharge() {
+ const apt = document.getElementById('f-addr-type').value === 'apt';
+ const el = document.getElementById('apt-surcharge-note');
+ el.style.display = (apt && currentCarrier === 'ups' && currentPickup === 'pickup') ? 'block' : 'none';
+ }
+
+ // CALENDAR 
+ const MONTHS = ['January','February','March','April','May','June',
+ 'July','August','September','October','November','December'];
+ let calView = new Date(); calView.setDate(1);
+
+ function renderCalendar() {
+ const y = calView.getFullYear(), m = calView.getMonth();
+ document.getElementById('cal-month-label').textContent = MONTHS[m] + ' ' + y;
+ const grid = document.getElementById('cal-days');
+ grid.innerHTML = '';
+ const today = new Date(); today.setHours(0,0,0,0);
+ const tmrw = new Date(today); tmrw.setDate(today.getDate() + 1);
+ const first = new Date(y, m, 1).getDay();
+ const offset = first === 0 ? 6 : first - 1;
+ const days = new Date(y, m + 1, 0).getDate();
+ const selVal = document.getElementById('f-pickup-date').value;
+
+ for (let i = 0; i < offset; i++) {
+ const el = document.createElement('div'); el.className = 'cal-cell empty'; grid.appendChild(el);
+ }
+ for (let d = 1; d <= days; d++) {
+ const date = new Date(y, m, d);
+ const dow = date.getDay();
+ const isWknd = dow === 0 || dow === 6;
+ const isPast = date < tmrw;
+ const ds = date.toISOString().split('T')[0];
+ const el = document.createElement('div');
+ el.textContent = d; el.className = 'cal-cell';
+ if (isWknd) el.classList.add('wknd-cell');
+ else if (isPast) el.classList.add('disabled');
+ else el.onclick = () => pickCalDay(ds);
+ if (date.getTime() === today.getTime()) el.classList.add('today');
+ if (ds === selVal) el.classList.add('selected');
+ grid.appendChild(el);
+ }
+ }
+
+ function calNav(dir) { calView.setMonth(calView.getMonth() + dir); renderCalendar(); }
+
+ function pickCalDay(ds) {
+ document.getElementById('f-pickup-date').value = ds;
+ const d = new Date(ds);
+ const fmt = d.toLocaleDateString('vi-VN', { weekday:'long', day:'2-digit', month:'2-digit', year:'numeric' });
+ document.getElementById('cal-selected-text').innerHTML = 'Ngày đã chọn: <em>' + fmt + '</em>';
+ document.getElementById('timeslot-wrap').style.display = 'block';
+ renderCalendar();
+ updateTimeline();
+ }
+
+ function selectTimeslot(el, val) {
+ document.querySelectorAll('.ts-btn').forEach(b => b.classList.remove('selected'));
+ el.classList.add('selected');
+ document.getElementById('f-pickup-time').value = val;
+ updateTimeline();
+ }
+
+ function updateTimeline() {
+ const dv = document.getElementById('f-pickup-date').value;
+ const tv = document.getElementById('f-pickup-time').value;
+ if (!dv || !tv) return;
+ const d = new Date(dv);
+ const fmt = d.toLocaleDateString('vi-VN', { weekday:'long', day:'2-digit', month:'2-digit', year:'numeric' });
+ document.getElementById('pkl-date').textContent = fmt;
+ document.getElementById('pkl-time').textContent = tv;
+ document.getElementById('pickup-timeline').classList.add('visible');
+ }
+
+ // PACKAGES 
+ function addPackage() {
+ pkgCounter++;
+ packages.push({ id: pkgCounter, weight: '', value: '' });
+ renderPackages();
+ }
+
+ function removePackage(id) {
+ packages = packages.filter(p => p.id !== id);
+ renderPackages();
+ }
+
+ function renderPackages() {
+ const tbody = document.getElementById('pkg-tbody');
+ tbody.innerHTML = '';
+ packages.forEach((pkg, idx) => {
+ const tr = document.createElement('tr');
+ tr.innerHTML = `
+ <td style="text-align:center;"><div class="pkg-num">${idx + 1}</div></td>
+ <td><input class="pkg-input" type="number" placeholder="lbs" min="0.1" step="0.1"
+ value="${pkg.weight}" oninput="updatePkg(${pkg.id},'weight',this.value)" /></td>
+ <td><input class="pkg-input" type="number" placeholder="$" min="0" step="0.01"
+ value="${pkg.value}" oninput="updatePkg(${pkg.id},'value',this.value)" /></td>
+ <td><button class="pkg-delete" type="button" onclick="removePackage(${pkg.id})" title="Xóa"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button></td>
+ `;
+ tbody.appendChild(tr);
+ });
+ calcTotal();
+ }
+
+ function updatePkg(id, field, val) {
+ const pkg = packages.find(p => p.id === id);
+ if (pkg) { pkg[field] = val; calcTotal(); }
+ }
+
+ // PRICE CALCULATION 
+ function calcPkg(lbs) {
+ const key = currentCarrier + '-' + currentService;
+ const data = RATE_DATA[key];
+ if (!data) return 0;
+ if (lbs <= 10) {
+ const tier = data.flat.find(f => lbs <= f.max);
+ return tier ? tier.p : data.flat[data.flat.length - 1].p;
+ }
+ if (!data.perLbs) return null; // USPS Express maxed
+ if (data.maxLbs && lbs > data.maxLbs) return null; // over limit
+ const PL_RANGES = [[11,20],[21,30],[31,40],[41,50],[51,70],[71,100],[101,9999]];
+ let rate;
+ if (Array.isArray(data.perLbs)) {
+   let idx = data.perLbs.length - 1;
+   for (let i = 0; i < PL_RANGES.length; i++) {
+     if (lbs >= PL_RANGES[i][0] && lbs <= PL_RANGES[i][1]) { idx = Math.min(i, data.perLbs.length - 1); break; }
+   }
+   rate = data.perLbs[idx];
+ } else {
+   rate = data.perLbs;
+ }
+ return lbs * rate;
+ }
+
+ function calcTotal() {
+ const key = currentCarrier + '-' + currentService;
+ const data = RATE_DATA[key];
+ let rows = '';
+ let total = 0;
+ let hasError = false;
+ let heavyCount = 0;
+ const el = document.getElementById('price-estimate');
+
+ packages.forEach((pkg, idx) => {
+ const w = parseFloat(pkg.weight);
+ if (!w || w <= 0) return;
+ const cost = calcPkg(w);
+ if (cost === null) { hasError = true; return; }
+ const heavy = currentCarrier === 'ups' && w > 50;
+ const surcharge = heavy ? CC_PRICING.upsHeavySurcharge : 0;
+ if (heavy) heavyCount++;
+ const subtotal = cost + surcharge;
+ total += subtotal;
+ rows += `<div class="pe-row"><span class="pk">${window.currentLang==='en'?'Package':'Kiện'} ${idx + 1} (${w} lbs)</span><span class="pv">$${subtotal.toFixed(2)}</span></div>`;
+ });
+
+ // Pickup surcharge
+ if (currentPickup === 'pickup' && currentCarrier === 'ups') {
+ const apt = document.getElementById('f-addr-type')?.value === 'apt';
+ const pu = apt ? CC_PRICING.upsPickupApt : CC_PRICING.upsPickup;
+ total += pu;
+ rows += `<div class="pe-row"><span class="pk">${window.currentLang==='en'?'Pick-up fee':'Phí pick-up'} (${apt ? (window.currentLang==='en'?'Apartment':'Căn hộ') : (window.currentLang==='en'?'House':'Nhà riêng')})</span><span class="pv">+$${pu.toFixed(2)}</span></div>`;
+ }
+
+ // Heavy surcharge note
+ document.getElementById('surcharge-note').classList.toggle('show', heavyCount > 0);
+
+ if (!rows) { el.style.display = 'none'; return; }
+ document.getElementById('pe-rows').innerHTML = rows;
+ document.getElementById('pe-total-val').textContent = hasError ? 'Liên hệ báo giá' : '~$' + total.toFixed(2);
+ el.style.display = 'block';
+ }
+
+ // INSURANCE & SIGNATURE 
+ function toggleInsurance() {
+ const cb = document.getElementById('f-insurance');
+ const note = document.getElementById('ins-note');
+ const wrap = document.getElementById('ins-toggle');
+ cb.checked = !cb.checked;
+ note.classList.toggle('show', cb.checked);
+ wrap.classList.toggle('active', cb.checked);
+ }
+
+ function toggleSignature() {
+ const cb = document.getElementById('f-signature');
+ const wrap = document.getElementById('sig-toggle');
+ cb.checked = !cb.checked;
+ wrap.classList.toggle('active', cb.checked);
+ }
+
+ // PROHIBITED 
+ function toggleProhibited(el) {
+ el.classList.toggle('open');
+ document.getElementById('prohibited-list').classList.toggle('show');
+ }
+
+ // REVIEW SHEET 
+ function showReview() {
+ // Validate required fields
+ const required = [
+ { id:'f-fbname', name:'Tên Facebook' },
+ { id:'f-name', name:'Họ tên' },
+ { id:'f-phone', name:'SĐT người gửi' },
+ { id:'f-email', name:'Email' },
+ { id:'f-addr', name:'Địa chỉ người gửi' },
+ { id:'f-recv-name', name:'Tên người nhận' },
+ { id:'f-recv-phone',name:'SĐT người nhận' },
+ { id:'f-recv-addr', name:'Địa chỉ người nhận' },
+ ];
+ for (const f of required) {
+ const el = document.getElementById(f.id);
+ if (!el.value.trim()) {
+ el.focus(); el.style.borderColor = '#EF4444';
+ setTimeout(() => el.style.borderColor = '', 2000);
+ showToast(' Vui lòng điền: ' + f.name); return;
+ }
+ }
+ if (packages.length === 0 || packages.every(p => !p.weight)) {
+ showToast(' Vui lòng nhập thông tin ít nhất 1 kiện hàng'); return;
+ }
+ const checks = ['p1','p2','p3','p4','p5','p6'];
+ if (!checks.every(id => document.getElementById(id).checked)) {
+ showToast(' Vui lòng xác nhận tất cả điều khoản'); return;
+ }
+
+ // Build review content
+ const icons = { ups:'', fedex:'', usps:'' };
+ const cname = CARRIERS[currentCarrier].name;
+ const pickupDate = document.getElementById('f-pickup-date').value;
+ const pickupTime = document.getElementById('f-pickup-time').value;
+ let pickupDisplay = '—';
+ if (currentPickup === 'dropoff') {
+ pickupDisplay = window.currentLang==='en' ? 'Drop-off at post office' : 'Drop-off tại bưu điện';
+ } else if (pickupDate) {
+ const d = new Date(pickupDate);
+ const fmt = d.toLocaleDateString('vi-VN', { weekday:'short', day:'2-digit', month:'2-digit', year:'numeric' });
+ pickupDisplay = fmt + (pickupTime ? ' · ' + pickupTime : '');
+ }
+
+ let pkgRows = '';
+ packages.forEach((pkg, idx) => {
+ if (!pkg.weight) return;
+ const cost = calcPkg(parseFloat(pkg.weight));
+ const heavy = currentCarrier === 'ups' && parseFloat(pkg.weight) > 50;
+ const sub = cost !== null ? ` — ~$${(cost + (heavy ? 27 : 0)).toFixed(2)}` : (window.currentLang==='en' ? ' — Contact us' : ' — Liên hệ');
+ pkgRows += `<div class="review-row"><span class="rk">${window.currentLang==='en'?'Package #':'Kiện hàng số '} ${idx + 1}</span><span class="rv blue">${pkg.weight} lbs${sub}</span></div>`;
+ });
+
+ const totalEl = document.getElementById('pe-total-val').textContent;
+ const insured = document.getElementById('f-insurance').checked;
+ const sig = document.getElementById('f-signature').checked;
+ const pickupFeeNote = (currentPickup === 'pickup' && currentCarrier === 'ups')
+ ? ` (+ $${document.getElementById('f-addr-type').value === 'apt' ? CC_PRICING.upsPickupApt.toFixed(2) : CC_PRICING.upsPickup.toFixed(2)} pick-up)`
+ : '';
+
+ const modeLabel = currentMode === 'kho'
+ ? ' Gửi lên kho Cuckoo Cargo'
+ : ' Xuyên bang Mỹ';
+
+ const isENv = window.currentLang === 'en';
+ const VL = {
+   type: isENv?'Service type':'Loại dịch vụ', carrier:isENv?'Carrier':'Dịch vụ vận chuyển',
+   sender: isENv?'Sender name':'Tên người gửi', phone:isENv?'Sender phone':'SĐT người gửi',
+   code: isENv?'Customer code':'Mã khách hàng', receiver:isENv?'Receiver':'Người nhận',
+   addr: isENv?'Delivery address':'Địa chỉ nhận', method:isENv?'Method':'Hình thức',
+   pickup: isENv?'Pick-up time':'Thời gian lấy hàng', ins:isENv?'Insurance':'Bảo hiểm',
+   sig: isENv?'Signature':'Ký nhận', yes:isENv?'Yes':' Có', required:isENv?'Signature required':' Yêu cầu chữ ký',
+   total: isENv?'ESTIMATED LABEL PRICE':'DỰ TÍNH GIÁ LABEL',
+   pickupLabel: isENv?' Pick-up':' Pick-up', dropoff: isENv?' Drop-off':' Drop-off',
+   modeKho: isENv?' Ship to Cuckoo Cargo warehouse':' Gửi lên kho Cuckoo Cargo',
+   modeXuyen: isENv?' Cross-State Shipping':' Xuyên bang Mỹ',
+ };
+ const modeL = currentMode === 'kho' ? VL.modeKho : VL.modeXuyen;
+ document.getElementById('review-content').innerHTML = `
+ <div class="review-row"><span class="rk">${VL.type}</span><span class="rv">${modeL}</span></div>
+ <div class="review-row"><span class="rk">${VL.carrier}</span><span class="rv">${icons[currentCarrier]} ${cname} ${currentService}</span></div>
+ <div class="review-row"><span class="rk">${VL.sender}</span><span class="rv">${document.getElementById('f-name').value}</span></div>
+ <div class="review-row"><span class="rk">${VL.phone}</span><span class="rv">${document.getElementById('f-phone').value}</span></div>
+ <div class="review-row"><span class="rk">Email</span><span class="rv">${document.getElementById('f-email').value}</span></div>
+ <div class="review-row"><span class="rk">${VL.code}</span><span class="rv">${document.getElementById('f-code').value || '—'}</span></div>
+ <div class="review-divider"></div>
+ <div class="review-row"><span class="rk">${VL.receiver}</span><span class="rv">${document.getElementById('f-recv-name').value}</span></div>
+ <div class="review-row"><span class="rk">${VL.addr}</span><span class="rv" style="max-width:260px;text-align:right;">${document.getElementById('f-recv-addr').value}${document.getElementById('f-recv-apt').value ? ', ' + document.getElementById('f-recv-apt').value : ''}</span></div>
+ <div class="review-divider"></div>
+ <div class="review-row"><span class="rk">${VL.method}</span><span class="rv">${currentPickup === 'pickup' ? VL.pickupLabel + pickupFeeNote : VL.dropoff}</span></div>
+ <div class="review-row"><span class="rk">${VL.pickup}</span><span class="rv blue">${pickupDisplay}</span></div>
+ <div class="review-divider"></div>
+ ${pkgRows}
+ <div class="review-row"><span class="rk">${VL.ins}</span><span class="rv">${insured ? VL.yes : '—'}</span></div>
+ <div class="review-row"><span class="rk">${VL.sig}</span><span class="rv">${sig ? VL.required : '—'}</span></div>
+ <div class="review-divider"></div>
+ <div class="review-total"><span>${VL.total}</span><span class="tv">${totalEl}</span></div>
+ `;
+
+ document.getElementById('review-overlay').classList.add('show');
+ }
+
+ function closeReview(e) {
+ if (!e || e.target === document.getElementById('review-overlay')) {
+ document.getElementById('review-overlay').classList.remove('show');
+ }
+ }
+
+ // SUBMIT 
+ async function submitLabel() {
+ const btn = document.getElementById('btn-confirm');
+ btn.disabled = true;
+ btn.textContent = window.currentLang==='en' ? '⏳ Submitting...' : '⏳ Đang gửi...';
+ const data = {
+ formType: 'label',
+ orderId: generateHTS(),
+ mode: currentMode === 'kho' ? 'Gửi lên kho Cuckoo Cargo' : 'Xuyên bang Mỹ',
+ carrier: CARRIERS[currentCarrier].name,
+ service: currentService,
+ facebookName: document.getElementById('f-fbname').value,
+ customerCode: document.getElementById('f-code').value,
+ senderName: document.getElementById('f-name').value,
+ phoneUS: document.getElementById('f-phone').value,
+ email: document.getElementById('f-email').value,
+ senderAddress: document.getElementById('f-addr').value + (document.getElementById('f-apt').value ? ', ' + document.getElementById('f-apt').value : ''),
+ pickupMode: currentPickup,
+ pickupDate: document.getElementById('f-pickup-date').value,
+ pickupTime: document.getElementById('f-pickup-time').value,
+ addrType: document.getElementById('f-addr-type')?.value || '',
+ receiverName: document.getElementById('f-recv-name').value,
+ receiverPhone: document.getElementById('f-recv-phone').value,
+ receiverAddress:document.getElementById('f-recv-addr').value + (document.getElementById('f-recv-apt').value ? ', ' + document.getElementById('f-recv-apt').value : ''),
+ packages: packages.map(p => ({ weight: p.weight, value: p.value })),
+ insurance: document.getElementById('f-insurance').checked,
+ signature: document.getElementById('f-signature').checked,
+ estimatedFee: document.getElementById('pe-total-val').textContent,
+ note: document.getElementById('f-note').value,
+ };
+ try {
+ if (!SCRIPT_URL || SCRIPT_URL.includes('PASTE')) {
+ await new Promise(r => setTimeout(r, 1500));
+ document.getElementById('review-overlay').classList.remove('show');
+ document.getElementById('success-modal-overlay').classList.add('show');
+ } else {
+ await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(data) });
+ document.getElementById('review-overlay').classList.remove('show');
+ document.getElementById('success-modal-overlay').classList.add('show');
+ }
+ } catch(err) { showToast(' Lỗi: ' + err.message); }
+ btn.disabled = false;
+ btn.textContent = ' Xác nhận & Gửi đơn';
+ }
+
+ // TOAST 
+ function showToast(msg) {
+ const t = document.getElementById('toast');
+ document.getElementById('toast-msg').textContent = msg;
+ t.classList.add('show');
+ setTimeout(() => t.classList.remove('show'), 4000);
+ }
+
+ // MODE (Xuyên bang / Kho Cuckoo Cargo) 
+ const KHO_INFO = {
+ name: 'Cuckoo Cargo',
+ phone: '+1 714-398-4817',
+ addr: '13122 Newell Street, Garden Grove, CA 92843',
+ apt: '',
+ };
+ let currentMode = 'xuyen';
+
+ function setMode(mode) {
+ currentMode = mode;
+
+ // Update mode buttons
+ document.getElementById('mode-xuyen').classList.toggle('active', mode === 'xuyen');
+ document.getElementById('mode-kho').classList.toggle('active', mode === 'kho');
+ document.getElementById('mode-xuyen').querySelector('.mode-check').textContent = mode === 'xuyen' ? '' : '';
+ document.getElementById('mode-kho').querySelector('.mode-check').textContent = mode === 'kho' ? '' : '';
+
+ const nameEl = document.getElementById('f-recv-name');
+ const phoneEl = document.getElementById('f-recv-phone');
+ const addrEl = document.getElementById('f-recv-addr');
+ const aptEl = document.getElementById('f-recv-apt');
+ const badge = document.getElementById('recv-locked-badge');
+ const body = document.getElementById('recv-card-body');
+ const aptGrp = document.getElementById('recv-apt-group');
+ const title = document.getElementById('recv-card-title');
+
+ if (mode === 'kho') {
+ // Pre-fill and lock
+ nameEl.value = KHO_INFO.name;
+ phoneEl.value = KHO_INFO.phone;
+ addrEl.value = KHO_INFO.addr;
+ aptEl.value = KHO_INFO.apt;
+ [nameEl, phoneEl, addrEl, aptEl].forEach(el => {
+ el.readOnly = true;
+ el.style.background = '#f5f5f7';
+ el.style.color = '#8E8E93';
+ el.style.cursor = 'not-allowed';
+ el.style.borderColor = '#E5E5EA';
+ });
+ badge.style.display = 'flex';
+ aptGrp.style.display = 'none';
+ title.textContent = 'Giao đến kho Cuckoo Cargo';
+ } else {
+ // Unlock and clear
+ [nameEl, phoneEl, addrEl, aptEl].forEach(el => {
+ el.readOnly = false;
+ el.style.background = '';
+ el.style.color = '';
+ el.style.cursor = '';
+ el.style.borderColor = '';
+ if (el.value === KHO_INFO.name || el.value === KHO_INFO.phone ||
+ el.value === KHO_INFO.addr || el.value === KHO_INFO.apt) {
+ el.value = '';
+ }
+ });
+ badge.style.display = 'none';
+ aptGrp.style.display = 'block';
+ title.textContent = 'Thông tin người nhận';
+ }
+ }
+
+ injectFooter();
+
+ // LANG handled by assets/js/lang.js (shared engine, persists across pages)
+
+ // INIT
+ selectCarrier('ups');
+ setPickup('pickup');
+ renderCalendar();
+ addPackage(); // start with 1 package
+
+ // Auto-generate mã khách hàng từ SĐT
+ document.addEventListener('DOMContentLoaded', () => {
+   setupAutoCustomerCode('f-phone', 'f-code');
+ });
+ // Fallback nếu DOM đã load rồi
+ if (document.readyState !== 'loading') setupAutoCustomerCode('f-phone', 'f-code');
+
+// Mobile nav toggle
+function toggleMobileNav() {
+  var nav = document.getElementById('cc-nav-links');
+  var btn = document.getElementById('mobile-toggle-btn');
+  if (!nav) return;
+  var isOpen = nav.classList.toggle('open');
+  if (btn) {
+    var open = btn.querySelector('.hbg-open');
+    var close = btn.querySelector('.hbg-close');
+    if (open)  open.style.display  = isOpen ? 'none'  : 'block';
+    if (close) close.style.display = isOpen ? 'block' : 'none';
+  }
+}
+// Đóng menu khi click ra ngoài
+document.addEventListener('click', function(e) {
+  var nav = document.getElementById('cc-nav-links');
+  var btn = document.getElementById('mobile-toggle-btn');
+  if (nav && nav.classList.contains('open') && btn && !nav.contains(e.target) && !btn.contains(e.target)) {
+    nav.classList.remove('open');
+    var open = btn.querySelector('.hbg-open');
+    var close = btn.querySelector('.hbg-close');
+    if (open)  open.style.display  = 'block';
+    if (close) close.style.display = 'none';
+  }
+});
+</script>
+<!-- FLOATING BUTTONS -->
+<div id="cc-fab-wrap">
+ <a href="https://zalo.me/cuckoocargo" target="_blank" class="cc-fab cc-fab-zalo" aria-label="Zalo">
+  <svg viewBox="0 0 50 50" width="28" height="28"><rect x="3" y="3" width="44" height="38" rx="10" fill="white"/><text x="25" y="28" text-anchor="middle" font-size="18" font-weight="900" fill="#0068FF" font-family="Arial,sans-serif">Zalo</text><polygon points="10,41 18,41 10,50" fill="white"/></svg>
+ </a>
+ <a href="https://www.facebook.com/61582783740459/" target="_blank" class="cc-fab cc-fab-fb" aria-label="Facebook">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+ </a>
+ <a href="https://www.tiktok.com/@cuckoo.cargo6" target="_blank" class="cc-fab cc-fab-tiktok" aria-label="TikTok">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-6.34 6.29 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+ </a>
+ <button class="cc-fab cc-fab-top" id="cc-fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Lên đầu" style="display:none">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+ </button>
+</div>
+</body>
+</html>
