@@ -1,0 +1,105 @@
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;font-size:14px}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+.navbar{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.navbar-brand{font-size:18px;font-weight:800;color:#f97316;letter-spacing:.5px}
+.navbar-nav{display:flex;gap:6px;align-items:center}
+.nav-link{color:#cbd5e1;padding:7px 14px;border-radius:6px;font-size:13px;font-weight:500;transition:all .2s}
+.nav-link:hover,.nav-link.active{background:#f97316;color:#fff}
+.btn-logout{background:#dc2626;color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600}
+
+/* LAYOUT */
+.container{max-width:1300px;margin:0 auto;padding:24px 20px}
+.page-title{font-size:22px;font-weight:800;margin-bottom:20px;color:#1a1a2e}
+
+/* CARDS */
+.card{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:16px}
+.card-header{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:14px 20px;border-radius:12px 12px 0 0;font-weight:700;font-size:14px}
+.card-body{padding:20px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:#f97316;color:#fff}
+.btn-primary:hover{background:#ea6c0a}
+.btn-secondary{background:#6b7280;color:#fff}
+.btn-secondary:hover{background:#4b5563}
+.btn-success{background:#16a34a;color:#fff}
+.btn-success:hover{background:#15803d}
+.btn-danger{background:#dc2626;color:#fff}
+.btn-danger:hover{background:#b91c1c}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-outline{background:#fff;border:1.5px solid #e5e7eb;color:#374151}
+.btn-outline:hover{border-color:#f97316;color:#f97316}
+
+/* FORMS */
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-weight:600;margin-bottom:5px;font-size:13px;color:#374151}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;font-family:inherit;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#f97316}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table.data-tbl{width:100%;border-collapse:collapse;font-size:13px}
+table.data-tbl th{background:#f8fafc;padding:11px 14px;text-align:left;font-weight:700;border-bottom:2px solid #e5e7eb;white-space:nowrap}
+table.data-tbl td{padding:10px 14px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+table.data-tbl tr:hover td{background:#fff8f4}
+
+/* BADGES */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-orange{background:#ffedd5;color:#c2410c}
+.badge-blue{background:#dbeafe;color:#1d4ed8}
+.badge-gray{background:#f1f5f9;color:#475569}
+
+/* ALERT */
+.alert{padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:13px}
+.alert-success{background:#dcfce7;color:#166534;border-left:4px solid #16a34a}
+.alert-danger{background:#fee2e2;color:#dc2626;border-left:4px solid #dc2626}
+.alert-info{background:#dbeafe;color:#1d4ed8;border-left:4px solid #2563eb}
+
+/* LOGIN */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1a2e,#16213e)}
+.login-card{background:#fff;border-radius:16px;padding:40px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-logo{text-align:center;margin-bottom:24px}
+.login-logo .brand{font-size:26px;font-weight:900;color:#f97316}
+.login-logo .sub{font-size:13px;color:#6b7280;margin-top:4px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.stat-card .label{font-size:12px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.stat-card .value{font-size:28px;font-weight:800;margin-top:6px;color:#1a1a2e}
+.stat-card .sub{font-size:12px;color:#9ca3af;margin-top:4px}
+.stat-card.orange{border-left:4px solid #f97316}
+.stat-card.green{border-left:4px solid #16a34a}
+.stat-card.blue{border-left:4px solid #2563eb}
+.stat-card.purple{border-left:4px solid #7c3aed}
+
+/* QUOTE FORM */
+.quote-layout{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+.cost-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.08);position:sticky;top:20px}
+.cost-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9}
+.cost-row:last-child{border-bottom:none}
+.cost-label{font-size:13px;color:#6b7280}
+.cost-value{font-weight:700;color:#1a1a2e}
+.cost-total{font-size:18px!important;color:#f97316!important}
+
+/* ORDER TABLE */
+.order-table{width:100%;border-collapse:collapse;font-size:13px}
+.order-table th{background:#1a1a2e;color:#fff;padding:10px 8px;text-align:center;font-weight:600;font-size:12px}
+.order-table th:first-child{text-align:left}
+.order-table td{padding:6px 4px;border-bottom:1px solid #f1f5f9;text-align:center}
+.order-table td:first-child{text-align:left}
+.order-table input{width:100%;padding:6px 8px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:12px;font-family:inherit}
+.order-table input:focus{outline:none;border-color:#f97316}
+.btn-remove-row{background:#fee2e2;color:#dc2626;border:none;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.price-hint{font-size:11px;color:#6b7280;margin-top:6px;padding:6px 10px;background:#f8fafc;border-radius:6px}
+
+@media(max-width:768px){
+  .quote-layout{grid-template-columns:1fr}
+  .cost-card{position:static}
+  .navbar-nav{gap:2px}
+  .nav-link{padding:5px 8px;font-size:12px}
+}

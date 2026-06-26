@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Quote Form — Cuckoo Cargo</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="navbar-brand">🐦 Cuckoo Cargo</div>
+  <div class="navbar-nav">
+    <a class="nav-link" href="dashboard.html">Dashboard</a>
+    <a class="nav-link active" href="#">New Quote</a>
+    <a class="nav-link" href="admin.html">Admin</a>
+    <button class="btn-logout" onclick="auth.signOut().then(()=>location.href='index.html')">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div id="alertBox"></div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+    <h1 class="page-title" style="margin:0">📋 Quote Form</h1>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-outline" onclick="history.back()">← Back</button>
+      <button class="btn btn-secondary" onclick="generatePDF()" id="btnPDF" style="display:none">📄 Print PDF</button>
+      <button class="btn btn-primary" onclick="saveQuote()">💾 Save Quote</button>
+    </div>
+  </div>
+
+  <div class="quote-layout">
+    <!-- LEFT: FORM -->
+    <div>
+
+      <!-- BASIC INFO -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header">📦 Basic Information</div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;flex-wrap:wrap">
+            <div class="form-group" style="margin:0">
+              <label>Service Type</label>
+              <select id="serviceType" onchange="onServiceTypeChange()">
+                <option value="intl">🌏 USA → Vietnam</option>
+                <option value="domestic">🇺🇸 Domestic USA</option>
+                <option value="shopping">🛍️ Shopping Proxy</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Carrier</label>
+              <select id="carrierSelect">
+                <option value="">-- Select carrier --</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Quote Date</label>
+              <input type="date" id="quoteDate"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Tracking Number</label>
+              <input type="text" id="tracking" placeholder="Tracking number"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Payment Status</label>
+              <select id="paymentStatus">
+                <option value="unpaid">⏳ Unpaid</option>
+                <option value="paid">✅ Paid</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SENDER / RECIPIENT -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header">👥 Sender &amp; Recipient</div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div>
+              <div style="font-weight:700;margin-bottom:10px;color:#f97316">📤 Sender (USA)</div>
+              <div class="form-group">
+                <label>Customer Code</label>
+                <input type="text" id="customerCode" placeholder="e.g. CAC001" oninput="lookupCustomer(this.value)"/>
+              </div>
+              <div class="form-group"><label>Full Name</label><input type="text" id="senderName" placeholder="Sender name"/></div>
+              <div class="form-group"><label>Phone</label><input type="text" id="senderPhone" placeholder="+1 ..."/></div>
+              <div class="form-group"><label>Address</label><input type="text" id="senderAddress" placeholder="US address"/></div>
+            </div>
+            <div>
+              <div style="font-weight:700;margin-bottom:10px;color:#2563eb">📥 Recipient (Vietnam)</div>
+              <div class="form-group"><label>Full Name</label><input type="text" id="recipientName" placeholder="Recipient name"/></div>
+              <div class="form-group"><label>Phone</label><input type="text" id="recipientPhone" placeholder="09..."/></div>
+              <div class="form-group"><label>Address</label><input type="text" id="recipientAddress" placeholder="Vietnam address"/></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER TABLE -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header">📦 Order Details</div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="order-table" id="orderTable">
+              <thead>
+                <tr>
+                  <th style="min-width:130px">Description</th>
+                  <th style="width:80px">Weight (lbs)</th>
+                  <th style="width:80px">Rate ($/lb)</th>
+                  <th style="width:95px">Charge ($)</th>
+                  <th style="width:95px">Packing ($)</th>
+                  <th style="width:55px">Qty</th>
+                  <th style="width:100px">Dims (in)</th>
+                  <th style="width:36px"></th>
+                </tr>
+              </thead>
+              <tbody id="orderRows"></tbody>
+            </table>
+          </div>
+          <div style="margin-top:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <button class="btn btn-outline btn-sm" onclick="addOrderRow()">+ Add Row</button>
+            <div class="price-hint" id="priceHint" style="flex:1">Enter weight to auto-fill price from pricing table.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEES -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header">💵 Fees &amp; Charges</div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="form-group" style="margin:0">
+              <label>Service Charge ($)</label>
+              <input type="number" id="serviceCharge" value="0" step="0.01" oninput="recalcCosts()"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Packaging Fee ($) <span style="font-size:11px;color:#6b7280">(auto from rows)</span></label>
+              <input type="number" id="packagingFee" value="0" step="0.01" oninput="recalcCosts()" style="background:#f0fdf4;color:#166534;font-weight:700"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Customs Tax / Insurance ($)</label>
+              <input type="number" id="customsTaxAmt" value="0" step="0.01" oninput="recalcCosts()"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Provincial Delivery Fee ($)</label>
+              <input type="number" id="provincialFee" value="0" step="0.01" oninput="recalcCosts()"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Surcharge / Penalty ($)</label>
+              <input type="number" id="surchargeFee" value="0" step="0.01" oninput="recalcCosts()"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Pick-up Fee ($)</label>
+              <input type="number" id="pickupFee" value="0" step="0.01" oninput="recalcCosts()"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Discount ($)</label>
+              <input type="number" id="discount" value="0" step="0.01" oninput="recalcCosts()"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VND PAYMENT -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header">🇻🇳 Payment in VND (Optional)</div>
+        <div class="card-body" style="padding-bottom:0">
+
+          <div class="form-group" style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <input type="checkbox" id="showVND" style="width:auto;margin:0" onchange="toggleVND()"/>
+            <label for="showVND" style="margin:0;cursor:pointer;font-weight:600">Show VND payment on PDF</label>
+          </div>
+
+          <div id="vndFields" style="display:none">
+            <!-- Exchange rate row -->
+            <div style="background:#fbbf24;border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap">
+              <span style="font-weight:700;font-size:13px">💰 Payment in VND</span>
+              <span style="font-size:12px;color:#78350f">Exchange Rate USD/VND:</span>
+              <input type="number" id="exchangeRate" placeholder="27000" step="100" oninput="recalcCosts()"
+                style="width:100px;padding:4px 8px;border:none;border-radius:6px;font-size:13px;font-weight:600;background:#fff8e1"/>
+              <span style="margin-left:auto;font-weight:800;font-size:14px;color:#78350f" id="totalVND">0 VND</span>
+            </div>
+
+            <!-- Transfer fee row -->
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff7ed;border-radius:8px;margin-bottom:8px;flex-wrap:wrap">
+              <span style="font-size:13px;color:#c2410c;font-weight:600">💸 Phí chuyển tiền VN → Mỹ</span>
+              <input type="number" id="transferFeeRate" value="2" min="0" max="100" step="0.1" oninput="recalcCosts()"
+                style="width:64px;padding:4px 8px;border:1px solid #fed7aa;border-radius:6px;font-size:13px;font-weight:600;text-align:center"/>
+              <span style="color:#c2410c;font-weight:600">%</span>
+              <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#555;cursor:pointer;margin:0">
+                <input type="checkbox" id="showTransferFeeOnPDF" style="width:auto;margin:0"/>
+                Hiện trên PDF
+              </label>
+              <span style="margin-left:auto;font-weight:700;font-size:13px;color:#c2410c" id="transferFeeAmt">+ 0 VND</span>
+            </div>
+
+            <!-- Total after fee -->
+            <div style="background:#fde68a;border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <span style="font-weight:700;font-size:13px;color:#78350f">🏠 Tổng thanh toán VNĐ (sau phí)</span>
+              <span style="font-weight:800;font-size:15px;color:#92400e" id="totalVNDAfterFee">0 VND</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTES -->
+      <div class="card">
+        <div class="card-header">📝 Notes</div>
+        <div class="card-body">
+          <div class="form-group"><label>Internal Notes</label><textarea id="notes" rows="2" placeholder="Internal staff notes..."></textarea></div>
+          <div class="form-group"><label>Customer Notes (shown on PDF)</label><textarea id="customerNotes" rows="2" placeholder="Special instructions for customer..."></textarea></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: SIDEBAR -->
+    <div class="quote-sidebar">
+      <div class="cost-card">
+        <div style="font-size:15px;font-weight:800;margin-bottom:16px;color:#1a1a2e">💰 Cost Summary</div>
+        <div class="cost-row"><span class="cost-label">Shipping Charge</span><span class="cost-value" id="sum-shipping">$0.00</span></div>
+        <div class="cost-row"><span class="cost-label">Packaging</span><span class="cost-value" id="sum-packaging">$0.00</span></div>
+        <div class="cost-row"><span class="cost-label">Customs / Tax</span><span class="cost-value" id="sum-customs">$0.00</span></div>
+        <div class="cost-row"><span class="cost-label">Provincial</span><span class="cost-value" id="sum-provincial">$0.00</span></div>
+        <div class="cost-row"><span class="cost-label">Surcharge</span><span class="cost-value" id="sum-surcharge">$0.00</span></div>
+        <div class="cost-row"><span class="cost-label">Pick-up</span><span class="cost-value" id="sum-pickup">$0.00</span></div>
+        <div class="cost-row"><span class="cost-label">Discount</span><span class="cost-value" style="color:#e74c3c" id="sum-discount">-$0.00</span></div>
+        <div class="cost-row" style="border-top:2px solid #eee;padding-top:14px;margin-top:6px">
+          <span class="cost-label" style="font-weight:700;font-size:15px">Total (USD)</span>
+          <span class="cost-value cost-total" id="sum-total">$0.00</span>
+        </div>
+        <div class="cost-row" id="sum-vnd-row" style="display:none">
+          <span class="cost-label">Total (VND)</span>
+          <span class="cost-value" style="color:#e65100" id="sum-vnd">₫0</span>
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-size:11px;color:#888;margin-bottom:6px">Total Weight</div>
+          <div style="font-size:16px;font-weight:700;color:#2980b9" id="sum-weight">0 lbs</div>
+        </div>
+      </div>
+      <div class="cost-card" style="margin-top:16px;font-size:12px;color:#888;line-height:1.8">
+        <div style="font-weight:700;color:#333;margin-bottom:8px">Quick Tips</div>
+        💡 Enter weight → auto-fills price from admin pricing<br/>
+        📋 Customer code → auto-fills sender info<br/>
+        📄 Save first, then click Print PDF
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script>
+let quoteId = null;
+let rowCount = 0;
+let pricingTiers = [];
+let carriers = [];
+
+// ── AUTH GUARD ──
+auth.onAuthStateChanged(async user => {
+  if (!user) { location.href = 'index.html'; return; }
+  const today = new Date();
+  document.getElementById('quoteDate').value = today.toISOString().slice(0,10);
+  try {
+    await Promise.all([loadPricingData(), loadCarriers(), loadCustomersForForm()]);
+  } catch(e) { console.warn('Init error:', e); }
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  if (id) { quoteId = id; await loadExistingQuote(id); }
+  else { addOrderRow(); }
+});
+
+// ── LOAD PRICING ──
+async function loadPricingData() {
+  const snap = await db.collection('pricingTiers').orderBy('minWeight').get();
+  pricingTiers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+// ── LOAD CARRIERS ──
+async function loadCarriers() {
+  const sel = document.getElementById('carrierSelect');
+  try {
+    const snap = await db.collection('settings').doc('carriers').get();
+    if (snap.exists && snap.data().list) {
+      carriers = snap.data().list;
+    } else {
+      carriers = ['FedEx','UPS','USPS','DHL'];
+    }
+  } catch(e) { carriers = ['FedEx','UPS','USPS','DHL']; }
+  sel.innerHTML = '<option value="">-- Select carrier --</option>';
+  carriers.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
+}
+
+// ── LOAD CUSTOMERS ──
+let customerMap = {};
+async function loadCustomersForForm() {
+  try {
+    const snap = await db.collection('customers').get();
+    snap.docs.forEach(d => { customerMap[d.data().code] = d.data(); });
+  } catch(e) {}
+}
+function lookupCustomer(code) {
+  const c = customerMap[code.toUpperCase()];
+  if (!c) return;
+  document.getElementById('senderName').value    = c.name || '';
+  document.getElementById('senderPhone').value   = c.phone || '';
+  document.getElementById('senderAddress').value = c.address || '';
+}
+
+// ── SERVICE TYPE CHANGE ──
+function onServiceTypeChange() { recalcCosts(); }
+
+// ── PRICING TIER LOOKUP ──
+function getTierForWeight(totalWeight) {
+  if (!pricingTiers.length || totalWeight <= 0) return null;
+  const svcType  = document.getElementById('serviceType').value;
+  const carrier  = document.getElementById('carrierSelect').value;
+  // Filter by service type if tiers have serviceType field
+  let tiers = pricingTiers.filter(t => {
+    if (t.serviceType && t.serviceType !== svcType) return false;
+    if (t.carrier && carrier && t.carrier !== carrier) return false;
+    return true;
+  });
+  if (!tiers.length) tiers = pricingTiers; // fallback to all tiers
+  let matched = null;
+  for (const t of tiers) {
+    const min = parseFloat(t.minWeight) || 0;
+    const max = parseFloat(t.maxWeight) || Infinity;
+    if (totalWeight >= min && totalWeight <= max) { matched = t; break; }
+  }
+  if (!matched) matched = tiers[tiers.length - 1]; // use last tier if over max
+  return matched;
+}
+
+function refreshPriceHint() {
+  let totalWeight = 0;
+  document.querySelectorAll('.order-row').forEach(r => {
+    totalWeight += parseFloat(r.querySelector('.inp-weight').value) || 0;
+  });
+  const tier = getTierForWeight(totalWeight);
+  const hint = document.getElementById('priceHint');
+  if (tier && totalWeight > 0) {
+    const type = tier.pricingType === 'flat' ? 'flat rate' : `$${tier.price}/lb`;
+    hint.textContent = `✅ ${totalWeight.toFixed(1)} lbs → Tier: $${tier.price} (${type})`;
+    hint.style.color = '#166534';
+    hint.style.background = '#dcfce7';
+  } else {
+    hint.textContent = 'Enter weight to auto-fill price from pricing table.';
+    hint.style.color = '#6b7280';
+    hint.style.background = '#f8fafc';
+  }
+}
+
+// ── ADD ORDER ROW ──
+function addOrderRow() {
+  rowCount++;
+  const id = rowCount;
+  const tr = document.createElement('tr');
+  tr.className = 'order-row'; tr.id = 'row-' + id;
+  tr.innerHTML = `
+    <td><input class="inp-desc" type="text" placeholder="Package description" style="min-width:110px"/></td>
+    <td><input class="inp-weight" type="number" step="0.1" min="0" placeholder="0"
+          oninput="onWeightChange(${id})" style="width:70px"/></td>
+    <td><input class="inp-rate" type="number" step="0.01" min="0" placeholder="–" readonly
+          style="width:72px;background:#f0fdf4;color:#166534;font-weight:700;cursor:default"
+          title="Auto-filled from admin pricing table"/></td>
+    <td><input class="inp-charge" type="number" step="0.01" min="0" placeholder="0"
+          id="charge-${id}" oninput="recalcCosts()"
+          style="width:82px;background:#f0fdf4;color:#166534;font-weight:700"/></td>
+    <td><input class="inp-packing" type="number" step="0.01" min="0" placeholder="0"
+          oninput="recalcCosts()" style="width:82px"/></td>
+    <td><input class="inp-qty" type="number" min="1" value="1" oninput="recalcCosts()" style="width:46px"/></td>
+    <td><input class="inp-dims" type="text" placeholder="L×W×H" style="width:88px"/></td>
+    <td>${id > 1 ? `<button class="btn-remove-row" onclick="removeRow(${id})">✕</button>` : ''}</td>
+  `;
+  document.getElementById('orderRows').appendChild(tr);
+}
+
+function removeRow(id) {
+  const el = document.getElementById('row-' + id);
+  if (el) el.remove();
+  recalcCosts();
+}
+
+// ── WEIGHT CHANGE → AUTO PRICE ──
+function onWeightChange(id) {
+  let totalWeight = 0;
+  document.querySelectorAll('.order-row').forEach(r => {
+    totalWeight += parseFloat(r.querySelector('.inp-weight').value) || 0;
+  });
+  const tier   = getTierForWeight(totalWeight);
+  const row    = document.getElementById('row-' + id);
+  if (!row) return;
+  const weight = parseFloat(row.querySelector('.inp-weight').value) || 0;
+  const rateInput   = row.querySelector('.inp-rate');
+  const chargeInput = document.getElementById('charge-' + id);
+
+  if (tier && weight > 0) {
+    const rate   = tier.price;
+    const charge = tier.pricingType === 'flat' ? tier.price : weight * rate;
+    rateInput.value   = rate;
+    chargeInput.value = charge.toFixed(2);
+  } else {
+    rateInput.value   = '';
+    chargeInput.value = '';
+  }
+  refreshPriceHint();
+  recalcCosts();
+}
+
+// ── RECALC COSTS ──
+function recalcCosts() {
+  let totalWeight = 0;
+  document.querySelectorAll('.order-row').forEach(r => {
+    totalWeight += parseFloat(r.querySelector('.inp-weight').value) || 0;
+  });
+  const tier = getTierForWeight(totalWeight);
+
+  let shipping = 0, rowPacking = 0;
+  document.querySelectorAll('.order-row').forEach(row => {
+    const rowId     = row.id.replace('row-', '');
+    const weight    = parseFloat(row.querySelector('.inp-weight').value) || 0;
+    const chargeInp = document.getElementById('charge-' + rowId);
+    const packingInp= row.querySelector('.inp-packing');
+
+    // Auto-fill charge if blank and tier available
+    if (chargeInp && (!chargeInp.value || chargeInp.value === '0') && tier && weight > 0) {
+      const charge = tier.pricingType === 'flat' ? tier.price : weight * tier.price;
+      chargeInp.value = charge.toFixed(2);
+      row.querySelector('.inp-rate').value = tier.price;
+    }
+    shipping    += parseFloat(chargeInp ? chargeInp.value : 0) || 0;
+    rowPacking  += parseFloat(packingInp ? packingInp.value : 0) || 0;
+  });
+
+  // For flat pricing: total shipping = flat rate (not sum of rows)
+  if (tier && tier.pricingType === 'flat' && totalWeight > 0) shipping = tier.price;
+
+  // Update packaging fee from row packing sum
+  document.getElementById('packagingFee').value = rowPacking.toFixed(2);
+
+  // Override serviceCharge
+  const scEl = document.getElementById('serviceCharge');
+  if (totalWeight > 0) scEl.value = shipping.toFixed(2);
+
+  const sc   = parseFloat(document.getElementById('serviceCharge').value)  || 0;
+  const pkg  = parseFloat(document.getElementById('packagingFee').value)   || 0;
+  const cust = parseFloat(document.getElementById('customsTaxAmt').value)  || 0;
+  const prov = parseFloat(document.getElementById('provincialFee').value)  || 0;
+  const sur  = parseFloat(document.getElementById('surchargeFee').value)   || 0;
+  const pu   = parseFloat(document.getElementById('pickupFee').value)      || 0;
+  const disc = parseFloat(document.getElementById('discount').value)       || 0;
+  const total= sc + pkg + cust + prov + sur + pu - disc;
+
+  document.getElementById('sum-shipping').textContent  = '$' + sc.toFixed(2);
+  document.getElementById('sum-packaging').textContent = '$' + pkg.toFixed(2);
+  document.getElementById('sum-customs').textContent   = '$' + cust.toFixed(2);
+  document.getElementById('sum-provincial').textContent= '$' + prov.toFixed(2);
+  document.getElementById('sum-surcharge').textContent = '$' + sur.toFixed(2);
+  document.getElementById('sum-pickup').textContent    = '$' + pu.toFixed(2);
+  document.getElementById('sum-discount').textContent  = '-$' + disc.toFixed(2);
+  document.getElementById('sum-total').textContent     = '$' + total.toFixed(2);
+  document.getElementById('sum-weight').textContent    = totalWeight.toFixed(1) + ' lbs';
+
+  // VND calc
+  if (document.getElementById('showVND').checked) {
+    const rate       = parseFloat(document.getElementById('exchangeRate').value) || 0;
+    const vnd        = total * rate;
+    const feeRate    = parseFloat(document.getElementById('transferFeeRate').value) || 0;
+    const transferFee= Math.round(vnd * feeRate / 100);
+    document.getElementById('totalVND').textContent        = vnd ? Math.round(vnd).toLocaleString('vi-VN') + ' ₫' : '0 ₫';
+    document.getElementById('transferFeeAmt').textContent  = '+ ' + transferFee.toLocaleString('vi-VN') + ' ₫';
+    document.getElementById('totalVNDAfterFee').textContent= (vnd + transferFee).toLocaleString('vi-VN') + ' ₫';
+    document.getElementById('sum-vnd-row').style.display  = '';
+    document.getElementById('sum-vnd').textContent        = '₫' + Math.round(vnd).toLocaleString('vi-VN');
+  } else {
+    document.getElementById('sum-vnd-row').style.display = 'none';
+  }
+}
+
+// ── TOGGLE VND ──
+function toggleVND() {
+  const on = document.getElementById('showVND').checked;
+  document.getElementById('vndFields').style.display   = on ? '' : 'none';
+  document.getElementById('sum-vnd-row').style.display = on ? '' : 'none';
+  recalcCosts();
+}
+
+// ── SAVE QUOTE ──
+async function saveQuote() {
+  const user = auth.currentUser;
+  if (!user) { showAlert('Not logged in!', 'danger'); return; }
+
+  const orderRows = [];
+  document.querySelectorAll('.order-row').forEach(row => {
+    const rowId     = row.id.replace('row-', '');
+    const description = row.querySelector('.inp-desc').value.trim();
+    const weight      = parseFloat(row.querySelector('.inp-weight').value) || 0;
+    const qty         = parseInt(row.querySelector('.inp-qty').value) || 1;
+    const dimensions  = row.querySelector('.inp-dims').value.trim();
+    const rateInp     = row.querySelector('.inp-rate');
+    const chargeInp   = document.getElementById('charge-' + rowId);
+    const packingInp  = row.querySelector('.inp-packing');
+    orderRows.push({
+      description,
+      weight,
+      qty,
+      dimensions,
+      priceRate:  parseFloat(rateInp   ? rateInp.value   : 0) || 0,
+      charge:     parseFloat(chargeInp ? chargeInp.value : 0) || 0,
+      packingFee: parseFloat(packingInp? packingInp.value: 0) || 0,
+    });
+  });
+
+  const senderName = document.getElementById('senderName').value.trim();
+  if (!senderName) { showAlert('Please enter sender name.', 'danger'); return; }
+
+  const showVND = document.getElementById('showVND').checked;
+  const data = {
+    serviceType:     document.getElementById('serviceType').value,
+    carrier:         document.getElementById('carrierSelect').value,
+    date:            document.getElementById('quoteDate').value,
+    tracking:        document.getElementById('tracking').value.trim(),
+    paymentStatus:   document.getElementById('paymentStatus').value,
+    customerCode:    document.getElementById('customerCode').value.trim().toUpperCase(),
+    senderName,
+    senderPhone:     document.getElementById('senderPhone').value.trim(),
+    senderAddress:   document.getElementById('senderAddress').value.trim(),
+    recipientName:   document.getElementById('recipientName').value.trim(),
+    recipientPhone:  document.getElementById('recipientPhone').value.trim(),
+    recipientAddress:document.getElementById('recipientAddress').value.trim(),
+    orderRows,
+    serviceCharge:   parseFloat(document.getElementById('serviceCharge').value)  || 0,
+    packagingFee:    parseFloat(document.getElementById('packagingFee').value)   || 0,
+    customsTaxAmt:   parseFloat(document.getElementById('customsTaxAmt').value)  || 0,
+    provincialFee:   parseFloat(document.getElementById('provincialFee').value)  || 0,
+    surchargeFee:    parseFloat(document.getElementById('surchargeFee').value)   || 0,
+    pickupFee:       parseFloat(document.getElementById('pickupFee').value)      || 0,
+    discount:        parseFloat(document.getElementById('discount').value)       || 0,
+    showVND,
+    exchangeRate:        showVND ? parseFloat(document.getElementById('exchangeRate').value)    || 0 : 0,
+    transferFeeRate:     showVND ? parseFloat(document.getElementById('transferFeeRate').value) || 2 : 2,
+    showTransferFeeOnPDF:showVND ? document.getElementById('showTransferFeeOnPDF').checked      : false,
+    notes:           document.getElementById('notes').value.trim(),
+    customerNotes:   document.getElementById('customerNotes').value.trim(),
+    createdBy:       user.email,
+    updatedAt:       firebase.firestore.FieldValue.serverTimestamp(),
+  };
+  data.total = data.serviceCharge + data.packagingFee + data.customsTaxAmt +
+               data.provincialFee + data.surchargeFee + data.pickupFee - data.discount;
+
+  try {
+    if (quoteId) {
+      await db.collection('quotes').doc(quoteId).update(data);
+      showAlert('Quote updated!', 'success');
+    } else {
+      data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      const ref = await db.collection('quotes').add(data);
+      quoteId = ref.id;
+      history.replaceState(null,'',`?id=${quoteId}`);
+      showAlert('Quote saved!', 'success');
+    }
+    document.getElementById('btnPDF').style.display = '';
+  } catch(e) { showAlert('Error saving: ' + e.message, 'danger'); }
+}
+
+// ── LOAD EXISTING QUOTE ──
+async function loadExistingQuote(id) {
+  try {
+    const doc = await db.collection('quotes').doc(id).get();
+    if (!doc.exists) { showAlert('Quote not found.', 'danger'); return; }
+    const d = doc.data();
+    document.getElementById('serviceType').value    = d.serviceType || 'intl';
+    document.getElementById('quoteDate').value      = d.date || '';
+    document.getElementById('tracking').value       = d.tracking || '';
+    document.getElementById('paymentStatus').value  = d.paymentStatus || 'unpaid';
+    document.getElementById('customerCode').value   = d.customerCode || '';
+    document.getElementById('senderName').value     = d.senderName || '';
+    document.getElementById('senderPhone').value    = d.senderPhone || '';
+    document.getElementById('senderAddress').value  = d.senderAddress || '';
+    document.getElementById('recipientName').value  = d.recipientName || '';
+    document.getElementById('recipientPhone').value = d.recipientPhone || '';
+    document.getElementById('recipientAddress').value= d.recipientAddress || '';
+    document.getElementById('packagingFee').value   = d.packagingFee || 0;
+    document.getElementById('customsTaxAmt').value  = d.customsTaxAmt || 0;
+    document.getElementById('provincialFee').value  = d.provincialFee || 0;
+    document.getElementById('surchargeFee').value   = d.surchargeFee || 0;
+    document.getElementById('pickupFee').value      = d.pickupFee || 0;
+    document.getElementById('discount').value       = d.discount || 0;
+    document.getElementById('notes').value          = d.notes || '';
+    document.getElementById('customerNotes').value  = d.customerNotes || '';
+
+    if (d.showVND) {
+      document.getElementById('showVND').checked = true;
+      document.getElementById('vndFields').style.display = '';
+      document.getElementById('sum-vnd-row').style.display = '';
+      document.getElementById('exchangeRate').value        = d.exchangeRate || '';
+      document.getElementById('transferFeeRate').value     = d.transferFeeRate ?? 2;
+      document.getElementById('showTransferFeeOnPDF').checked = d.showTransferFeeOnPDF || false;
+    }
+
+    setTimeout(() => {
+      if (d.carrier) document.getElementById('carrierSelect').value = d.carrier;
+      document.getElementById('orderRows').innerHTML = '';
+      rowCount = 0;
+      if (d.orderRows && d.orderRows.length) {
+        d.orderRows.forEach(r => {
+          addOrderRow();
+          const tr = document.getElementById('row-' + rowCount);
+          tr.querySelector('.inp-desc').value    = r.description || '';
+          tr.querySelector('.inp-weight').value  = r.weight || '';
+          tr.querySelector('.inp-qty').value     = r.qty || 1;
+          tr.querySelector('.inp-dims').value    = r.dimensions || '';
+          if (r.priceRate)  tr.querySelector('.inp-rate').value = r.priceRate;
+          if (r.charge !== undefined) {
+            const ci = document.getElementById('charge-' + rowCount);
+            if (ci) ci.value = r.charge;
+          }
+          tr.querySelector('.inp-packing').value = r.packingFee || 0;
+        });
+      } else { addOrderRow(); }
+      // Restore service charge AFTER rows (don't let recalcCosts overwrite)
+      document.getElementById('serviceCharge').value = d.serviceCharge || 0;
+      recalcCosts();
+      refreshPriceHint();
+    }, 150);
+
+    document.getElementById('btnPDF').style.display = '';
+  } catch(e) { showAlert('Error loading: ' + e.message, 'danger'); }
+}
+
+// ── PDF ──
+function generatePDF() {
+  if (!quoteId) { showAlert('Save first before printing!', 'danger'); return; }
+  window.open('print.html?id=' + quoteId, '_blank');
+}
+
+// ── ALERT ──
+function showAlert(msg, type) {
+  const box = document.getElementById('alertBox');
+  box.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+  setTimeout(() => box.innerHTML = '', 5000);
+}
+</script>
+</body>
+</html>

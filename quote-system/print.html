@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quote — Cuckoo Cargo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Be Vietnam Pro',Arial,sans-serif;font-size:12px;color:#1a1a1a;background:#e5e7eb;padding:24px}
+
+    .print-bar{max-width:794px;margin:0 auto 16px;display:flex;gap:10px;justify-content:flex-end}
+    .print-bar button{padding:9px 20px;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+    .btn-print{background:#f97316;color:#fff}
+    .btn-close{background:#fff;color:#333;border:1px solid #ddd}
+
+    .page{max-width:794px;margin:0 auto;background:#fff;padding:30px 36px 28px}
+
+    /* HEADER */
+    .hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+    .hdr-info table{border-collapse:collapse}
+    .hdr-info td{padding:1.5px 0;font-size:11.5px;vertical-align:top}
+    .hdr-info td:first-child{font-weight:700;padding-right:14px;white-space:nowrap}
+    .hdr-info a{color:#1a1a1a}
+    .hdr-logo img{height:100px;width:auto;object-fit:contain}
+
+    /* TITLE */
+    .title-wrap{text-align:center;margin:10px 0 18px}
+    .title-wrap h1{font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:0.3px;color:#1a1a1a}
+    .title-line{width:100px;height:3px;background:#f97316;margin:7px auto 0;border-radius:2px}
+
+    /* DATE */
+    .doc-date{font-size:12.5px;margin-bottom:14px}
+    .doc-date strong{font-weight:800}
+
+    /* PARTIES */
+    .parties{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;margin-bottom:12px}
+    .party-tbl{width:100%;border-collapse:collapse}
+    .party-tbl td{padding:2.5px 0;font-size:11.5px;vertical-align:top}
+    .party-tbl td.lbl{font-weight:700;padding-right:8px;white-space:nowrap}
+    .party-tbl td.val{color:#1a1a1a;line-height:1.45}
+
+    /* TRACKING ROW */
+    .track-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;margin-bottom:10px;border-top:1px solid #e0e0e0}
+    .track-row .tl{font-size:12px}
+    .track-row .tl strong{font-weight:700;margin-right:6px}
+    .track-row .tr{font-size:12px;text-align:right}
+    .track-row .tr strong{font-weight:700;margin-right:6px}
+
+    /* ORDER TABLE */
+    .order-tbl{width:100%;border-collapse:collapse;margin-bottom:0}
+    .order-tbl th{background:#f97316;color:#fff;padding:8px 10px;font-size:11.5px;font-weight:700;text-align:center}
+    .order-tbl th:first-child{text-align:left}
+    .order-tbl td{padding:8px 10px;font-size:11.5px;text-align:center;border-bottom:1px solid #f0f0f0}
+    .order-tbl td:first-child{text-align:left}
+    .order-tbl tr.filler td{color:#bbb;background:#fafafa}
+    .order-tbl tr:nth-child(even):not(.filler) td{background:#fff8f4}
+
+    /* FEES */
+    .fees-section{margin-top:18px}
+    .fees-tbl{width:100%;border-collapse:collapse;font-size:12px}
+    .fees-tbl td{padding:6px 4px;vertical-align:middle}
+    .fees-tbl .fee-lbl{width:62%;padding-left:0}
+    .fees-tbl .fee-mid{width:18%;text-align:center;color:#777}
+    .fees-tbl .fee-val{width:20%;text-align:right;font-weight:500}
+    .fees-tbl .row-sc td{font-weight:700;font-size:12.5px;border-bottom:1px solid #e8e8e8;padding-bottom:8px}
+    .fees-tbl .row-sub td{border-bottom:1px solid #f5f5f5}
+    .fees-tbl .subtag{color:#f97316;font-style:italic;font-weight:400}
+    .fees-tbl .row-discount td{font-weight:700;border-top:1px solid #e8e8e8;padding-top:8px}
+
+    .row-total-bar{background:#f97316;color:#fff;display:flex;justify-content:space-between;padding:9px 4px;font-size:14px;font-weight:800;margin-top:8px;border-radius:1px}
+    .row-vnd-bar{background:#fbbf24;color:#78350f;display:flex;justify-content:space-between;padding:8px 4px;font-size:13px;font-weight:700;margin-top:4px;border-radius:1px}
+    .row-transfer-fee{display:flex;justify-content:space-between;padding:7px 4px;font-size:12px;color:#c2410c;background:#fff7ed;margin-top:3px;border-radius:1px}
+    .row-vnd-total{display:flex;justify-content:space-between;padding:8px 4px;font-size:13px;font-weight:800;background:#fde68a;color:#78350f;margin-top:3px;border-radius:1px}
+
+    /* NOTES */
+    .notes-section{margin-top:20px;font-size:11.5px;color:#333;line-height:1.7}
+    .notes-section .notes-title{font-weight:700;margin-bottom:6px}
+    .notes-section ul{list-style:disc;padding-left:18px}
+    .notes-section ul li{margin-bottom:2px}
+    .notes-section a{color:#1a1a1a}
+
+    /* FOOTER */
+    .doc-footer{margin-top:24px;font-size:12px;line-height:1.8}
+    .doc-footer .regards{color:#555}
+    .doc-footer .company{font-weight:800;font-size:13px}
+
+    @media print{
+      body{background:#fff;padding:0}
+      .print-bar{display:none}
+      .page{padding:14mm 16mm}
+      @page{margin:0;size:A4 portrait}
+    }
+  </style>
+</head>
+<body>
+
+<div class="print-bar">
+  <button class="btn-close" onclick="window.close()">✕ Close</button>
+  <button class="btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-info">
+      <table>
+        <tr><td>Company name</td><td>Cuckoo Cargo LLC</td></tr>
+        <tr><td>Phone</td><td>+1 (714) 398-4817</td></tr>
+        <tr><td>Address</td><td>8075 Westminster Blvd, Westminster, CA, United States, 92683</td></tr>
+        <tr><td>Gmail</td><td><a href="mailto:cuckoocargo.us@gmail.com">cuckoocargo.us@gmail.com</a></td></tr>
+      </table>
+    </div>
+    <div class="hdr-logo">
+      <img src="../logo.png" alt="Cuckoo Cargo" onerror="this.style.display='none'"/>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title-wrap">
+    <h1 id="docTitle">SHIPPING COST FROM USA TO VIETNAM</h1>
+    <div class="title-line"></div>
+  </div>
+
+  <!-- DATE -->
+  <div class="doc-date"><strong>DATE:</strong> <span id="p-date">–</span></div>
+
+  <!-- PARTIES -->
+  <div class="parties">
+    <div>
+      <table class="party-tbl">
+        <tr><td class="lbl">Sender's name</td><td class="val" id="p-senderName">–</td></tr>
+        <tr><td class="lbl">Customer code</td><td class="val" id="p-custCode">–</td></tr>
+        <tr><td class="lbl">Sender's phone</td><td class="val" id="p-senderPhone">–</td></tr>
+        <tr><td class="lbl">Sender's address</td><td class="val" id="p-senderAddr">–</td></tr>
+      </table>
+    </div>
+    <div>
+      <table class="party-tbl">
+        <tr><td class="lbl">Recipient's name</td><td class="val" id="p-recpName">–</td></tr>
+        <tr><td class="lbl">Recipient's phone</td><td class="val" id="p-recpPhone">–</td></tr>
+        <tr><td class="lbl">Recipient's address</td><td class="val" id="p-recpAddr">–</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- TRACKING -->
+  <div class="track-row">
+    <div class="tl"><strong>Tracking</strong> <span id="p-tracking">–</span></div>
+    <div class="tr"><strong>Currency</strong> USD</div>
+  </div>
+
+  <!-- ORDER TABLE -->
+  <table class="order-tbl">
+    <thead>
+      <tr>
+        <th style="width:28%">ORDER</th>
+        <th style="width:13%">Weight (lbs)</th>
+        <th style="width:11%">Price</th>
+        <th style="width:13%">Charge ($)</th>
+        <th style="width:13%">Packing ($)</th>
+        <th style="width:22%">Pick-up</th>
+      </tr>
+    </thead>
+    <tbody id="p-orderRows"></tbody>
+  </table>
+
+  <!-- FEES -->
+  <div class="fees-section">
+    <table class="fees-tbl">
+      <tbody id="p-feesRows"></tbody>
+    </table>
+    <div class="row-total-bar"><span>Total</span><span id="p-total">0</span></div>
+
+    <!-- VND section — injected by JS -->
+    <div id="p-vndSection"></div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="notes-section" id="p-notesWrap">
+    <div class="notes-title">Notes:</div>
+    <ul id="p-notesList"></ul>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="regards">Best regards,</div>
+    <div class="company">CUCKOO CARGO</div>
+  </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script>
+const params  = new URLSearchParams(location.search);
+const quoteId = params.get('id');
+
+const TITLES = {
+  intl:     'SHIPPING COST FROM USA TO VIETNAM',
+  domestic: 'DOMESTIC SHIPPING COST — USA',
+  shopping: 'SHOPPING PROXY SERVICE COST',
+};
+
+const DEFAULT_NOTES = [
+  'The above price list already includes shipping fees within Hanoi and Ho Chi Minh City areas.',
+  'Complaints will only be accepted if the shipment exceeds 3 weeks in transit or if you are not satisfied with the service quality.',
+  'Please record a video when opening the package in case of any damage.',
+  'This quotation is valid for 15 days from the date the customer receives it.',
+  'For any inquiries, please contact our Fanpage and email: <a href="mailto:cuckoocargo.us@gmail.com">cuckoocargo.us@gmail.com</a> or hotline: +1 (714) 398-4817 for the support.',
+];
+
+auth.onAuthStateChanged(async user => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  if (!quoteId) { document.body.innerHTML = '<p style="padding:40px;color:red">No quote ID provided.</p>'; return; }
+  try {
+    const doc = await db.collection('quotes').doc(quoteId).get();
+    if (!doc.exists) { document.body.innerHTML = '<p style="padding:40px;color:red">Quote not found.</p>'; return; }
+    render(quoteId, doc.data());
+  } catch(e) {
+    document.body.innerHTML = `<p style="padding:40px;color:red">Error: ${e.message}</p>`;
+  }
+});
+
+function fmtNum(n) {
+  const v = Number(n || 0);
+  return v % 1 === 0
+    ? v.toLocaleString('en-US')
+    : v.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:2});
+}
+function fmtVND(n) { return Number(n || 0).toLocaleString('vi-VN') + ' ₫'; }
+
+function formatDate(d) {
+  if (!d) return '–';
+  const parts = d.split('-');
+  if (parts.length === 3) return parts[2]+'/'+parts[1]+'/'+parts[0];
+  return d;
+}
+
+function render(id, d) {
+  document.title = 'Quote #' + id.slice(-6).toUpperCase() + ' — Cuckoo Cargo';
+
+  document.getElementById('docTitle').textContent = TITLES[d.serviceType] || TITLES.intl;
+  document.getElementById('p-date').textContent   = formatDate(d.date);
+
+  document.getElementById('p-senderName').textContent  = d.senderName || '–';
+  document.getElementById('p-custCode').textContent    = d.customerCode || '–';
+  document.getElementById('p-senderPhone').textContent = d.senderPhone || '–';
+  document.getElementById('p-senderAddr').textContent  = d.senderAddress || '–';
+  document.getElementById('p-recpName').textContent    = (d.recipientName || '–').toUpperCase();
+  document.getElementById('p-recpPhone').textContent   = d.recipientPhone || '–';
+  document.getElementById('p-recpAddr').textContent    = (d.recipientAddress || '–').toUpperCase();
+  document.getElementById('p-tracking').textContent    = d.tracking || '–';
+
+  // Order rows
+  const rows      = d.orderRows || [];
+  const pickupFee = parseFloat(d.pickupFee) || 0;
+
+  let tbody = '';
+  rows.forEach((r, i) => {
+    const w       = parseFloat(r.weight) || 0;
+    const rate    = parseFloat(r.priceRate) || 0;
+    const charge  = parseFloat(r.charge) || 0;
+    const packing = parseFloat(r.packingFee) || 0;
+    const pu      = i === 0 && pickupFee > 0 ? fmtNum(pickupFee) : '';
+    tbody += `<tr>
+      <td>${r.description || '–'}</td>
+      <td>${w > 0 ? w : '–'}</td>
+      <td>${rate ? fmtNum(rate) : ''}</td>
+      <td>${charge ? fmtNum(charge) : ''}</td>
+      <td>${packing ? fmtNum(packing) : ''}</td>
+      <td>${pu}</td>
+    </tr>`;
+  });
+  tbody += `<tr class="filler"><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>`;
+  document.getElementById('p-orderRows').innerHTML = tbody;
+
+  // Fees
+  const serviceCharge = parseFloat(d.serviceCharge) || 0;
+  const packaging     = parseFloat(d.packagingFee)  || 0;
+  const customs       = parseFloat(d.customsTaxAmt) || 0;
+  const provincial    = parseFloat(d.provincialFee) || 0;
+  const surcharge     = parseFloat(d.surchargeFee)  || 0;
+  const discount      = parseFloat(d.discount)      || 0;
+  const total = parseFloat(d.total) ||
+    (serviceCharge + packaging + customs + provincial + surcharge + pickupFee - discount);
+
+  let feesHtml = '';
+  feesHtml += `<tr class="row-sc">
+    <td class="fee-lbl">Service Charge</td>
+    <td class="fee-mid"></td>
+    <td class="fee-val">${fmtNum(serviceCharge)}</td>
+  </tr>`;
+  if (packaging > 0) {
+    feesHtml += `<tr class="row-sub">
+      <td class="fee-lbl">Packaging Fee</td>
+      <td class="fee-mid"></td>
+      <td class="fee-val">${fmtNum(packaging)}</td>
+    </tr>`;
+  }
+  feesHtml += `<tr class="row-sub">
+    <td class="fee-lbl">Customs tax/insurance <span class="subtag">value (if any)</span></td>
+    <td class="fee-mid"></td>
+    <td class="fee-val">${fmtNum(customs)}</td>
+  </tr>`;
+  feesHtml += `<tr class="row-sub">
+    <td class="fee-lbl">Provincial delivery fee <span class="subtag">(if any)</span></td>
+    <td class="fee-mid"></td>
+    <td class="fee-val">${fmtNum(provincial)}</td>
+  </tr>`;
+  feesHtml += `<tr class="row-sub">
+    <td class="fee-lbl">Surcharge/Penalty fee <span class="subtag">(if any)</span></td>
+    <td class="fee-mid"></td>
+    <td class="fee-val">${fmtNum(surcharge)}</td>
+  </tr>`;
+  feesHtml += `<tr class="row-discount">
+    <td class="fee-lbl">Discount (-)</td>
+    <td class="fee-mid"></td>
+    <td class="fee-val">${fmtNum(discount)}</td>
+  </tr>`;
+
+  document.getElementById('p-feesRows').innerHTML = feesHtml;
+  document.getElementById('p-total').textContent  = fmtNum(total);
+
+  // ── VND SECTION ──
+  // Show if showVND is checked AND exchangeRate was saved
+  const vndSection = document.getElementById('p-vndSection');
+  vndSection.innerHTML = '';
+
+  if (d.showVND && d.exchangeRate) {
+    const rate        = parseFloat(d.exchangeRate) || 0;
+    const vnd         = total * rate;
+    const feeRate     = parseFloat(d.transferFeeRate) || 0;
+    const transferFee = Math.round(vnd * feeRate / 100);
+    const vndAfterFee = Math.round(vnd) + transferFee;
+
+    if (d.showTransferFeeOnPDF && feeRate > 0) {
+      // Show: VND base + transfer fee + total after fee
+      vndSection.innerHTML = `
+        <div class="row-vnd-bar">
+          <span>Thanh toán bằng tiền Việt</span>
+          <span>${fmtVND(Math.round(vnd))}</span>
+        </div>
+        <div class="row-transfer-fee">
+          <span>+ Phí chuyển tiền VN → Mỹ (${feeRate}%)</span>
+          <span style="font-weight:700">${fmtVND(transferFee)}</span>
+        </div>
+        <div class="row-vnd-total">
+          <span>Tổng thanh toán VNĐ (sau phí)</span>
+          <span>${fmtVND(vndAfterFee)}</span>
+        </div>`;
+    } else {
+      // Show VND total only — no transfer fee, no exchange rate
+      vndSection.innerHTML = `
+        <div class="row-vnd-bar">
+          <span>Thanh toán bằng tiền Việt</span>
+          <span>${fmtVND(Math.round(vnd))}</span>
+        </div>`;
+    }
+  }
+
+  // Notes
+  const customNote = (d.customerNotes || d.notes || '').trim();
+  const allNotes   = customNote ? [customNote, ...DEFAULT_NOTES] : DEFAULT_NOTES;
+  document.getElementById('p-notesList').innerHTML = allNotes.map(n => `<li>${n}</li>`).join('');
+
+  if (params.get('autoprint') === '1') setTimeout(() => window.print(), 900);
+}
+</script>
+</body>
+</html>

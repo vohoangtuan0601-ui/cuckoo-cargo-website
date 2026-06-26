@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Dashboard — Cuckoo Cargo</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-brand">🐦 Cuckoo Cargo</div>
+  <div class="navbar-nav">
+    <a class="nav-link active" href="dashboard.html">Dashboard</a>
+    <a class="nav-link" href="quote-form.html">New Quote</a>
+    <a class="nav-link" href="admin.html">Admin</a>
+    <button class="btn-logout" onclick="auth.signOut().then(()=>location.href='index.html')">Logout</button>
+  </div>
+</nav>
+<div class="container">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+    <h1 class="page-title" style="margin:0">📊 Dashboard</h1>
+    <a href="quote-form.html" class="btn btn-primary">+ New Quote</a>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card orange"><div class="label">Total Quotes</div><div class="value" id="st-total">–</div><div class="sub">All time</div></div>
+    <div class="stat-card green"><div class="label">Paid</div><div class="value" id="st-paid">–</div><div class="sub">Completed</div></div>
+    <div class="stat-card blue"><div class="label">Unpaid</div><div class="value" id="st-unpaid">–</div><div class="sub">Pending</div></div>
+    <div class="stat-card purple"><div class="label">Revenue (USD)</div><div class="value" id="st-revenue">–</div><div class="sub">Paid quotes</div></div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-body" style="padding:14px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <input type="text" id="searchInput" placeholder="🔍 Search name / code / tracking..." style="flex:1;min-width:200px;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px" oninput="filterQuotes()"/>
+      <select id="filterStatus" style="padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px" onchange="filterQuotes()">
+        <option value="">All Status</option>
+        <option value="paid">✅ Paid</option>
+        <option value="unpaid">⏳ Unpaid</option>
+      </select>
+      <select id="filterService" style="padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px" onchange="filterQuotes()">
+        <option value="">All Services</option>
+        <option value="intl">USA→Vietnam</option>
+        <option value="domestic">Domestic</option>
+        <option value="shopping">Shopping</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="card">
+    <div class="card-body" style="padding:0">
+      <div class="table-wrap">
+        <table class="data-tbl">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Service</th>
+              <th>Carrier</th>
+              <th>Tracking</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="quotesBody">
+            <tr><td colspan="9" style="text-align:center;padding:30px;color:#6b7280">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script>
+let allQuotes = [];
+
+auth.onAuthStateChanged(async user => {
+  if (!user) { location.href = 'index.html'; return; }
+  loadQuotes();
+});
+
+async function loadQuotes() {
+  try {
+    const snap = await db.collection('quotes').orderBy('createdAt','desc').limit(200).get();
+    allQuotes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    updateStats();
+    filterQuotes();
+  } catch(e) {
+    document.getElementById('quotesBody').innerHTML =
+      `<tr><td colspan="9" style="text-align:center;padding:30px;color:#dc2626">Error: ${e.message}</td></tr>`;
+  }
+}
+
+function updateStats() {
+  const paid    = allQuotes.filter(q => q.paymentStatus === 'paid');
+  const unpaid  = allQuotes.filter(q => q.paymentStatus !== 'paid');
+  const revenue = paid.reduce((s, q) => s + (parseFloat(q.total) || 0), 0);
+  document.getElementById('st-total').textContent   = allQuotes.length;
+  document.getElementById('st-paid').textContent    = paid.length;
+  document.getElementById('st-unpaid').textContent  = unpaid.length;
+  document.getElementById('st-revenue').textContent = '$' + revenue.toFixed(0);
+}
+
+function filterQuotes() {
+  const q   = document.getElementById('searchInput').value.toLowerCase();
+  const st  = document.getElementById('filterStatus').value;
+  const svc = document.getElementById('filterService').value;
+  const filtered = allQuotes.filter(r => {
+    const matchSearch = !q || (r.senderName||'').toLowerCase().includes(q)
+      || (r.customerCode||'').toLowerCase().includes(q)
+      || (r.tracking||'').toLowerCase().includes(q)
+      || (r.recipientName||'').toLowerCase().includes(q);
+    const matchStatus  = !st  || r.paymentStatus === st;
+    const matchService = !svc || r.serviceType === svc;
+    return matchSearch && matchStatus && matchService;
+  });
+  renderTable(filtered);
+}
+
+const SVC_LABELS = { intl:'🌏 USA→VN', domestic:'🇺🇸 Domestic', shopping:'🛍️ Shopping' };
+
+function renderTable(list) {
+  if (!list.length) {
+    document.getElementById('quotesBody').innerHTML =
+      '<tr><td colspan="9" style="text-align:center;padding:30px;color:#6b7280">No quotes found.</td></tr>';
+    return;
+  }
+  document.getElementById('quotesBody').innerHTML = list.map((q, i) => `
+    <tr>
+      <td style="font-size:11px;color:#6b7280">${q.id.slice(-6).toUpperCase()}</td>
+      <td>${q.date || '–'}</td>
+      <td>
+        <div style="font-weight:600">${q.senderName || '–'}</div>
+        <div style="font-size:11px;color:#6b7280">${q.customerCode || ''}</div>
+      </td>
+      <td>${SVC_LABELS[q.serviceType] || q.serviceType || '–'}</td>
+      <td>${q.carrier || '–'}</td>
+      <td style="font-size:11px;color:#6b7280">${q.tracking || '–'}</td>
+      <td style="font-weight:700">$${(parseFloat(q.total)||0).toFixed(2)}</td>
+      <td><span class="badge ${q.paymentStatus==='paid'?'badge-green':'badge-orange'}">${q.paymentStatus==='paid'?'✅ Paid':'⏳ Unpaid'}</span></td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <a href="quote-form.html?id=${q.id}" class="btn btn-outline btn-sm">✏️ Edit</a>
+          <a href="print.html?id=${q.id}" class="btn btn-primary btn-sm" target="_blank">📄 PDF</a>
+          <button class="btn btn-danger btn-sm" onclick="deleteQuote('${q.id}')">🗑️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function deleteQuote(id) {
+  if (!confirm('Delete this quote?')) return;
+  await db.collection('quotes').doc(id).delete();
+  allQuotes = allQuotes.filter(q => q.id !== id);
+  updateStats();
+  filterQuotes();
+}
+</script>
+</body>
+</html>
