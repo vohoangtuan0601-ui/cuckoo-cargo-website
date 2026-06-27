@@ -1,0 +1,32 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "**/*.sample",
+      "HEAD",
+      "index",
+      "config",
+      "description",
+      "COMMIT_EDITMSG",
+      "*.js.map",
+      "all_fixes.txt",
+      "last_fix.txt",
+      "fix_*.js",
+      "restore_*.js",
+      "mockup-ui.html",
+      "test-form.html"
+    ],
+    "rewrites": [
+      { "source": "/quote-system", "destination": "/quote-system/index.html" }
+    ],
+    "headers": [
+      {
+        "source": "**/*.html",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      }
+    ]
+  }
+}
