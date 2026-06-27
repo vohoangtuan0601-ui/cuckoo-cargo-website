@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
  <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="assets/images/favicon.png" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Gửi Hàng Mỹ - Việt Nam | Cuckoo Cargo</title>
+ <link rel="icon" type="image/png" href="assets/images/favicon.png" />
  <meta name="description" content="Dịch vụ gửi hàng từ Mỹ về Việt Nam. 7–10 ngày giao hàng, bảo hiểm đầy đủ, drop-off hoặc pickup tận nơi. Tạo đơn online dễ dàng." />
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,7 +15,7 @@
  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
  html { scroll-behavior:smooth; }
  :root {
- --orange:#F47B20; --orange-deep:#D4650E; --orange-light:#FFB366;
+ --orange:#fc4f08; --orange-deep:#d94007; --orange-light:#fd8a4d;
  --orange-bg:#FFF3E8; --black:#0F0F10; --surface:#1A1A1E;
  --white:#FFFFFF; --gray:#8E8E93; --gray-light:#F5F5F7;
  --gray-border:#E5E5EA; --text-primary:#0F0F10; --text-muted:#8E8E93;
@@ -644,17 +644,17 @@
  .success-modal h3 { font-size:22px; font-weight:900; color:#0F0F10; margin-bottom:8px; }
  .success-modal p { font-size:14px; color:#8E8E93; line-height:1.7; margin-bottom:20px; }
  .success-modal-code {
-   background:#FFF3E8; border:2px dashed #F47B20; border-radius:12px;
+   background:#FFF3E8; border:2px dashed #fc4f08; border-radius:12px;
    padding:14px 20px; margin-bottom:24px;
  }
  .success-modal-code .code-label { font-size:11px; font-weight:700; color:#8E8E93; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
- .success-modal-code .code-value { font-size:24px; font-weight:900; color:#F47B20; letter-spacing:2px; }
+ .success-modal-code .code-value { font-size:24px; font-weight:900; color:#fc4f08; letter-spacing:2px; }
  .success-modal-close {
-   width:100%; padding:14px; background:#F47B20; color:#fff; border:none;
+   width:100%; padding:14px; background:#fc4f08; color:#fff; border:none;
    border-radius:12px; font-size:15px; font-weight:800; cursor:pointer;
    font-family:inherit; transition:background .2s;
  }
- .success-modal-close:hover { background:#D4650E; }
+ .success-modal-close:hover { background:#d94007; }
 
  /* Footer */
  footer a { color:var(--orange); text-decoration:none; }
@@ -1374,7 +1374,7 @@
      // Hiện mã tức thì — không cần chờ API
      const localCode = 'CAC' + digits.slice(-4);
      codeEl.value = localCode;
-     codeEl.style.borderColor = '#F47B20';
+     codeEl.style.borderColor = '#fc4f08';
      setTimeout(() => codeEl.style.borderColor = '', 2000);
      // Check trùng ngầm ở background
      try {
