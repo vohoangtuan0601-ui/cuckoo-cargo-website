@@ -11,11 +11,11 @@
 html { scroll-behavior: smooth; }
 
 :root {
-  /* Brand Colors */
-  --orange:        #fc4f08;
-  --orange-deep:   #d94007;
-  --orange-light:  #fd8a4d;
-  --orange-bg:     #FFF3E8;
+  /* Brand Colors — matched to Cuckoo Cargo logo (vivid orange-red) */
+  --orange:        #F5430A;
+  --orange-deep:   #CC3200;
+  --orange-light:  #FF7A50;
+  --orange-bg:     #FFF1EC;
   --black:         #0F0F10;
   --surface:       #1A1A1E;
   --elevated:      #2A2A2E;
@@ -35,7 +35,7 @@ html { scroll-behavior: smooth; }
   --red:           #EF4444;
 
   /* Gradients */
-  --grad-orange:   linear-gradient(135deg, #fc4f08 0%, #d94007 100%);
+  --grad-orange:   linear-gradient(135deg, #F5430A 0%, #CC3200 100%);
   --grad-dark:     linear-gradient(135deg, #1A1A1E 0%, #0F0F10 100%);
 
   /* Carriers */
@@ -53,7 +53,7 @@ html { scroll-behavior: smooth; }
   --shadow-sm:     0 2px 8px rgba(0,0,0,.06);
   --shadow-md:     0 8px 24px rgba(0,0,0,.10);
   --shadow-lg:     0 16px 48px rgba(0,0,0,.14);
-  --shadow-orange: 0 8px 24px rgba(252,79,8,.30);
+  --shadow-orange: 0 8px 24px rgba(245,67,10,.35);
 }
 
 body {
@@ -353,7 +353,7 @@ textarea {
 }
 input:focus, select:focus, textarea:focus {
   border-color: var(--orange);
-  box-shadow: 0 0 0 3px rgba(252,79,8,.12);
+  box-shadow: 0 0 0 3px rgba(245,67,10,.12);
 }
 textarea { resize: vertical; min-height: 90px; }
 select {
@@ -394,7 +394,7 @@ select {
   padding: 4px 12px; border-radius: 20px;
   font-size: 12px; font-weight: 600;
 }
-.badge-orange { background: var(--orange-bg); color: var(--orange); border: 1px solid rgba(252,79,8,.3); }
+.badge-orange { background: var(--orange-bg); color: var(--orange); border: 1px solid rgba(245,67,10,.3); }
 .badge-green  { background: #F0FFF4; color: #16A34A; border: 1px solid #BBF7D0; }
 .badge-red    { background: #FFF5F5; color: #DC2626; border: 1px solid #FCA5A5; }
 .badge-gray   { background: var(--gray-light); color: var(--gray); border: 1px solid var(--gray-border); }
@@ -402,8 +402,8 @@ select {
 
 /* ── POLICY BOX ──────────────────────────────────────────── */
 .policy-box {
-  background: #FFFBF7;
-  border: 1.5px solid #FFD9B3;
+  background: #FFF4F0;
+  border: 1.5px solid #FFCAB5;
   border-radius: var(--radius-md); padding: 20px;
 }
 .policy-box .policy-title {
@@ -467,12 +467,12 @@ select {
 }
 .cc-hero::before {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(252,79,8,.18) 0%, transparent 70%);
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,67,10,.18) 0%, transparent 70%);
   pointer-events: none;
 }
 .cc-hero-badge {
   display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(252,79,8,.15); border: 1px solid rgba(252,79,8,.3);
+  background: rgba(245,67,10,.15); border: 1px solid rgba(245,67,10,.3);
   color: var(--orange); padding: 6px 16px; border-radius: 20px;
   font-size: 12px; font-weight: 600; letter-spacing: 1px;
   margin-bottom: 20px; position: relative;

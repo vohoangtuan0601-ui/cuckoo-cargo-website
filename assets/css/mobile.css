@@ -1,4 +1,4 @@
-/* ═══════════════════════════════════════════════════════════
+﻿/* ═══════════════════════════════════════════════════════════
    CUCKOO CARGO — Mobile Responsive (mobile.css)
    Tối ưu UX/UI cho tất cả breakpoints
    ═══════════════════════════════════════════════════════════ */
@@ -57,7 +57,7 @@ table { table-layout: auto; }
     padding: 0 !important;
   }
   .mobile-nav-toggle:hover,
-  .cc-mobile-toggle:hover { border-color: #fc4f08 !important; color: #fc4f08 !important; }
+  .cc-mobile-toggle:hover { border-color: #F5430A !important; color: #F5430A !important; }
 
   /* ── Nav links: slide-down drawer ── */
   .nav-links {
