@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
  <meta charset="UTF-8" />
@@ -14,7 +14,7 @@
  }
  .blog-hero::before {
  content:''; position:absolute; inset:0;
- background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(252,79,8,.18) 0%, transparent 70%);
+ background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(244,123,32,.18) 0%, transparent 70%);
  pointer-events:none;
  }
  .blog-hero h1 { font-size: clamp(28px,4vw,48px); font-weight:900; color:var(--white); margin-bottom:12px; position:relative; }
@@ -40,7 +40,7 @@
  }
  .blog-featured:hover { box-shadow:var(--shadow-lg); }
  @media(max-width:640px){ .blog-featured { grid-template-columns:1fr; } }
- .blog-featured-img { min-height:260px; background:linear-gradient(135deg,#1a0a40,#fc4f08); display:flex; align-items:center; justify-content:center; font-size:96px; }
+ .blog-featured-img { min-height:260px; background:linear-gradient(135deg,#1a0a40,#F47B20); display:flex; align-items:center; justify-content:center; font-size:96px; }
  .blog-featured-body { padding:36px 32px; display:flex; flex-direction:column; justify-content:center; }
  .blog-featured-tag { font-size:11px; font-weight:800; color:var(--orange); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
  .blog-featured-title { font-size:22px; font-weight:900; line-height:1.35; margin-bottom:12px; }
@@ -151,7 +151,7 @@
 
  <!-- Featured -->
  <div class="blog-featured" data-cat="guide" onclick="openArticle('guide-mvv')">
- <div class="blog-featured-img"></div>
+ <div class="blog-featured-img" style="padding:0; overflow:hidden;"><img src="file:///C:/Users/Admin/.gemini/antigravity-ide/brain/11befd32-3775-41ae-bb1c-e4b6c6edd44d/blog_guide_real_png_1782321346593.png" style="width:100%;height:100%;object-fit:cover;" alt="Guide" /></div>
  <div class="blog-featured-body">
  <div class="blog-featured-tag" data-vi=" Hướng dẫn" data-en=" Guide"> Hướng dẫn</div>
  <div class="blog-featured-title" data-vi="Hướng dẫn gửi hàng từ Mỹ về Việt Nam — Từ A đến Z (2026)" data-en="Complete guide to shipping from US to Vietnam — A to Z (2026)">Hướng dẫn gửi hàng từ Mỹ về Việt Nam — Từ A đến Z (2026)</div>
@@ -168,7 +168,7 @@
  <div class="blog-main-grid" id="blog-grid">
 
  <div class="bl-card" data-cat="tips" onclick="openArticle('tips-ship')">
- <div class="bl-card-img" style="background:linear-gradient(135deg,#0F0F10,#22C55E);"></div>
+ <div class="bl-card-img" style="padding:0; overflow:hidden; background-image: url('file:///C:/Users/Admin/.gemini/antigravity-ide/brain/11befd32-3775-41ae-bb1c-e4b6c6edd44d/media__1782322599498.jpg'); background-size: 320% 215%; background-position: 0% 0%;"></div>
  <div class="bl-card-body">
  <div class="bl-card-tag" data-vi=" Tips tiết kiệm" data-en=" Money tips"> Tips tiết kiệm</div>
  <div class="bl-card-title" data-vi="7 cách tiết kiệm phí ship hàng Mỹ về Việt Nam" data-en="7 ways to save on US to Vietnam shipping costs">7 cách tiết kiệm phí ship hàng Mỹ về Việt Nam</div>
@@ -179,7 +179,7 @@
  </div>
 
  <div class="bl-card" data-cat="customs" onclick="openArticle('customs-vn')">
- <div class="bl-card-img" style="background:linear-gradient(135deg,#1a0a40,#4B5563);"></div>
+ <div class="bl-card-img" style="padding:0; overflow:hidden; background-image: url('file:///C:/Users/Admin/.gemini/antigravity-ide/brain/11befd32-3775-41ae-bb1c-e4b6c6edd44d/media__1782322599498.jpg'); background-size: 320% 215%; background-position: 100% 100%;"></div>
  <div class="bl-card-body">
  <div class="bl-card-tag" data-vi=" Hải quan" data-en=" Customs"> Hải quan</div>
  <div class="bl-card-title" data-vi="Quy định hải quan Việt Nam 2026 — Hàng hóa từ Mỹ" data-en="Vietnam Customs Regulations 2026 — Goods from the US">Quy định hải quan Việt Nam 2026 — Hàng hóa từ Mỹ</div>
@@ -190,7 +190,7 @@
  </div>
 
  <div class="bl-card" data-cat="guide" onclick="openArticle('guide-label')">
- <div class="bl-card-img" style="background:linear-gradient(135deg,#351C75,#fc4f08);"></div>
+ <div class="bl-card-img" style="padding:0; overflow:hidden; background-image: url('file:///C:/Users/Admin/.gemini/antigravity-ide/brain/11befd32-3775-41ae-bb1c-e4b6c6edd44d/media__1782322599498.jpg'); background-size: 320% 215%; background-position: 100% 0%;"></div>
  <div class="bl-card-body">
  <div class="bl-card-tag" data-vi=" Hướng dẫn" data-en=" Guide"> Hướng dẫn</div>
  <div class="bl-card-title" data-vi="Label nội địa Mỹ — UPS, FedEx hay USPS? Chọn hãng nào?" data-en="US Domestic Label — UPS, FedEx or USPS? Which to choose?">Label nội địa Mỹ — UPS, FedEx hay USPS? Chọn hãng nào?</div>
@@ -201,7 +201,7 @@
  </div>
 
  <div class="bl-card" data-cat="tips" onclick="openArticle('tips-muaho')">
- <div class="bl-card-img" style="background:linear-gradient(135deg,#0F0F10,#1877F2);"></div>
+ <div class="bl-card-img" style="padding:0; overflow:hidden; background-image: url('file:///C:/Users/Admin/.gemini/antigravity-ide/brain/11befd32-3775-41ae-bb1c-e4b6c6edd44d/media__1782322599498.jpg'); background-size: 320% 215%; background-position: 0% 100%;"></div>
  <div class="bl-card-body">
  <div class="bl-card-tag" data-vi=" Tips tiết kiệm" data-en=" Money tips"> Tips tiết kiệm</div>
  <div class="bl-card-title" data-vi="Mua hộ hàng Mỹ: Black Friday, Prime Day — Khi nào mua rẻ nhất?" data-en="US Personal Shopping: Black Friday, Prime Day — Best time to buy?">Mua hộ hàng Mỹ: Black Friday, Prime Day — Khi nào mua rẻ nhất?</div>
@@ -212,7 +212,7 @@
  </div>
 
  <div class="bl-card" data-cat="customs" onclick="openArticle('customs-ensure')">
- <div class="bl-card-img" style="background:linear-gradient(135deg,#1a0a40,#22C55E);"></div>
+ <div class="bl-card-img" style="padding:0; overflow:hidden; background-image: url('file:///C:/Users/Admin/.gemini/antigravity-ide/brain/11befd32-3775-41ae-bb1c-e4b6c6edd44d/media__1782322599498.jpg'); background-size: 320% 215%; background-position: 50% 100%;"></div>
  <div class="bl-card-body">
  <div class="bl-card-tag" data-vi=" Hải quan" data-en=" Customs"> Hải quan</div>
  <div class="bl-card-title" data-vi="Mang sữa Ensure từ Mỹ về Việt Nam — Quy định và số lượng cho phép" data-en="Bringing Ensure from the US to Vietnam — Regulations and allowed quantity">Mang sữa Ensure từ Mỹ về Việt Nam — Quy định và số lượng cho phép</div>
@@ -223,7 +223,7 @@
  </div>
 
  <div class="bl-card" data-cat="news" onclick="openArticle('news-price')">
- <div class="bl-card-img" style="background:linear-gradient(135deg,#fc4f08,#d94007);"></div>
+ <div class="bl-card-img" style="padding:0; overflow:hidden; background-image: url('file:///C:/Users/Admin/.gemini/antigravity-ide/brain/11befd32-3775-41ae-bb1c-e4b6c6edd44d/media__1782322599498.jpg'); background-size: 320% 215%; background-position: 50% 0%;"></div>
  <div class="bl-card-body">
  <div class="bl-card-tag" data-vi=" Tin tức" data-en=" News"> Tin tức</div>
  <div class="bl-card-title" data-vi="Cập nhật giá cước vận chuyển Mỹ – Việt tháng 06/2026" data-en="US–Vietnam Shipping Rate Update — June 2026">Cập nhật giá cước vận chuyển Mỹ – Việt tháng 06/2026</div>

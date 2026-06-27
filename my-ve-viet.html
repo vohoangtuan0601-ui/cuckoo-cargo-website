@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
  <meta charset="UTF-8" />
@@ -15,8 +15,8 @@
  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
  html { scroll-behavior:smooth; }
  :root {
- --orange:#fc4f08; --orange-deep:#d94007; --orange-light:#fd8a4d;
- --orange-bg:#FFF3E8; --black:#0F0F10; --surface:#1A1A1E;
+ --orange:#F5430A; --orange-deep:#CC3200; --orange-light:#FF7A50;
+ --orange-bg:#FFF1EC; --black:#0F0F10; --surface:#1A1A1E;
  --white:#FFFFFF; --gray:#8E8E93; --gray-light:#F5F5F7;
  --gray-border:#E5E5EA; --text-primary:#0F0F10; --text-muted:#8E8E93;
  --green:#22C55E; --blue:#3B82F6;
@@ -53,11 +53,11 @@
  }
  .hero::before {
  content:''; position:absolute; inset:0;
- background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(252,79,8,.18) 0%, transparent 70%);
+ background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,67,10,.18) 0%, transparent 70%);
  }
  .hero-badge {
  display:inline-flex; align-items:center; gap:6px;
- background:rgba(252,79,8,.15); border:1px solid rgba(252,79,8,.3);
+ background:rgba(245,67,10,.15); border:1px solid rgba(245,67,10,.3);
  color:var(--orange); padding:6px 16px; border-radius:20px;
  font-size:12px; font-weight:600; letter-spacing:1px; margin-bottom:20px;
  position:relative;
@@ -79,7 +79,7 @@
 
  /* STEPS OVERVIEW (How it works) */
  .steps-bar {
- background:var(--orange-bg); border-bottom:1px solid #FFD9B3;
+ background:var(--orange-bg); border-bottom:1px solid #FFCAB5;
  padding:14px 0;
  }
  .steps-bar-inner {
@@ -122,7 +122,7 @@
  /* Province fee note */
  .province-fee-note { font-size:13px; font-weight:600; margin-top:6px; padding:6px 10px; border-radius:8px; }
  .province-fee-note.free { background:#DCFCE7; color:#16A34A; }
- .province-fee-note.paid { background:#FFF3E8; color:var(--orange-deep); }
+ .province-fee-note.paid { background:#FFF1EC; color:var(--orange-deep); }
 
  /* Packaging guide */
  .pkg-guide { background:#FFFBF0; border:1px solid #FDE68A; border-radius:14px; padding:18px; margin-bottom:16px; }
@@ -152,7 +152,7 @@
  .price-card { background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.06); }
  .price-card-title { background:var(--orange); color:#fff; padding:12px 18px; font-weight:800; font-size:15px; }
  .price-card table { width:100%; border-collapse:collapse; font-size:14px; }
- .price-card table thead th { background:#fff3e8; padding:8px 14px; font-weight:700; text-align:left; color:var(--orange-deep); }
+ .price-card table thead th { background:#FFF1EC; padding:8px 14px; font-weight:700; text-align:left; color:var(--orange-deep); }
  .price-card table tbody td { padding:9px 14px; border-bottom:1px solid var(--gray-border); }
  .price-card table tbody tr:last-child td { border-bottom:none; }
  .price-card table tbody tr:hover { background:#fafafa; }
@@ -305,7 +305,7 @@
 
  /* Step 4 — Policy */
  .policy-box {
- background:#FFFBF7; border:1.5px solid #FFD9B3;
+ background:#FFF4F0; border:1.5px solid #FFCAB5;
  border-radius:14px; padding:20px 20px;
  }
  .policy-title { font-size:15px; font-weight:800; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
@@ -392,7 +392,7 @@
 
  /* Insurance alert */
  .ins-alert {
- background:#FFF3E8; border:1px solid var(--orange-light); border-radius:10px;
+ background:#FFF1EC; border:1px solid var(--orange-light); border-radius:10px;
  padding:12px 16px; font-size:13px; color:var(--text-primary);
  margin-bottom:16px; line-height:1.6;
  }
@@ -483,7 +483,7 @@
  font-family:inherit; transition:all .2s; text-decoration:none;
  display:flex; align-items:center; justify-content:center; gap:8px;
  }
- .popup-btn-book:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(252,79,8,.4); }
+ .popup-btn-book:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,67,10,.4); }
  .popup-btn-skip {
  width:100%; padding:13px; border:2px solid var(--gray-border);
  background:transparent; border-radius:14px;
@@ -567,7 +567,7 @@
  font-size:15px; font-weight:800; cursor:pointer;
  transition:all .2s; display:flex; align-items:center; justify-content:center; gap:8px;
  }
- .btn-next:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(252,79,8,.35); }
+ .btn-next:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,67,10,.35); }
  .btn-next:disabled { background:#ccc; cursor:not-allowed; transform:none; box-shadow:none; }
  .btn-next.submit { background:linear-gradient(135deg,#22C55E,#16A34A); }
  .btn-next.submit:hover { box-shadow:0 8px 24px rgba(34,197,94,.35); }
@@ -644,17 +644,17 @@
  .success-modal h3 { font-size:22px; font-weight:900; color:#0F0F10; margin-bottom:8px; }
  .success-modal p { font-size:14px; color:#8E8E93; line-height:1.7; margin-bottom:20px; }
  .success-modal-code {
-   background:#FFF3E8; border:2px dashed #fc4f08; border-radius:12px;
+   background:#FFF1EC; border:2px dashed #F5430A; border-radius:12px;
    padding:14px 20px; margin-bottom:24px;
  }
  .success-modal-code .code-label { font-size:11px; font-weight:700; color:#8E8E93; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
- .success-modal-code .code-value { font-size:24px; font-weight:900; color:#fc4f08; letter-spacing:2px; }
+ .success-modal-code .code-value { font-size:24px; font-weight:900; color:#F5430A; letter-spacing:2px; }
  .success-modal-close {
-   width:100%; padding:14px; background:#fc4f08; color:#fff; border:none;
+   width:100%; padding:14px; background:#F5430A; color:#fff; border:none;
    border-radius:12px; font-size:15px; font-weight:800; cursor:pointer;
    font-family:inherit; transition:background .2s;
  }
- .success-modal-close:hover { background:#d94007; }
+ .success-modal-close:hover { background:#CC3200; }
 
  /* Footer */
  footer a { color:var(--orange); text-decoration:none; }
@@ -754,7 +754,7 @@
  <li><span data-vi="Vaccine, máy y tế, xe máy" data-en="Vaccines, medical devices, motorbikes">Vaccine, máy y tế, xe máy</span><span class="customs-fee" data-vi="Thuế 20%" data-en="20% tax">Thuế 20%</span></li>
  <li><span data-vi="Điện tử khác (không liệt kê trên)" data-en="Other electronics (not listed above)">Điện tử khác (không liệt kê trên)</span><span class="customs-fee" data-vi="10% giá trị" data-en="10% of value">10% giá trị</span></li>
  </ul>
- <div class="price-note" style="background:#fff3e8;">
+ <div class="price-note" style="background:#FFF1EC;">
  <span data-vi="<strong>Bảo hiểm hàng hoá:</strong><br>Không khai báo: đền <strong>$6/lbs</strong>, tối đa $100.<br>Khai báo đầy đủ + giấy tờ: thuế HQ 10% giá trị; đền <strong>70–100%</strong> giá trị hàng." data-en="<strong>Cargo insurance:</strong><br>Not declared: $6/lbs, max $100.<br>Fully declared + documents: 10% customs tax; 70–100% of item value."><strong>Bảo hiểm hàng hoá:</strong><br>
  Không khai báo: đền <strong>$6/lbs</strong>, tối đa $100.<br>
  Khai báo đầy đủ + giấy tờ: thuế HQ 10% giá trị; đền <strong>70–100%</strong> giá trị hàng.</span>
@@ -1374,7 +1374,8 @@
      // Hiện mã tức thì — không cần chờ API
      const localCode = 'CAC' + digits.slice(-4);
      codeEl.value = localCode;
-     codeEl.style.borderColor = '#fc4f08';
+     codeEl.innerText = "Copy";
+     codeEl.style.borderColor = '#F5430A';
      setTimeout(() => codeEl.style.borderColor = '', 2000);
      // Check trùng ngầm ở background
      try {

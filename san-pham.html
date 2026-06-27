@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
  <meta charset="UTF-8" />
@@ -14,7 +14,7 @@
  }
  .sp-hero::before {
  content:''; position:absolute; inset:0;
- background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(252,79,8,.18) 0%, transparent 70%);
+ background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(244,123,32,.18) 0%, transparent 70%);
  pointer-events:none;
  }
  .sp-hero h1 { font-size: clamp(28px,4vw,48px); font-weight:900; color:var(--white); margin-bottom:12px; position:relative; }
@@ -32,8 +32,8 @@
  .cat-tab:hover:not(.active) { border-color:var(--orange); color:var(--orange); }
 
  /* Product grid */
- .sp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
- @media(max-width:900px){ .sp-grid { grid-template-columns:repeat(2,1fr); gap:16px; } }
+ .sp-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+ @media(max-width:1024px){ .sp-grid { grid-template-columns:repeat(2,1fr); gap:16px; } }
  @media(max-width:560px){
    .sp-grid { grid-template-columns:1fr; gap:12px; }
    .sp-card { flex-direction:row !important; min-height:130px; }
@@ -128,12 +128,41 @@
  .sp-spec-value { font-size:14px; font-weight:800; }
 
  /* Why section */
- .why-sp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
- @media(max-width:640px){ .why-sp-grid { grid-template-columns:1fr 1fr; } }
- .why-sp-card { background:var(--white); border-radius:var(--radius-md); border:1.5px solid var(--gray-border); padding:22px 18px; text-align:center; }
- .why-sp-card .icon { font-size:32px; margin-bottom:10px; }
- .why-sp-card h4 { font-size:15px; font-weight:800; margin-bottom:6px; }
- .why-sp-card p { font-size:13px; color:var(--text-muted); line-height:1.6; }
+ .why-sp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+ @media(max-width:900px){ .why-sp-grid { grid-template-columns:repeat(2,1fr); } }
+ @media(max-width:640px){ .why-sp-grid { grid-template-columns:1fr; } }
+ .why-sp-card { 
+   background: var(--white); 
+   border-radius: 20px; 
+   border: 1px solid rgba(0,0,0,0.03); 
+   padding: 0; 
+   text-align: center; 
+   box-shadow: 0 12px 36px rgba(0,0,0,0.03);
+   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   position: relative;
+   overflow: hidden;
+ }
+ .why-sp-card::before {
+   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index:2;
+   background: linear-gradient(135deg, var(--orange), var(--orange-deep));
+   opacity: 0; transition: opacity 0.3s ease;
+ }
+ .why-sp-card:hover { 
+   transform: translateY(-8px); 
+   box-shadow: 0 24px 48px rgba(244, 123, 32, 0.08); 
+   border-color: rgba(244, 123, 32, 0.2); 
+ }
+ .why-sp-card:hover::before { opacity: 1; }
+ .why-sp-card-img {
+   width: 100%;
+   height: 170px;
+   background-size: cover;
+   background-position: center;
+   border-bottom: 2px solid var(--gray-border);
+ }
+ .why-sp-card-body { padding: 32px 24px; text-align: center; }
+ .why-sp-card h4 { font-size: 18px; font-weight: 800; margin-bottom: 16px; color: var(--text-primary); line-height: 1.45; letter-spacing: 0.3px; }
+ .why-sp-card p { font-size: 14.5px; color: var(--text-muted); line-height: 1.7; margin: 0; padding: 0 4px; }
 
  /* Order form */
  .sp-order-form { max-width:600px; margin:0 auto; }
@@ -233,24 +262,6 @@
  </div>
  </div>
 
- <!-- Ensure Plus -->
- <div class="sp-card" data-cat="sua">
- <div class="sp-card-img">
- <img src="assets/images/sua-ensure-my.png" alt="Ensure Plus" />
- <div class="sp-badge" data-vi="Phổ biến" data-en="Popular">Phổ biến</div>
- </div>
- <div class="sp-card-body">
- <div class="sp-card-tag" data-vi="Sữa dinh dưỡng" data-en="Nutrition Milk">Sữa dinh dưỡng</div>
- <div class="sp-card-name">Ensure Plus Nutrition Shake</div>
- <div class="sp-card-desc" data-vi="Hàm lượng calo và protein cao hơn Ensure Original. Dành cho người cần tăng cân, hồi phục sau phẫu thuật hoặc bệnh nặng." data-en="Higher calories and protein than Ensure Original. For those needing weight gain or recovery after surgery.">Hàm lượng calo và protein cao hơn Ensure Original. Dành cho người cần tăng cân, hồi phục sau phẫu thuật hoặc bệnh nặng.</div>
- <div class="sp-card-price" data-vi="Liên hệ <span class='unit'>/ hộp</span>" data-en="Contact us <span class='unit'>/ can</span>">Liên hệ <span class="unit">/ hộp</span></div>
- <div class="sp-card-origin" data-vi=" Xuất xứ Mỹ · Abbott Laboratories" data-en=" Made in USA · Abbott Laboratories"> Xuất xứ Mỹ · Abbott Laboratories</div>
- <div class="sp-card-actions">
- <a href="#dat-hang" class="btn-order-sp" onclick="prefillProduct('Ensure Plus')" data-vi=" Đặt hàng" data-en=" Order Now"> Đặt hàng</a>
- <button class="btn-contact-sp" onclick="openModal('ensure-plus')" title="Chi tiết">ℹ</button>
- </div>
- </div>
- </div>
 
  <!-- Ensure Max Protein -->
  <div class="sp-card" data-cat="sua">
@@ -290,25 +301,10 @@
  </div>
  </div>
 
- <!-- Eagle Brand White Flower -->
- <div class="sp-card" data-cat="daugió">
- <div class="sp-card-img"><img src="assets/images/dau-gio-my.webp" alt="White Flower Oil" /></div>
- <div class="sp-card-body">
- <div class="sp-card-tag" data-vi="Dầu gió" data-en="Medicated Oil">Dầu gió</div>
- <div class="sp-card-name">White Flower Embrocation Oil</div>
- <div class="sp-card-desc" data-vi="Dầu Hoa Trắng kinh điển. Giảm đau đầu, khó chịu, say tàu xe. Được tin dùng nhiều thế hệ." data-en="Classic White Flower Oil. Relieves headaches, discomfort, and motion sickness. Trusted for generations.">Dầu Hoa Trắng kinh điển. Giảm đau đầu, khó chịu, say tàu xe. Được tin dùng nhiều thế hệ.</div>
- <div class="sp-card-price" data-vi="Liên hệ <span class='unit'>/ chai</span>" data-en="Contact us <span class='unit'>/ bottle</span>">Liên hệ <span class="unit">/ chai</span></div>
- <div class="sp-card-origin" data-vi=" Phân phối tại Mỹ" data-en=" Distributed in USA"> Phân phối tại Mỹ</div>
- <div class="sp-card-actions">
- <a href="#dat-hang" class="btn-order-sp" onclick="prefillProduct('White Flower Embrocation Oil')" data-vi=" Đặt hàng" data-en=" Order Now"> Đặt hàng</a>
- <button class="btn-contact-sp" onclick="openModal('white-flower')" title="Chi tiết">ℹ</button>
- </div>
- </div>
- </div>
 
  <!-- Vitamin D3 -->
  <div class="sp-card" data-cat="vitamin">
- <div class="sp-card-img"></div>
+ <div class="sp-card-img"><img src="file:///C:/Users/Admin/.gemini/antigravity-ide/brain/11befd32-3775-41ae-bb1c-e4b6c6edd44d/vitamin_d3_png_1782320341888.png" alt="Vitamin D3 Nature Made" /></div>
  <div class="sp-card-body">
  <div class="sp-card-tag" data-vi="Vitamin &amp; TPCN" data-en="Vitamins &amp; Supplements">Vitamin &amp; TPCN</div>
  <div class="sp-card-name">Vitamin D3 5000 IU — Nature Made</div>
@@ -317,7 +313,7 @@
  <div class="sp-card-origin" data-vi=" Xuất xứ Mỹ · Nature Made" data-en=" Made in USA · Nature Made"> Xuất xứ Mỹ · Nature Made</div>
  <div class="sp-card-actions">
  <a href="#dat-hang" class="btn-order-sp" onclick="prefillProduct('Vitamin D3 5000IU Nature Made')" data-vi=" Đặt hàng" data-en=" Order Now"> Đặt hàng</a>
- <button class="btn-contact-sp" title="Chi tiết">ℹ</button>
+ <button class="btn-contact-sp" onclick="openModal('vitamin-d3')" title="Chi tiết">ℹ</button>
  </div>
  </div>
  </div>
@@ -327,43 +323,55 @@
 </section>
 
 <!-- WHY BUY FROM US -->
-<section class="section" style="background:var(--gray-light);">
+<section class="section" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
  <div class="container">
- <div class="section-title">
- <h2 data-vi="Tại sao mua tại Cuckoo Cargo?" data-en="Why Buy from Cuckoo Cargo?">Tại sao mua tại Cuckoo Cargo?</h2>
- </div>
- <div class="why-sp-grid">
- <div class="why-sp-card">
- <div class="icon"></div>
- <h4 data-vi="Hàng chính hãng 100%" data-en="100% Authentic Products">Hàng chính hãng 100%</h4>
- <p data-vi="Mua trực tiếp từ siêu thị Mỹ (Walmart, Costco, CVS). Có hóa đơn gốc khi yêu cầu." data-en="Purchased directly from US supermarkets (Walmart, Costco, CVS). Original receipt available on request.">Mua trực tiếp từ siêu thị Mỹ (Walmart, Costco, CVS). Có hóa đơn gốc khi yêu cầu.</p>
- </div>
- <div class="why-sp-card">
- <div class="icon"></div>
- <h4 data-vi="Ảnh thực tế trước khi gửi" data-en="Real Photos Before Shipping">Ảnh thực tế trước khi gửi</h4>
- <p data-vi="Chụp ảnh hộp, date, tem nhãn gửi cho bạn kiểm tra trước khi đóng gói." data-en="We photograph the box, date, and label for your inspection before packaging.">Chụp ảnh hộp, date, tem nhãn gửi cho bạn kiểm tra trước khi đóng gói.</p>
- </div>
- <div class="why-sp-card">
- <div class="icon"></div>
- <h4 data-vi="Giao nhanh về Việt Nam" data-en="Fast Delivery to Vietnam">Giao nhanh về Việt Nam</h4>
- <p data-vi="7–15 ngày về tới tay. Hoặc giao nội địa Mỹ 1–5 ngày qua UPS/FedEx." data-en="7–15 days to your door. Or US domestic 1–5 days via UPS/FedEx.">7–15 ngày về tới tay. Hoặc giao nội địa Mỹ 1–5 ngày qua UPS/FedEx.</p>
- </div>
- <div class="why-sp-card">
- <div class="icon"></div>
- <h4 data-vi="Giá tốt hơn nhập riêng lẻ" data-en="Better Price Than Buying Alone">Giá tốt hơn nhập riêng lẻ</h4>
- <p data-vi="Gộp đơn, tối ưu phí ship. Tư vấn combo tiết kiệm nhất cho bạn." data-en="Bundled orders optimize shipping costs. We advise on the most cost-effective combo.">Gộp đơn, tối ưu phí ship. Tư vấn combo tiết kiệm nhất cho bạn.</p>
- </div>
- <div class="why-sp-card">
- <div class="icon"></div>
- <h4 data-vi="Đóng gói cẩn thận" data-en="Careful Packaging">Đóng gói cẩn thận</h4>
- <p data-vi="Hàng lỏng, dễ vỡ được wrap bubble riêng. Đảm bảo nguyên vẹn khi nhận." data-en="Liquids and fragile items are bubble-wrapped individually. Guaranteed intact on arrival.">Hàng lỏng, dễ vỡ được wrap bubble riêng. Đảm bảo nguyên vẹn khi nhận.</p>
- </div>
- <div class="why-sp-card">
- <div class="icon"></div>
- <h4 data-vi="Hỗ trợ 7 ngày / tuần" data-en="Support 7 Days a Week">Hỗ trợ 7 ngày / tuần</h4>
- <p data-vi="Zalo, Messenger, hotline — luôn có người trả lời trong vòng 30 phút." data-en="Zalo, Messenger, hotline — always someone to reply within 30 minutes.">Zalo, Messenger, hotline — luôn có người trả lời trong vòng 30 phút.</p>
- </div>
- </div>
+  <div class="section-title">
+  <h2 data-vi="Tại sao mua tại Cuckoo Cargo?" data-en="Why Buy from Cuckoo Cargo?" style="font-size: 36px; margin-bottom: 48px; color: #ffffff;">Tại sao mua tại Cuckoo Cargo?</h2>
+  </div>
+  <div class="why-sp-grid">
+  <div class="why-sp-card">
+  <div class="why-sp-card-img" style="background-image: url('assets/images/why1_authentic.png');"></div>
+  <div class="why-sp-card-body">
+  <h4 data-vi="Hàng chính hãng 100%" data-en="100% Authentic Products">Hàng chính hãng 100%</h4>
+  <p data-vi="Mua trực tiếp từ siêu thị Mỹ (Walmart, Costco, CVS). Có hóa đơn gốc khi yêu cầu." data-en="Purchased directly from US supermarkets (Walmart, Costco, CVS). Original receipt available on request.">Mua trực tiếp từ siêu thị Mỹ (Walmart, Costco, CVS). Có hóa đơn gốc khi yêu cầu.</p>
+  </div>
+  </div>
+  <div class="why-sp-card">
+  <div class="why-sp-card-img" style="background-image: url('assets/images/why2_real_photo.png');"></div>
+  <div class="why-sp-card-body">
+  <h4 data-vi="Ảnh thực tế trước khi gửi" data-en="Real Photos Before Shipping">Ảnh thực tế trước khi gửi</h4>
+  <p data-vi="Chụp ảnh hộp, date, tem nhãn gửi cho bạn kiểm tra trước khi đóng gói." data-en="We photograph the box, date, and label for your inspection before packaging.">Chụp ảnh hộp, date, tem nhãn gửi cho bạn kiểm tra trước khi đóng gói.</p>
+  </div>
+  </div>
+  <div class="why-sp-card">
+  <div class="why-sp-card-img" style="background-image: url('assets/images/why3_fast_delivery.png');"></div>
+  <div class="why-sp-card-body">
+  <h4 data-vi="Giao nhanh về Việt Nam" data-en="Fast Delivery to Vietnam">Giao nhanh về Việt Nam</h4>
+  <p data-vi="7–15 ngày về tới tay. Hoặc giao nội địa Mỹ 1–5 ngày qua UPS/FedEx." data-en="7–15 days to your door. Or US domestic 1–5 days via UPS/FedEx.">7–15 ngày về tới tay. Hoặc giao nội địa Mỹ 1–5 ngày qua UPS/FedEx.</p>
+  </div>
+  </div>
+  <div class="why-sp-card">
+  <div class="why-sp-card-img" style="background-image: url('assets/images/why4_best_price.png');"></div>
+  <div class="why-sp-card-body">
+  <h4 data-vi="Giá tốt hơn nhập riêng lẻ" data-en="Better Price Than Buying Alone">Giá tốt hơn nhập riêng lẻ</h4>
+  <p data-vi="Gộp đơn, tối ưu phí ship. Tư vấn combo tiết kiệm nhất cho bạn." data-en="Bundled orders optimize shipping costs. We advise on the most cost-effective combo.">Gộp đơn, tối ưu phí ship. Tư vấn combo tiết kiệm nhất cho bạn.</p>
+  </div>
+  </div>
+  <div class="why-sp-card">
+  <div class="why-sp-card-img" style="background-image: url('assets/images/why5_careful_packing.png');"></div>
+  <div class="why-sp-card-body">
+  <h4 data-vi="Đóng gói cẩn thận" data-en="Careful Packaging">Đóng gói cẩn thận</h4>
+  <p data-vi="Hàng lỏng, dễ vỡ được wrap bubble riêng. Đảm bảo nguyên vẹn khi nhận." data-en="Liquids and fragile items are bubble-wrapped individually. Guaranteed intact on arrival.">Hàng lỏng, dễ vỡ được wrap bubble riêng. Đảm bảo nguyên vẹn khi nhận.</p>
+  </div>
+  </div>
+  <div class="why-sp-card">
+  <div class="why-sp-card-img" style="background-image: url('assets/images/why6_support.png');"></div>
+  <div class="why-sp-card-body">
+  <h4 data-vi="Hỗ trợ 7 ngày / tuần" data-en="Support 7 Days a Week">Hỗ trợ 7 ngày / tuần</h4>
+  <p data-vi="Zalo, Messenger, hotline — luôn có người trả lời trong vòng 30 phút." data-en="Zalo, Messenger, hotline — always someone to reply within 30 minutes.">Zalo, Messenger, hotline — luôn có người trả lời trong vòng 30 phút.</p>
+  </div>
+  </div>
+  </div>
  </div>
 </section>
 
@@ -550,7 +558,7 @@
  },
  'white-flower': {
  title: 'White Flower Embrocation Oil',
- imgSrc: 'assets/images/dau-gio-my.webp',
+ imgSrc: 'assets/images/anh2.png',
  icon: '',
  specs: [
  {label:'Xuất xứ', value:'Singapore / Phân phối tại Mỹ'},
@@ -561,6 +569,20 @@
  {label:'Kháng nước', value:'Không'},
  ],
  desc: 'Dầu Hoa Trắng là sản phẩm dân gian kinh điển, được tin dùng nhiều thế hệ. Đặc biệt hiệu quả cho say tàu xe, khó chịu, đau đầu nhẹ. Hương thơm thư giãn.',
+ },
+ 'vitamin-d3': {
+ title: 'Vitamin D3 5000 IU — Nature Made',
+ imgSrc: 'file:///C:/Users/Admin/.gemini/antigravity-ide/brain/11befd32-3775-41ae-bb1c-e4b6c6edd44d/vitamin_d3_png_1782320341888.png',
+ icon: '',
+ specs: [
+ {label:'Thương hiệu', value:'Nature Made'},
+ {label:'Xuất xứ', value:'Hoa Kỳ'},
+ {label:'Hàm lượng', value:'5000 IU (125 mcg)'},
+ {label:'Công dụng', value:'Hỗ trợ xương, răng, hệ miễn dịch'},
+ {label:'Dạng bào chế', value:'Softgels (viên nang mềm)'},
+ {label:'Quy cách', value:'Hộp 320 viên'},
+ ],
+ desc: 'Nature Made Vitamin D3 5000 IU giúp bổ sung lượng Vitamin D3 cần thiết mỗi ngày. Đặc biệt dạng viên nang mềm lỏng (softgels) giúp cơ thể dễ dàng hấp thụ nhanh chóng, hỗ trợ chắc khỏe xương và hệ miễn dịch.',
  },
  };
 

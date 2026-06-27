@@ -37,8 +37,8 @@
       inset: 0;
       pointer-events: none;
       background:
-        radial-gradient(ellipse 90% 70% at 50% -10%, rgba(252, 79, 8, .22) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(252, 79, 8, .07) 0%, transparent 60%);
+        radial-gradient(ellipse 90% 70% at 50% -10%, rgba(244, 123, 32, .22) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(244, 123, 32, .07) 0%, transparent 60%);
     }
 
     .hero-grid-lines {
@@ -62,8 +62,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(252, 79, 8, .15);
-      border: 1px solid rgba(252, 79, 8, .35);
+      background: rgba(244, 123, 32, .15);
+      border: 1px solid rgba(244, 123, 32, .35);
       color: var(--orange);
       padding: 6px 18px;
       border-radius: 20px;
@@ -351,7 +351,7 @@
       height: 64px;
       border-radius: 18px;
       background: var(--orange-bg);
-      border: 1.5px solid rgba(252, 79, 8, .2);
+      border: 1.5px solid rgba(244, 123, 32, .2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -364,7 +364,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 30% 30%, rgba(252, 79, 8, .15), transparent 70%);
+      background: radial-gradient(circle at 30% 30%, rgba(244, 123, 32, .15), transparent 70%);
     }
 
     .svc-icon-wrap svg {
@@ -422,7 +422,7 @@
       align-items: baseline;
       gap: 4px;
       background: var(--orange-bg);
-      border: 1px solid rgba(252, 79, 8, .25);
+      border: 1px solid rgba(244, 123, 32, .25);
       padding: 5px 14px;
       border-radius: 20px;
     }
@@ -566,39 +566,28 @@
 
     .how-tabs {
       display: flex;
-      gap: 16px;
+      gap: 8px;
       justify-content: center;
-      margin-bottom: 56px;
+      margin-bottom: 48px;
       flex-wrap: wrap;
     }
 
     .how-tab {
-      padding: 14px 36px;
-      border-radius: 40px;
-      border: 1px solid rgba(0,0,0,0.08);
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      padding: 9px 22px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-border);
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      background: #fff;
-      color: #666;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .how-tab:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-      color: var(--black);
-      border-color: rgba(0,0,0,0.15);
+      background: var(--white);
+      color: var(--text-muted);
+      transition: all .2s;
     }
 
     .how-tab.active {
-      background: linear-gradient(135deg, var(--orange), var(--orange-deep));
+      background: var(--orange);
       color: #fff;
-      border-color: transparent;
-      box-shadow: 0 10px 24px rgba(252, 79, 8, 0.35);
-      transform: translateY(-2px);
+      border-color: var(--orange);
     }
 
     .how-panel {
@@ -677,7 +666,7 @@
       right: -80px;
       width: 480px;
       height: 480px;
-      background: radial-gradient(circle, rgba(252, 79, 8, .08) 0%, transparent 65%);
+      background: radial-gradient(circle, rgba(244, 123, 32, .08) 0%, transparent 65%);
       pointer-events: none;
     }
 
@@ -797,10 +786,11 @@
       background: rgba(255, 255, 255, .03);
       border: 1px solid rgba(255, 255, 255, .07);
       border-radius: 18px;
-      padding: 28px 24px;
+      padding: 32px 24px;
       transition: background .3s, border-color .3s, transform .25s;
       position: relative;
       overflow: hidden;
+      text-align: center;
     }
 
     .why-card::before {
@@ -817,8 +807,8 @@
     }
 
     .why-card:hover {
-      background: rgba(252, 79, 8, .06);
-      border-color: rgba(252, 79, 8, .25);
+      background: rgba(244, 123, 32, .06);
+      border-color: rgba(244, 123, 32, .25);
       transform: translateY(-4px);
     }
 
@@ -831,8 +821,8 @@
       width: 52px;
       height: 52px;
       border-radius: 14px;
-      background: rgba(252, 79, 8, .1);
-      border: 1px solid rgba(252, 79, 8, .2);
+      background: rgba(244, 123, 32, .1);
+      border: 1px solid rgba(244, 123, 32, .2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -841,7 +831,7 @@
     }
 
     .why-card:hover .wc-icon-box {
-      background: rgba(252, 79, 8, .18);
+      background: rgba(244, 123, 32, .18);
     }
 
     .wc-icon-box svg {
@@ -856,27 +846,29 @@
 
     /* Text */
     .why-card h4 {
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 800;
       color: var(--white);
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      line-height: 1.4;
+      letter-spacing: 0.3px;
     }
 
     .why-card p {
-      font-size: 13px;
-      color: #666;
-      line-height: 1.7;
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.65;
     }
 
     /* Featured card (first) */
     .why-card.featured {
-      background: linear-gradient(135deg, rgba(252, 79, 8, .12) 0%, rgba(252, 79, 8, .04) 100%);
-      border-color: rgba(252, 79, 8, .3);
+      background: linear-gradient(135deg, rgba(244, 123, 32, .12) 0%, rgba(244, 123, 32, .04) 100%);
+      border-color: rgba(244, 123, 32, .3);
     }
 
     .why-card.featured .wc-icon-box {
-      background: rgba(252, 79, 8, .2);
-      border-color: rgba(252, 79, 8, .4);
+      background: rgba(244, 123, 32, .2);
+      border-color: rgba(244, 123, 32, .4);
     }
 
     /* CAM KẾT */
@@ -903,7 +895,7 @@
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background-image: repeating-linear-gradient(-45deg, rgba(252, 79, 8, .025) 0px, rgba(252, 79, 8, .025) 1px, transparent 1px, transparent 32px);
+      background-image: repeating-linear-gradient(-45deg, rgba(244, 123, 32, .025) 0px, rgba(244, 123, 32, .025) 1px, transparent 1px, transparent 32px);
     }
 
     .camket-inner {
@@ -1013,14 +1005,14 @@
     .camket-deco-line {
       flex: 1;
       height: 1px;
-      background: rgba(252, 79, 8, .2);
+      background: rgba(244, 123, 32, .2);
     }
 
     .camket-deco-text {
       font-family: 'Faustina', serif;
       font-size: 13px;
       font-weight: 700;
-      color: rgba(252, 79, 8, .4);
+      color: rgba(244, 123, 32, .4);
       letter-spacing: 2px;
       text-transform: uppercase;
       white-space: nowrap;
@@ -1038,7 +1030,7 @@
       gap: 16px;
       background: rgba(255, 255, 255, .03);
       border: 1px solid rgba(255, 255, 255, .06);
-      border-left: 3px solid rgba(252, 79, 8, .35);
+      border-left: 3px solid rgba(244, 123, 32, .35);
       border-radius: 14px;
       padding: 18px 20px;
       transition: background .25s, border-left-color .25s, transform .2s;
@@ -1051,7 +1043,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, rgba(252, 79, 8, .05) 0%, transparent 55%);
+      background: linear-gradient(90deg, rgba(244, 123, 32, .05) 0%, transparent 55%);
       opacity: 0;
       transition: opacity .25s;
     }
@@ -1070,8 +1062,8 @@
       width: 42px;
       height: 42px;
       flex-shrink: 0;
-      background: rgba(252, 79, 8, .1);
-      border: 1px solid rgba(252, 79, 8, .2);
+      background: rgba(244, 123, 32, .1);
+      border: 1px solid rgba(244, 123, 32, .2);
       border-radius: 11px;
       display: flex;
       align-items: center;
@@ -1239,7 +1231,7 @@
 
     .mini-dot.active {
       background: var(--orange);
-      box-shadow: 0 0 0 3px rgba(252, 79, 8, .3);
+      box-shadow: 0 0 0 3px rgba(244, 123, 32, .3);
     }
 
     .mini-dot.pending {
@@ -1303,14 +1295,14 @@
       border-radius: 20px;
       overflow: hidden;
       display: flex;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-      border: 1px solid rgba(0,0,0,0.03);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.03);
       transition: transform .3s ease, box-shadow .3s ease;
     }
 
     .prod-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
     }
 
     .prod-img {
@@ -1322,7 +1314,7 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      border-right: 1px solid rgba(0,0,0,0.04);
+      border-right: 1px solid rgba(0, 0, 0, 0.04);
     }
 
     .prod-img img {
@@ -1346,7 +1338,7 @@
         width: 100%;
         height: 240px;
         border-right: none;
-        border-bottom: 1px solid rgba(0,0,0,0.04);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.04);
       }
 
       .prod-info {
@@ -1426,7 +1418,7 @@
     .prod-cta:hover {
       background: var(--orange);
       transform: translateX(4px);
-      box-shadow: 0 4px 12px rgba(252,79,8,0.25);
+      box-shadow: 0 4px 12px rgba(244, 123, 32, 0.25);
     }
 
     /* BLOG */
@@ -1563,7 +1555,7 @@
       left: -80px;
       width: 400px;
       height: 400px;
-      background: radial-gradient(circle, rgba(252, 79, 8, .06) 0%, transparent 65%);
+      background: radial-gradient(circle, rgba(244, 123, 32, .06) 0%, transparent 65%);
       pointer-events: none;
     }
 
@@ -1724,13 +1716,13 @@
     }
 
     .faq-item:hover {
-      border-color: rgba(252, 79, 8, .3);
-      box-shadow: 0 4px 20px rgba(252, 79, 8, .06);
+      border-color: rgba(244, 123, 32, .3);
+      box-shadow: 0 4px 20px rgba(244, 123, 32, .06);
     }
 
     .faq-item.open {
       border-color: var(--orange);
-      box-shadow: 0 4px 24px rgba(252, 79, 8, .1);
+      box-shadow: 0 4px 24px rgba(244, 123, 32, .1);
     }
 
     .faq-q {
@@ -1767,7 +1759,7 @@
       border-radius: 10px;
       flex-shrink: 0;
       background: var(--orange-bg);
-      border: 1px solid rgba(252, 79, 8, .2);
+      border: 1px solid rgba(244, 123, 32, .2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1803,7 +1795,7 @@
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      background: rgba(252, 79, 8, .08);
+      background: rgba(244, 123, 32, .08);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1836,7 +1828,7 @@
       font-size: 14px;
       color: var(--text-muted);
       line-height: 1.85;
-      border-top: 1px solid rgba(252, 79, 8, .12);
+      border-top: 1px solid rgba(244, 123, 32, .12);
     }
 
     .faq-item.open .faq-a {
@@ -2310,9 +2302,11 @@
         <p data-vi="Đơn giản — chỉ 3 bước là xong" data-en="Simple — just 3 steps">Đơn giản — chỉ 3 bước là xong</p>
       </div>
       <div class="how-tabs">
-        <div class="how-tab active" onclick="switchHow('mvv',this)" data-vi="Mỹ - Việt" data-en="US – Vietnam">Mỹ - Việt</div>
-        <div class="how-tab" onclick="switchHow('label',this)" data-vi="Label Nội địa" data-en="Domestic Label">Label Nội địa</div>
-        <div class="how-tab" onclick="switchHow('mh',this)" data-vi="Mua hộ" data-en="Shop For Me">Mua hộ</div>
+        <div class="how-tab active" onclick="switchHow('mvv',this)" data-vi=" Mỹ - Việt" data-en=" US – Vietnam"> Mỹ -
+          Việt</div>
+        <div class="how-tab" onclick="switchHow('label',this)" data-vi=" Label Nội địa" data-en=" Domestic Label"> Label
+          Nội địa</div>
+        <div class="how-tab" onclick="switchHow('mh',this)" data-vi=" Mua hộ" data-en=" Shop For Me"> Mua hộ</div>
       </div>
       <div class="how-panel active" id="how-mvv">
         <div class="how-step-card"
@@ -2430,7 +2424,8 @@
               style="top: auto; bottom: -16px; box-shadow: 0 4px 10px rgba(245,67,10,0.3); border: 3px solid #fff; width: 32px; height: 32px; font-size: 14px;">
               1</div>
           </div>
-          <h4 data-vi="Gửi link sản phẩm" data-en="Send the product link" style="padding: 0 22px;">Gửi link sản phẩm</h4>
+          <h4 data-vi="Gửi link sản phẩm" data-en="Send the product link" style="padding: 0 22px;">Gửi link sản phẩm
+          </h4>
           <p data-vi="Copy link từ Amazon, Walmart, Target... và điền form yêu cầu mua hộ trên website."
             data-en="Copy a link from Amazon, Walmart, Target... and fill in the Shop-For-Me request form on the website."
             style="padding: 0 22px;">
@@ -2462,7 +2457,8 @@
               style="top: auto; bottom: -16px; box-shadow: 0 4px 10px rgba(245,67,10,0.3); border: 3px solid #fff; width: 32px; height: 32px; font-size: 14px;">
               3</div>
           </div>
-          <h4 data-vi="Xác nhận & nhận hàng" data-en="Confirm & receive" style="padding: 0 22px;">Xác nhận & nhận hàng</h4>
+          <h4 data-vi="Xác nhận & nhận hàng" data-en="Confirm & receive" style="padding: 0 22px;">Xác nhận & nhận hàng
+          </h4>
           <p data-vi="Thanh toán QR → Cuckoo Cargo đặt hàng → ship về Việt Nam trong 7–10 ngày."
             data-en="Pay by QR → Cuckoo Cargo places the order → ships to Vietnam in 7–10 days."
             style="padding: 0 22px;">Thanh toán QR → Cuckoo
@@ -2505,7 +2501,8 @@
       <div class="why-grid">
 
         <div class="why-card featured">
-          <img src="assets/images/why1.png" alt="Giao hàng 7–10 ngày" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          <img src="assets/images/why1.png" alt="Giao hàng 7–10 ngày"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
           <h4 data-vi="Giao hàng 7–10 ngày" data-en="7–10 day delivery">Giao hàng 7–10 ngày</h4>
           <p data-vi="Lộ trình tối ưu từ kho Mỹ về 63 tỉnh thành Việt Nam. Không delay vô lý do."
             data-en="Optimised route from US warehouse to all 63 provinces. No unnecessary delays.">Lộ trình tối ưu từ
@@ -2513,7 +2510,8 @@
         </div>
 
         <div class="why-card">
-          <img src="assets/images/why3.png" alt="Bảo hiểm đầy đủ" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          <img src="assets/images/why3.png" alt="Bảo hiểm đầy đủ"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
           <h4 data-vi="Bảo hiểm đầy đủ" data-en="Full insurance">Bảo hiểm đầy đủ</h4>
           <p data-vi="4 gói bảo hiểm từ Free đến Max. Đền bù nhanh trong 7–14 ngày nếu có sự cố."
             data-en="4 insurance plans from Free to Max. Fast compensation within 7–14 days if needed.">4 gói bảo hiểm
@@ -2521,7 +2519,8 @@
         </div>
 
         <div class="why-card">
-          <img src="assets/images/why2.png" alt="50 Tiểu bang phủ sóng" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          <img src="assets/images/why2.png" alt="50 Tiểu bang phủ sóng"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
           <h4 data-vi="50 Tiểu bang phủ sóng" data-en="All 50 US states">50 Tiểu bang phủ sóng</h4>
           <p data-vi="Pickup tận nơi hoặc drop-off tại điểm Cuckoo Cargo gần nhất trên toàn nước Mỹ."
             data-en="Door pickup or drop-off at the nearest Cuckoo Cargo point across the US.">Pickup tận nơi hoặc
@@ -2529,7 +2528,8 @@
         </div>
 
         <div class="why-card">
-          <img src="assets/images/why4.png" alt="Hỗ trợ tiếng Việt" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          <img src="assets/images/why4.png" alt="Hỗ trợ tiếng Việt"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
           <h4 data-vi="Hỗ trợ tiếng Việt" data-en="Vietnamese support">Hỗ trợ tiếng Việt</h4>
           <p data-vi="Đội ngũ người Việt qua Facebook, Zalo, hotline — 7 ngày / tuần."
             data-en="Vietnamese-speaking team via Facebook, Zalo, hotline — 7 days a week.">Đội ngũ người Việt qua
@@ -2537,7 +2537,8 @@
         </div>
 
         <div class="why-card">
-          <img src="assets/images/why5.png" alt="Hỗ trợ đóng gói" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          <img src="assets/images/why5.png" alt="Hỗ trợ đóng gói"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
           <h4 data-vi="Hỗ trợ đóng gói" data-en="Packaging support">Hỗ trợ đóng gói</h4>
           <p data-vi="Thùng carton chắc chắn, đóng gói cẩn thận tại kho Mỹ. Không phát sinh thêm."
             data-en="Sturdy carton boxes, carefully packed at US warehouse. No extra charges.">Thùng carton chắc chắn,
@@ -2545,7 +2546,8 @@
         </div>
 
         <div class="why-card">
-          <img src="assets/images/why6.png" alt="Tracking minh bạch" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          <img src="assets/images/why6.png" alt="Tracking minh bạch"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
           <h4 data-vi="Tracking minh bạch" data-en="Transparent tracking">Tracking minh bạch</h4>
           <p data-vi="Tra cứu đơn hàng 24/7 trên website. Cập nhật từng bước từ khi nhận đến khi giao."
             data-en="Track orders 24/7 on the website. Step-by-step updates from receipt to delivery.">Tra cứu đơn hàng

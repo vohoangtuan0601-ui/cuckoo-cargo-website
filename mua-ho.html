@@ -2,9 +2,9 @@
 <html lang="vi">
 <head>
  <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="assets/images/favicon.png" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Mua Hộ Hàng Mỹ — Cuckoo Cargo</title>
+ <link rel="icon" type="image/png" href="assets/images/favicon.png" />
  <meta name="description" content="Dịch vụ mua hộ hàng Mỹ uy tín. Phí 5% giá trị hàng. Amazon, Walmart, Target... ship về Việt Nam trong 7–15 ngày." />
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,7 +13,7 @@
  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
  html{scroll-behavior:smooth;}
  :root{
- --orange:#fc4f08;--orange-deep:#d94007;--orange-light:#fd8a4d;
+ --orange:#F47B20;--orange-deep:#D4650E;--orange-light:#FFB366;
  --orange-bg:#FFF3E8;--black:#0F0F10;--white:#FFFFFF;
  --gray:#8E8E93;--gray-light:#F5F5F7;--gray-border:#E5E5EA;
  --text-primary:#0F0F10;--text-muted:#8E8E93;
@@ -40,8 +40,8 @@
 
  /* HERO */
  .hero{background:var(--black);padding:64px 24px 52px;text-align:center;position:relative;overflow:hidden;}
- .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(252,79,8,.18),transparent 70%);}
- .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(252,79,8,.15);border:1px solid rgba(252,79,8,.3);color:var(--orange);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:20px;position:relative;}
+ .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(244,123,32,.18),transparent 70%);}
+ .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(244,123,32,.15);border:1px solid rgba(244,123,32,.3);color:var(--orange);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:20px;position:relative;}
  .hero h1{font-family:'Faustina',serif;font-size:clamp(34px,6vw,68px);color:#fff;letter-spacing:3px;line-height:1.05;margin-bottom:14px;position:relative;}
  .hero h1 span{color:var(--orange);}
  .hero p{font-size:16px;color:#aaa;max-width:560px;margin:0 auto 32px;line-height:1.7;position:relative;}
@@ -82,13 +82,19 @@
  .section-title p{font-size:15px;color:var(--text-muted);margin-top:8px;}
 
  /* HOW IT WORKS */
- .steps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
- @media(max-width:900px){.steps-grid{grid-template-columns:repeat(3,1fr);}}
- @media(max-width:560px){.steps-grid{grid-template-columns:1fr 1fr;}}
- .step-card{text-align:center;padding:20px 12px;}
- .step-num{width:60px;height:60px;border-radius:50%;background:var(--orange-bg);border:2px solid var(--orange);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:20px;font-weight:900;color:var(--orange);}
- .step-card h4{font-size:14px;font-weight:700;margin-bottom:6px;}
- .step-card p{font-size:12px;color:var(--text-muted);line-height:1.6;}
+ .steps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;position:relative;padding-top:36px;margin-top:20px;}
+ .steps-grid::before{content:'';position:absolute;top:36px;left:8%;right:8%;height:3px;background:rgba(244,123,32,0.15);z-index:0;}
+ .steps-grid::after{content:'';position:absolute;top:36px;left:8%;right:8%;height:3px;background:linear-gradient(90deg,transparent,var(--orange),transparent);background-size:200% 100%;animation:flowLine 3s infinite linear;z-index:0;opacity:0.8;}
+ @keyframes flowLine{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+ @media(max-width:1024px){.steps-grid{grid-template-columns:repeat(3,1fr);}}
+ @media(max-width:640px){.steps-grid{grid-template-columns:1fr;gap:48px;padding-top:0;} .steps-grid::before,.steps-grid::after{display:none;}}
+ .step-card{text-align:center;padding:0 20px 28px;background:var(--white);border-radius:24px;box-shadow:0 12px 36px rgba(0,0,0,0.04);position:relative;z-index:1;transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);border:1px solid rgba(244,123,32,0.08);}
+ .step-card:hover{transform:translateY(-8px);box-shadow:0 24px 48px rgba(244,123,32,0.12);border-color:rgba(244,123,32,0.3);}
+ .step-num{width:72px;height:72px;border-radius:50%;background:#fff;border:3px solid var(--orange);color:var(--orange);display:flex;align-items:center;justify-content:center;margin:-36px auto 20px;font-size:26px;font-weight:900;box-shadow:0 8px 24px rgba(244,123,32,0.15);transition:all 0.3s ease;position:relative;}
+ @keyframes pulseOrange{0%{box-shadow:0 0 0 0 rgba(244,123,32,0.5);}70%{box-shadow:0 0 0 15px rgba(244,123,32,0);}100%{box-shadow:0 0 0 0 rgba(244,123,32,0);}}
+ .step-card:hover .step-num{background:linear-gradient(135deg,var(--orange),var(--orange-deep));color:#fff;transform:scale(1.1);border-color:#fff;animation:pulseOrange 1.5s infinite;}
+ .step-card h4{font-size:16px;font-weight:800;margin-bottom:8px;color:var(--black);}
+ .step-card p{font-size:14px;color:var(--text-muted);line-height:1.6;}
 
  /* STORES */
  .stores-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
@@ -111,7 +117,7 @@
  .fee-group input,.fee-group select{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 14px;color:#fff;font-size:15px;font-family:inherit;outline:none;transition:border .2s;}
  .fee-group input:focus,.fee-group select:focus{border-color:var(--orange);}
  .fee-group select option{background:#1a1a1a;}
- .fee-result{grid-column:1/-1;background:rgba(252,79,8,.12);border:1.5px solid var(--orange);border-radius:12px;padding:18px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:center;}
+ .fee-result{grid-column:1/-1;background:rgba(244,123,32,.12);border:1.5px solid var(--orange);border-radius:12px;padding:18px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:center;}
  .fee-result-block{display:flex;flex-direction:column;gap:4px;}
  .fee-result-lbl{font-size:12px;color:rgba(255,255,255,.6);font-weight:600;}
  .fee-result-val{font-size:26px;font-weight:900;color:var(--orange);}
@@ -180,7 +186,7 @@
  @media(max-width:560px){.item-row-2{grid-template-columns:1fr 1fr;}}
  .item-label{font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;}
  .btn-add-item{width:100%;padding:12px;border:2px dashed var(--orange);background:var(--orange-bg);color:var(--orange);border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;}
- .btn-add-item:hover{background:rgba(252,79,8,.12);}
+ .btn-add-item:hover{background:rgba(244,123,32,.12);}
 
  /* PAYMENT METHOD */
  .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
@@ -211,7 +217,7 @@
 
  /* SUBMIT */
  .btn-review-mh{width:100%;padding:16px;background:linear-gradient(135deg,var(--orange),var(--orange-deep));color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;font-family:inherit;margin-top:16px;}
- .btn-review-mh:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(252,79,8,.35);}
+ .btn-review-mh:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(244,123,32,.35);}
  .btn-review-mh:disabled{background:#ccc;cursor:not-allowed;transform:none;box-shadow:none;}
  .submit-note{font-size:12px;color:var(--text-muted);text-align:center;margin-top:10px;line-height:1.6;}
 
@@ -256,7 +262,7 @@
  .btn-edit{flex:1;padding:14px;background:transparent;border:2px solid var(--gray-border);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary);}
  .btn-edit:hover{border-color:var(--orange);color:var(--orange);}
  .btn-confirm-mh{flex:2;padding:14px;background:linear-gradient(135deg,var(--orange),var(--orange-deep));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;font-family:inherit;}
- .btn-confirm-mh:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(252,79,8,.35);}
+ .btn-confirm-mh:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(244,123,32,.35);}
  .btn-confirm-mh:disabled{background:#ccc;cursor:not-allowed;transform:none;box-shadow:none;}
 
  /* TOAST */
@@ -360,18 +366,18 @@
 </div>
 
 <!-- HOW IT WORKS -->
-<div class="section gray">
+<div class="section" style="background: linear-gradient(135deg, #fff2e8 0%, #ffffff 100%);">
  <div class="container">
  <div class="section-title">
  <h2 data-vi="Quy trình <span>mua hộ</span>" data-en="How <span>Shopping</span> Works">Quy trình <span>mua hộ</span></h2>
  <p data-vi="5 bước đơn giản — Cuckoo Cargo lo từ A đến Z" data-en="5 simple steps — Cuckoo Cargo handles everything A to Z">5 bước đơn giản — Cuckoo Cargo lo từ A đến Z</p>
  </div>
  <div class="steps-grid">
- <div class="step-card"><div class="step-num">1</div><h4 data-vi="Gửi link / yêu cầu" data-en="Send link / request">Gửi link / yêu cầu</h4><p data-vi="Điền form hoặc nhắn link sản phẩm qua Zalo / Messenger" data-en="Fill the form or send product link via Zalo / Messenger">Điền form hoặc nhắn link sản phẩm qua Zalo / Messenger</p></div>
- <div class="step-card"><div class="step-num">2</div><h4 data-vi="Xác nhận giá & phí" data-en="Confirm price & fee">Xác nhận giá & phí</h4><p data-vi="Cuckoo Cargo báo tổng giá (hàng + phí mua hộ 5% + ship) trong 24h" data-en="Cuckoo Cargo quotes total price (item + 5% fee + ship) within 24h">Cuckoo Cargo báo tổng giá (hàng + phí mua hộ 5% + ship) trong 24h</p></div>
- <div class="step-card"><div class="step-num">3</div><h4 data-vi="Thanh toán" data-en="Payment">Thanh toán</h4><p data-vi="Thanh toán qua USD (Zelle) hoặc VND (chuyển khoản) — nhận mã đơn ngay" data-en="Pay via USD (Zelle) or VND (bank transfer) — get order code immediately">Thanh toán qua USD (Zelle) hoặc VND (chuyển khoản) — nhận mã đơn ngay</p></div>
- <div class="step-card"><div class="step-num">4</div><h4 data-vi="Mua & kiểm hàng" data-en="Purchase & inspect">Mua & kiểm hàng</h4><p data-vi="Cuckoo Cargo mua hàng, chụp ảnh thực tế, đóng gói cẩn thận" data-en="Cuckoo Cargo purchases, takes real photos, packs carefully">Cuckoo Cargo mua hàng, chụp ảnh thực tế, đóng gói cẩn thận</p></div>
- <div class="step-card"><div class="step-num">5</div><h4 data-vi="Giao tận tay" data-en="Home delivery">Giao tận tay</h4><p data-vi="Ship về Việt Nam trong 7–15 ngày. Giao tận nhà toàn quốc." data-en="Ships to Vietnam in 7–15 days. Nationwide home delivery.">Ship về Việt Nam trong 7–15 ngày. Giao tận nhà toàn quốc.</p></div>
+ <div class="step-card"><div class="step-num">1</div><h4 data-vi="Gửi yêu cầu 📝" data-en="Send request 📝">Gửi yêu cầu 📝</h4><p data-vi="Điền form hoặc nhắn link sản phẩm qua Zalo / Messenger" data-en="Fill the form or send product link via Zalo / Messenger">Điền form hoặc nhắn link sản phẩm qua Zalo / Messenger</p></div>
+ <div class="step-card"><div class="step-num">2</div><h4 data-vi="Nhận báo giá 💬" data-en="Get quote 💬">Nhận báo giá 💬</h4><p data-vi="Cuckoo Cargo báo tổng giá (hàng + phí mua hộ 5% + ship) trong 24h" data-en="Cuckoo Cargo quotes total price (item + 5% fee + ship) within 24h">Cuckoo Cargo báo tổng giá (hàng + phí mua hộ 5% + ship) trong 24h</p></div>
+ <div class="step-card"><div class="step-num">3</div><h4 data-vi="Thanh toán 💳" data-en="Payment 💳">Thanh toán 💳</h4><p data-vi="Thanh toán qua USD (Zelle) hoặc VND (chuyển khoản) — nhận mã đơn ngay" data-en="Pay via USD (Zelle) or VND (bank transfer) — get order code immediately">Thanh toán qua USD (Zelle) hoặc VND (chuyển khoản) — nhận mã đơn ngay</p></div>
+ <div class="step-card"><div class="step-num">4</div><h4 data-vi="Mua & kiểm hàng 📦" data-en="Purchase & inspect 📦">Mua & kiểm hàng 📦</h4><p data-vi="Cuckoo Cargo mua hàng, chụp ảnh thực tế, đóng gói cẩn thận" data-en="Cuckoo Cargo purchases, takes real photos, packs carefully">Cuckoo Cargo mua hàng, chụp ảnh thực tế, đóng gói cẩn thận</p></div>
+ <div class="step-card"><div class="step-num">5</div><h4 data-vi="Giao tận tay 🚀" data-en="Home delivery 🚀">Giao tận tay 🚀</h4><p data-vi="Ship về Việt Nam trong 7–15 ngày. Giao tận nhà toàn quốc." data-en="Ships to Vietnam in 7–15 days. Nationwide home delivery.">Ship về Việt Nam trong 7–15 ngày. Giao tận nhà toàn quốc.</p></div>
  </div>
  </div>
 </div>
@@ -775,7 +781,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53
      if (cur && !cur.toUpperCase().startsWith('CAC')) return;
      const localCode = 'CAC' + digits.slice(-4);
      codeEl.value = localCode;
-     codeEl.style.borderColor = '#fc4f08';
+     codeEl.style.borderColor = '#F47B20';
      setTimeout(() => codeEl.style.borderColor = '', 2000);
      try {
        const res  = await fetch(`${SCRIPT_URL}?action=generateCode&phone=${encodeURIComponent(digits)}`,{redirect:'follow'});

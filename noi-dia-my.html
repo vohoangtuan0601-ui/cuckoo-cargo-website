@@ -13,7 +13,7 @@
  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
  html{scroll-behavior:smooth;}
  :root{
- --orange:#fc4f08; --orange-deep:#d94007; --orange-light:#fd8a4d;
+ --orange:#F47B20; --orange-deep:#D4650E; --orange-light:#FFB366;
  --orange-bg:#FFF3E8; --black:#0F0F10; --white:#FFFFFF;
  --gray:#8E8E93; --gray-light:#F0F2F5; --gray-border:#E5E5EA;
  --text-primary:#0F0F10; --text-muted:#8E8E93;
@@ -42,7 +42,7 @@
 
  /* HERO */
  .hero{background:var(--black);padding:56px 24px 44px;text-align:center;}
- .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(252,79,8,.15);border:1px solid rgba(252,79,8,.3);color:var(--orange);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:20px;}
+ .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(244,123,32,.15);border:1px solid rgba(244,123,32,.3);color:var(--orange);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:1px;margin-bottom:20px;}
  .hero h1{font-family:'Faustina',serif;font-size:clamp(34px,6vw,68px);color:#fff;letter-spacing:3px;line-height:1.05;margin-bottom:14px;}
  .hero h1 span{color:var(--orange);}
  .hero p{font-size:15px;color:#aaa;max-width:540px;margin:0 auto 28px;line-height:1.7;}
@@ -888,7 +888,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53
      if (cur && !cur.toUpperCase().startsWith('CAC')) return;
      const localCode = 'CAC' + digits.slice(-4);
      codeEl.value = localCode;
-     codeEl.style.borderColor = '#fc4f08';
+     codeEl.style.borderColor = '#F47B20';
      setTimeout(() => codeEl.style.borderColor = '', 2000);
      try {
        const res  = await fetch(`${SCRIPT_URL}?action=generateCode&phone=${encodeURIComponent(digits)}`,{redirect:'follow'});
