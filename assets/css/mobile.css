@@ -57,7 +57,7 @@ table { table-layout: auto; }
     padding: 0 !important;
   }
   .mobile-nav-toggle:hover,
-  .cc-mobile-toggle:hover { border-color: #F47B20 !important; color: #F47B20 !important; }
+  .cc-mobile-toggle:hover { border-color: #fc4f08 !important; color: #fc4f08 !important; }
 
   /* ── Nav links: slide-down drawer ── */
   .nav-links {

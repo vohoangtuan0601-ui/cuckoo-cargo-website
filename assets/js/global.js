@@ -355,7 +355,7 @@ function setupAutoCustomerCode(phoneId, codeId) {
 
       if (data.success && data.code) {
         codeEl.value = data.code;
-        codeEl.style.borderColor = 'var(--orange, #F47B20)';
+        codeEl.style.borderColor = 'var(--orange, #fc4f08)';
         setTimeout(() => { codeEl.style.borderColor = ''; }, 2000);
       }
     } catch(err) {
