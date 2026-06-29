@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Tra Cứu Đơn Hàng — Cuckoo Cargo</title>
- <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+  <link rel="icon" type="image/png" href="assets/images/favicon.png?v=2" />
  <meta name="description" content="Tra cứu trạng thái đơn hàng Cuckoo Cargo theo mã đơn. Cập nhật realtime từ kho đến tay bạn." />
  <link rel="stylesheet" href="assets/css/global.css" />
  <link rel="stylesheet" href="assets/css/pages.css" />
@@ -23,7 +23,7 @@
  content: '';
  position: absolute; inset: 0;
  background:
- radial-gradient(ellipse 60% 50% at 50% 0%, rgba(244,123,32,.18) 0%, transparent 70%),
+ radial-gradient(ellipse 60% 50% at 50% 0%, rgba(252, 79, 8,.18) 0%, transparent 70%),
  repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.03) 39px, rgba(255,255,255,.03) 40px),
  repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,.03) 39px, rgba(255,255,255,.03) 40px);
  pointer-events: none;
@@ -108,7 +108,7 @@
  padding: 8px 18px; border-radius: 20px;
  font-size: 13px; font-weight: 800; white-space: nowrap;
  }
- .tk-status-badge.transit { background: rgba(244,123,32,.15); color: var(--orange); border: 1.5px solid var(--orange); }
+ .tk-status-badge.transit { background: rgba(252, 79, 8,.15); color: var(--orange); border: 1.5px solid var(--orange); }
  .tk-status-badge.delivered { background: rgba(34,197,94,.12); color: #16A34A; border: 1.5px solid #4ADE80; }
  .tk-status-badge.pending { background: rgba(255,255,255,.08);color: rgba(255,255,255,.6); border: 1.5px solid rgba(255,255,255,.15); }
  .tk-status-badge.customs { background: rgba(234,179,8,.12); color: #B45309; border: 1.5px solid #FCD34D; }
@@ -139,7 +139,7 @@
  transition: all .3s;
  }
  .tk-prog-dot.done { background: var(--orange); color: #fff; }
- .tk-prog-dot.active { background: var(--orange); color: #fff; box-shadow: 0 0 0 4px rgba(244,123,32,.25); }
+ .tk-prog-dot.active { background: var(--orange); color: #fff; box-shadow: 0 0 0 4px rgba(252, 79, 8,.25); }
  .tk-prog-dot.pending { background: var(--white); border: 2px solid var(--gray-border); color: var(--gray); }
  .tk-prog-label { font-size: 11px; color: var(--text-muted); font-weight: 600; }
  .tk-prog-label.active { color: var(--orange); font-weight: 800; }
@@ -155,7 +155,7 @@
  .tl-left { display: flex; flex-direction: column; align-items: center; width: 36px; flex-shrink: 0; }
  .tl-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
  .tl-dot.done { background: var(--green); }
- .tl-dot.active { background: var(--orange); box-shadow: 0 0 0 3px rgba(244,123,32,.25); }
+ .tl-dot.active { background: var(--orange); box-shadow: 0 0 0 3px rgba(252, 79, 8,.25); }
  .tl-dot.pending { background: var(--gray-border); }
  .tl-line { flex: 1; width: 2px; background: var(--gray-border); margin: 4px 0 0; min-height: 24px; }
  .tl-item:last-child .tl-line { display: none; }
@@ -188,54 +188,40 @@
  .tk-not-found p { font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 360px; margin: 0 auto 24px; }
 
  /* FAQ section */
- .faq-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+ .faq-list { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
  .faq-item {
- background: var(--white); border-radius: 18px; border: 1.5px solid rgba(0,0,0,0.12);
- overflow: hidden; box-shadow: 0 12px 36px rgba(0,0,0,0.08); transition: all .35s cubic-bezier(0.4, 0, 0.2, 1);
+ border-radius: var(--radius-md); border: 1.5px solid var(--gray-border);
+ overflow: hidden;
  }
- .faq-item:hover { border-color: rgba(244,123,32,0.5); transform: translateY(-3px); box-shadow: 0 16px 40px rgba(244,123,32,0.15); }
- .faq-item.open { border-color: var(--orange); box-shadow: 0 20px 48px rgba(244,123,32,0.22); transform: scale(1.02); z-index: 10; position: relative; }
  .faq-q {
- padding: 22px 28px; font-size: 16.5px; font-weight: 800; color: var(--black);
+ padding: 16px 20px; font-size: 15px; font-weight: 700;
  cursor: pointer; display: flex; justify-content: space-between; align-items: center;
- user-select: none; transition: color .2s;
+ user-select: none; transition: background .2s;
  }
- .faq-q:hover { color: var(--orange); }
- .faq-item.open .faq-q { color: var(--orange); }
- .faq-arrow { 
- display: flex; align-items: center; justify-content: center;
- width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.04);
- font-size: 16px; color: var(--orange); transition: transform .3s, background .3s; flex-shrink: 0;
- }
- .faq-arrow::after { content: '▼'; font-size: 12px; }
- .faq-item.open .faq-arrow { transform: rotate(180deg); background: var(--orange); color: #fff; box-shadow: 0 4px 12px rgba(244,123,32,0.4); }
+ .faq-q:hover { background: var(--gray-light); }
+ .faq-arrow { font-size: 12px; color: var(--text-muted); transition: transform .2s; flex-shrink: 0; }
  .faq-a {
- display: none; padding: 0 28px 22px;
- font-size: 15px; color: #444; line-height: 1.8;
- border-top: 1px dashed rgba(244,123,32,0.2); margin-top: 4px; padding-top: 20px;
+ display: none; padding: 0 20px 16px;
+ font-size: 14px; color: var(--text-muted); line-height: 1.7;
  }
- .faq-item.open .faq-a { display: block; animation: fadeIn .3s ease; }
- @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+ .faq-item.open .faq-a { display: block; }
+ .faq-item.open .faq-arrow { transform: rotate(180deg); }
 
  /* Other services CTA */
  .other-services {
- display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 48px;
+ display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
  }
- @media (max-width: 800px) { .other-services { grid-template-columns: 1fr; } }
+ @media (max-width: 640px) { .other-services { grid-template-columns: 1fr; } }
  .os-card {
- background: var(--white); border-radius: 20px; border: 1px solid rgba(0,0,0,0.06);
- overflow: hidden; text-align: center;
- transition: transform .3s, border-color .3s, box-shadow .3s;
- text-decoration: none; color: inherit; display: flex; flex-direction: column;
+ border-radius: var(--radius-md); border: 1.5px solid var(--gray-border);
+ padding: 24px 20px; text-align: center;
+ transition: transform .2s, border-color .2s, box-shadow .2s;
+ text-decoration: none; color: inherit; display: block;
  }
- .os-card:hover { transform: translateY(-6px); border-color: rgba(244,123,32,0.4); box-shadow: 0 16px 40px rgba(244,123,32,0.12); }
- .os-card-img {
- width: 100%; height: 180px; position: relative; border-bottom: 1px solid rgba(0,0,0,0.05);
- }
- .os-card-img img { width: 100%; height: 100%; object-fit: cover; }
- .os-card-content { padding: 28px 24px; flex: 1; }
- .os-card h4 { font-size: 18px; font-weight: 800; margin-bottom: 12px; color: var(--black); }
- .os-card p { font-size: 14px; color: #666; line-height: 1.6; }
+ .os-card:hover { transform: translateY(-3px); border-color: var(--orange); box-shadow: var(--shadow-md); }
+ .os-card .icon { font-size: 36px; margin-bottom: 10px; }
+ .os-card h4 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+ .os-card p { font-size: 13px; color: var(--text-muted); }
  
  /* NAV */
  nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-border);padding:0 24px;}
@@ -386,25 +372,19 @@
  </div>
  <div class="other-services">
  <a href="my-ve-viet.html" class="os-card">
- <div class="os-card-img"><img src="assets/images/os_my_viet.png" alt="Gửi hàng Mỹ - Việt"></div>
- <div class="os-card-content">
+ <div class="icon"></div>
  <h4 data-vi="Gửi hàng Mỹ - Việt" data-en="US to Vietnam Shipping">Gửi hàng Mỹ - Việt</h4>
  <p data-vi="Tạo đơn gửi hàng quốc tế, wizard 7 bước đơn giản" data-en="International shipping, simple 7-step wizard">Tạo đơn gửi hàng quốc tế, wizard 7 bước đơn giản</p>
- </div>
  </a>
  <a href="noi-dia-my.html" class="os-card">
- <div class="os-card-img"><img src="assets/images/os_label.png" alt="Label nội địa Mỹ"></div>
- <div class="os-card-content">
+ <div class="icon"></div>
  <h4 data-vi="Label nội địa Mỹ" data-en="US Domestic Label">Label nội địa Mỹ</h4>
  <p data-vi="UPS · FedEx · USPS — giao khắp 50 tiểu bang" data-en="UPS · FedEx · USPS — delivery across all 50 states">UPS · FedEx · USPS — giao khắp 50 tiểu bang</p>
- </div>
  </a>
  <a href="mua-ho.html" class="os-card">
- <div class="os-card-img"><img src="assets/images/os_shopping.png" alt="Mua hộ hàng Mỹ"></div>
- <div class="os-card-content">
+ <div class="icon"></div>
  <h4 data-vi="Mua hộ hàng Mỹ" data-en="US Personal Shopping">Mua hộ hàng Mỹ</h4>
  <p data-vi="Amazon, Walmart, Target... giao về Việt Nam hoặc Mỹ" data-en="Amazon, Walmart, Target... shipped to Vietnam or the US">Amazon, Walmart, Target... giao về Việt Nam hoặc Mỹ</p>
- </div>
  </a>
  </div>
  </div>

@@ -408,7 +408,7 @@ function formatDate(date) {
 
 function formatHeader(sheet) {
   const headerRange = sheet.getRange(1, 1, 1, sheet.getLastColumn());
-  headerRange.setBackground("#F47B20");   // Màu cam Cuckoo Cargo
+  headerRange.setBackground("#fc4f08");   // Màu cam Cuckoo Cargo
   headerRange.setFontColor("#FFFFFF");
   headerRange.setFontWeight("bold");
   sheet.setFrozenRows(1);

@@ -1,0 +1,40 @@
+<img src="assets/images/anh1.png.png" alt="Mỹ - Việt Nam"
+                style="width: 100%; height: 220px; object-fit: contain; display: block; transition: transform 0.4s ease;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+<img src="assets/images/anh2.png" alt="Label Nội địa Mỹ"
+                style="width: 100%; height: 220px; object-fit: contain; display: block; transition: transform 0.4s ease;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+<img src="assets/images/anh3.png" alt="Mua hộ hàng Mỹ"
+                style="width: 100%; height: 220px; object-fit: contain; display: block; transition: transform 0.4s ease;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+<img src="assets/images/blog_guide.png" alt="Step 1" style="width: 100%; height: 100%; object-fit: cover;">
+<img src="assets/images/blog_compare.png" alt="Step 2"
+              style="width: 100%; height: 100%; object-fit: cover;">
+<img src="assets/images/blog_products.png" alt="Step 3"
+              style="width: 100%; height: 100%; object-fit: cover;">
+<img src="assets/images/label_step1.png" alt="Step 1" style="width: 100%; height: 100%; object-fit: cover;">
+<img src="assets/images/label_step2.png" alt="Step 2" style="width: 100%; height: 100%; object-fit: cover;">
+<img src="assets/images/label_step3.png" alt="Step 3" style="width: 100%; height: 100%; object-fit: cover;">
+<img src="assets/images/mh_step1.png" alt="Step 1" style="width: 100%; height: 100%; object-fit: cover;">
+<img src="assets/images/mh_step2.png" alt="Step 2" style="width: 100%; height: 100%; object-fit: cover;">
+<img src="assets/images/mh_step3.png" alt="Step 3" style="width: 100%; height: 100%; object-fit: cover;">
+<img src="assets/images/why1.png" alt="Giao hàng 7–10 ngày"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+<img src="assets/images/why3.png" alt="Bảo hiểm đầy đủ"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+<img src="assets/images/why2.png" alt="50 Tiểu bang phủ sóng"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+<img src="assets/images/why4.png" alt="Hỗ trợ tiếng Việt"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+<img src="assets/images/why5.png" alt="Hỗ trợ đóng gói"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+<img src="assets/images/why6.png" alt="Tracking minh bạch"
+            style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+<img src="assets/images/sua-ensure-my.png" alt="Sữa Ensure Original Mỹ" />
+<img src="assets/images/dau-gio-my.webp" alt="Dầu Gió Eagle Brand" />
+<img src="assets/images/blog1_new.png" style="width: 100%; height: 100%; object-fit: cover;"
+              alt="Hướng dẫn gửi hàng">
+<img src="assets/images/blog2_new.png" style="width: 100%; height: 100%; object-fit: cover;"
+              alt="So sánh hãng vận chuyển">
+<img src="assets/images/blog3_new.png" style="width: 100%; height: 100%; object-fit: cover;"
+              alt="Top 10 sản phẩm Mỹ">
