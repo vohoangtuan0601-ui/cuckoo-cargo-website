@@ -1,0 +1,16 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[user]
+	email = vohoangtuan0601@gmail.com
+	name = Tuan Vo
+[remote "origin"]
+	url = https://github.com/vohoangtuan0601-ui/cuckoo-cargo-website.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
