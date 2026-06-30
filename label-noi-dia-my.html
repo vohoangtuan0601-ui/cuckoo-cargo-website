@@ -319,9 +319,9 @@
    .svc-header-left h3{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
    .svc-header-left p{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
    .svc-header-badge{flex-shrink:0;white-space:nowrap;font-size:12px;padding:4px 12px;}
-   /* Pricing table: padding-right so FAB buttons don't overlap GIÁ BÁN column */
-   .pricing-section{padding-right:68px;}
-   .ptable th:last-child,.ptable td:last-child{padding-right:10px;}
+   /* Chỉ pad cell cuối thay vì pad cả section — không làm hẹp bảng */
+   .pricing-section{padding-right:16px;}
+   .ptable th:last-child,.ptable td:last-child{padding-right:56px;}
  }
 
  @media(max-width:640px){
@@ -370,8 +370,8 @@
    .form-card-body{padding:14px;}
    .pkg-table th,.pkg-table td{padding:8px 10px;}
 
-   /* Pricing section — keep 68px right clearance for FABs */
-   .pricing-section{padding:16px 68px 0 12px;}
+   .pricing-section{padding:16px 12px 0 12px;}
+   .ptable th:last-child,.ptable td:last-child{padding-right:56px;}
    .svc-header{padding:12px 14px;border-radius:10px 10px 0 0;gap:8px;}
 
    /* svc-header overflow fix — also in 900px block below */
