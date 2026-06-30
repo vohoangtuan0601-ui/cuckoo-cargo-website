@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cuckoo Cargo</title>
+  <script>
+    // GitHub Pages Clean URL Redirect
+    // Maps clean URLs → actual .html files (relative to repo subfolder)
+    var pathMap = {
+      '/gui-hang-my-ve-viet': 'gui-hang-my-ve-viet.html',
+      '/label-noi-dia-my':    'label-noi-dia-my.html',
+      '/mua-ho-hang-my':      'mua-ho-hang-my.html',
+      '/san-pham':            'san-pham.html',
+      '/blog':                'blog.html',
+      '/tracking':            'tracking.html',
+      '/lien-he':             'lien-he.html',
+      '/dieu-khoan':          'dieu-khoan.html',
+      '/trang-chu':           'index.html',
+      '/my-ve-viet':          'gui-hang-my-ve-viet.html',
+      '/noi-dia-my':          'label-noi-dia-my.html',
+      '/mua-ho':              'mua-ho-hang-my.html'
+    };
+
+    (function() {
+      var path = window.location.pathname;
+
+      // Detect GitHub Pages subfolder prefix (e.g. /cuckoo-cargo-website)
+      var segments = path.split('/').filter(Boolean);
+      var cleanPath = '/' + (segments.length > 1 ? '/' + segments.slice(1).join('/') : segments.join('/'));
+      // Try exact match first, then with leading slash
+      var key = '/' + segments.slice(1).join('/');
+      if (!key || key === '/') key = path;
+
+      // Try all possible keys
+      var target = pathMap[path] || pathMap[key] || pathMap['/' + segments[segments.length - 1]];
+
+      if (target) {
+        // Build base (e.g. /cuckoo-cargo-website/)
+        var base = '/' + segments.slice(0, segments.length - (key.split('/').filter(Boolean).length)).join('/');
+        if (base && !base.endsWith('/')) base += '/';
+        window.location.replace(base + target);
+      } else {
+        // Fallback to homepage
+        var homeParts = path.split('/');
+        // Go up to find the repo root
+        var repoRoot = window.location.origin;
+        if (homeParts.length > 1) {
+          repoRoot += '/' + homeParts[1] + '/';
+        }
+        window.location.replace(repoRoot);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <p style="font-family:sans-serif;text-align:center;padding:40px">Đang chuyển hướng...</p>
+</body>
+</html>
