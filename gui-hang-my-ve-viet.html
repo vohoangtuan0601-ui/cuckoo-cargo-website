@@ -728,8 +728,8 @@
  <tr><td>&lt; 10 lbs <small style="color:var(--text-muted)">(tính tròn 10 lbs)</small></td><td class="price-bold">$3,89</td></tr>
  <tr><td>10 – 50 lbs</td><td class="price-bold">$3,89</td></tr>
  <tr><td>50,1 – 90 lbs</td><td class="price-bold">$3,79</td></tr>
- <tr><td>90,1 – 150 lbs</td><td class="price-bold">$3,59</td></tr>
- <tr><td>&gt; 150 lbs</td><td class="price-bold">$3,49</td></tr>
+ <tr><td>90,1 – 150 lbs</td><td class="price-bold">$3,65</td></tr>
+ <tr><td>&gt; 150 lbs</td><td class="price-bold">$3,55</td></tr>
  <tr><td data-vi="Thời gian bay" data-en="Flight days">Thời gian bay</td><td><strong data-vi="Thứ 3 &amp; Thứ 6" data-en="Tue &amp; Fri">Thứ 3 &amp; Thứ 6</strong></td></tr>
  <tr><td data-vi="Giao tại TP. Hồ Chí Minh &amp; Hà Nội" data-en="Delivery in HCMC &amp; Hanoi">Giao tại TP. Hồ Chí Minh &amp; Hà Nội</td><td style="color:var(--green);font-weight:700" data-vi="Miễn phí" data-en="Free">Miễn phí</td></tr>
  <tr><td data-vi="Ra tỉnh khác" data-en="Other provinces">Ra tỉnh khác</td><td>+$0,99/lbs</td></tr>
@@ -809,10 +809,6 @@
  <p data-vi="Điền đầy đủ để Cuckoo Cargo liên hệ xác nhận và gửi thông tin vận đơn." data-en="Fill in your details so Cuckoo Cargo can confirm and send shipment info.">Điền đầy đủ để Cuckoo Cargo liên hệ xác nhận và gửi thông tin vận đơn.</p>
  </div>
  <div class="form-row col2">
- <div class="form-group">
- <label data-vi="Tên Facebook <span class='req'>*</span>" data-en="Facebook Name <span class='req'>*</span>">Tên Facebook <span class="req">*</span></label>
- <input type="text" id="s1-fb" placeholder="Nguyen Van A" required />
- </div>
  <div class="form-group">
  <label data-vi="Mã khách hàng <span class='hint'>(CAC + 4 số)</span>" data-en="Customer Code <span class='hint'>(CAC + 4 digits)</span>">Mã khách hàng <span class="hint">(CAC + 4 số)</span></label>
  <input type="text" id="s1-code" placeholder="CAC0001" maxlength="10" />
@@ -1441,7 +1437,7 @@
  // VALIDATION 
  function validateStep(n) {
  const required = {
- 1: ['s1-fb','s1-name','s1-phone','s1-email'],
+ 1: ['s1-name','s1-phone','s1-email'],
  2: ['s2-name','s2-phone','s2-province','s2-ward','s2-street'],
  3: [],
  4: [],
@@ -1642,8 +1638,8 @@
      { from:0, to:10, rate:3.89 },
      { from:10, to:50, rate:3.89 },
      { from:50, to:90, rate:3.79 },
-     { from:90, to:150, rate:3.59 },
-     { from:150, to:9999, rate:3.49 },
+     { from:90, to:150, rate:3.65 },
+     { from:150, to:9999, rate:3.55 },
    ];
  const INS_FEES = typeof CC_PRICING !== 'undefined'
    ? { Free: CC_PRICING.insurance.Free.price, Pro: CC_PRICING.insurance.Pro.price, ProMax: CC_PRICING.insurance.ProMax.price, Special: null }
@@ -1658,7 +1654,6 @@
  function buildSummary(){
  const isEN = window.currentLang === 'en';
  const L = {
-   fb: isEN ? 'Facebook Name' : 'Tên Facebook',
    code: isEN ? 'Customer Code' : 'Mã khách hàng',
    noCode: isEN ? '(Not assigned)' : '(Chưa có)',
    sender: isEN ? 'Sender' : 'Người gửi',
@@ -1676,7 +1671,6 @@
    noNote: isEN ? 'None' : 'Không có',
  };
  const rows = [
- [L.fb, v('s1-fb')],
  [L.code, v('s1-code') || L.noCode],
  [L.sender, v('s1-name') + ' — ' + v('s1-phone')],
  ['Email', v('s1-email')],
@@ -1750,7 +1744,6 @@
  const data = {
  formType: 'order',
  orderId: htsMa,
- facebookName: v('s1-fb'),
  customerCode: v('s1-code'),
  senderName: v('s1-name'),
  phoneUS: v('s1-phone'),
@@ -1932,7 +1925,7 @@
  function showMVVReview() {
  const isENr = window.currentLang === 'en';
  const RL = {
-   fb: isENr?'Facebook Name':'Tên Facebook', sender:isENr?'Sender':'Người gửi',
+   sender:isENr?'Sender':'Người gửi',
    receiver: isENr?'Receiver':'Người nhận', code:isENr?'Customer Code':'Mã khách hàng',
    addrVN: isENr?'VN Address':'Địa chỉ VN', items:isENr?'Items':'Hàng hóa',
    noItems: isENr?'(Not specified)':'(Không ghi cụ thể)', weight:isENr?'Weight':'Cân nặng',
@@ -1973,7 +1966,6 @@
  const payMeth = v('f-pay-method') || 'USD';
 
  document.getElementById('mvv-review-content').innerHTML = `
- <div class="mvv-rrow"><span class="rk">${RL.fb}</span><span class="rv">${v('s1-fb')}</span></div>
  <div class="mvv-rrow"><span class="rk">${RL.sender}</span><span class="rv">${v('s1-name')} · ${v('s1-phone')}</span></div>
  <div class="mvv-rrow"><span class="rk">Email</span><span class="rv">${v('s1-email')}</span></div>
  <div class="mvv-rrow"><span class="rk">${RL.code}</span><span class="rv">${v('s1-code')||'—'}</span></div>
