@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Admin — Cuckoo Cargo</title>
   <link rel="stylesheet" href="css/styles.css"/>
+  <style>
+    .section-tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+    .section-tab{padding:8px 18px;border-radius:8px;border:1.5px solid #e5e7eb;background:#f8fafc;color:#475569;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+    .section-tab.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+    .section-panel{display:none}.section-panel.active{display:block}
+    .carrier-tab-wrap{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+    .carrier-tab{padding:7px 16px;border-radius:8px;border:1.5px solid #e5e7eb;background:#f1f5f9;color:#475569;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+    .carrier-tab.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
+    .service-tab-wrap{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap}
+    .service-tab{padding:5px 12px;border-radius:6px;border:1.5px solid #e5e7eb;background:#f8fafc;color:#64748b;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
+    .service-tab.active{background:#f97316;color:#fff;border-color:#f97316}
+    .service-label{font-size:12px;color:#64748b;margin-bottom:8px;padding:4px 10px;background:#f1f5f9;border-radius:6px;display:inline-block}
+  </style>
 </head>
 <body>
 <nav class="navbar">
@@ -12,6 +25,9 @@
   <div class="navbar-nav">
     <a class="nav-link" href="dashboard.html">Dashboard</a>
     <a class="nav-link" href="quote-form.html">New Quote</a>
+    <a class="nav-link" href="reports.html">📊 Báo cáo</a>
+    <a class="nav-link" href="crm.html">👥 CRM</a>
+    <a class="nav-link" href="finance.html">💰 Tài chính</a>
     <a class="nav-link active" href="#">Admin</a>
     <button class="btn-logout" onclick="auth.signOut().then(()=>location.href='index.html')">Logout</button>
   </div>
@@ -20,155 +36,277 @@
   <h1 class="page-title">⚙️ Admin Settings</h1>
   <div id="alertBox"></div>
 
-  <!-- PRICING TIERS -->
-  <div class="card" style="margin-bottom:20px">
-    <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
-      <span>💲 Pricing Tiers</span>
-      <button class="btn btn-primary btn-sm" onclick="showAddTier()">+ Add Tier</button>
+  <!-- SECTION TABS -->
+  <div class="section-tabs">
+    <button class="section-tab active" onclick="switchSection('pricing')">💲 Bảng giá</button>
+    <button class="section-tab" onclick="switchSection('carriers')">🚚 Carriers</button>
+    <button class="section-tab" onclick="switchSection('customers')">👥 Khách hàng</button>
+  </div>
+
+  <!-- ══ SECTION: PRICING ══ -->
+  <div class="section-panel active" id="section-pricing">
+
+    <!-- Sub-tabs: Quốc tế / Nội địa / Mua hộ -->
+    <div class="carrier-tab-wrap" style="margin-bottom:14px">
+      <button class="carrier-tab active" data-svc="intl"      onclick="switchPricingService('intl')">🌏 USA→Vietnam</button>
+      <button class="carrier-tab"        data-svc="domestic"  onclick="switchPricingService('domestic')">🇺🇸 Domestic USA</button>
+      <button class="carrier-tab"        data-svc="shopping"  onclick="switchPricingService('shopping')">🛍️ Mua hộ</button>
     </div>
-    <div class="card-body" style="padding:0">
+
+    <!-- INTL PANEL -->
+    <div id="pricing-intl">
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
+          <span>🌏 USA → Vietnam — Pricing Tiers</span>
+          <button class="btn btn-primary btn-sm" onclick="showAddTierIntl()">+ Add Tier</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table class="data-tbl">
+              <thead><tr><th>Min (lbs)</th><th>Max (lbs)</th><th>Giá ($)</th><th>Loại</th><th>Actions</th></tr></thead>
+              <tbody id="tiersBody-intl"><tr><td colspan="5" style="text-align:center;padding:20px;color:#6b7280">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOMESTIC PANEL -->
+    <div id="pricing-domestic" style="display:none">
+      <!-- Carrier tabs -->
+      <div class="carrier-tab-wrap">
+        <button class="carrier-tab active" data-carrier="FedEx" onclick="selectCarrier('FedEx')">📦 FedEx</button>
+        <button class="carrier-tab"        data-carrier="UPS"   onclick="selectCarrier('UPS')">🟤 UPS</button>
+        <button class="carrier-tab"        data-carrier="USPS"  onclick="selectCarrier('USPS')">🔵 USPS</button>
+      </div>
+      <!-- Service sub-tabs -->
+      <div class="service-tab-wrap" id="serviceTabs"></div>
+      <div id="currentServiceLabel" class="service-label"></div>
+
+      <div class="card" style="margin-bottom:16px;margin-top:10px">
+        <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
+          <span id="domesticTableTitle">📦 FedEx — Pricing Tiers</span>
+          <button class="btn btn-primary btn-sm" onclick="showAddTierDomestic()">+ Add Tier</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table class="data-tbl">
+              <thead><tr><th>Min (lbs)</th><th>Max (lbs)</th><th>Giá ($)</th><th>Loại</th><th>Service</th><th>Actions</th></tr></thead>
+              <tbody id="tiersBody-domestic"><tr><td colspan="6" style="text-align:center;padding:20px;color:#6b7280">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHOPPING PANEL -->
+    <div id="pricing-shopping" style="display:none">
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
+          <span>🛍️ Mua Hộ — Pricing Tiers</span>
+          <button class="btn btn-primary btn-sm" onclick="showAddTierShopping()">+ Add Tier</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table class="data-tbl">
+              <thead><tr><th>Min (lbs)</th><th>Max (lbs)</th><th>Giá ($)</th><th>Loại</th><th>Actions</th></tr></thead>
+              <tbody id="tiersBody-shopping"><tr><td colspan="5" style="text-align:center;padding:20px;color:#6b7280">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD / EDIT TIER FORM (shared) -->
+    <div class="card" id="tierForm" style="margin-bottom:20px;display:none">
+      <div class="card-header" id="tierFormTitle">Add New Tier</div>
+      <div class="card-body">
+        <div style="font-size:12px;color:#6b7280;margin-bottom:12px;padding:6px 10px;background:#f8fafc;border-radius:6px" id="tierFormMeta"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+          <input type="hidden" id="tf-service-hidden"/>
+          <input type="hidden" id="tf-carrier-hidden"/>
+          <input type="hidden" id="tf-carrier-service-hidden"/>
+          <div class="form-group" style="margin:0">
+            <label>Min Weight (lbs)</label>
+            <input type="number" id="tf-min" placeholder="0" step="0.1" min="0"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label>Max Weight (lbs)</label>
+            <input type="number" id="tf-max" placeholder="999" step="0.1"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label>Price ($)</label>
+            <input type="number" id="tf-price" placeholder="5.00" step="0.01" min="0"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label>Pricing Type</label>
+            <select id="tf-type">
+              <option value="perLbs">Per Pound ($/lb)</option>
+              <option value="flat">Flat Rate ($)</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:10px">
+          <button class="btn btn-primary" onclick="saveTier()">💾 Save Tier</button>
+          <button class="btn btn-outline" onclick="cancelTier()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /section-pricing -->
+
+  <!-- ══ SECTION: CARRIERS ══ -->
+  <div class="section-panel" id="section-carriers">
+    <div class="card">
+      <div class="card-header">🚚 Carriers</div>
+      <div class="card-body">
+        <div class="form-group">
+          <label>Carrier List (one per line)</label>
+          <textarea id="carrierList" rows="5" placeholder="FedEx&#10;UPS&#10;USPS&#10;DHL"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="saveCarriers()">💾 Save Carriers</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION: CUSTOMERS ══ -->
+  <div class="section-panel" id="section-customers">
+    <div class="card">
+      <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
+        <span>👥 Khách hàng</span>
+        <button class="btn btn-primary btn-sm" onclick="showAddCustomer()">+ Add Customer</button>
+      </div>
+      <div class="card-body" id="customerFormWrap" style="display:none;border-bottom:1px solid #f1f5f9">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+          <div class="form-group" style="margin:0"><label>Code</label><input type="text" id="cust-code" placeholder="CAC001"/></div>
+          <div class="form-group" style="margin:0"><label>Tên</label><input type="text" id="cust-name" placeholder="Họ và tên"/></div>
+          <div class="form-group" style="margin:0"><label>Phone</label><input type="text" id="cust-phone" placeholder="+1..."/></div>
+          <div class="form-group" style="margin:0;grid-column:span 2"><label>Địa chỉ</label><input type="text" id="cust-addr" placeholder="Address"/></div>
+          <div class="form-group" style="margin:0"><label>Email</label><input type="email" id="cust-email" placeholder="email"/></div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:10px">
+          <button class="btn btn-primary btn-sm" onclick="saveCustomer()">Save</button>
+          <button class="btn btn-outline btn-sm" onclick="document.getElementById('customerFormWrap').style.display='none'">Cancel</button>
+        </div>
+      </div>
       <div class="table-wrap">
         <table class="data-tbl">
-          <thead>
-            <tr>
-              <th>Min Weight (lbs)</th>
-              <th>Max Weight (lbs)</th>
-              <th>Price ($/lb or flat)</th>
-              <th>Pricing Type</th>
-              <th>Service Type</th>
-              <th>Carrier</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="tiersBody">
-            <tr><td colspan="7" style="text-align:center;padding:20px;color:#6b7280">Loading...</td></tr>
-          </tbody>
+          <thead><tr><th>Code</th><th>Tên</th><th>Phone</th><th>Email</th><th>Địa chỉ</th><th>Actions</th></tr></thead>
+          <tbody id="custBody"><tr><td colspan="6" style="text-align:center;padding:20px;color:#6b7280">Loading...</td></tr></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- ADD / EDIT TIER FORM -->
-  <div class="card" id="tierForm" style="margin-bottom:20px;display:none">
-    <div class="card-header" id="tierFormTitle">Add New Tier</div>
-    <div class="card-body">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
-        <div class="form-group" style="margin:0">
-          <label>Min Weight (lbs)</label>
-          <input type="number" id="tf-min" placeholder="0" step="0.1" min="0"/>
-        </div>
-        <div class="form-group" style="margin:0">
-          <label>Max Weight (lbs)</label>
-          <input type="number" id="tf-max" placeholder="999" step="0.1"/>
-        </div>
-        <div class="form-group" style="margin:0">
-          <label>Price ($)</label>
-          <input type="number" id="tf-price" placeholder="5.00" step="0.01" min="0"/>
-        </div>
-        <div class="form-group" style="margin:0">
-          <label>Pricing Type</label>
-          <select id="tf-type">
-            <option value="perLbs">Per Pound ($/lb)</option>
-            <option value="flat">Flat Rate ($)</option>
-          </select>
-        </div>
-        <div class="form-group" style="margin:0">
-          <label>Service Type</label>
-          <select id="tf-service">
-            <option value="">All</option>
-            <option value="intl">USA→Vietnam</option>
-            <option value="domestic">Domestic USA</option>
-            <option value="shopping">Shopping Proxy</option>
-          </select>
-        </div>
-        <div class="form-group" style="margin:0">
-          <label>Carrier (optional)</label>
-          <input type="text" id="tf-carrier" placeholder="FedEx, UPS, etc."/>
-        </div>
-      </div>
-      <div style="margin-top:14px;display:flex;gap:10px">
-        <button class="btn btn-primary" onclick="saveTier()">💾 Save Tier</button>
-        <button class="btn btn-outline" onclick="cancelTier()">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CARRIERS -->
-  <div class="card" style="margin-bottom:20px">
-    <div class="card-header">🚚 Carriers</div>
-    <div class="card-body">
-      <div class="form-group">
-        <label>Carrier List (one per line)</label>
-        <textarea id="carrierList" rows="5" placeholder="FedEx&#10;UPS&#10;USPS&#10;DHL"></textarea>
-      </div>
-      <button class="btn btn-primary" onclick="saveCarriers()">💾 Save Carriers</button>
-    </div>
-  </div>
-
-  <!-- CUSTOMERS -->
-  <div class="card">
-    <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
-      <span>👥 Customers</span>
-      <button class="btn btn-primary btn-sm" onclick="showAddCustomer()">+ Add Customer</button>
-    </div>
-    <div class="card-body" id="customerFormWrap" style="display:none;border-bottom:1px solid #f1f5f9;margin-bottom:0">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
-        <div class="form-group" style="margin:0"><label>Code</label><input type="text" id="cust-code" placeholder="CAC001"/></div>
-        <div class="form-group" style="margin:0"><label>Name</label><input type="text" id="cust-name" placeholder="Full name"/></div>
-        <div class="form-group" style="margin:0"><label>Phone</label><input type="text" id="cust-phone" placeholder="+1..."/></div>
-        <div class="form-group" style="margin:0;grid-column:span 2"><label>Address</label><input type="text" id="cust-addr" placeholder="Address"/></div>
-        <div class="form-group" style="margin:0"><label>Email</label><input type="email" id="cust-email" placeholder="email"/></div>
-      </div>
-      <div style="margin-top:12px;display:flex;gap:10px">
-        <button class="btn btn-primary btn-sm" onclick="saveCustomer()">Save</button>
-        <button class="btn btn-outline btn-sm" onclick="document.getElementById('customerFormWrap').style.display='none'">Cancel</button>
-      </div>
-    </div>
-    <div class="table-wrap">
-      <table class="data-tbl">
-        <thead><tr><th>Code</th><th>Name</th><th>Phone</th><th>Email</th><th>Address</th><th>Actions</th></tr></thead>
-        <tbody id="custBody"><tr><td colspan="6" style="text-align:center;padding:20px;color:#6b7280">Loading...</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-
-</div>
+</div><!-- /container -->
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="js/firebase-config.js"></script>
 <script>
+// ── AUTH ──
 auth.onAuthStateChanged(async user => {
   if (!user) { location.href = 'index.html'; return; }
-  loadTiers();
+  loadAllTiers();
   loadCarriers();
   loadCustomers();
 });
 
-// ── PRICING TIERS ──
+// ── SECTION TABS ──
+function switchSection(name) {
+  document.querySelectorAll('.section-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.section-tab[onclick*="${name}"]`).classList.add('active');
+  document.getElementById('section-' + name).classList.add('active');
+}
+
+// ── PRICING SERVICE TABS ──
+let activePricingService = 'intl';
+
+function switchPricingService(svc) {
+  activePricingService = svc;
+  document.querySelectorAll('[data-svc]').forEach(b => {
+    b.classList.toggle('active', b.dataset.svc === svc);
+  });
+  ['intl','domestic','shopping'].forEach(s => {
+    document.getElementById('pricing-' + s).style.display = s === svc ? '' : 'none';
+  });
+  cancelTier();
+  if (svc === 'domestic') { renderDomesticTable(); }
+  if (svc === 'intl')     { renderTiers('intl'); }
+  if (svc === 'shopping') { renderTiers('shopping'); }
+}
+
+// ── CARRIER / SERVICE STATE ──
+const CARRIER_SERVICES = {
+  FedEx: ['Ground','Express Saver','2Day','2Day A.M.','Overnight','Priority Overnight'],
+  UPS:   ['Ground','3 Day Select','2nd Day Air','2nd Day Air A.M.','Next Day Air Saver','Next Day Air'],
+  USPS:  ['Priority Mail','Priority Mail Express','First Class Package','Parcel Select Ground'],
+};
+let activeCarrier = 'FedEx';
+let activeService = CARRIER_SERVICES['FedEx'][0];
+
+function selectCarrier(carrier) {
+  activeCarrier = carrier;
+  activeService = CARRIER_SERVICES[carrier][0];
+  document.querySelectorAll('[data-carrier]').forEach(b => {
+    b.classList.toggle('active', b.dataset.carrier === carrier);
+  });
+  renderServiceTabs();
+  renderDomesticTable();
+  cancelTier();
+}
+
+function selectService(svc) {
+  activeService = svc;
+  document.querySelectorAll('.service-tab').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === svc);
+  });
+  document.getElementById('currentServiceLabel').textContent = `🇺🇸 ${activeCarrier} — ${activeService}`;
+  renderDomesticTable();
+  cancelTier();
+}
+
+function renderServiceTabs() {
+  const services = CARRIER_SERVICES[activeCarrier] || [];
+  document.getElementById('serviceTabs').innerHTML = services.map(s =>
+    `<button class="service-tab${s === activeService ? ' active' : ''}" onclick="selectService('${s}')">${s}</button>`
+  ).join('');
+  document.getElementById('currentServiceLabel').textContent = `🇺🇸 ${activeCarrier} — ${activeService}`;
+  document.getElementById('domesticTableTitle').textContent = `📦 ${activeCarrier} — Pricing Tiers`;
+}
+
+// ── TIERS DATA ──
 let tiers = [];
 let editTierId = null;
 
-async function loadTiers() {
-  const snap = await db.collection('pricingTiers').orderBy('minWeight').get();
-  tiers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderTiers();
+async function loadAllTiers() {
+  try {
+    const snap = await db.collection('pricingTiers').orderBy('minWeight').get();
+    tiers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch(e) {
+    const snap = await db.collection('pricingTiers').get();
+    tiers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+  renderTiers('intl');
+  renderServiceTabs();
 }
 
-function renderTiers() {
-  if (!tiers.length) {
-    document.getElementById('tiersBody').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#6b7280">No pricing tiers. Add one above.</td></tr>';
+function renderTiers(svcType) {
+  const filtered = tiers.filter(t => (t.serviceType || '') === svcType);
+  const tbody = document.getElementById('tiersBody-' + svcType);
+  if (!tbody) return;
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:#6b7280">Chưa có tier. Thêm mới ở trên.</td></tr>`;
     return;
   }
-  document.getElementById('tiersBody').innerHTML = tiers.map(t => `
+  tbody.innerHTML = filtered.map(t => `
     <tr>
       <td>${t.minWeight}</td>
       <td>${t.maxWeight || '∞'}</td>
       <td style="font-weight:700;color:#f97316">$${t.price}</td>
       <td><span class="badge ${t.pricingType==='flat'?'badge-blue':'badge-green'}">${t.pricingType==='flat'?'Flat Rate':'Per Pound'}</span></td>
-      <td>${t.serviceType || 'All'}</td>
-      <td>${t.carrier || '–'}</td>
       <td>
         <button class="btn btn-outline btn-sm" onclick="editTier('${t.id}')">✏️</button>
         <button class="btn btn-danger btn-sm" onclick="deleteTier('${t.id}')">🗑️</button>
@@ -177,32 +315,94 @@ function renderTiers() {
   `).join('');
 }
 
-function showAddTier() {
+function renderDomesticTable() {
+  const filtered = tiers.filter(t =>
+    t.serviceType === 'domestic' &&
+    t.carrier === activeCarrier &&
+    t.carrierService === activeService
+  );
+  const tbody = document.getElementById('tiersBody-domestic');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:#6b7280">Chưa có tier cho ${activeCarrier} — ${activeService}.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(t => `
+    <tr>
+      <td>${t.minWeight}</td>
+      <td>${t.maxWeight || '∞'}</td>
+      <td style="font-weight:700;color:#f97316">$${t.price}</td>
+      <td><span class="badge ${t.pricingType==='flat'?'badge-blue':'badge-green'}">${t.pricingType==='flat'?'Flat Rate':'Per Pound'}</span></td>
+      <td style="font-size:12px;color:#64748b">${t.carrierService || '–'}</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="editTier('${t.id}')">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteTier('${t.id}')">🗑️</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ── SHOW ADD FORMS ──
+function showAddTierIntl() {
   editTierId = null;
-  document.getElementById('tf-min').value    = '';
-  document.getElementById('tf-max').value    = '';
-  document.getElementById('tf-price').value  = '';
-  document.getElementById('tf-type').value   = 'perLbs';
-  document.getElementById('tf-service').value= '';
-  document.getElementById('tf-carrier').value= '';
-  document.getElementById('tierFormTitle').textContent = 'Add New Tier';
+  clearTierForm();
+  document.getElementById('tf-service-hidden').value = 'intl';
+  document.getElementById('tf-carrier-hidden').value = '';
+  document.getElementById('tf-carrier-service-hidden').value = '';
+  document.getElementById('tierFormTitle').textContent = 'Add Tier — USA→Vietnam';
+  document.getElementById('tierFormMeta').textContent = '🌏 Dịch vụ: USA → Vietnam';
+  showTierForm();
+}
+
+function showAddTierDomestic() {
+  editTierId = null;
+  clearTierForm();
+  document.getElementById('tf-service-hidden').value = 'domestic';
+  document.getElementById('tf-carrier-hidden').value = activeCarrier;
+  document.getElementById('tf-carrier-service-hidden').value = activeService;
+  document.getElementById('tierFormTitle').textContent = `Add Tier — ${activeCarrier} ${activeService}`;
+  document.getElementById('tierFormMeta').textContent = `🇺🇸 Carrier: ${activeCarrier} — Service: ${activeService}`;
+  showTierForm();
+}
+
+function showAddTierShopping() {
+  editTierId = null;
+  clearTierForm();
+  document.getElementById('tf-service-hidden').value = 'shopping';
+  document.getElementById('tf-carrier-hidden').value = '';
+  document.getElementById('tf-carrier-service-hidden').value = '';
+  document.getElementById('tierFormTitle').textContent = 'Add Tier — Mua Hộ';
+  document.getElementById('tierFormMeta').textContent = '🛍️ Dịch vụ: Mua hộ';
+  showTierForm();
+}
+
+function clearTierForm() {
+  ['tf-min','tf-max','tf-price'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('tf-type').value = 'perLbs';
+}
+
+function showTierForm() {
   document.getElementById('tierForm').style.display = '';
-  document.getElementById('tierForm').scrollIntoView({behavior:'smooth'});
+  document.getElementById('tierForm').scrollIntoView({ behavior: 'smooth' });
 }
 
 function editTier(id) {
   const t = tiers.find(x => x.id === id);
   if (!t) return;
   editTierId = id;
-  document.getElementById('tf-min').value    = t.minWeight || '';
-  document.getElementById('tf-max').value    = t.maxWeight || '';
-  document.getElementById('tf-price').value  = t.price || '';
-  document.getElementById('tf-type').value   = t.pricingType || 'perLbs';
-  document.getElementById('tf-service').value= t.serviceType || '';
-  document.getElementById('tf-carrier').value= t.carrier || '';
+  document.getElementById('tf-min').value   = t.minWeight || '';
+  document.getElementById('tf-max').value   = t.maxWeight || '';
+  document.getElementById('tf-price').value = t.price || '';
+  document.getElementById('tf-type').value  = t.pricingType || 'perLbs';
+  document.getElementById('tf-service-hidden').value        = t.serviceType || '';
+  document.getElementById('tf-carrier-hidden').value        = t.carrier || '';
+  document.getElementById('tf-carrier-service-hidden').value= t.carrierService || '';
+  const svcLabel = t.serviceType === 'domestic'
+    ? `🇺🇸 ${t.carrier || ''} — ${t.carrierService || ''}`
+    : t.serviceType === 'intl' ? '🌏 USA→Vietnam'
+    : '🛍️ Mua hộ';
   document.getElementById('tierFormTitle').textContent = 'Edit Tier';
-  document.getElementById('tierForm').style.display = '';
-  document.getElementById('tierForm').scrollIntoView({behavior:'smooth'});
+  document.getElementById('tierFormMeta').textContent = svcLabel;
+  showTierForm();
 }
 
 function cancelTier() {
@@ -212,12 +412,13 @@ function cancelTier() {
 
 async function saveTier() {
   const data = {
-    minWeight:   parseFloat(document.getElementById('tf-min').value)   || 0,
-    maxWeight:   parseFloat(document.getElementById('tf-max').value)   || null,
-    price:       parseFloat(document.getElementById('tf-price').value) || 0,
-    pricingType: document.getElementById('tf-type').value,
-    serviceType: document.getElementById('tf-service').value || null,
-    carrier:     document.getElementById('tf-carrier').value.trim() || null,
+    minWeight:     parseFloat(document.getElementById('tf-min').value)   || 0,
+    maxWeight:     parseFloat(document.getElementById('tf-max').value)   || null,
+    price:         parseFloat(document.getElementById('tf-price').value) || 0,
+    pricingType:   document.getElementById('tf-type').value,
+    serviceType:   document.getElementById('tf-service-hidden').value || null,
+    carrier:       document.getElementById('tf-carrier-hidden').value.trim() || null,
+    carrierService:document.getElementById('tf-carrier-service-hidden').value.trim() || null,
   };
   try {
     if (editTierId) {
@@ -228,25 +429,28 @@ async function saveTier() {
       showAlert('Tier added!', 'success');
     }
     cancelTier();
-    loadTiers();
+    await loadAllTiers();
+    // Re-render correct table
+    const svc = data.serviceType;
+    if (svc === 'domestic') renderDomesticTable();
+    else if (svc === 'intl' || svc === 'shopping') renderTiers(svc);
   } catch(e) { showAlert('Error: ' + e.message, 'danger'); }
 }
 
 async function deleteTier(id) {
-  if (!confirm('Delete this tier?')) return;
+  if (!confirm('Xóa tier này?')) return;
   await db.collection('pricingTiers').doc(id).delete();
-  loadTiers();
+  await loadAllTiers();
+  if (activePricingService === 'domestic') renderDomesticTable();
+  else renderTiers(activePricingService);
 }
 
 // ── CARRIERS ──
 async function loadCarriers() {
   try {
     const doc = await db.collection('settings').doc('carriers').get();
-    if (doc.exists && doc.data().list) {
-      document.getElementById('carrierList').value = doc.data().list.join('\n');
-    } else {
-      document.getElementById('carrierList').value = 'FedEx\nUPS\nUSPS\nDHL';
-    }
+    document.getElementById('carrierList').value =
+      (doc.exists && doc.data().list) ? doc.data().list.join('\n') : 'FedEx\nUPS\nUSPS\nDHL';
   } catch(e) {}
 }
 
@@ -262,14 +466,19 @@ let customers = [];
 let editCustId = null;
 
 async function loadCustomers() {
-  const snap = await db.collection('customers').orderBy('code').get();
-  customers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  try {
+    const snap = await db.collection('customers').orderBy('code').get();
+    customers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch(e) {
+    const snap = await db.collection('customers').get();
+    customers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
   renderCustomers();
 }
 
 function renderCustomers() {
   if (!customers.length) {
-    document.getElementById('custBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#6b7280">No customers yet.</td></tr>';
+    document.getElementById('custBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#6b7280">Chưa có khách hàng.</td></tr>';
     return;
   }
   document.getElementById('custBody').innerHTML = customers.map(c => `
@@ -279,23 +488,22 @@ function renderCustomers() {
       <td>${c.phone || '–'}</td>
       <td>${c.email || '–'}</td>
       <td style="font-size:12px">${c.address || '–'}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="deleteCustomer('${c.id}')">🗑️</button></td>
+      <td>
+        <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${c.id}')">🗑️</button>
+      </td>
     </tr>
   `).join('');
 }
 
 function showAddCustomer() {
-  document.getElementById('cust-code').value  = '';
-  document.getElementById('cust-name').value  = '';
-  document.getElementById('cust-phone').value = '';
-  document.getElementById('cust-addr').value  = '';
-  document.getElementById('cust-email').value = '';
+  ['cust-code','cust-name','cust-phone','cust-addr','cust-email']
+    .forEach(id => document.getElementById(id).value = '');
   document.getElementById('customerFormWrap').style.display = '';
 }
 
 async function saveCustomer() {
   const code = document.getElementById('cust-code').value.trim().toUpperCase();
-  if (!code) { showAlert('Customer code required.', 'danger'); return; }
+  if (!code) { showAlert('Cần nhập mã khách hàng.', 'danger'); return; }
   const data = {
     code,
     name:    document.getElementById('cust-name').value.trim(),
@@ -305,14 +513,14 @@ async function saveCustomer() {
   };
   try {
     await db.collection('customers').doc(code).set(data);
-    showAlert('Customer saved!', 'success');
+    showAlert('Đã lưu khách hàng!', 'success');
     document.getElementById('customerFormWrap').style.display = 'none';
     loadCustomers();
   } catch(e) { showAlert('Error: ' + e.message, 'danger'); }
 }
 
 async function deleteCustomer(id) {
-  if (!confirm('Delete customer?')) return;
+  if (!confirm('Xóa khách hàng này?')) return;
   await db.collection('customers').doc(id).delete();
   loadCustomers();
 }
