@@ -255,7 +255,15 @@ h1, h2, h3 { line-height: 1.15; }
   .cc-nav-cta { display: none; }
   /* Ẩn social trên desktop nav khi mobile */
   .cc-nav-socials { display: none; }
-  .cc-search-box { width: calc(100vw - 32px); right: -8px; }
+
+  /* Search box: fixed dưới nav để không bị lệch/clip trên mobile */
+  .cc-search-wrap.open .cc-search-box {
+    position: fixed;
+    top: 64px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+  }
 }
 
 
