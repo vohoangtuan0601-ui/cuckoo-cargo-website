@@ -36,7 +36,15 @@
     "headers": [
       {
         "source": "**/*.html",
-        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+        "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }]
+      },
+      {
+        "source": "assets/js/**",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }]
+      },
+      {
+        "source": "assets/css/**",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }]
       }
     ]
   }
