@@ -195,7 +195,7 @@ function injectFooter() {
  footer.innerHTML = `
  <div class="cc-footer-inner">
  <div class="cc-footer-brand">
- <div class="logo"><img src="assets/images/logo.png" alt="Cuckoo Cargo" style="height:32px;width:auto;display:block;" /></div>
+ <div class="logo"><img src="assets/images/favicon-main.png" alt="Cuckoo Cargo" style="height:32px;width:auto;display:block;" /></div>
  <p data-vi="Dịch vụ vận chuyển Mỹ – Việt uy tín.<br>Label nội địa 50 tiểu bang. Mua hộ hàng Mỹ."
  data-en="Trusted US–Vietnam shipping.<br>Domestic labels all 50 states. Personal shopping.">
  Dịch vụ vận chuyển Mỹ – Việt uy tín.<br>Label nội địa 50 tiểu bang. Mua hộ hàng Mỹ.
