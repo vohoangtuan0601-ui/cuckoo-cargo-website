@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Báo cáo doanh thu — Cuckoo Cargo</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+    .kpi{background:#fff;border-radius:12px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-left:4px solid #f97316}
+    .kpi.blue{border-color:#3b82f6}.kpi.green{border-color:#16a34a}.kpi.purple{border-color:#7c3aed}.kpi.red{border-color:#dc2626}
+    .kpi .label{font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+    .kpi .value{font-size:24px;font-weight:900;color:#1a1a2e}
+    .kpi .sub{font-size:11px;color:#9ca3af;margin-top:3px}
+    .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+    @media(max-width:768px){.charts-grid{grid-template-columns:1fr}}
+    .chart-card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .chart-card h3{font-size:13px;font-weight:700;color:#374151;margin-bottom:14px}
+    .filter-bar{background:#fff;border-radius:12px;padding:14px 20px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .filter-bar select,.filter-bar input{padding:7px 11px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;font-family:inherit}
+    .rate-table{width:100%;border-collapse:collapse;font-size:13px}
+    .rate-table th{background:#f8fafc;padding:9px 14px;text-align:left;font-weight:700;border-bottom:2px solid #e5e7eb}
+    .rate-table td{padding:9px 14px;border-bottom:1px solid #f1f5f9}
+    .rate-table tr:hover td{background:#f8fafc}
+    .rate-input{width:110px;padding:5px 9px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:13px}
+    .rate-input:focus{outline:none;border-color:#f97316}
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-brand">🐦 Cuckoo Cargo</div>
+  <div class="navbar-nav">
+    <a class="nav-link" href="dashboard.html">Dashboard</a>
+    <a class="nav-link" href="quote-form.html">New Quote</a>
+    <a class="nav-link active" href="reports.html">📊 Báo cáo</a>
+    <a class="nav-link" href="crm.html">👥 CRM</a>
+    <a class="nav-link" href="finance.html">💰 Tài chính</a>
+    <a class="nav-link" href="admin.html">Admin</a>
+    <button class="btn-logout" onclick="auth.signOut().then(()=>location.href='index.html')">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+    <h1 class="page-title" style="margin:0">📊 Báo cáo doanh thu</h1>
+    <button class="btn btn-success" onclick="exportExcel()">⬇️ Xuất Excel</button>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <select id="filterYear" onchange="applyFilters()">
+      <option value="">Tất cả năm</option>
+    </select>
+    <select id="filterMonth" onchange="applyFilters()">
+      <option value="">Tất cả tháng</option>
+      <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+      <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+      <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+      <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12">Tháng 12</option>
+    </select>
+    <select id="filterService" onchange="applyFilters()">
+      <option value="">Tất cả dịch vụ</option>
+      <option value="intl">USA → Vietnam</option>
+      <option value="domestic">Domestic USA</option>
+      <option value="shopping">Mua hộ</option>
+    </select>
+    <select id="filterCarrier" onchange="applyFilters()">
+      <option value="">Tất cả carrier</option>
+      <option value="FedEx">FedEx</option>
+      <option value="UPS">UPS</option>
+      <option value="USPS">USPS</option>
+      <option value="DHL">DHL</option>
+    </select>
+    <select id="filterStatus" onchange="applyFilters()">
+      <option value="">Tất cả trạng thái</option>
+      <option value="paid">✅ Đã thanh toán</option>
+      <option value="unpaid">⏳ Chưa thanh toán</option>
+    </select>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi"><div class="label">Tổng doanh thu</div><div class="value" id="kpi-revenue">–</div><div class="sub">Đơn đã thanh toán</div></div>
+    <div class="kpi blue"><div class="label">Doanh thu chờ thu</div><div class="value" id="kpi-pending">–</div><div class="sub">Đơn chưa thanh toán</div></div>
+    <div class="kpi green"><div class="label">Tổng đơn hàng</div><div class="value" id="kpi-orders">–</div><div class="sub" id="kpi-orders-sub">–</div></div>
+    <div class="kpi purple"><div class="label">Trung bình / đơn</div><div class="value" id="kpi-avg">–</div><div class="sub">Đơn đã thanh toán</div></div>
+    <div class="kpi red"><div class="label">Đơn chưa thanh toán</div><div class="value" id="kpi-unpaid-count">–</div><div class="sub">Cần theo dõi</div></div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>📈 Doanh thu theo tháng (USD)</h3>
+      <canvas id="chartMonthly" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>🥧 Theo dịch vụ</h3>
+      <canvas id="chartService" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>🚚 Theo carrier</h3>
+      <canvas id="chartCarrier" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>💳 Paid vs Unpaid (theo tháng)</h3>
+      <canvas id="chartPayment" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- UNPAID ORDERS TABLE -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header" style="background:linear-gradient(135deg,#dc2626,#ef4444);display:flex;justify-content:space-between;align-items:center">
+      <span>⏳ Đơn chưa thanh toán</span>
+      <span id="unpaidTotal" style="font-size:13px;font-weight:600"></span>
+    </div>
+    <div class="card-body" style="padding:0">
+      <div class="table-wrap">
+        <table class="data-tbl">
+          <thead><tr><th>#</th><th>Ngày</th><th>Khách hàng</th><th>Dịch vụ</th><th>Carrier</th><th>Tổng tiền</th><th>Thao tác</th></tr></thead>
+          <tbody id="unpaidBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONTHLY BREAKDOWN TABLE -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">📅 Chi tiết theo tháng</div>
+    <div class="card-body" style="padding:0">
+      <div class="table-wrap">
+        <table class="data-tbl">
+          <thead><tr><th>Tháng</th><th>Số đơn</th><th>Doanh thu (USD)</th><th>Chưa thu (USD)</th><th>Đơn paid</th><th>Đơn unpaid</th></tr></thead>
+          <tbody id="monthlyBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXCHANGE RATE TRACKER -->
+  <div class="card">
+    <div class="card-header" style="background:linear-gradient(135deg,#065f46,#059669)">💱 Theo dõi tỷ giá VND/USD</div>
+    <div class="card-body">
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap">
+        <div class="form-group" style="margin:0;flex:0 0 160px">
+          <label>Ngày</label>
+          <input type="date" id="rateDate" style="padding:7px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+        </div>
+        <div class="form-group" style="margin:0;flex:0 0 180px">
+          <label>Tỷ giá (VND/USD)</label>
+          <input type="number" id="rateValue" placeholder="25000" style="padding:7px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+        </div>
+        <div class="form-group" style="margin:0;flex:0 0 200px">
+          <label>Ghi chú</label>
+          <input type="text" id="rateNote" placeholder="VCB, Techcombank..." style="padding:7px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+        </div>
+        <div style="padding-top:18px">
+          <button class="btn btn-success" onclick="saveRate()">+ Lưu tỷ giá</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="rate-table">
+          <thead><tr><th>Ngày</th><th>Tỷ giá (VND/USD)</th><th>Ghi chú</th><th></th></tr></thead>
+          <tbody id="rateBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script>
+let allQuotes = [];
+let filteredQuotes = [];
+let chartMonthly, chartService, chartCarrier, chartPayment;
+
+const SVC_LABELS = { intl:'USA→VN', domestic:'Domestic', shopping:'Mua hộ' };
+const MONTH_NAMES = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
+const COLORS = ['#f97316','#3b82f6','#16a34a','#7c3aed','#dc2626','#0891b2','#d97706','#059669'];
+
+auth.onAuthStateChanged(async user => {
+  if (!user) { location.href = 'index.html'; return; }
+  await loadQuotes();
+  loadRates();
+  // populate year filter
+  const years = [...new Set(allQuotes.map(q => (q.date||'').slice(0,4)).filter(Boolean))].sort().reverse();
+  const fy = document.getElementById('filterYear');
+  years.forEach(y => { const o = document.createElement('option'); o.value = y; o.textContent = 'Năm ' + y; fy.appendChild(o); });
+  applyFilters();
+});
+
+async function loadQuotes() {
+  const snap = await db.collection('quotes').orderBy('createdAt','desc').get();
+  allQuotes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+function applyFilters() {
+  const yr  = document.getElementById('filterYear').value;
+  const mo  = document.getElementById('filterMonth').value;
+  const svc = document.getElementById('filterService').value;
+  const car = document.getElementById('filterCarrier').value;
+  const st  = document.getElementById('filterStatus').value;
+  filteredQuotes = allQuotes.filter(q => {
+    const d = q.date || '';
+    if (yr  && !d.startsWith(yr)) return false;
+    if (mo  && parseInt(d.slice(5,7)) !== parseInt(mo)) return false;
+    if (svc && q.serviceType !== svc) return false;
+    if (car && q.carrier !== car) return false;
+    if (st  && q.paymentStatus !== st) return false;
+    return true;
+  });
+  renderKPIs();
+  renderCharts();
+  renderUnpaid();
+  renderMonthly();
+}
+
+function renderKPIs() {
+  const paid   = filteredQuotes.filter(q => q.paymentStatus === 'paid');
+  const unpaid = filteredQuotes.filter(q => q.paymentStatus !== 'paid');
+  const rev    = paid.reduce((s,q) => s + (parseFloat(q.total)||0), 0);
+  const pend   = unpaid.reduce((s,q) => s + (parseFloat(q.total)||0), 0);
+  document.getElementById('kpi-revenue').textContent = '$' + rev.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  document.getElementById('kpi-pending').textContent = '$' + pend.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  document.getElementById('kpi-orders').textContent  = filteredQuotes.length;
+  document.getElementById('kpi-orders-sub').textContent = `${paid.length} paid · ${unpaid.length} unpaid`;
+  document.getElementById('kpi-avg').textContent = paid.length ? '$' + (rev/paid.length).toFixed(2) : '$0';
+  document.getElementById('kpi-unpaid-count').textContent = unpaid.length;
+}
+
+function getMonthlyData(status) {
+  const map = {};
+  filteredQuotes.filter(q => !status || q.paymentStatus === status).forEach(q => {
+    const d = q.date || '';
+    const key = d.slice(0,7); // YYYY-MM
+    if (!key) return;
+    map[key] = (map[key]||0) + (parseFloat(q.total)||0);
+  });
+  return map;
+}
+
+function renderCharts() {
+  // Monthly revenue
+  const monthlyPaid   = getMonthlyData('paid');
+  const monthlyUnpaid = getMonthlyData('unpaid');
+  const allMonths = [...new Set([...Object.keys(monthlyPaid), ...Object.keys(monthlyUnpaid)])].sort();
+
+  if (chartMonthly) chartMonthly.destroy();
+  chartMonthly = new Chart(document.getElementById('chartMonthly'), {
+    type: 'bar',
+    data: {
+      labels: allMonths.map(m => m.slice(5,7)+'/'+m.slice(0,4)),
+      datasets: [
+        { label:'Đã thu ($)', data: allMonths.map(m=>monthlyPaid[m]||0), backgroundColor:'#16a34a' },
+        { label:'Chưa thu ($)', data: allMonths.map(m=>monthlyUnpaid[m]||0), backgroundColor:'#f97316', stack:'s' },
+      ]
+    },
+    options: { responsive:true, plugins:{legend:{position:'top'}}, scales:{x:{stacked:true},y:{stacked:true}} }
+  });
+
+  // By service
+  const svcMap = {};
+  filteredQuotes.filter(q=>q.paymentStatus==='paid').forEach(q => {
+    const k = SVC_LABELS[q.serviceType] || q.serviceType || 'Other';
+    svcMap[k] = (svcMap[k]||0) + (parseFloat(q.total)||0);
+  });
+  if (chartService) chartService.destroy();
+  chartService = new Chart(document.getElementById('chartService'), {
+    type: 'doughnut',
+    data: { labels: Object.keys(svcMap), datasets: [{ data: Object.values(svcMap), backgroundColor: COLORS }] },
+    options: { responsive:true, plugins:{legend:{position:'bottom'}} }
+  });
+
+  // By carrier
+  const carMap = {};
+  filteredQuotes.filter(q=>q.paymentStatus==='paid').forEach(q => {
+    const k = q.carrier || 'Khác';
+    carMap[k] = (carMap[k]||0) + (parseFloat(q.total)||0);
+  });
+  if (chartCarrier) chartCarrier.destroy();
+  chartCarrier = new Chart(document.getElementById('chartCarrier'), {
+    type: 'bar',
+    data: {
+      labels: Object.keys(carMap),
+      datasets: [{ label:'Doanh thu ($)', data: Object.values(carMap), backgroundColor: COLORS }]
+    },
+    options: { responsive:true, plugins:{legend:{display:false}}, indexAxis:'y' }
+  });
+
+  // Paid vs Unpaid count by month
+  const paidCount = {}, unpaidCount = {};
+  filteredQuotes.forEach(q => {
+    const key = (q.date||'').slice(0,7);
+    if (!key) return;
+    if (q.paymentStatus === 'paid') paidCount[key] = (paidCount[key]||0)+1;
+    else unpaidCount[key] = (unpaidCount[key]||0)+1;
+  });
+  const payMonths = [...new Set([...Object.keys(paidCount),...Object.keys(unpaidCount)])].sort();
+  if (chartPayment) chartPayment.destroy();
+  chartPayment = new Chart(document.getElementById('chartPayment'), {
+    type: 'bar',
+    data: {
+      labels: payMonths.map(m=>m.slice(5,7)+'/'+m.slice(0,4)),
+      datasets: [
+        { label:'Paid', data: payMonths.map(m=>paidCount[m]||0), backgroundColor:'#16a34a' },
+        { label:'Unpaid', data: payMonths.map(m=>unpaidCount[m]||0), backgroundColor:'#dc2626' },
+      ]
+    },
+    options: { responsive:true, plugins:{legend:{position:'top'}} }
+  });
+}
+
+function renderUnpaid() {
+  const unpaid = filteredQuotes.filter(q => q.paymentStatus !== 'paid');
+  const total  = unpaid.reduce((s,q)=>s+(parseFloat(q.total)||0),0);
+  document.getElementById('unpaidTotal').textContent = `Tổng cần thu: $${total.toFixed(2)}`;
+  if (!unpaid.length) {
+    document.getElementById('unpaidBody').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#6b7280">Không có đơn chưa thanh toán 🎉</td></tr>';
+    return;
+  }
+  document.getElementById('unpaidBody').innerHTML = unpaid.map(q => `
+    <tr>
+      <td style="font-size:11px;color:#6b7280">${q.id.slice(-6).toUpperCase()}</td>
+      <td>${q.date||'–'}</td>
+      <td><div style="font-weight:600">${q.senderName||'–'}</div><div style="font-size:11px;color:#6b7280">${q.recipientName||''}</div></td>
+      <td>${SVC_LABELS[q.serviceType]||q.serviceType||'–'}</td>
+      <td>${q.carrier||'–'}</td>
+      <td style="font-weight:700;color:#dc2626">$${(parseFloat(q.total)||0).toFixed(2)}</td>
+      <td>
+        <a href="quote-form.html?id=${q.id}" class="btn btn-outline btn-sm">✏️ Sửa</a>
+        <a href="print.html?id=${q.id}" class="btn btn-primary btn-sm" target="_blank">📄 PDF</a>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderMonthly() {
+  const map = {};
+  filteredQuotes.forEach(q => {
+    const key = (q.date||'').slice(0,7);
+    if (!key) return;
+    if (!map[key]) map[key] = { paid:0, unpaid:0, paidCount:0, unpaidCount:0 };
+    if (q.paymentStatus === 'paid') { map[key].paid += parseFloat(q.total)||0; map[key].paidCount++; }
+    else { map[key].unpaid += parseFloat(q.total)||0; map[key].unpaidCount++; }
+  });
+  const months = Object.keys(map).sort().reverse();
+  if (!months.length) {
+    document.getElementById('monthlyBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#6b7280">Không có dữ liệu</td></tr>';
+    return;
+  }
+  document.getElementById('monthlyBody').innerHTML = months.map(m => {
+    const d = map[m];
+    const [yr,mo] = m.split('-');
+    return `<tr>
+      <td style="font-weight:700">Tháng ${parseInt(mo)}/${yr}</td>
+      <td>${d.paidCount+d.unpaidCount}</td>
+      <td style="color:#16a34a;font-weight:700">$${d.paid.toFixed(2)}</td>
+      <td style="color:#dc2626;font-weight:700">$${d.unpaid.toFixed(2)}</td>
+      <td><span class="badge badge-green">${d.paidCount}</span></td>
+      <td><span class="badge badge-orange">${d.unpaidCount}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── EXCHANGE RATE TRACKER ──
+let rates = [];
+
+async function loadRates() {
+  const snap = await db.collection('exchangeRates').orderBy('date','desc').limit(50).get();
+  rates = snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderRates();
+  // set today as default
+  document.getElementById('rateDate').value = new Date().toISOString().slice(0,10);
+}
+
+function renderRates() {
+  if (!rates.length) {
+    document.getElementById('rateBody').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:14px;color:#6b7280">Chưa có dữ liệu tỷ giá</td></tr>';
+    return;
+  }
+  document.getElementById('rateBody').innerHTML = rates.map(r => `
+    <tr>
+      <td>${r.date}</td>
+      <td style="font-weight:700;color:#059669">${parseInt(r.rate).toLocaleString('vi-VN')} ₫</td>
+      <td style="color:#6b7280">${r.note||'–'}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteRate('${r.id}')">🗑️</button></td>
+    </tr>
+  `).join('');
+}
+
+async function saveRate() {
+  const date = document.getElementById('rateDate').value;
+  const rate = parseFloat(document.getElementById('rateValue').value);
+  const note = document.getElementById('rateNote').value.trim();
+  if (!date || !rate) { alert('Vui lòng nhập ngày và tỷ giá'); return; }
+  await db.collection('exchangeRates').add({ date, rate, note, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+  document.getElementById('rateValue').value = '';
+  document.getElementById('rateNote').value = '';
+  loadRates();
+}
+
+async function deleteRate(id) {
+  if (!confirm('Xóa tỷ giá này?')) return;
+  await db.collection('exchangeRates').doc(id).delete();
+  loadRates();
+}
+
+// ── EXCEL EXPORT ──
+function exportExcel() {
+  const rows = [['ID','Ngày','Khách hàng','Dịch vụ','Carrier','Tổng ($)','Trạng thái']];
+  filteredQuotes.forEach(q => {
+    rows.push([
+      q.id.slice(-6).toUpperCase(),
+      q.date||'',
+      q.senderName||'',
+      SVC_LABELS[q.serviceType]||q.serviceType||'',
+      q.carrier||'',
+      (parseFloat(q.total)||0).toFixed(2),
+      q.paymentStatus==='paid'?'Đã thanh toán':'Chưa thanh toán',
+    ]);
+  });
+  // Add summary row
+  const paid = filteredQuotes.filter(q=>q.paymentStatus==='paid');
+  const rev  = paid.reduce((s,q)=>s+(parseFloat(q.total)||0),0);
+  rows.push([]);
+  rows.push(['','','','','','Tổng doanh thu (paid):', rev.toFixed(2)]);
+
+  let csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const BOM = '﻿';
+  const blob = new Blob([BOM + csv], {type:'text/csv;charset=utf-8;'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `bao-cao-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Tài chính — Cuckoo Cargo</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    /* TABS */
+    .tab-nav{display:flex;gap:0;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:20px;overflow-x:auto}
+    .tab-btn{padding:13px 18px;border:none;background:none;font-size:13px;font-weight:600;cursor:pointer;color:#6b7280;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;font-family:inherit}
+    .tab-btn.active{color:#f97316;border-bottom-color:#f97316}
+    .tab-btn:hover:not(.active){color:#374151;background:#f8fafc}
+    .tab-panel{display:none}.tab-panel.active{display:block}
+
+    /* KPI */
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px}
+    .kpi{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-left:4px solid #f97316}
+    .kpi.blue{border-color:#3b82f6}.kpi.green{border-color:#16a34a}.kpi.purple{border-color:#7c3aed}
+    .kpi.red{border-color:#dc2626}.kpi.teal{border-color:#0891b2}.kpi.yellow{border-color:#d97706}
+    .kpi .lbl{font-size:10px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+    .kpi .val{font-size:22px;font-weight:900;color:#1a1a2e}
+    .kpi .sub{font-size:11px;color:#9ca3af;margin-top:2px}
+
+    /* CHARTS */
+    .charts-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+    @media(max-width:768px){.charts-2{grid-template-columns:1fr}}
+    .chart-box{background:#fff;border-radius:12px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .chart-box h3{font-size:13px;font-weight:700;color:#374151;margin-bottom:14px}
+
+    /* P&L TABLE */
+    .pl-table{width:100%;border-collapse:collapse;font-size:13px}
+    .pl-table td{padding:9px 16px;border-bottom:1px solid #f1f5f9}
+    .pl-table .section-header td{background:#f8fafc;font-weight:800;font-size:12px;text-transform:uppercase;color:#374151;letter-spacing:.5px;padding:10px 16px}
+    .pl-table .total-row td{font-weight:800;font-size:14px;background:#fff8f4;border-top:2px solid #f97316}
+    .pl-table .net-profit td{font-weight:900;font-size:16px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);color:#15803d;border-top:3px solid #16a34a}
+    .pl-table .net-loss td{font-weight:900;font-size:16px;background:linear-gradient(135deg,#fef2f2,#fee2e2);color:#dc2626;border-top:3px solid #dc2626}
+    .pl-table .indent{padding-left:36px!important}
+    .pl-table .negative{color:#dc2626}
+    .pl-table .positive{color:#16a34a}
+
+    /* AGING TABLE */
+    .aging-bar{height:8px;border-radius:4px;display:inline-block;vertical-align:middle;margin-left:8px}
+
+    /* MODAL */
+    .fin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center}
+    .fin-modal.open{display:flex}
+    .fin-modal-box{background:#fff;border-radius:16px;width:min(480px,95vw);overflow:hidden}
+    .fin-modal-header{padding:16px 24px;font-weight:800;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+    .fin-modal-body{padding:20px 24px}
+
+    /* MISC */
+    .filter-bar{background:#fff;border-radius:12px;padding:12px 16px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .filter-bar select,.filter-bar input[type=text],.filter-bar input[type=date]{padding:7px 11px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;font-family:inherit}
+    .promo-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+    .exp-cat{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#f1f5f9;color:#374151}
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-brand">🐦 Cuckoo Cargo</div>
+  <div class="navbar-nav">
+    <a class="nav-link" href="dashboard.html">Dashboard</a>
+    <a class="nav-link" href="quote-form.html">New Quote</a>
+    <a class="nav-link" href="reports.html">📊 Báo cáo</a>
+    <a class="nav-link" href="crm.html">👥 CRM</a>
+    <a class="nav-link active" href="finance.html">💰 Tài chính</a>
+    <a class="nav-link" href="admin.html">Admin</a>
+    <button class="btn-logout" onclick="auth.signOut().then(()=>location.href='index.html')">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <!-- PERIOD FILTER (global) -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+    <h1 class="page-title" style="margin:0">💰 Tài chính & Báo cáo</h1>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <select id="gYear" onchange="reloadAll()" style="padding:7px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px">
+        <option value="">Tất cả năm</option>
+      </select>
+      <select id="gMonth" onchange="reloadAll()" style="padding:7px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px">
+        <option value="">Tất cả tháng</option>
+        <option value="1">T1</option><option value="2">T2</option><option value="3">T3</option>
+        <option value="4">T4</option><option value="5">T5</option><option value="6">T6</option>
+        <option value="7">T7</option><option value="8">T8</option><option value="9">T9</option>
+        <option value="10">T10</option><option value="11">T11</option><option value="12">T12</option>
+      </select>
+      <button class="btn btn-outline btn-sm" onclick="exportFinanceExcel()">⬇️ Xuất Excel</button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('analysis')">📦 Phân tích đơn</button>
+    <button class="tab-btn" onclick="switchTab('revenue')">💵 Doanh thu & VAT</button>
+    <button class="tab-btn" onclick="switchTab('debt')">🏦 Công nợ</button>
+    <button class="tab-btn" onclick="switchTab('promo')">🎁 Khuyến mãi</button>
+    <button class="tab-btn" onclick="switchTab('cashflow')">💸 Dòng tiền</button>
+    <button class="tab-btn" onclick="switchTab('pl')">📈 Kết quả KD</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- TAB 1: PHÂN TÍCH ĐƠN HÀNG                    -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="tab-panel active" id="panel-analysis">
+    <div class="kpi-grid">
+      <div class="kpi">        <div class="lbl">Tổng đơn hàng</div>    <div class="val" id="a-total">–</div></div>
+      <div class="kpi green">  <div class="lbl">Đơn hoàn thành</div>   <div class="val" id="a-paid">–</div><div class="sub" id="a-paid-pct">–</div></div>
+      <div class="kpi red">    <div class="lbl">Đơn hoàn trả</div>     <div class="val" id="a-refund">–</div><div class="sub" id="a-refund-pct">–</div></div>
+      <div class="kpi blue">   <div class="lbl">Đơn đang xử lý</div>   <div class="val" id="a-unpaid">–</div></div>
+      <div class="kpi purple"> <div class="lbl">Doanh thu thuần</div>  <div class="val" id="a-net">–</div><div class="sub">Sau hoàn trả</div></div>
+      <div class="kpi yellow"> <div class="lbl">Tiền hoàn trả</div>    <div class="val" id="a-refund-amt">–</div></div>
+    </div>
+    <div class="charts-2">
+      <div class="chart-box"><h3>📦 Số đơn theo tháng</h3><canvas id="c-orders" height="220"></canvas></div>
+      <div class="chart-box"><h3>🔄 Tỷ lệ hoàn trả theo tháng (%)</h3><canvas id="c-refund-rate" height="220"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
+        <span>📋 Danh sách đơn hoàn trả</span>
+        <button class="btn btn-danger btn-sm" onclick="openRefundModal()">+ Ghi nhận hoàn trả</button>
+      </div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap">
+          <table class="data-tbl">
+            <thead><tr><th>#</th><th>Ngày</th><th>Khách hàng</th><th>Dịch vụ</th><th>Tổng đơn</th><th>Tiền hoàn</th><th>Lý do</th><th>Thao tác</th></tr></thead>
+            <tbody id="refund-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- TAB 2: DOANH THU & VAT                        -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-revenue">
+    <div style="background:#fff;border-radius:12px;padding:14px 20px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:16px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <label style="font-weight:700;font-size:13px">Thuế suất VAT (%)</label>
+      <input type="number" id="vatRate" value="10" min="0" max="100" step="0.5" style="width:80px;padding:7px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px" oninput="renderRevenue()"/>
+      <label style="font-weight:700;font-size:13px;margin-left:12px">Loại VAT</label>
+      <select id="vatType" onchange="renderRevenue()" style="padding:7px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px">
+        <option value="exclusive">Chưa bao gồm VAT (cộng thêm)</option>
+        <option value="inclusive">Đã bao gồm VAT (tách ra)</option>
+      </select>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi">       <div class="lbl">Doanh thu gộp</div>      <div class="val" id="v-gross">–</div></div>
+      <div class="kpi red">   <div class="lbl">Hoàn trả</div>           <div class="val" id="v-refunds">–</div></div>
+      <div class="kpi green"> <div class="lbl">Doanh thu thuần</div>    <div class="val" id="v-net">–</div></div>
+      <div class="kpi blue">  <div class="lbl">Thuế VAT phải nộp</div>  <div class="val" id="v-vat">–</div></div>
+      <div class="kpi purple"><div class="lbl">Doanh thu sau thuế</div> <div class="val" id="v-after-tax">–</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">📅 Báo cáo VAT theo tháng</div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap">
+          <table class="data-tbl">
+            <thead><tr><th>Tháng</th><th>Số đơn</th><th>Doanh thu gộp</th><th>Hoàn trả</th><th>Doanh thu thuần</th><th>VAT phải nộp</th><th>Doanh thu sau thuế</th></tr></thead>
+            <tbody id="vat-monthly-body"></tbody>
+            <tfoot id="vat-footer" style="background:#fff8f4;font-weight:800"></tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- TAB 3: CÔNG NỢ KHÁCH HÀNG                     -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-debt">
+    <div class="kpi-grid">
+      <div class="kpi red">   <div class="lbl">Tổng công nợ</div>         <div class="val" id="d-total">–</div></div>
+      <div class="kpi yellow"><div class="lbl">Nợ dưới 30 ngày</div>      <div class="val" id="d-30">–</div></div>
+      <div class="kpi">       <div class="lbl">Nợ 30–60 ngày</div>        <div class="val" id="d-60">–</div></div>
+      <div class="kpi blue">  <div class="lbl">Nợ 60–90 ngày</div>        <div class="val" id="d-90">–</div></div>
+      <div class="kpi red">   <div class="lbl">Nợ trên 90 ngày</div>      <div class="val" id="d-over90">–</div></div>
+      <div class="kpi green"> <div class="lbl">Số khách có nợ</div>       <div class="val" id="d-cust-count">–</div></div>
+    </div>
+    <div class="charts-2">
+      <div class="chart-box"><h3>🏦 Phân bổ công nợ theo tuổi nợ</h3><canvas id="c-aging" height="200"></canvas></div>
+      <div class="chart-box"><h3>👥 Top 10 khách nợ nhiều nhất</h3><canvas id="c-top-debt" height="200"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-header">📋 Chi tiết công nợ theo khách hàng</div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap">
+          <table class="data-tbl">
+            <thead><tr><th>Khách hàng</th><th>&lt;30 ngày</th><th>30–60</th><th>60–90</th><th>&gt;90 ngày</th><th>Tổng nợ</th><th>Số đơn</th><th>Thao tác</th></tr></thead>
+            <tbody id="debt-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- TAB 4: KHUYẾN MÃI                             -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-promo">
+    <div class="kpi-grid">
+      <div class="kpi">        <div class="lbl">Tổng mã KM</div>          <div class="val" id="p-total">–</div></div>
+      <div class="kpi green">  <div class="lbl">Mã đang hoạt động</div>   <div class="val" id="p-active">–</div></div>
+      <div class="kpi red">    <div class="lbl">Tổng đã giảm</div>        <div class="val" id="p-discount">–</div></div>
+      <div class="kpi blue">   <div class="lbl">Lượt sử dụng</div>        <div class="val" id="p-uses">–</div></div>
+      <div class="kpi yellow"> <div class="lbl">Giảm giá từ đơn hàng</div><div class="val" id="p-from-quotes">–</div></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+      <button class="btn btn-primary" onclick="openPromoModal()">+ Tạo mã khuyến mãi</button>
+    </div>
+    <div class="card">
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap">
+          <table class="data-tbl">
+            <thead><tr><th>Mã KM</th><th>Loại</th><th>Giá trị</th><th>Giới hạn</th><th>Đã dùng</th><th>Tổng đã giảm</th><th>Hết hạn</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+            <tbody id="promo-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="card-header">📉 Tổng chiết khấu từ đơn hàng (theo tháng)</div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap">
+          <table class="data-tbl">
+            <thead><tr><th>Tháng</th><th>Số đơn có giảm giá</th><th>Tổng giá trị giảm ($)</th><th>TB giảm / đơn</th></tr></thead>
+            <tbody id="discount-monthly-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- TAB 5: DÒNG TIỀN                              -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-cashflow">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;gap:8px">
+      <button class="btn btn-primary" onclick="openExpenseModal()">+ Ghi nhận chi phí</button>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi green"> <div class="lbl">Tổng thu</div>             <div class="val" id="cf-in">–</div><div class="sub">Đơn đã thanh toán</div></div>
+      <div class="kpi red">   <div class="lbl">Tổng chi</div>             <div class="val" id="cf-out">–</div><div class="sub">Chi phí hoạt động</div></div>
+      <div class="kpi blue">  <div class="lbl">Dòng tiền thuần</div>      <div class="val" id="cf-net">–</div></div>
+      <div class="kpi purple"><div class="lbl">Tiền mặt hiện có</div>     <div class="val" id="cf-balance">–</div><div class="sub">Lũy kế</div></div>
+    </div>
+    <div class="chart-box" style="margin-bottom:16px">
+      <h3>💸 Dòng tiền theo tháng (USD)</h3>
+      <canvas id="c-cashflow" height="180"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-header">📋 Chi tiết dòng tiền theo tháng</div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap">
+          <table class="data-tbl">
+            <thead><tr><th>Tháng</th><th>Thu (paid)</th><th>Chi phí</th><th>Dòng tiền thuần</th><th>Lũy kế</th></tr></thead>
+            <tbody id="cf-monthly-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
+        <span>🧾 Danh sách chi phí</span>
+      </div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap">
+          <table class="data-tbl">
+            <thead><tr><th>Ngày</th><th>Danh mục</th><th>Mô tả</th><th>Số tiền</th><th></th></tr></thead>
+            <tbody id="expense-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- TAB 6: KẾT QUẢ KINH DOANH (P&L)              -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-pl">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+      <button class="btn btn-success" onclick="exportPL()">⬇️ Xuất báo cáo</button>
+    </div>
+    <div class="card">
+      <div class="card-header">📈 Báo cáo kết quả hoạt động kinh doanh</div>
+      <div class="card-body" style="padding:0">
+        <table class="pl-table" id="pl-table">
+          <tbody>
+            <!-- populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="charts-2" style="margin-top:16px">
+      <div class="chart-box"><h3>📊 Doanh thu vs Chi phí theo tháng</h3><canvas id="c-pl-monthly" height="220"></canvas></div>
+      <div class="chart-box"><h3>🥧 Cơ cấu chi phí</h3><canvas id="c-expense-breakdown" height="220"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ MODALS ══════ -->
+
+<!-- REFUND MODAL -->
+<div class="fin-modal" id="refundModal">
+  <div class="fin-modal-box">
+    <div class="fin-modal-header" style="background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff">
+      <span>🔄 Ghi nhận hoàn trả</span>
+      <button onclick="closeModal('refundModal')" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">×</button>
+    </div>
+    <div class="fin-modal-body">
+      <div style="display:grid;gap:12px">
+        <div class="form-group" style="margin:0"><label>Chọn đơn hàng</label>
+          <select id="rf-quote" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px">
+            <option value="">-- Chọn đơn --</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin:0"><label>Tiền hoàn ($)</label>
+          <input type="number" id="rf-amount" placeholder="0.00" step="0.01" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+        </div>
+        <div class="form-group" style="margin:0"><label>Ngày hoàn</label>
+          <input type="date" id="rf-date" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+        </div>
+        <div class="form-group" style="margin:0"><label>Lý do</label>
+          <select id="rf-reason" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px">
+            <option>Hàng bị hỏng</option><option>Thất lạc</option><option>Giao sai địa chỉ</option>
+            <option>Khách yêu cầu hủy</option><option>Khác</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin:0"><label>Ghi chú</label>
+          <textarea id="rf-note" rows="2" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;resize:vertical"></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
+        <button class="btn btn-outline" onclick="closeModal('refundModal')">Hủy</button>
+        <button class="btn btn-danger" onclick="saveRefund()">Lưu hoàn trả</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPENSE MODAL -->
+<div class="fin-modal" id="expenseModal">
+  <div class="fin-modal-box">
+    <div class="fin-modal-header" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff">
+      <span>🧾 Ghi nhận chi phí</span>
+      <button onclick="closeModal('expenseModal')" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">×</button>
+    </div>
+    <div class="fin-modal-body">
+      <div style="display:grid;gap:12px">
+        <input type="hidden" id="exp-id"/>
+        <div class="form-group" style="margin:0"><label>Danh mục *</label>
+          <select id="exp-cat" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px">
+            <option value="shipping">🚚 Chi phí vận chuyển</option>
+            <option value="packing">📦 Chi phí đóng gói</option>
+            <option value="labor">👷 Nhân công</option>
+            <option value="warehouse">🏭 Kho bãi / Mặt bằng</option>
+            <option value="marketing">📣 Marketing / Quảng cáo</option>
+            <option value="office">🖥️ Văn phòng phẩm / Thiết bị</option>
+            <option value="tax">🏛️ Thuế / Phí</option>
+            <option value="other">💼 Khác</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin:0"><label>Mô tả</label>
+          <input type="text" id="exp-desc" placeholder="Mô tả chi phí..." style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group" style="margin:0"><label>Số tiền ($) *</label>
+            <input type="number" id="exp-amount" placeholder="0.00" step="0.01" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+          </div>
+          <div class="form-group" style="margin:0"><label>Ngày *</label>
+            <input type="date" id="exp-date" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+          </div>
+        </div>
+        <div class="form-group" style="margin:0"><label>Ghi chú</label>
+          <input type="text" id="exp-note" placeholder="" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
+        <button class="btn btn-outline" onclick="closeModal('expenseModal')">Hủy</button>
+        <button class="btn btn-primary" onclick="saveExpense()">Lưu chi phí</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMO MODAL -->
+<div class="fin-modal" id="promoModal">
+  <div class="fin-modal-box">
+    <div class="fin-modal-header" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff">
+      <span>🎁 Tạo mã khuyến mãi</span>
+      <button onclick="closeModal('promoModal')" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">×</button>
+    </div>
+    <div class="fin-modal-body">
+      <div style="display:grid;gap:12px">
+        <input type="hidden" id="promo-id"/>
+        <div class="form-group" style="margin:0"><label>Mã khuyến mãi *</label>
+          <input type="text" id="promo-code" placeholder="SUMMER20" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;text-transform:uppercase"/>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group" style="margin:0"><label>Loại giảm</label>
+            <select id="promo-type" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px">
+              <option value="percent">% Phần trăm</option>
+              <option value="fixed">$ Cố định</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin:0"><label>Giá trị</label>
+            <input type="number" id="promo-value" placeholder="10" step="0.01" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group" style="margin:0"><label>Giới hạn dùng</label>
+            <input type="number" id="promo-limit" placeholder="Không giới hạn" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+          </div>
+          <div class="form-group" style="margin:0"><label>Hết hạn</label>
+            <input type="date" id="promo-expire" style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+          </div>
+        </div>
+        <div class="form-group" style="margin:0"><label>Mô tả</label>
+          <input type="text" id="promo-desc" placeholder="Mô tả chương trình..." style="width:100%;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px"/>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
+        <button class="btn btn-outline" onclick="closeModal('promoModal')">Hủy</button>
+        <button class="btn btn-primary" style="background:#7c3aed" onclick="savePromo()">Lưu mã KM</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script>
+// ── DATA ──
+let quotes=[], refunds=[], expenses=[], promos=[], filteredQ=[], filteredR=[], filteredE=[];
+let charts={};
+const CAT_LABELS = {shipping:'Vận chuyển',packing:'Đóng gói',labor:'Nhân công',warehouse:'Kho bãi',marketing:'Marketing',office:'Văn phòng',tax:'Thuế/Phí',other:'Khác'};
+const CAT_COLORS = ['#f97316','#3b82f6','#16a34a','#7c3aed','#dc2626','#0891b2','#d97706','#059669'];
+
+// ── AUTH ──
+auth.onAuthStateChanged(async user => {
+  if (!user) { location.href='index.html'; return; }
+  try {
+    await loadAll();
+  } catch(e) { console.error('loadAll failed:', e); }
+  populateYears();
+  reloadAll();
+  document.getElementById('exp-date').value = today();
+  document.getElementById('rf-date').value  = today();
+});
+
+async function loadAll() {
+  // Load each collection independently so one failure doesn't block others
+  try {
+    const s = await db.collection('quotes').orderBy('createdAt','desc').get();
+    quotes = s.docs.map(d=>({id:d.id,...d.data()}));
+  } catch(e) {
+    try {
+      const s = await db.collection('quotes').get();
+      quotes = s.docs.map(d=>({id:d.id,...d.data()}));
+    } catch(e2) { console.warn('quotes load failed:', e2); }
+  }
+  try {
+    const s = await db.collection('refunds').orderBy('date','desc').get();
+    refunds = s.docs.map(d=>({id:d.id,...d.data()}));
+  } catch(e) { refunds = []; }
+  try {
+    const s = await db.collection('expenses').orderBy('date','desc').get();
+    expenses = s.docs.map(d=>({id:d.id,...d.data()}));
+  } catch(e) { expenses = []; }
+  try {
+    const s = await db.collection('promotions').orderBy('createdAt','desc').get();
+    promos = s.docs.map(d=>({id:d.id,...d.data()}));
+  } catch(e) { promos = []; }
+  // populate quote selector for refund
+  const sel = document.getElementById('rf-quote');
+  sel.innerHTML = '<option value="">-- Chọn đơn --</option>';
+  quotes.forEach(q => {
+    const o = document.createElement('option');
+    o.value = q.id;
+    o.textContent = `${q.id.slice(-6).toUpperCase()} | ${q.senderName||''} | $${parseFloat(q.total||0).toFixed(2)} | ${q.date||''}`;
+    sel.appendChild(o);
+  });
+}
+
+function today() { return new Date().toISOString().slice(0,10); }
+
+function populateYears() {
+  const years = [...new Set(quotes.map(q=>(q.date||'').slice(0,4)).filter(Boolean))].sort().reverse();
+  const fy = document.getElementById('gYear');
+  years.forEach(y=>{ const o=document.createElement('option'); o.value=y; o.textContent='Năm '+y; fy.appendChild(o); });
+}
+
+function getFilters() {
+  return { yr: document.getElementById('gYear').value, mo: document.getElementById('gMonth').value };
+}
+
+function applyFilter(list, dateField='date') {
+  const {yr,mo} = getFilters();
+  return list.filter(x => {
+    const d = x[dateField]||'';
+    if (yr && !d.startsWith(yr)) return false;
+    if (mo && parseInt(d.slice(5,7)) !== parseInt(mo)) return false;
+    return true;
+  });
+}
+
+function reloadAll() {
+  filteredQ = applyFilter(quotes);
+  filteredR = applyFilter(refunds);
+  filteredE = applyFilter(expenses);
+  // Only render the currently active tab — Chart.js fails on hidden canvases
+  const activePanel = document.querySelector('.tab-panel.active');
+  const activeName  = activePanel ? activePanel.id.replace('panel-','') : 'analysis';
+  const renderMap   = { analysis:renderAnalysis, revenue:renderRevenue, debt:renderDebt, promo:renderPromo, cashflow:renderCashflow, pl:renderPL };
+  try { if (renderMap[activeName]) renderMap[activeName](); } catch(e) { console.error('reloadAll render error:', e); }
+}
+
+// ── TAB SWITCH ──
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const panels = ['analysis','revenue','debt','promo','cashflow','pl'];
+  const idx = panels.indexOf(name);
+  if (idx >= 0) document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  // Re-render AFTER panel is visible so Chart.js gets real canvas dimensions
+  const renderMap = {
+    analysis: renderAnalysis,
+    revenue:  renderRevenue,
+    debt:     renderDebt,
+    promo:    renderPromo,
+    cashflow: renderCashflow,
+    pl:       renderPL,
+  };
+  try { if (renderMap[name]) renderMap[name](); } catch(e) { console.error('Tab render error ['+name+']:', e); }
+}
+
+// ── CHART HELPER ──
+function mkChart(id, type, data, options={}) {
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), { type, data, options });
+}
+
+function monthsFromData(items, dateField='date') {
+  return [...new Set(items.map(x=>(x[dateField]||'').slice(0,7)).filter(Boolean))].sort();
+}
+
+// ═══════════════════════════════════════
+// TAB 1: ANALYSIS
+// ═══════════════════════════════════════
+function renderAnalysis() {
+  const paid   = filteredQ.filter(q=>q.paymentStatus==='paid');
+  const unpaid = filteredQ.filter(q=>q.paymentStatus!=='paid');
+  const refAmt = filteredR.reduce((s,r)=>s+(parseFloat(r.amount)||0),0);
+  const grossRev = paid.reduce((s,q)=>s+(parseFloat(q.total)||0),0);
+  const netRev   = grossRev - refAmt;
+  const refPct   = filteredQ.length ? ((filteredR.length/filteredQ.length)*100).toFixed(1) : '0';
+
+  document.getElementById('a-total').textContent      = filteredQ.length;
+  document.getElementById('a-paid').textContent       = paid.length;
+  document.getElementById('a-paid-pct').textContent   = filteredQ.length ? ((paid.length/filteredQ.length*100).toFixed(1)+'%') : '';
+  document.getElementById('a-refund').textContent     = filteredR.length;
+  document.getElementById('a-refund-pct').textContent = refPct + '% tỷ lệ hoàn';
+  document.getElementById('a-unpaid').textContent     = unpaid.length;
+  document.getElementById('a-net').textContent        = '$'+netRev.toFixed(2);
+  document.getElementById('a-refund-amt').textContent = '$'+refAmt.toFixed(2);
+
+  // chart: orders by month
+  const months = monthsFromData(filteredQ);
+  const paidMap={},unpaidMap={};
+  filteredQ.forEach(q=>{ const m=(q.date||'').slice(0,7); if(!m) return; if(q.paymentStatus==='paid') paidMap[m]=(paidMap[m]||0)+1; else unpaidMap[m]=(unpaidMap[m]||0)+1; });
+  mkChart('c-orders','bar',{
+    labels: months.map(m=>m.slice(5)+'/'+m.slice(0,4)),
+    datasets:[
+      {label:'Hoàn thành',data:months.map(m=>paidMap[m]||0),backgroundColor:'#16a34a'},
+      {label:'Chờ thu',   data:months.map(m=>unpaidMap[m]||0),backgroundColor:'#f97316'},
+    ]
+  },{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{stacked:true},y:{stacked:true}}});
+
+  // chart: refund rate
+  const refMap={};
+  filteredR.forEach(r=>{ const m=(r.date||'').slice(0,7); if(m) refMap[m]=(refMap[m]||0)+1; });
+  const allMonths = [...new Set([...months,...Object.keys(refMap)])].sort();
+  mkChart('c-refund-rate','line',{
+    labels: allMonths.map(m=>m.slice(5)+'/'+m.slice(0,4)),
+    datasets:[{
+      label:'Tỷ lệ hoàn trả (%)',
+      data: allMonths.map(m=>{ const tot=(paidMap[m]||0)+(unpaidMap[m]||0); return tot?((refMap[m]||0)/tot*100).toFixed(1):0; }),
+      borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,.1)',fill:true,tension:.3,pointRadius:4
+    }]
+  },{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:0}}});
+
+  // refund table
+  document.getElementById('refund-body').innerHTML = filteredR.length
+    ? filteredR.map(r => {
+        const q = quotes.find(x=>x.id===r.quoteId)||{};
+        return `<tr>
+          <td style="font-size:11px;color:#6b7280">${r.quoteId?r.quoteId.slice(-6).toUpperCase():'–'}</td>
+          <td>${r.date||'–'}</td>
+          <td>${q.senderName||r.customerName||'–'}</td>
+          <td>${q.serviceType||'–'}</td>
+          <td>$${(parseFloat(q.total)||0).toFixed(2)}</td>
+          <td style="font-weight:700;color:#dc2626">$${(parseFloat(r.amount)||0).toFixed(2)}</td>
+          <td>${r.reason||'–'}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteRefund('${r.id}')">🗑️</button></td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="8" style="text-align:center;padding:20px;color:#6b7280">Chưa có đơn hoàn trả 🎉</td></tr>';
+}
+
+// ═══════════════════════════════════════
+// TAB 2: REVENUE & VAT
+// ═══════════════════════════════════════
+function renderRevenue() {
+  const vatRate  = parseFloat(document.getElementById('vatRate').value)||0;
+  const vatType  = document.getElementById('vatType').value;
+  const paid     = filteredQ.filter(q=>q.paymentStatus==='paid');
+  const gross    = paid.reduce((s,q)=>s+(parseFloat(q.total)||0),0);
+  const refAmt   = filteredR.reduce((s,r)=>s+(parseFloat(r.amount)||0),0);
+  const net      = gross - refAmt;
+  const vat      = vatType==='inclusive' ? net*(vatRate/(100+vatRate)) : net*(vatRate/100);
+  const afterTax = vatType==='inclusive' ? net-vat : net;
+
+  document.getElementById('v-gross').textContent    = '$'+gross.toFixed(2);
+  document.getElementById('v-refunds').textContent  = '-$'+refAmt.toFixed(2);
+  document.getElementById('v-net').textContent      = '$'+net.toFixed(2);
+  document.getElementById('v-vat').textContent      = '$'+vat.toFixed(2);
+  document.getElementById('v-after-tax').textContent= '$'+afterTax.toFixed(2);
+
+  // monthly VAT table
+  const months = monthsFromData(filteredQ);
+  const mPaid={}, mRefund={};
+  filteredQ.filter(q=>q.paymentStatus==='paid').forEach(q=>{ const m=(q.date||'').slice(0,7); if(m){mPaid[m]=(mPaid[m]||{count:0,amt:0}); mPaid[m].count++; mPaid[m].amt+=parseFloat(q.total)||0;} });
+  filteredR.forEach(r=>{ const m=(r.date||'').slice(0,7); if(m) mRefund[m]=(mRefund[m]||0)+(parseFloat(r.amount)||0); });
+  const allM=[...new Set([...Object.keys(mPaid),...Object.keys(mRefund)])].sort().reverse();
+  let totGross=0,totRef=0,totNet=0,totVAT=0,totAfter=0,totOrders=0;
+  document.getElementById('vat-monthly-body').innerHTML = allM.map(m => {
+    const g=(mPaid[m]?.amt)||0, ref=(mRefund[m])||0, n=g-ref;
+    const v = vatType==='inclusive' ? n*(vatRate/(100+vatRate)) : n*(vatRate/100);
+    const at= vatType==='inclusive' ? n-v : n;
+    const cnt=(mPaid[m]?.count)||0;
+    totGross+=g;totRef+=ref;totNet+=n;totVAT+=v;totAfter+=at;totOrders+=cnt;
+    const [yr,mo]=m.split('-');
+    return `<tr>
+      <td style="font-weight:700">T${parseInt(mo)}/${yr}</td>
+      <td>${cnt}</td>
+      <td>$${g.toFixed(2)}</td>
+      <td style="color:#dc2626">-$${ref.toFixed(2)}</td>
+      <td style="color:#16a34a;font-weight:700">$${n.toFixed(2)}</td>
+      <td style="color:#7c3aed;font-weight:700">$${v.toFixed(2)}</td>
+      <td style="font-weight:700">$${at.toFixed(2)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('vat-footer').innerHTML = `<tr style="background:#fff8f4">
+    <td style="font-weight:800;padding:10px 14px">TỔNG</td>
+    <td style="font-weight:800;padding:10px 14px">${totOrders}</td>
+    <td style="font-weight:800;padding:10px 14px">$${totGross.toFixed(2)}</td>
+    <td style="font-weight:800;color:#dc2626;padding:10px 14px">-$${totRef.toFixed(2)}</td>
+    <td style="font-weight:800;color:#16a34a;padding:10px 14px">$${totNet.toFixed(2)}</td>
+    <td style="font-weight:800;color:#7c3aed;padding:10px 14px">$${totVAT.toFixed(2)}</td>
+    <td style="font-weight:800;padding:10px 14px">$${totAfter.toFixed(2)}</td>
+  </tr>`;
+}
+
+// ═══════════════════════════════════════
+// TAB 3: CÔNG NỢ
+// ═══════════════════════════════════════
+function renderDebt() {
+  const today = new Date();
+  const unpaid = quotes.filter(q=>q.paymentStatus!=='paid' && q.date); // all time for debt
+  // group by customer
+  const custDebt={};
+  unpaid.forEach(q=>{
+    const key = q.senderName||'Khách không tên';
+    if (!custDebt[key]) custDebt[key]={name:key,d0:0,d30:0,d60:0,d90:0,total:0,count:0,quotes:[]};
+    const days = Math.floor((today - new Date(q.date))/(1000*60*60*24));
+    const amt  = parseFloat(q.total)||0;
+    custDebt[key].total+=amt; custDebt[key].count++;
+    custDebt[key].quotes.push(q);
+    if      (days<30)  custDebt[key].d0  +=amt;
+    else if (days<60)  custDebt[key].d30 +=amt;
+    else if (days<90)  custDebt[key].d60 +=amt;
+    else               custDebt[key].d90 +=amt;
+  });
+  const list = Object.values(custDebt).sort((a,b)=>b.total-a.total);
+  const totD0  = list.reduce((s,c)=>s+c.d0,0);
+  const totD30 = list.reduce((s,c)=>s+c.d30,0);
+  const totD60 = list.reduce((s,c)=>s+c.d60,0);
+  const totD90 = list.reduce((s,c)=>s+c.d90,0);
+  const totAll = totD0+totD30+totD60+totD90;
+
+  document.getElementById('d-total').textContent       = '$'+totAll.toFixed(2);
+  document.getElementById('d-30').textContent          = '$'+totD0.toFixed(2);
+  document.getElementById('d-60').textContent          = '$'+totD30.toFixed(2);
+  document.getElementById('d-90').textContent          = '$'+totD60.toFixed(2);
+  document.getElementById('d-over90').textContent      = '$'+totD90.toFixed(2);
+  document.getElementById('d-cust-count').textContent  = list.length;
+
+  mkChart('c-aging','doughnut',{
+    labels:['<30 ngày','30–60 ngày','60–90 ngày','>90 ngày'],
+    datasets:[{data:[totD0,totD30,totD60,totD90],backgroundColor:['#16a34a','#d97706','#f97316','#dc2626']}]
+  },{responsive:true,plugins:{legend:{position:'bottom'}}});
+
+  const top10=list.slice(0,10);
+  mkChart('c-top-debt','bar',{
+    labels:top10.map(c=>c.name.split(' ').slice(-1)[0]),
+    datasets:[{label:'Công nợ ($)',data:top10.map(c=>c.total),backgroundColor:'#f97316'}]
+  },{responsive:true,indexAxis:'y',plugins:{legend:{display:false}}});
+
+  document.getElementById('debt-body').innerHTML = list.length
+    ? list.map(c=>`<tr>
+        <td style="font-weight:700">${c.name}</td>
+        <td style="color:#16a34a">$${c.d0.toFixed(2)}</td>
+        <td style="color:#d97706">$${c.d30.toFixed(2)}</td>
+        <td style="color:#f97316">$${c.d60.toFixed(2)}</td>
+        <td style="color:#dc2626;font-weight:700">$${c.d90.toFixed(2)}</td>
+        <td style="font-weight:800">$${c.total.toFixed(2)}</td>
+        <td>${c.count}</td>
+        <td><a href="crm.html" class="btn btn-outline btn-sm">👁️</a></td>
+      </tr>`)
+      .join('')
+    : '<tr><td colspan="8" style="text-align:center;padding:20px;color:#6b7280">Không có công nợ 🎉</td></tr>';
+}
+
+// ═══════════════════════════════════════
+// TAB 4: KHUYẾN MÃI
+// ═══════════════════════════════════════
+function renderPromo() {
+  const active = promos.filter(p=>p.active!==false);
+  const totalUses = promos.reduce((s,p)=>s+(p.usageCount||0),0);
+  const totalDiscount = promos.reduce((s,p)=>s+(p.totalDiscount||0),0);
+  // discount from quotes discount field
+  const discFromQuotes = filteredQ.reduce((s,q)=>s+(parseFloat(q.discount)||0),0);
+
+  document.getElementById('p-total').textContent       = promos.length;
+  document.getElementById('p-active').textContent      = active.length;
+  document.getElementById('p-discount').textContent    = '$'+totalDiscount.toFixed(2);
+  document.getElementById('p-uses').textContent        = totalUses;
+  document.getElementById('p-from-quotes').textContent = '$'+discFromQuotes.toFixed(2);
+
+  const today = new Date().toISOString().slice(0,10);
+  document.getElementById('promo-body').innerHTML = promos.length
+    ? promos.map(p=>{
+        const expired = p.expireDate && p.expireDate < today;
+        const inactive = p.active===false;
+        const status = inactive ? '<span class="promo-badge" style="background:#f1f5f9;color:#6b7280">Tắt</span>'
+          : expired ? '<span class="promo-badge" style="background:#fee2e2;color:#dc2626">Hết hạn</span>'
+          : '<span class="promo-badge" style="background:#dcfce7;color:#15803d">Hoạt động</span>';
+        return `<tr>
+          <td style="font-weight:800;font-size:14px;letter-spacing:.5px">${p.code}</td>
+          <td>${p.type==='percent'?'%':'$'}</td>
+          <td style="font-weight:700">${p.type==='percent'?p.value+'%':'$'+p.value}</td>
+          <td>${p.limit||'∞'}</td>
+          <td>${p.usageCount||0}</td>
+          <td style="color:#dc2626;font-weight:700">$${(p.totalDiscount||0).toFixed(2)}</td>
+          <td style="font-size:12px;color:#6b7280">${p.expireDate||'–'}</td>
+          <td>${status}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="togglePromo('${p.id}',${!inactive})">${inactive?'▶️':'⏸️'}</button>
+            <button class="btn btn-danger btn-sm" onclick="deletePromo('${p.id}')">🗑️</button>
+          </td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="9" style="text-align:center;padding:20px;color:#6b7280">Chưa có mã khuyến mãi</td></tr>';
+
+  // discount monthly from quotes
+  const mDisc={};
+  filteredQ.filter(q=>parseFloat(q.discount)>0).forEach(q=>{ const m=(q.date||'').slice(0,7); if(m){mDisc[m]=mDisc[m]||{count:0,total:0}; mDisc[m].count++; mDisc[m].total+=parseFloat(q.discount)||0;} });
+  const dMonths=Object.keys(mDisc).sort().reverse();
+  document.getElementById('discount-monthly-body').innerHTML = dMonths.length
+    ? dMonths.map(m=>{const d=mDisc[m],[yr,mo]=m.split('-');return`<tr><td>T${parseInt(mo)}/${yr}</td><td>${d.count}</td><td style="color:#dc2626;font-weight:700">-$${d.total.toFixed(2)}</td><td>$${(d.total/d.count).toFixed(2)}</td></tr>`;}).join('')
+    : '<tr><td colspan="4" style="text-align:center;padding:16px;color:#6b7280">Không có đơn giảm giá</td></tr>';
+}
+
+// ═══════════════════════════════════════
+// TAB 5: DÒNG TIỀN
+// ═══════════════════════════════════════
+function renderCashflow() {
+  const inflow  = filteredQ.filter(q=>q.paymentStatus==='paid').reduce((s,q)=>s+(parseFloat(q.total)||0),0);
+  const outflow = filteredE.reduce((s,e)=>s+(parseFloat(e.amount)||0),0);
+  const net     = inflow-outflow;
+
+  // running balance (all time for cumulative)
+  const allPaid = quotes.filter(q=>q.paymentStatus==='paid');
+  const allInMap={}, allOutMap={};
+  allPaid.forEach(q=>{ const m=(q.date||'').slice(0,7); if(m) allInMap[m]=(allInMap[m]||0)+(parseFloat(q.total)||0); });
+  expenses.forEach(e=>{ const m=(e.date||'').slice(0,7); if(m) allOutMap[m]=(allOutMap[m]||0)+(parseFloat(e.amount)||0); });
+  const allMonths=[...new Set([...Object.keys(allInMap),...Object.keys(allOutMap)])].sort();
+  let running=0;
+  const cfRows=allMonths.map(m=>{ const i=allInMap[m]||0,o=allOutMap[m]||0; running+=i-o; return {m,i,o,net:i-o,bal:running}; });
+  const totalBal = running;
+
+  document.getElementById('cf-in').textContent      = '$'+inflow.toFixed(2);
+  document.getElementById('cf-out').textContent     = '$'+outflow.toFixed(2);
+  document.getElementById('cf-net').textContent     = (net>=0?'+':'')+'$'+net.toFixed(2);
+  document.getElementById('cf-net').style.color     = net>=0?'#16a34a':'#dc2626';
+  document.getElementById('cf-balance').textContent = '$'+totalBal.toFixed(2);
+
+  mkChart('c-cashflow','bar',{
+    labels: allMonths.map(m=>m.slice(5)+'/'+m.slice(0,4)),
+    datasets:[
+      {label:'Thu ($)', data:allMonths.map(m=>allInMap[m]||0), backgroundColor:'#16a34a'},
+      {label:'Chi ($)', data:allMonths.map(m=>-(allOutMap[m]||0)), backgroundColor:'#dc2626'},
+      {label:'Lũy kế', data:cfRows.map(r=>r.bal), type:'line', borderColor:'#7c3aed', backgroundColor:'transparent', tension:.3, pointRadius:3, yAxisID:'y2'},
+    ]
+  },{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{stacked:false},y2:{position:'right',grid:{drawOnChartArea:false}}}});
+
+  // filtered months table
+  const fMonths=[...new Set([...Object.keys(allInMap).filter(m=>{const{yr,mo}=getFilters(); return (!yr||m.startsWith(yr))&&(!mo||parseInt(m.slice(5))===parseInt(mo));}), ...Object.keys(allOutMap).filter(m=>{const{yr,mo}=getFilters(); return (!yr||m.startsWith(yr))&&(!mo||parseInt(m.slice(5))===parseInt(mo));}) ])].sort().reverse();
+  let cumNet=0;
+  document.getElementById('cf-monthly-body').innerHTML = fMonths.length
+    ? fMonths.map(m=>{ const i=allInMap[m]||0,o=allOutMap[m]||0,n=i-o;cumNet+=n;const[yr,mo]=m.split('-');return`<tr>
+        <td style="font-weight:700">T${parseInt(mo)}/${yr}</td>
+        <td style="color:#16a34a;font-weight:700">$${i.toFixed(2)}</td>
+        <td style="color:#dc2626;font-weight:700">$${o.toFixed(2)}</td>
+        <td style="font-weight:800;color:${n>=0?'#16a34a':'#dc2626'}">${n>=0?'+':''}$${n.toFixed(2)}</td>
+        <td style="color:#7c3aed">$${cumNet.toFixed(2)}</td>
+      </tr>`;}).join('')
+    : '<tr><td colspan="5" style="text-align:center;padding:20px;color:#6b7280">Không có dữ liệu</td></tr>';
+
+  // expense list (filtered)
+  document.getElementById('expense-body').innerHTML = filteredE.length
+    ? filteredE.map(e=>`<tr>
+        <td>${e.date||'–'}</td>
+        <td><span class="exp-cat">${CAT_LABELS[e.category]||e.category||'Khác'}</span></td>
+        <td>${e.description||e.note||'–'}</td>
+        <td style="font-weight:700;color:#dc2626">$${(parseFloat(e.amount)||0).toFixed(2)}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="deleteExpense('${e.id}')">🗑️</button></td>
+      </tr>`).join('')
+    : '<tr><td colspan="5" style="text-align:center;padding:20px;color:#6b7280">Chưa có chi phí</td></tr>';
+}
+
+// ═══════════════════════════════════════
+// TAB 6: P&L
+// ═══════════════════════════════════════
+function renderPL() {
+  const vatRate = parseFloat(document.getElementById('vatRate').value)||0;
+  const vatType = document.getElementById('vatType').value;
+  const paid    = filteredQ.filter(q=>q.paymentStatus==='paid');
+
+  const grossRev   = paid.reduce((s,q)=>s+(parseFloat(q.total)||0),0);
+  const discounts  = filteredQ.reduce((s,q)=>s+(parseFloat(q.discount)||0),0);
+  const refAmt     = filteredR.reduce((s,r)=>s+(parseFloat(r.amount)||0),0);
+  const netRev     = grossRev - discounts - refAmt;
+  const vat        = vatType==='inclusive' ? netRev*(vatRate/(100+vatRate)) : netRev*(vatRate/100);
+  const revAfterTax= vatType==='inclusive' ? netRev-vat : netRev;
+
+  // COGS (shipping, packing expenses)
+  const cogsCats   = ['shipping','packing'];
+  const cogs       = filteredE.filter(e=>cogsCats.includes(e.category)).reduce((s,e)=>s+(parseFloat(e.amount)||0),0);
+  const grossProfit= netRev - cogs;
+
+  // Operating expenses
+  const opexCats   = ['labor','warehouse','marketing','office','tax','other'];
+  const opexMap    = {};
+  filteredE.filter(e=>opexCats.includes(e.category)).forEach(e=>{ opexMap[e.category]=(opexMap[e.category]||0)+(parseFloat(e.amount)||0); });
+  const totalOpex  = Object.values(opexMap).reduce((s,v)=>s+v,0);
+  const ebitda     = grossProfit - totalOpex;
+  const netProfit  = ebitda - vat;
+  const margin     = netRev>0 ? (netProfit/netRev*100).toFixed(1) : '0';
+
+  const fmt = v => v<0 ? `<span class="negative">($${Math.abs(v).toFixed(2)})</span>` : `$${v.toFixed(2)}`;
+  const rows = [
+    ['section','DOANH THU'],
+    ['row','Doanh thu bán hàng', '$'+grossRev.toFixed(2)],
+    ['row','Chiết khấu / Khuyến mãi', discounts>0?`<span class="negative">($${discounts.toFixed(2)})</span>`:'$0.00'],
+    ['row','Hoàn trả', refAmt>0?`<span class="negative">($${refAmt.toFixed(2)})</span>`:'$0.00'],
+    ['total','DOANH THU THUẦN', fmt(netRev)],
+    ['section','CHI PHÍ HÀNG BÁN (COGS)'],
+    ['indent','Chi phí vận chuyển hàng đi', fmt(filteredE.filter(e=>e.category==='shipping').reduce((s,e)=>s+(parseFloat(e.amount)||0),0))],
+    ['indent','Chi phí đóng gói', fmt(filteredE.filter(e=>e.category==='packing').reduce((s,e)=>s+(parseFloat(e.amount)||0),0))],
+    ['total','TỔNG COGS', fmt(cogs)],
+    ['total','LỢI NHUẬN GỘP', fmt(grossProfit), grossProfit>=0?'#16a34a':'#dc2626'],
+    ['section','CHI PHÍ HOẠT ĐỘNG'],
+    ['indent','Nhân công', fmt(opexMap['labor']||0)],
+    ['indent','Kho bãi / Mặt bằng', fmt(opexMap['warehouse']||0)],
+    ['indent','Marketing / Quảng cáo', fmt(opexMap['marketing']||0)],
+    ['indent','Văn phòng / Thiết bị', fmt(opexMap['office']||0)],
+    ['indent','Thuế / Phí khác', fmt(opexMap['tax']||0)],
+    ['indent','Chi phí khác', fmt(opexMap['other']||0)],
+    ['total','TỔNG CHI PHÍ HOẠT ĐỘNG', fmt(totalOpex)],
+    ['total','EBITDA', fmt(ebitda), ebitda>=0?'#16a34a':'#dc2626'],
+    ['section','THUẾ'],
+    ['row',`Thuế VAT (${vatRate}% – ${vatType==='inclusive'?'đã bao gồm':'cộng thêm'})`, fmt(vat)],
+    [netProfit>=0?'net-profit':'net-loss', `LỢI NHUẬN THUẦN  •  Biên lợi nhuận ${margin}%`, fmt(netProfit)],
+  ];
+
+  document.querySelector('#pl-table tbody').innerHTML = rows.map(r=>{
+    if (r[0]==='section') return `<tr class="section-header"><td colspan="2">${r[1]}</td></tr>`;
+    const cls = r[0]==='total'?'total-row':r[0]==='indent'?'':'';
+    const netCls = r[0]==='net-profit'?'net-profit':r[0]==='net-loss'?'net-loss':'';
+    const tdCls  = r[0]==='indent'?'indent':'';
+    const style  = r[3]?`style="color:${r[3]}"` : '';
+    return `<tr class="${cls} ${netCls}"><td class="${tdCls}" ${style}>${r[1]}</td><td style="text-align:right;font-family:monospace;${r[3]?'color:'+r[3]:''}">${r[2]}</td></tr>`;
+  }).join('');
+
+  // P&L monthly chart
+  const months = [...new Set([...quotes.map(q=>(q.date||'').slice(0,7)),...expenses.map(e=>(e.date||'').slice(0,7))].filter(Boolean))];
+  const fMonths = months.filter(m=>{ const{yr,mo}=getFilters(); return (!yr||m.startsWith(yr))&&(!mo||parseInt(m.slice(5))===parseInt(mo)); }).sort();
+  const mRev={},mExp={};
+  filteredQ.filter(q=>q.paymentStatus==='paid').forEach(q=>{ const m=(q.date||'').slice(0,7); if(m) mRev[m]=(mRev[m]||0)+(parseFloat(q.total)||0); });
+  filteredE.forEach(e=>{ const m=(e.date||'').slice(0,7); if(m) mExp[m]=(mExp[m]||0)+(parseFloat(e.amount)||0); });
+  mkChart('c-pl-monthly','bar',{
+    labels:fMonths.map(m=>m.slice(5)+'/'+m.slice(0,4)),
+    datasets:[
+      {label:'Doanh thu thuần',data:fMonths.map(m=>(mRev[m]||0)),backgroundColor:'#16a34a'},
+      {label:'Tổng chi phí',   data:fMonths.map(m=>(mExp[m]||0)),backgroundColor:'#f97316'},
+      {label:'Lợi nhuận',      data:fMonths.map(m=>(mRev[m]||0)-(mExp[m]||0)), type:'line', borderColor:'#7c3aed', backgroundColor:'transparent', tension:.3, pointRadius:4},
+    ]
+  },{responsive:true,plugins:{legend:{position:'top'}}});
+
+  // Expense breakdown chart
+  const expCats={}; filteredE.forEach(e=>{ expCats[CAT_LABELS[e.category]||'Khác']=(expCats[CAT_LABELS[e.category]||'Khác']||0)+(parseFloat(e.amount)||0); });
+  mkChart('c-expense-breakdown','doughnut',{
+    labels:Object.keys(expCats),
+    datasets:[{data:Object.values(expCats),backgroundColor:CAT_COLORS}]
+  },{responsive:true,plugins:{legend:{position:'bottom'}}});
+}
+
+// ═══════════════════════════════════════
+// MODALS & CRUD
+// ═══════════════════════════════════════
+function openRefundModal()  { document.getElementById('refundModal').classList.add('open'); }
+function openExpenseModal() { document.getElementById('expenseModal').classList.add('open'); document.getElementById('exp-date').value=today(); }
+function openPromoModal()   { document.getElementById('promoModal').classList.add('open'); }
+function closeModal(id)     { document.getElementById(id).classList.remove('open'); }
+
+async function saveRefund() {
+  const quoteId = document.getElementById('rf-quote').value;
+  const amount  = parseFloat(document.getElementById('rf-amount').value);
+  const date    = document.getElementById('rf-date').value;
+  const reason  = document.getElementById('rf-reason').value;
+  const note    = document.getElementById('rf-note').value;
+  if (!quoteId || !amount || !date) { alert('Vui lòng điền đầy đủ thông tin'); return; }
+  const q = quotes.find(x=>x.id===quoteId)||{};
+  await db.collection('refunds').add({ quoteId, customerName:q.senderName||'', amount, date, reason, note, createdAt:firebase.firestore.FieldValue.serverTimestamp() });
+  closeModal('refundModal');
+  await loadAll(); reloadAll();
+}
+
+async function deleteRefund(id) {
+  if (!confirm('Xóa hoàn trả này?')) return;
+  await db.collection('refunds').doc(id).delete();
+  await loadAll(); reloadAll();
+}
+
+async function saveExpense() {
+  const amount = parseFloat(document.getElementById('exp-amount').value);
+  const date   = document.getElementById('exp-date').value;
+  if (!amount || !date) { alert('Vui lòng nhập số tiền và ngày'); return; }
+  const data = {
+    category:    document.getElementById('exp-cat').value,
+    description: document.getElementById('exp-desc').value.trim(),
+    amount, date,
+    note:        document.getElementById('exp-note').value.trim(),
+    createdAt:   firebase.firestore.FieldValue.serverTimestamp(),
+  };
+  const id = document.getElementById('exp-id').value;
+  if (id) await db.collection('expenses').doc(id).update(data);
+  else    await db.collection('expenses').add(data);
+  closeModal('expenseModal');
+  await loadAll(); reloadAll();
+}
+
+async function deleteExpense(id) {
+  if (!confirm('Xóa chi phí này?')) return;
+  await db.collection('expenses').doc(id).delete();
+  await loadAll(); reloadAll();
+}
+
+async function savePromo() {
+  const code  = document.getElementById('promo-code').value.trim().toUpperCase();
+  const value = parseFloat(document.getElementById('promo-value').value);
+  if (!code || !value) { alert('Vui lòng nhập mã và giá trị'); return; }
+  const data = {
+    code, value,
+    type:       document.getElementById('promo-type').value,
+    limit:      parseInt(document.getElementById('promo-limit').value)||null,
+    expireDate: document.getElementById('promo-expire').value||null,
+    description:document.getElementById('promo-desc').value.trim(),
+    usageCount: 0, totalDiscount: 0, active: true,
+    createdAt:  firebase.firestore.FieldValue.serverTimestamp(),
+  };
+  const id = document.getElementById('promo-id').value;
+  if (id) await db.collection('promotions').doc(id).update(data);
+  else    await db.collection('promotions').add(data);
+  closeModal('promoModal');
+  await loadAll(); reloadAll();
+}
+
+async function togglePromo(id, active) {
+  await db.collection('promotions').doc(id).update({ active });
+  await loadAll(); reloadAll();
+}
+
+async function deletePromo(id) {
+  if (!confirm('Xóa mã khuyến mãi này?')) return;
+  await db.collection('promotions').doc(id).delete();
+  await loadAll(); reloadAll();
+}
+
+// ── EXPORT ──
+function exportFinanceExcel() {
+  const paid = filteredQ.filter(q=>q.paymentStatus==='paid');
+  const rev  = paid.reduce((s,q)=>s+(parseFloat(q.total)||0),0);
+  const out  = filteredE.reduce((s,e)=>s+(parseFloat(e.amount)||0),0);
+  const rows = [
+    ['BÁO CÁO TÀI CHÍNH — CUCKOO CARGO'],
+    ['Kỳ:', document.getElementById('gYear').value||'Tất cả','–', document.getElementById('gMonth').value?'Tháng '+document.getElementById('gMonth').value:''],
+    [],
+    ['CHỈ TIÊU','GIÁ TRỊ (USD)'],
+    ['Doanh thu gộp', rev.toFixed(2)],
+    ['Hoàn trả',     filteredR.reduce((s,r)=>s+(parseFloat(r.amount)||0),0).toFixed(2)],
+    ['Tổng chi phí', out.toFixed(2)],
+    ['Lợi nhuận gộp',(rev-out).toFixed(2)],
+    [],
+    ['CHI PHÍ CHI TIẾT'],
+    ['Ngày','Danh mục','Mô tả','Số tiền ($)'],
+    ...filteredE.map(e=>[e.date||'',CAT_LABELS[e.category]||'',e.description||e.note||'',(parseFloat(e.amount)||0).toFixed(2)]),
+    [],
+    ['CÔNG NỢ CHƯA THU'],
+    ['Khách hàng','Ngày đơn','Tổng tiền ($)'],
+    ...quotes.filter(q=>q.paymentStatus!=='paid').map(q=>[q.senderName||'',q.date||'',(parseFloat(q.total)||0).toFixed(2)]),
+  ];
+  const csv = rows.map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`tai-chinh-${today()}.csv`; a.click();
+}
+
+function exportPL() {
+  alert('Hàm xuất P&L — bạn có thể dùng Ctrl+P để in hoặc lưu PDF từ trình duyệt.');
+  window.print();
+}
+</script>
+</body>
+</html>
