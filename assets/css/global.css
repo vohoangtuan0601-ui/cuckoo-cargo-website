@@ -544,6 +544,23 @@ body > #cc-fab-wrap:not(:last-of-type) { display: none !important; }
   .cc-fab { width: 40px; height: 40px; }
 }
 
+/* Landscape mobile: FAB nằm ngang ở đáy giữa, không chiếm cột phải */
+@media (orientation: landscape) and (max-height: 500px) {
+  #cc-fab-wrap {
+    flex-direction: row;
+    bottom: 8px; right: auto; left: 50%;
+    transform: translateX(-50%);
+    gap: 8px;
+    background: rgba(255,255,255,.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 40px;
+    padding: 6px 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.15);
+  }
+  .cc-fab { width: 36px; height: 36px; }
+}
+
 /* ── UTILITIES ───────────────────────────────────────────── */
 .mt-0 { margin-top: 0 !important; }
 .mb-0 { margin-bottom: 0 !important; }
