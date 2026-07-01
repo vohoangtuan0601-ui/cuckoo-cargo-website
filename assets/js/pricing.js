@@ -10,8 +10,8 @@ const CC_PRICING = {
     { from: 0,    to: 10,   price: 3.89 },
     { from: 10,   to: 50,   price: 3.89 },
     { from: 50,   to: 90,   price: 3.79 },
-    { from: 90,   to: 150,  price: 3.59 },
-    { from: 150,  to: 9999, price: 3.49 },
+    { from: 90,   to: 150,  price: 3.65 },
+    { from: 150,  to: 9999, price: 3.55 },
   ],
 
   deliveryVN: { sgHn: 0, province: 0.99 },
