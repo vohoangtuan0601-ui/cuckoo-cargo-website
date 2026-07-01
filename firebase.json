@@ -30,8 +30,24 @@
       "test-form.html",
       "*.md"
     ],
+    "cleanUrls": true,
+    "trailingSlash": false,
     "rewrites": [
       { "source": "/quote-system", "destination": "/quote-system/index.html" }
+    ],
+    "redirects": [
+      { "source": "/index.html", "destination": "/", "type": 301 },
+      { "source": "/my-ve-viet.html", "destination": "/my-ve-viet", "type": 301 },
+      { "source": "/gui-hang-my-ve-viet.html", "destination": "/my-ve-viet", "type": 301 },
+      { "source": "/noi-dia-my.html", "destination": "/label-noi-dia-my", "type": 301 },
+      { "source": "/label-noi-dia-my.html", "destination": "/label-noi-dia-my", "type": 301 },
+      { "source": "/mua-ho.html", "destination": "/mua-ho-hang-my", "type": 301 },
+      { "source": "/mua-ho-hang-my.html", "destination": "/mua-ho-hang-my", "type": 301 },
+      { "source": "/san-pham.html", "destination": "/san-pham", "type": 301 },
+      { "source": "/blog.html", "destination": "/blog", "type": 301 },
+      { "source": "/tracking.html", "destination": "/tracking", "type": 301 },
+      { "source": "/lien-he.html", "destination": "/lien-he", "type": 301 },
+      { "source": "/dieu-khoan.html", "destination": "/dieu-khoan", "type": 301 }
     ],
     "headers": [
       {
