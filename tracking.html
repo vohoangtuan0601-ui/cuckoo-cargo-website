@@ -461,7 +461,7 @@
  }
 
  // Các bước hành trình — phải khớp với trạng thái admin cập nhật
- const STEPS_MVV   = ['Tạo đơn', 'Kho Mỹ', 'Đang bay', 'Kho VN', 'Hải quan', 'Đã giao'];
+ const STEPS_MVV   = ['Đã Tạo Đơn', 'Kho Mỹ', 'Đang Vận Chuyển', 'Chờ Thông Quan', 'Đang Trên Đường Giao', 'Đã Giao'];
  const STEPS_LABEL = ['Tạo label', 'Hãng nhận', 'Vận chuyển', 'Sắp giao', 'Đã giao'];
 
  /**
@@ -480,15 +480,14 @@
      return 0;
    }
 
-   // STEPS_MVV: ['Tạo đơn'=0, 'Kho Mỹ'=1, 'Đang bay'=2, 'Kho VN'=3, 'Hải quan'=4, 'Đã giao'=5]
+   // STEPS_MVV: ['Đã Tạo Đơn'=0, 'Kho Mỹ'=1, 'Đang Vận Chuyển'=2, 'Chờ Thông Quan'=3, 'Đang Trên Đường Giao'=4, 'Đã Giao'=5]
    if (s.includes('giao thành công') || s.includes('đã giao thành công')) return 5;
-   if (s.includes('giao hàng nội địa') || s.includes('đang giao hàng') || s.includes('đang giao')) return 5;
-   if (s.includes('thông quan') || s.includes('hải quan'))               return 4;
-   if (s.includes('kho việt nam') || s.includes('kho vn') || s.includes('về kho')) return 3;
-   if (s.includes('vận chuyển quốc tế') || s.includes('quốc tế'))       return 2;
+   if (s.includes('trên đường giao') || s.includes('giao hàng nội địa') || s.includes('đang giao')) return 4;
+   if (s.includes('thông quan') || s.includes('hải quan'))               return 3;
+   if (s.includes('vận chuyển quốc tế') || s.includes('quốc tế') || s.includes('kho việt nam') || s.includes('kho vn') || s.includes('về kho')) return 2;
    if (s.includes('xuất kho') || s.includes('đang bay') || s.includes('máy bay') || s.includes('lax')) return 2;
    if (s.includes('nhận tại kho') || s.includes('kho cuckoo') || s.includes('chuẩn bị hàng') || s.includes('kho mỹ')) return 1;
-   // Tạo đơn / mặc định
+   // Đã tạo đơn / mặc định
    return 0;
  }
 
