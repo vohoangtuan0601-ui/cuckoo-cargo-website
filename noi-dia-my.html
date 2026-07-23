@@ -908,7 +908,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53
 
  // UI labels per service (pricing numbers come from CC_PRICING.rateData in pricing.js)
  const RATE_UI = {
- 'ups-Ground':    { sub_vi:'Giao 3–5 ngày làm việc · Tiết kiệm nhất', sub_en:'3–5 business days · Most economical', from:'$1.99/lbs' },
+ 'ups-Ground':    { sub_vi:'Giao 3–5 ngày làm việc · Tiết kiệm nhất', sub_en:'3–5 business days · Most economical', from:'Từ $1.99/lbs' },
  'ups-3-Day':     { sub_vi:'Giao 3 ngày làm việc', sub_en:'3 business days', from:'Từ $30' },
  'ups-2-Day':     { sub_vi:'Giao 2 ngày làm việc', sub_en:'2 business days', from:'Từ $31' },
  'ups-Overnight': { sub_vi:'Giao ngày hôm sau', sub_en:'Next day delivery', from:'Từ $109' },
@@ -927,7 +927,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53
    'ups-Ground': {
      minBillLbs:10, maxLbs:null,
      flat:[ {max:2,p:25},{max:3,p:27},{max:5,p:30} ],
-     tiers:[ {maxLbs:9999,rate:1.99} ],
+     tiers:[ {maxLbs:10,rate:2.99},{maxLbs:9999,rate:1.99} ],
    },
    'ups-3-Day': {
      minBillLbs:10, maxLbs:null,
@@ -945,12 +945,13 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53
      minBillLbs:10, maxLbs:null,
      flat:[ {max:2,p:109},{max:3,p:117},{max:5,p:134} ],
      tiers:[ {maxLbs:10,rate:12.99},{maxLbs:15,rate:10.69},{maxLbs:20,rate:9.49},
-             {maxLbs:30,rate:8.39},{maxLbs:9999,rate:7.59} ],
+             {maxLbs:25,rate:8.39},{maxLbs:30,rate:7.99},{maxLbs:40,rate:7.59},{maxLbs:9999,rate:7.29} ],
    },
    'fedex-Ground': {
      minBillLbs:10, maxLbs:null,
      flat:[ {max:3,p:32},{max:5,p:33} ],
-     tiers:[ {maxLbs:10,rate:2.99},{maxLbs:9999,rate:2.59} ],
+     tiers:[ {maxLbs:10,rate:3.79},{maxLbs:15,rate:2.79},{maxLbs:20,rate:2.79},
+             {maxLbs:25,rate:2.29},{maxLbs:30,rate:2.29},{maxLbs:40,rate:2.09},{maxLbs:9999,rate:1.89} ],
    },
    'fedex-3-Day': {
      minBillLbs:10, maxLbs:null,
