@@ -555,15 +555,10 @@
  <h3 data-vi="Thông tin người gửi" data-en="Sender Information">Thông tin người gửi</h3>
  </div>
  <div class="form-card-body">
- <div class="form-row col2">
- <div class="form-group">
- <label data-vi="Tên Facebook <span class='req'>*</span>" data-en="Facebook Name <span class='req'>*</span>">Tên Facebook <span class="req">*</span></label>
- <input type="text" id="f-fbname" placeholder="Nguyen Van A" required />
- </div>
  <div class="form-group">
  <label data-vi="Mã khách hàng <span class='hint'>(CAC + 4 số)</span>" data-en="Customer Code <span class='hint'>(CAC + 4 digits)</span>">Mã khách hàng <span class="hint">(CAC + 4 số)</span></label>
  <input type="text" id="f-code" placeholder="CAC0001" maxlength="10" />
- </div>
+ <div class="input-note" data-vi="Mã tự động khi bạn nhập đầy đủ các thông tin người gửi" data-en="Code auto-generated when you fill in all sender information">Mã tự động khi bạn nhập đầy đủ các thông tin người gửi</div>
  </div>
  <div class="form-row col2">
  <div class="form-group">
@@ -855,7 +850,7 @@
  <span>Xem tóm tắt & Xác nhận label</span>
  </button>
  <div class="submit-note">
- <span data-vi="Cuckoo Cargo sẽ liên hệ qua <strong>Facebook</strong> hoặc <strong>Email</strong> để xác nhận và gửi file label PDF." data-en="Cuckoo Cargo will contact you via <strong>Facebook</strong> or <strong>Email</strong> to confirm and send the PDF label file.">Cuckoo Cargo sẽ liên hệ qua <strong>Facebook</strong> hoặc <strong>Email</strong> để xác nhận và gửi file label PDF.</span><br>
+ <span data-vi="Cuckoo Cargo sẽ liên hệ qua <strong>Facebook</strong> hoặc <strong>Email</strong> để xác nhận và gửi file label PDF." data-en="Cuckoo Cargo will contact you via <strong>Facebook</strong> or <strong>Email</strong> to confirm and send the PDF label file.">Cuckoo Cargo sẽ liên hệ qua <strong>Email</strong> để xác nhận và gửi file label PDF.</span><br>
  Hotline: <a href="tel:+17143984817" style="color:var(--orange)">+1 (714) 398-4817</a>
  </div>
  </div>
@@ -938,24 +933,91 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53
  usps: { name:'USPS', services:['Ground','Priority','Express'] },
  };
 
- // UI labels per service (pricing numbers come from CC_PRICING.rateData in pricing.js)
+ // UI labels per service
  const RATE_UI = {
- 'ups-Ground':    { sub_vi:'Giao 3–5 ngày làm việc · Tiết kiệm nhất', sub_en:'3–5 business days · Most economical', from:'$1.99/lbs' },
- 'ups-3-Day':     { sub_vi:'Giao 3 ngày làm việc', sub_en:'3 business days', from:'Từ $25' },
+ 'ups-Ground':    { sub_vi:'Giao 3–5 ngày làm việc · Tiết kiệm nhất', sub_en:'3–5 business days · Most economical', from:'Từ $1.99/lbs' },
+ 'ups-3-Day':     { sub_vi:'Giao 3 ngày làm việc', sub_en:'3 business days', from:'Từ $30' },
  'ups-2-Day':     { sub_vi:'Giao 2 ngày làm việc', sub_en:'2 business days', from:'Từ $31' },
- 'ups-Overnight': { sub_vi:'Giao ngày hôm sau', sub_en:'Next day delivery', from:'Từ $89' },
- 'fedex-Ground':  { sub_vi:'Giao 3–5 ngày · Ổn định', sub_en:'3–5 days · Reliable', from:'$2.99/lbs' },
- 'fedex-3-Day':   { sub_vi:'Giao 3 ngày làm việc', sub_en:'3 business days', from:'Từ $69' },
- 'fedex-2-Day':   { sub_vi:'Giao 2 ngày làm việc', sub_en:'2 business days', from:'Từ $82' },
- 'fedex-Overnight':{ sub_vi:'Giao ngày hôm sau', sub_en:'Next day delivery', from:'Từ $139' },
- 'usps-Ground':   { sub_vi:'Giao 2–5 ngày · Tối đa 20 lbs', sub_en:'2–5 days · Max 20 lbs', from:'Từ $22' },
- 'usps-Priority': { sub_vi:'Giao 1–3 ngày · Tối đa 20 lbs', sub_en:'1–3 days · Max 20 lbs', from:'Từ $29' },
- 'usps-Express':  { sub_vi:'Giao 1–2 ngày · Tối đa 10 lbs', sub_en:'1–2 days · Max 10 lbs', from:'Từ $129' },
+ 'ups-Overnight': { sub_vi:'Giao ngày hôm sau', sub_en:'Next day delivery', from:'Từ $109' },
+ 'fedex-Ground':  { sub_vi:'Giao 3–5 ngày · Ổn định', sub_en:'3–5 days · Reliable', from:'Từ $32' },
+ 'fedex-3-Day':   { sub_vi:'Giao 3 ngày làm việc', sub_en:'3 business days', from:'Từ $79' },
+ 'fedex-2-Day':   { sub_vi:'Giao 2 ngày làm việc', sub_en:'2 business days', from:'Từ $89' },
+ 'fedex-Overnight':{ sub_vi:'Giao ngày hôm sau', sub_en:'Next day delivery', from:'Từ $159' },
+ 'usps-Ground':   { sub_vi:'Giao 2–5 ngày · Tối đa 20 lbs', sub_en:'2–5 days · Max 20 lbs', from:'Từ $24' },
+ 'usps-Priority': { sub_vi:'Giao 1–3 ngày · Tối đa 20 lbs', sub_en:'1–3 days · Max 20 lbs', from:'Từ $32' },
+ 'usps-Express':  { sub_vi:'Giao 1–2 ngày · Tối đa 10 lbs', sub_en:'1–2 days · Max 10 lbs', from:'Từ $134' },
  };
- // Merge pricing data (from pricing.js) with UI labels
+
+ // ── New domestic pricing (from Excel Tong Hop) ──────────────────────────────
+ const DOMESTIC_RATES = {
+   'ups-Ground': {
+     minBillLbs:10, maxLbs:null,
+     flat:[ {max:2,p:25},{max:3,p:27},{max:5,p:30} ],
+     tiers:[ {maxLbs:10,rate:2.99},{maxLbs:9999,rate:1.99} ],
+   },
+   'ups-3-Day': {
+     minBillLbs:10, maxLbs:null,
+     flat:[ {max:2,p:30},{max:3,p:37},{max:5,p:47} ],
+     tiers:[ {maxLbs:10,rate:5.49},{maxLbs:15,rate:4.69},{maxLbs:20,rate:4.29},
+             {maxLbs:25,rate:4.09},{maxLbs:30,rate:3.89},{maxLbs:40,rate:3.69},{maxLbs:9999,rate:3.49} ],
+   },
+   'ups-2-Day': {
+     minBillLbs:10, maxLbs:null,
+     flat:[ {max:2,p:31},{max:3,p:44},{max:5,p:56} ],
+     tiers:[ {maxLbs:10,rate:7.49},{maxLbs:15,rate:6.49},{maxLbs:20,rate:5.99},
+             {maxLbs:25,rate:5.79},{maxLbs:30,rate:5.59},{maxLbs:40,rate:5.29},{maxLbs:9999,rate:5.09} ],
+   },
+   'ups-Overnight': {
+     minBillLbs:10, maxLbs:null,
+     flat:[ {max:2,p:109},{max:3,p:117},{max:5,p:134} ],
+     tiers:[ {maxLbs:10,rate:12.99},{maxLbs:15,rate:10.69},{maxLbs:20,rate:9.49},
+             {maxLbs:25,rate:8.39},{maxLbs:30,rate:7.99},{maxLbs:40,rate:7.59},{maxLbs:9999,rate:7.29} ],
+   },
+   'fedex-Ground': {
+     minBillLbs:10, maxLbs:null,
+     flat:[ {max:3,p:32},{max:5,p:33} ],
+     tiers:[ {maxLbs:10,rate:3.79},{maxLbs:15,rate:2.79},{maxLbs:20,rate:2.79},
+             {maxLbs:25,rate:2.29},{maxLbs:30,rate:2.29},{maxLbs:40,rate:2.09},{maxLbs:9999,rate:1.89} ],
+   },
+   'fedex-3-Day': {
+     minBillLbs:10, maxLbs:null,
+     flat:[ {max:2,p:79},{max:5,p:99} ],
+     tiers:[ {maxLbs:10,rate:15.29},{maxLbs:15,rate:12.79},{maxLbs:20,rate:11.49},
+             {maxLbs:25,rate:9.79},{maxLbs:30,rate:9.49},{maxLbs:40,rate:8.99},{maxLbs:9999,rate:8.59} ],
+   },
+   'fedex-2-Day': {
+     minBillLbs:10, maxLbs:null,
+     flat:[ {max:2,p:89},{max:5,p:117} ],
+     tiers:[ {maxLbs:10,rate:18.19},{maxLbs:15,rate:15.19},{maxLbs:20,rate:13.99},
+             {maxLbs:25,rate:12.19},{maxLbs:30,rate:11.59},{maxLbs:40,rate:11.09},{maxLbs:9999,rate:10.19} ],
+   },
+   'fedex-Overnight': {
+     minBillLbs:10, maxLbs:null,
+     flat:[ {max:2,p:159},{max:5,p:176} ],
+     tiers:[ {maxLbs:10,rate:23.99},{maxLbs:15,rate:19.79},{maxLbs:20,rate:16.49},
+             {maxLbs:30,rate:12.89},{maxLbs:9999,rate:11.09} ],
+   },
+   'usps-Ground': {
+     minBillLbs:null, maxLbs:20,
+     flat:[ {max:1,p:24},{max:3,p:27},{max:5,p:30} ],
+     tiers:[ {maxLbs:10,rate:3.49},{maxLbs:20,rate:3.99} ],
+   },
+   'usps-Priority': {
+     minBillLbs:null, maxLbs:20,
+     flat:[ {max:1,p:32},{max:3,p:49},{max:5,p:62} ],
+     tiers:[ {maxLbs:10,rate:6.99},{maxLbs:20,rate:5.99} ],
+   },
+   'usps-Express': {
+     minBillLbs:null, maxLbs:10,
+     flat:[ {max:1,p:134},{max:3,p:174},{max:5,p:213} ],
+     tiers:[ {maxLbs:10,rate:21.99} ],
+   },
+ };
+
+ // Merge pricing data with UI labels
  const RATE_DATA = {};
- for (const key in CC_PRICING.rateData) {
-   RATE_DATA[key] = Object.assign({}, CC_PRICING.rateData[key], RATE_UI[key] || {});
+ for (const key in DOMESTIC_RATES) {
+   RATE_DATA[key] = Object.assign({}, DOMESTIC_RATES[key], RATE_UI[key] || {});
  }
 
  let currentCarrier = 'ups';
@@ -1028,41 +1090,43 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53
  <th>${isEN?'Price':'Giá bán'}</th>
  </tr></thead><tbody>`;
 
- // Flat fee rows
- rows += `<tr class="subhead"><td colspan="3">${isEN?'📦 FLAT FEE / ORDER — Orders ≤10 lbs':'📦 GIÁ CỐ ĐỊNH / ĐƠN — Đơn ≤10 lbs'}</td></tr>`;
- const flatLabels = ['1–2 lbs','3–5 lbs','6–8 lbs','9–10 lbs'];
- data.flat.forEach((f, i) => {
- rows += `<tr>
- <td><strong>${flatLabels[i]}</strong></td>
+ // Flat fee rows — dynamic labels from data.flat
+ const maxFlat = data.flat[data.flat.length - 1].max;
+ rows += `<tr class="subhead"><td colspan="3">${isEN?`📦 FLAT FEE / ORDER — ≤${maxFlat} lbs`:`📦 GIÁ CỐ ĐỊNH / ĐƠN — Đơn ≤${maxFlat} lbs`}</td></tr>`;
+ let prevMax = 0;
+ data.flat.forEach((f) => {
+   const label = f.max === prevMax + 1 ? `${f.max} lbs` : `${prevMax + 1}–${f.max} lbs`;
+   rows += `<tr>
+ <td><strong>${label}</strong></td>
  <td><span class="flat-badge">⚡ ${isEN?'flat':'cố định'}</span></td>
  <td class="price-cell">$${f.p}/${isEN?'order':'đơn'}</td>
  </tr>`;
+   prevMax = f.max;
  });
 
- // Per-lbs rows
- if (data.perLbs) {
- rows += `<tr class="subhead"><td colspan="3">${isEN?'📏 PER LBS — Orders over 10 lbs':'📏 TÍNH THEO $/LBS — Đơn trên 10 lbs'}</td></tr>`;
- const ALL_PERLBS = [
-   {label:'11–20 lbs'},{label:'21–30 lbs'},{label:'31–40 lbs'},{label:'41–50 lbs'},
-   {label:'51–70 lbs'},{label:'71–100 lbs'},{label:'101+ lbs'},
- ];
- const plRanges = data.maxLbs === 20 ? [ALL_PERLBS[0]] : ALL_PERLBS;
- const plArr = Array.isArray(data.perLbs) ? data.perLbs : plRanges.map(() => data.perLbs);
- plRanges.forEach((r, i) => {
-   const rate = plArr[Math.min(i, plArr.length - 1)];
-   rows += `<tr>
- <td><strong>${r.label}</strong></td>
+ // Per-lbs tiers — dynamic from data.tiers
+ if (data.tiers && data.tiers.length > 0) {
+   const minNote = data.minBillLbs
+     ? ` · ${isEN?`min ${data.minBillLbs} lbs billed`:`tối thiểu tính ${data.minBillLbs} lbs`}`
+     : '';
+   rows += `<tr class="subhead"><td colspan="3">${isEN?`📏 PER LBS — ${maxFlat+1} lbs+${minNote}`:`📏 TÍNH THEO $/LBS — Từ ${maxFlat+1} lbs${minNote}`}</td></tr>`;
+   let tierPrev = maxFlat;
+   data.tiers.forEach((t) => {
+     const tierLabel = t.maxLbs >= 9999 ? `${tierPrev+1}+ lbs` : `${tierPrev+1}–${t.maxLbs} lbs`;
+     rows += `<tr>
+ <td><strong>${tierLabel}</strong></td>
  <td><span style="font-size:12px;color:var(--text-muted)">${isEN?'per lbs':'theo lbs'}</span></td>
- <td class="price-cell">$${(+rate).toFixed(2)}/lbs</td>
+ <td class="price-cell">$${t.rate.toFixed(2)}/lbs</td>
  </tr>`;
- });
+     tierPrev = t.maxLbs;
+   });
  }
 
- // Max weight exceeded
- if (!data.perLbs || data.maxLbs === 10) {
- rows += `<tr class="subhead-warn"><td colspan="3">⚠️ ${isEN?'Over 10 lbs — Not accepted, please choose another service':'Trên 10 lbs — Không nhận, vui lòng chọn dịch vụ khác'}</td></tr>`;
- } else if (data.maxLbs === 20) {
- rows += `<tr class="subhead-warn"><td colspan="3">⚠️ ${isEN?'Over 20 lbs — Not accepted':'Trên 20 lbs — Không nhận'}</td></tr>`;
+ // Max weight warning
+ if (!data.tiers || data.tiers.length === 0) {
+   rows += `<tr class="subhead-warn"><td colspan="3">⚠️ ${isEN?`Over ${maxFlat} lbs — Not accepted, please choose another service`:`Trên ${maxFlat} lbs — Không nhận, vui lòng chọn dịch vụ khác`}</td></tr>`;
+ } else if (data.maxLbs) {
+   rows += `<tr class="subhead-warn"><td colspan="3">⚠️ ${isEN?`Over ${data.maxLbs} lbs — Not accepted`:`Trên ${data.maxLbs} lbs — Không nhận`}</td></tr>`;
  }
 
  // UPS heavy surcharge note
@@ -1217,29 +1281,23 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53
  if (pkg) { pkg[field] = val; calcTotal(); }
  }
 
- // PRICE CALCULATION 
+ // PRICE CALCULATION
  function calcPkg(lbs) {
  const key = currentCarrier + '-' + currentService;
  const data = RATE_DATA[key];
  if (!data) return 0;
- if (lbs <= 10) {
- const tier = data.flat.find(f => lbs <= f.max);
- return tier ? tier.p : data.flat[data.flat.length - 1].p;
- }
- if (!data.perLbs) return null; // USPS Express maxed
- if (data.maxLbs && lbs > data.maxLbs) return null; // over limit
- const PL_RANGES = [[11,20],[21,30],[31,40],[41,50],[51,70],[71,100],[101,9999]];
- let rate;
- if (Array.isArray(data.perLbs)) {
-   let idx = data.perLbs.length - 1;
-   for (let i = 0; i < PL_RANGES.length; i++) {
-     if (lbs >= PL_RANGES[i][0] && lbs <= PL_RANGES[i][1]) { idx = Math.min(i, data.perLbs.length - 1); break; }
-   }
-   rate = data.perLbs[idx];
- } else {
-   rate = data.perLbs;
- }
- return lbs * rate;
+ // 1. Flat fee tiers
+ const flatTier = data.flat.find(f => lbs <= f.max);
+ if (flatTier) return flatTier.p;
+ // 2. Check max weight
+ if (data.maxLbs && lbs > data.maxLbs) return null;
+ // 3. Per-lbs tiers (decreasing rates)
+ if (!data.tiers || data.tiers.length === 0) return null;
+ const tier = data.tiers.find(t => lbs <= t.maxLbs);
+ if (!tier) return null;
+ // Apply min billable weight (UPS/FedEx: min 10 lbs)
+ const billLbs = (data.minBillLbs && lbs < data.minBillLbs) ? data.minBillLbs : lbs;
+ return billLbs * tier.rate;
  }
 
  function calcTotal() {
@@ -1308,7 +1366,6 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53
  function showReview() {
  // Validate required fields
  const required = [
- { id:'f-fbname', name:'Tên Facebook' },
  { id:'f-name', name:'Họ tên' },
  { id:'f-phone', name:'SĐT người gửi' },
  { id:'f-email', name:'Email' },
@@ -1422,7 +1479,6 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53
  mode: currentMode === 'kho' ? 'Gửi lên kho Cuckoo Cargo' : 'Xuyên bang Mỹ',
  carrier: CARRIERS[currentCarrier].name,
  service: currentService,
- facebookName: document.getElementById('f-fbname').value,
  customerCode: document.getElementById('f-code').value,
  senderName: document.getElementById('f-name').value,
  phoneUS: document.getElementById('f-phone').value,
