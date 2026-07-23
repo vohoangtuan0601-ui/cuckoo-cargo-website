@@ -158,9 +158,16 @@ function getOrderData(orderId) {
     var tValues = trackingSheet.getDataRange().getValues();
     for (var ti = 1; ti < tValues.length; ti++) {
       if ((tValues[ti][0] || '').toString().toUpperCase().trim() === orderId) {
+        var rawTime = tValues[ti][1];
+        var fmtTime = '';
+        if (rawTime) {
+          fmtTime = rawTime instanceof Date
+            ? Utilities.formatDate(rawTime, 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy HH:mm')
+            : rawTime.toString();
+        }
         trackingEvents.push({
           orderId:  tValues[ti][0] || '',
-          time:     tValues[ti][1] ? tValues[ti][1].toString() : '',
+          time:     fmtTime,
           status:   tValues[ti][2] || '',
           location: tValues[ti][3] || '',
           note:     tValues[ti][4] || '',

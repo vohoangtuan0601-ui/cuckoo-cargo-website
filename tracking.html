@@ -481,7 +481,7 @@
    }
 
    // STEPS_MVV: ['Đã Tạo Đơn'=0, 'Kho Mỹ'=1, 'Đang Vận Chuyển'=2, 'Chờ Thông Quan'=3, 'Đang Trên Đường Giao'=4, 'Đã Giao'=5]
-   if (s.includes('giao thành công') || s.includes('đã giao thành công')) return 5;
+   if (s.includes('giao hàng thành công') || s.includes('giao thành công') || s.includes('đã giao thành công')) return 5;
    if (s.includes('trên đường giao') || s.includes('giao hàng nội địa') || s.includes('đang giao')) return 4;
    if (s.includes('thông quan') || s.includes('hải quan'))               return 3;
    if (s.includes('vận chuyển quốc tế') || s.includes('quốc tế') || s.includes('kho việt nam') || s.includes('kho vn') || s.includes('về kho')) return 2;
