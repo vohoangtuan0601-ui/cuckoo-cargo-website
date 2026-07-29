@@ -255,6 +255,7 @@ function handleOrder(data) {
     receiverAddress: data.receiverAddress,
     weight:          data.weight,
     estimatedFee:    data.estimatedFee,
+    lang:            data.lang || 'vi',
   });
 
   return { orderId };
@@ -318,6 +319,7 @@ function handleLabel(data) {
     weight:          data.weight,
     pickupMode:      data.pickupMode,
     estimatedFee:    data.estimatedFee,
+    lang:            data.lang || 'vi',
   });
 
   return { labelId };
@@ -369,6 +371,7 @@ function handleShopping(data) {
     customerName:    data.customerName,
     receiverAddress: data.receiverAddress,
     items:           data.items,
+    lang:            data.lang || 'vi',
   });
 
   return { shoppingId };
