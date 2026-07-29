@@ -6,11 +6,19 @@
   <title>CRM Khách hàng — Cuckoo Cargo</title>
   <link rel="stylesheet" href="css/styles.css"/>
   <style>
-    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
-    .kpi{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-left:4px solid #f97316}
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+    .kpi{background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-left:4px solid #f97316}
     .kpi.blue{border-color:#3b82f6}.kpi.green{border-color:#16a34a}.kpi.purple{border-color:#7c3aed}
-    .kpi .label{font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
-    .kpi .value{font-size:22px;font-weight:900;color:#1a1a2e}
+    .kpi.amber{border-color:#f59e0b}
+    .kpi .label{font-size:10px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+    .kpi .value{font-size:20px;font-weight:900;color:#1a1a2e}
+    /* Segment badges */
+    .seg{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+    .seg-new{background:#dbeafe;color:#1e40af}
+    .seg-normal{background:#f3f4f6;color:#374151}
+    .seg-potential{background:#fed7aa;color:#c2410c}
+    .seg-vip{background:#fef3c7;color:#92400e;border:1px solid #f59e0b}
+    /* Modal */
     .customer-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center}
     .customer-modal.open{display:flex}
     .modal-box{background:#fff;border-radius:16px;width:min(800px,95vw);max-height:90vh;overflow-y:auto;padding:0}
@@ -24,6 +32,13 @@
     .tag.paid{background:#dcfce7;color:#15803d}
     .tag.unpaid{background:#fee2e2;color:#dc2626}
     .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0}
+    .avatar.vip{background:linear-gradient(135deg,#f59e0b,#d97706)}
+    .avatar.potential{background:linear-gradient(135deg,#f97316,#c2410c)}
+    .avatar.new{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
+    .avatar.normal{background:linear-gradient(135deg,#6b7280,#374151)}
+    .seg-btn{padding:5px 14px;border:1.5px solid #e5e7eb;border-radius:20px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+    .seg-btn:hover{border-color:#f97316;color:#f97316}
+    .seg-btn.active{border-color:#f97316;background:#fff7ed;color:#c2410c}
   </style>
 </head>
 <body>
@@ -31,11 +46,12 @@
   <div class="navbar-brand">🐦 Cuckoo Cargo</div>
   <div class="navbar-nav">
     <a class="nav-link" href="dashboard.html">Dashboard</a>
-    <a class="nav-link" href="quote-form.html">New Quote</a>
-    <a class="nav-link" href="reports.html">📊 Báo cáo</a>
-    <a class="nav-link active" href="crm.html">👥 CRM</a>
-    <a class="nav-link" href="finance.html">💰 Tài chính</a>
-    <a class="nav-link" href="admin.html">Admin</a>
+    <a class="nav-link" href="quote-form.html">+ New Quote</a>
+    <a class="nav-link nav-admin-only" href="reports.html">📊 Báo cáo</a>
+    <a class="nav-link nav-admin-only" href="crm.html">👥 CRM</a>
+    <a class="nav-link nav-admin-only" href="finance.html">💰 Tài chính</a>
+    <a class="nav-link nav-admin-only" href="admin.html">⚙️ Admin</a>
+    <span id="navRoleBadge"></span>
     <button class="btn-logout" onclick="auth.signOut().then(()=>location.href='index.html')">Logout</button>
   </div>
 </nav>
@@ -46,17 +62,32 @@
     <button class="btn btn-primary" onclick="openAddCustomer()">+ Thêm khách hàng</button>
   </div>
 
-  <!-- KPIs -->
-  <div class="kpi-grid">
+  <!-- KPIs row 1 -->
+  <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
     <div class="kpi"><div class="label">Tổng khách hàng</div><div class="value" id="kpi-total">–</div></div>
     <div class="kpi blue"><div class="label">Có đơn hàng</div><div class="value" id="kpi-active">–</div></div>
     <div class="kpi green"><div class="label">Tổng doanh thu</div><div class="value" id="kpi-revenue">–</div></div>
     <div class="kpi purple"><div class="label">TB / khách hàng</div><div class="value" id="kpi-avg">–</div></div>
   </div>
 
+  <!-- KPIs row 2: phân loại -->
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-top:-6px">
+    <div class="kpi blue"><div class="label">🆕 Mới</div><div class="value" id="kpi-new">–</div></div>
+    <div class="kpi" style="border-left-color:#6b7280"><div class="label">👤 Bình thường</div><div class="value" id="kpi-normal">–</div></div>
+    <div class="kpi" style="border-left-color:#f97316"><div class="label">🔥 Tiềm năng</div><div class="value" id="kpi-potential">–</div></div>
+    <div class="kpi amber"><div class="label">👑 VIP</div><div class="value" id="kpi-vip">–</div></div>
+  </div>
+
   <!-- SEARCH & FILTER -->
   <div style="background:#fff;border-radius:12px;padding:14px 20px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
     <input type="text" id="searchInput" placeholder="🔍 Tìm tên, mã, email, điện thoại..." style="flex:1;min-width:200px;padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px" oninput="filterCustomers()"/>
+    <select id="segFilter" style="padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px" onchange="filterCustomers()">
+      <option value="">Tất cả phân loại</option>
+      <option value="new">🆕 Mới</option>
+      <option value="normal">👤 Bình thường</option>
+      <option value="potential">🔥 Tiềm năng</option>
+      <option value="vip">👑 VIP</option>
+    </select>
     <select id="sortBy" style="padding:8px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px" onchange="filterCustomers()">
       <option value="totalSpent">Sắp xếp: Chi tiêu nhiều nhất</option>
       <option value="orderCount">Sắp xếp: Nhiều đơn nhất</option>
@@ -74,6 +105,7 @@
             <tr>
               <th>Khách hàng</th>
               <th>Mã KH</th>
+              <th>Phân loại</th>
               <th>Liên hệ</th>
               <th>Tổng đơn</th>
               <th>Tổng chi tiêu</th>
@@ -83,7 +115,7 @@
             </tr>
           </thead>
           <tbody id="customerBody">
-            <tr><td colspan="8" style="text-align:center;padding:30px;color:#6b7280">Đang tải...</td></tr>
+            <tr><td colspan="9" style="text-align:center;padding:30px;color:#6b7280">Đang tải...</td></tr>
           </tbody>
         </table>
       </div>
@@ -96,7 +128,10 @@
   <div class="modal-box">
     <div class="modal-header">
       <div>
-        <div style="font-size:16px;font-weight:800" id="modalName">–</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="font-size:16px;font-weight:800" id="modalName">–</div>
+          <span id="modalSegBadge"></span>
+        </div>
         <div style="font-size:12px;color:#cbd5e1;margin-top:2px" id="modalCode">–</div>
       </div>
       <button onclick="closeModal()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer">×</button>
@@ -127,12 +162,26 @@
           </div>
         </div>
       </div>
+
+      <!-- Segment selector -->
+      <div style="background:#f8fafc;border-radius:10px;padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-size:13px;font-weight:700;color:#374151">Phân loại:</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button onclick="setSegment('new')"      class="seg-btn" data-seg="new">🆕 Mới</button>
+          <button onclick="setSegment('normal')"   class="seg-btn" data-seg="normal">👤 Bình thường</button>
+          <button onclick="setSegment('potential')" class="seg-btn" data-seg="potential">🔥 Tiềm năng</button>
+          <button onclick="setSegment('vip')"      class="seg-btn" data-seg="vip">👑 VIP</button>
+          <button onclick="setSegment('')"         class="seg-btn" data-seg="" style="color:#9ca3af;font-size:11px">↺ Tự động</button>
+        </div>
+      </div>
+
       <!-- Notes -->
       <div style="margin-bottom:20px">
         <div style="font-size:12px;font-weight:700;color:#6b7280;margin-bottom:8px;text-transform:uppercase">Ghi chú nội bộ</div>
         <textarea id="modalNotes" rows="3" style="width:100%;padding:9px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;resize:vertical" placeholder="Thêm ghi chú về khách hàng..."></textarea>
         <button class="btn btn-primary btn-sm" style="margin-top:6px" onclick="saveNotes()">Lưu ghi chú</button>
       </div>
+
       <!-- Order History -->
       <div>
         <div style="font-size:12px;font-weight:700;color:#6b7280;margin-bottom:10px;text-transform:uppercase">Lịch sử đơn hàng</div>
@@ -153,10 +202,26 @@
       <div style="display:grid;gap:12px">
         <input type="hidden" id="edit-id"/>
         <div class="form-group" style="margin:0"><label>Họ tên *</label><input type="text" id="edit-name" placeholder="Nguyễn Văn A"/></div>
-        <div class="form-group" style="margin:0"><label>Mã khách hàng</label><input type="text" id="edit-code" placeholder="KH001"/></div>
+        <div class="form-group" style="margin:0">
+          <label>Mã khách hàng</label>
+          <input type="text" id="edit-code" placeholder="KH001" oninput="checkCodeInput(this)" autocomplete="off"/>
+          <div id="code-error" style="display:none;font-size:12px;color:#dc2626;margin-top:4px;font-weight:600">
+            ⚠️ Mã khách hàng này đã tồn tại — vui lòng dùng mã khác.
+          </div>
+        </div>
         <div class="form-group" style="margin:0"><label>Điện thoại</label><input type="tel" id="edit-phone" placeholder="+1 555 000 0000"/></div>
         <div class="form-group" style="margin:0"><label>Email</label><input type="email" id="edit-email" placeholder="email@example.com"/></div>
         <div class="form-group" style="margin:0"><label>Địa chỉ</label><input type="text" id="edit-address" placeholder="123 Main St, Houston TX"/></div>
+        <div class="form-group" style="margin:0">
+          <label>Phân loại khách hàng</label>
+          <select id="edit-segment" style="width:100%;padding:9px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px">
+            <option value="">↺ Tự động (theo đơn hàng)</option>
+            <option value="new">🆕 Mới</option>
+            <option value="normal">👤 Bình thường</option>
+            <option value="potential">🔥 Tiềm năng</option>
+            <option value="vip">👑 VIP</option>
+          </select>
+        </div>
         <div class="form-group" style="margin:0"><label>Ghi chú</label><textarea id="edit-notes" rows="3" style="width:100%;padding:9px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;resize:vertical"></textarea></div>
       </div>
       <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end">
@@ -171,16 +236,44 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
 <script>
 let allCustomers = [];
 let allQuotes    = [];
-let customerMap  = {}; // keyed by name (lowercase) → aggregated data
+let customerMap  = {};
 let currentCustomerId = null;
 
 const SVC_LABELS = { intl:'USA→VN', domestic:'Domestic', shopping:'Mua hộ' };
 
-auth.onAuthStateChanged(async user => {
-  if (!user) { location.href = 'index.html'; return; }
+// ── Segment definitions ──────────────────────────────────────────────────────
+const SEGMENTS = {
+  new:       { label:'Mới',         emoji:'🆕', cls:'seg-new',       avatarCls:'new' },
+  normal:    { label:'Bình thường', emoji:'👤', cls:'seg-normal',    avatarCls:'normal' },
+  potential: { label:'Tiềm năng',   emoji:'🔥', cls:'seg-potential', avatarCls:'potential' },
+  vip:       { label:'VIP',         emoji:'👑', cls:'seg-vip',       avatarCls:'vip' },
+};
+
+// Auto-classify based on order activity
+function autoSegment(c) {
+  if (c.totalSpent >= 500 || c.orderCount >= 10) return 'vip';
+  if (c.totalSpent >= 100 || c.orderCount >= 3)  return 'potential';
+  if (c.orderCount >= 1)                          return 'normal';
+  return 'new';
+}
+
+// Get effective segment: manual override wins over auto
+function getSegment(c) {
+  if (c.segment && SEGMENTS[c.segment]) return c.segment;
+  return autoSegment(c);
+}
+
+function segBadge(seg) {
+  const s = SEGMENTS[seg] || SEGMENTS.new;
+  return `<span class="seg ${s.cls}">${s.emoji} ${s.label}</span>`;
+}
+
+// ── Bootstrap ────────────────────────────────────────────────────────────────
+pageInit('admin').then(async () => {
   await Promise.all([loadCustomers(), loadQuotes()]);
   buildCustomerMap();
   renderKPIs();
@@ -199,27 +292,20 @@ async function loadQuotes() {
 
 function buildCustomerMap() {
   customerMap = {};
-  // Seed from customers collection
   allCustomers.forEach(c => {
-    customerMap[c.id] = {
-      ...c,
-      orderCount: 0, totalSpent: 0, totalDebt: 0, lastOrder: '', quotes: []
-    };
+    customerMap[c.id] = { ...c, orderCount:0, totalSpent:0, totalDebt:0, lastOrder:'', quotes:[] };
   });
-  // Aggregate quotes by senderName + customerCode
   allQuotes.forEach(q => {
-    // Try to match customer by code or name
     let cust = allCustomers.find(c =>
       (q.customerCode && c.code && q.customerCode.trim().toLowerCase() === c.code.trim().toLowerCase()) ||
       (q.senderName   && c.name && q.senderName.trim().toLowerCase() === c.name.trim().toLowerCase())
     );
     if (!cust) {
-      // Auto-create entry for unknown customer
       const key = '__auto__' + (q.senderName||'unknown').toLowerCase().replace(/\s+/,'-');
       if (!customerMap[key]) {
         customerMap[key] = {
-          id: key, name: q.senderName||'Khách không tên', code: q.customerCode||'',
-          phone:'', email:'', address:'', notes:'',
+          id:key, name:q.senderName||'Khách không tên', code:q.customerCode||'',
+          phone:'', email:'', address:'', notes:'', segment:'',
           orderCount:0, totalSpent:0, totalDebt:0, lastOrder:'', quotes:[], auto:true
         };
       }
@@ -241,27 +327,38 @@ function renderKPIs() {
   const list = Object.values(customerMap);
   const active = list.filter(c=>c.orderCount>0);
   const rev = active.reduce((s,c)=>s+c.totalSpent,0);
-  document.getElementById('kpi-total').textContent   = list.length;
-  document.getElementById('kpi-active').textContent  = active.length;
-  document.getElementById('kpi-revenue').textContent = '$'+rev.toFixed(0);
-  document.getElementById('kpi-avg').textContent     = active.length ? '$'+(rev/active.length).toFixed(0) : '$0';
+  document.getElementById('kpi-total').textContent    = list.length;
+  document.getElementById('kpi-active').textContent   = active.length;
+  document.getElementById('kpi-revenue').textContent  = '$'+rev.toFixed(0);
+  document.getElementById('kpi-avg').textContent      = active.length ? '$'+(rev/active.length).toFixed(0) : '$0';
+  // Segment counts
+  const cnt = {new:0,normal:0,potential:0,vip:0};
+  list.forEach(c => cnt[getSegment(c)]++);
+  document.getElementById('kpi-new').textContent       = cnt.new;
+  document.getElementById('kpi-normal').textContent    = cnt.normal;
+  document.getElementById('kpi-potential').textContent = cnt.potential;
+  document.getElementById('kpi-vip').textContent       = cnt.vip;
 }
 
 function filterCustomers() {
   const q    = document.getElementById('searchInput').value.toLowerCase();
+  const seg  = document.getElementById('segFilter').value;
   const sort = document.getElementById('sortBy').value;
   let list = Object.values(customerMap).filter(c => {
-    if (!q) return true;
-    return (c.name||'').toLowerCase().includes(q)
-      || (c.code||'').toLowerCase().includes(q)
-      || (c.phone||'').toLowerCase().includes(q)
-      || (c.email||'').toLowerCase().includes(q);
+    if (q && !(
+      (c.name||'').toLowerCase().includes(q) ||
+      (c.code||'').toLowerCase().includes(q)  ||
+      (c.phone||'').toLowerCase().includes(q) ||
+      (c.email||'').toLowerCase().includes(q)
+    )) return false;
+    if (seg && getSegment(c) !== seg) return false;
+    return true;
   });
   list.sort((a,b) => {
-    if (sort === 'totalSpent')  return b.totalSpent - a.totalSpent;
-    if (sort === 'orderCount')  return b.orderCount - a.orderCount;
-    if (sort === 'lastOrder')   return (b.lastOrder||'').localeCompare(a.lastOrder||'');
-    if (sort === 'name')        return (a.name||'').localeCompare(b.name||'');
+    if (sort === 'totalSpent') return b.totalSpent - a.totalSpent;
+    if (sort === 'orderCount') return b.orderCount - a.orderCount;
+    if (sort === 'lastOrder')  return (b.lastOrder||'').localeCompare(a.lastOrder||'');
+    if (sort === 'name')       return (a.name||'').localeCompare(b.name||'');
     return 0;
   });
   renderTable(list);
@@ -270,15 +367,18 @@ function filterCustomers() {
 function renderTable(list) {
   if (!list.length) {
     document.getElementById('customerBody').innerHTML =
-      '<tr><td colspan="8" style="text-align:center;padding:30px;color:#6b7280">Không tìm thấy khách hàng nào.</td></tr>';
+      '<tr><td colspan="9" style="text-align:center;padding:30px;color:#6b7280">Không tìm thấy khách hàng nào.</td></tr>';
     return;
   }
   document.getElementById('customerBody').innerHTML = list.map(c => {
     const initials = (c.name||'?').split(' ').map(w=>w[0]).slice(-2).join('').toUpperCase();
+    const seg = getSegment(c);
+    const s   = SEGMENTS[seg];
+    const autoTag = c.segment ? '' : '<span style="font-size:9px;color:#9ca3af;margin-left:3px">(auto)</span>';
     return `<tr>
       <td>
         <div style="display:flex;align-items:center;gap:10px">
-          <div class="avatar">${initials}</div>
+          <div class="avatar ${s.avatarCls}">${initials}</div>
           <div>
             <div style="font-weight:700">${c.name||'–'}</div>
             ${c.auto ? '<div style="font-size:10px;color:#9ca3af">Tự động từ đơn hàng</div>' : ''}
@@ -286,6 +386,7 @@ function renderTable(list) {
         </div>
       </td>
       <td style="font-size:12px;color:#6b7280">${c.code||'–'}</td>
+      <td>${segBadge(seg)}${autoTag}</td>
       <td>
         <div style="font-size:12px">${c.phone||'–'}</div>
         <div style="font-size:11px;color:#6b7280">${c.email||''}</div>
@@ -310,9 +411,11 @@ function openDetail(id) {
   const c = customerMap[id];
   if (!c) return;
   currentCustomerId = id;
-  document.getElementById('modalName').textContent = c.name || '–';
-  document.getElementById('modalCode').textContent = c.code ? ('Mã: ' + c.code) : '';
-  document.getElementById('modalInfo').innerHTML = [
+  const seg = getSegment(c);
+  document.getElementById('modalName').textContent    = c.name || '–';
+  document.getElementById('modalCode').textContent    = c.code ? ('Mã: ' + c.code) : '';
+  document.getElementById('modalSegBadge').innerHTML  = segBadge(seg);
+  document.getElementById('modalInfo').innerHTML      = [
     c.phone   ? `📞 ${c.phone}`   : '',
     c.email   ? `✉️ ${c.email}`   : '',
     c.address ? `📍 ${c.address}` : '',
@@ -322,6 +425,10 @@ function openDetail(id) {
   document.getElementById('modalDebt').textContent    = c.totalDebt > 0 ? '$'+c.totalDebt.toFixed(2) : '$0';
   document.getElementById('modalAvg').textContent     = c.orderCount ? '$'+(c.totalSpent/c.orderCount).toFixed(2) : '$0';
   document.getElementById('modalNotes').value         = c.notes || '';
+  // Highlight active segment button
+  document.querySelectorAll('.seg-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.seg === (c.segment||''));
+  });
   // History
   const qs = (c.quotes||[]).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   document.getElementById('modalHistory').innerHTML = qs.length
@@ -341,6 +448,25 @@ function openDetail(id) {
   document.getElementById('detailModal').classList.add('open');
 }
 
+async function setSegment(seg) {
+  if (!currentCustomerId || customerMap[currentCustomerId]?.auto) return;
+  try {
+    const updateData = { updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+    if (seg) updateData.segment = seg;
+    else     updateData.segment = firebase.firestore.FieldValue.delete();
+    await db.collection('customers').doc(currentCustomerId).update(updateData);
+    customerMap[currentCustomerId].segment = seg;
+    // Refresh modal badge
+    const newSeg = getSegment(customerMap[currentCustomerId]);
+    document.getElementById('modalSegBadge').innerHTML = segBadge(newSeg);
+    document.querySelectorAll('.seg-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.seg === seg);
+    });
+    renderKPIs();
+    filterCustomers();
+  } catch(e) { alert('Lỗi: ' + e.message); }
+}
+
 async function saveNotes() {
   if (!currentCustomerId || customerMap[currentCustomerId]?.auto) return;
   const notes = document.getElementById('modalNotes').value;
@@ -354,9 +480,11 @@ function closeModal() { document.getElementById('detailModal').classList.remove(
 function openAddCustomer() {
   currentCustomerId = null;
   document.getElementById('editModalTitle').textContent = 'Thêm khách hàng';
-  ['id','name','code','phone','email','address','notes'].forEach(f =>
-    document.getElementById('edit-'+f) && (document.getElementById('edit-'+f).value='')
-  );
+  ['id','name','code','phone','email','address','notes'].forEach(f => {
+    const el = document.getElementById('edit-'+f);
+    if (el) el.value = '';
+  });
+  document.getElementById('edit-segment').value = '';
   document.getElementById('editModal').classList.add('open');
 }
 
@@ -365,31 +493,88 @@ function openEditCustomer(id) {
   if (!c || c.auto) return;
   currentCustomerId = id;
   document.getElementById('editModalTitle').textContent = 'Sửa thông tin';
-  document.getElementById('edit-id').value      = id;
-  document.getElementById('edit-name').value    = c.name    || '';
-  document.getElementById('edit-code').value    = c.code    || '';
-  document.getElementById('edit-phone').value   = c.phone   || '';
-  document.getElementById('edit-email').value   = c.email   || '';
-  document.getElementById('edit-address').value = c.address || '';
-  document.getElementById('edit-notes').value   = c.notes   || '';
+  document.getElementById('edit-id').value       = id;
+  document.getElementById('edit-name').value     = c.name    || '';
+  document.getElementById('edit-code').value     = c.code    || '';
+  document.getElementById('edit-phone').value    = c.phone   || '';
+  document.getElementById('edit-email').value    = c.email   || '';
+  document.getElementById('edit-address').value  = c.address || '';
+  document.getElementById('edit-notes').value    = c.notes   || '';
+  document.getElementById('edit-segment').value  = c.segment || '';
   document.getElementById('editModal').classList.add('open');
 }
 
-function closeEditModal() { document.getElementById('editModal').classList.remove('open'); }
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('open');
+  // Reset error state
+  setCodeError(false);
+}
+
+// Check if code is duplicate (returns the conflicting customer or null)
+function findDuplicateCode(code, excludeId) {
+  if (!code) return null;
+  const lower = code.toLowerCase();
+  return allCustomers.find(c =>
+    c.id !== excludeId &&
+    c.code && c.code.trim().toLowerCase() === lower
+  ) || null;
+}
+
+// Live validation on the code input
+function checkCodeInput(input) {
+  const code      = input.value.trim();
+  const excludeId = document.getElementById('edit-id').value;
+  const dup       = findDuplicateCode(code, excludeId);
+  setCodeError(!!dup, dup);
+}
+
+function setCodeError(hasError, dup) {
+  const input = document.getElementById('edit-code');
+  const errEl = document.getElementById('code-error');
+  if (hasError && dup) {
+    input.style.borderColor = '#dc2626';
+    input.style.background  = '#fff5f5';
+    errEl.innerHTML = `⚠️ Mã <strong>${dup.code}</strong> đã được dùng bởi khách hàng <strong>${dup.name}</strong> — vui lòng dùng mã khác.`;
+    errEl.style.display = '';
+  } else {
+    input.style.borderColor = '';
+    input.style.background  = '';
+    errEl.style.display = 'none';
+  }
+}
 
 async function saveCustomer() {
   const name = document.getElementById('edit-name').value.trim();
   if (!name) { alert('Vui lòng nhập tên khách hàng'); return; }
+
+  const code      = document.getElementById('edit-code').value.trim();
+  const id        = document.getElementById('edit-id').value;
+  const segVal    = document.getElementById('edit-segment').value;
+
+  // Duplicate code check before saving
+  if (code) {
+    const dup = findDuplicateCode(code, id);
+    if (dup) {
+      setCodeError(true, dup);
+      document.getElementById('edit-code').focus();
+      return;
+    }
+  }
+
   const data = {
     name,
-    code:    document.getElementById('edit-code').value.trim(),
-    phone:   document.getElementById('edit-phone').value.trim(),
-    email:   document.getElementById('edit-email').value.trim(),
-    address: document.getElementById('edit-address').value.trim(),
-    notes:   document.getElementById('edit-notes').value.trim(),
+    code,
+    phone:     document.getElementById('edit-phone').value.trim(),
+    email:     document.getElementById('edit-email').value.trim(),
+    address:   document.getElementById('edit-address').value.trim(),
+    notes:     document.getElementById('edit-notes').value.trim(),
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
-  const id = document.getElementById('edit-id').value;
+  if (segVal) {
+    data.segment = segVal;
+  } else if (id) {
+    data.segment = firebase.firestore.FieldValue.delete();
+  }
   try {
     if (id) {
       await db.collection('customers').doc(id).update(data);

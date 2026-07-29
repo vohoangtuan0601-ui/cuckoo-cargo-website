@@ -247,6 +247,16 @@ function handleOrder(data) {
   // Cập nhật hoặc thêm khách hàng
   upsertCustomer(ss, data);
 
+  // Gửi email xác nhận cho khách
+  sendConfirmationEmail(data.email, 'mvv', {
+    orderId:         orderId,
+    senderName:      data.senderName,
+    receiverName:    data.receiverName,
+    receiverAddress: data.receiverAddress,
+    weight:          data.weight,
+    estimatedFee:    data.estimatedFee,
+  });
+
   return { orderId };
 }
 
@@ -297,6 +307,19 @@ function handleLabel(data) {
 
   upsertCustomer(ss, data);
 
+  // Gửi email xác nhận cho khách
+  sendConfirmationEmail(data.email, 'label', {
+    orderId:         labelId,
+    senderName:      data.senderName,
+    carrier:         data.carrier,
+    service:         data.service,
+    receiverName:    data.receiverName,
+    receiverAddress: data.receiverAddress,
+    weight:          data.weight,
+    pickupMode:      data.pickupMode,
+    estimatedFee:    data.estimatedFee,
+  });
+
   return { labelId };
 }
 
@@ -339,6 +362,14 @@ function handleShopping(data) {
   ]);
 
   upsertCustomer(ss, data);
+
+  // Gửi email xác nhận cho khách
+  sendConfirmationEmail(data.email, 'shopping', {
+    orderId:         shoppingId,
+    customerName:    data.customerName,
+    receiverAddress: data.receiverAddress,
+    items:           data.items,
+  });
 
   return { shoppingId };
 }
@@ -411,6 +442,134 @@ function generateShoppingId() { return generateOrderId(); }
 
 function formatDate(date) {
   return Utilities.formatDate(date, "Asia/Ho_Chi_Minh", "dd/MM/yyyy HH:mm");
+}
+
+// ─── GỬI EMAIL XÁC NHẬN ─────────────────────────────────────────────────────
+var COMPANY_EMAIL = "cuckoocargo.us@gmail.com";
+var COMPANY_NAME  = "Cuckoo Cargo";
+var TRACKING_URL  = "https://cuckoocargo23102025.github.io/cuckoocargo.com/tracking";
+
+/**
+ * Gửi email xác nhận đơn hàng cho khách.
+ * @param {string} toEmail  - Email khách hàng
+ * @param {string} type     - "mvv" | "label" | "shopping"
+ * @param {Object} info     - Thông tin đơn hàng
+ */
+function sendConfirmationEmail(toEmail, type, info) {
+  if (!toEmail || toEmail.trim() === '') return;
+
+  var subject, bodyRows;
+
+  if (type === 'mvv') {
+    subject = '[Cuckoo Cargo] Xác nhận đơn gửi hàng Mỹ → Việt #' + info.orderId;
+    bodyRows = [
+      ['Mã đơn hàng', '<strong>' + info.orderId + '</strong>'],
+      ['Dịch vụ',     'Gửi hàng Mỹ → Việt Nam'],
+      ['Người gửi',   info.senderName  || '—'],
+      ['Người nhận',  info.receiverName || '—'],
+      ['Địa chỉ nhận',info.receiverAddress || '—'],
+      ['Cân nặng',    info.weight ? info.weight + ' lbs' : '—'],
+      ['Phí ước tính', info.estimatedFee ? '$' + info.estimatedFee : 'Nhân viên sẽ báo giá'],
+      ['Trạng thái',   '<span style="color:#fc4f08;font-weight:700">Đã tiếp nhận — Đang xử lý</span>'],
+    ];
+  } else if (type === 'label') {
+    subject = '[Cuckoo Cargo] Xác nhận đặt label nội địa Mỹ #' + info.orderId;
+    bodyRows = [
+      ['Mã đơn hàng', '<strong>' + info.orderId + '</strong>'],
+      ['Dịch vụ',     'Label nội địa Mỹ — ' + (info.carrier || '') + ' ' + (info.service || '')],
+      ['Người gửi',   info.senderName || '—'],
+      ['Người nhận',  info.receiverName || '—'],
+      ['Địa chỉ nhận',info.receiverAddress || '—'],
+      ['Cân nặng',    info.weight ? info.weight + ' lbs' : '—'],
+      ['Hình thức',   info.pickupMode || '—'],
+      ['Phí ước tính', info.estimatedFee ? '$' + info.estimatedFee : '—'],
+      ['Trạng thái',   '<span style="color:#fc4f08;font-weight:700">Đã tiếp nhận — Chờ xử lý</span>'],
+    ];
+  } else if (type === 'shopping') {
+    subject = '[Cuckoo Cargo] Xác nhận đơn mua hộ #' + info.orderId;
+    var itemLines = '';
+    if (info.items && info.items.length > 0) {
+      info.items.forEach(function(it, idx) {
+        if (!it || !it.url) return;
+        itemLines += '<li style="margin-bottom:6px">'
+          + 'SP' + (idx + 1) + ': <a href="' + it.url + '">' + it.url + '</a>'
+          + (it.qty   ? ' — SL: ' + it.qty   : '')
+          + (it.size  ? ', Size: ' + it.size  : '')
+          + (it.color ? ', Màu: '  + it.color  : '')
+          + '</li>';
+      });
+    }
+    bodyRows = [
+      ['Mã đơn hàng',  '<strong>' + info.orderId + '</strong>'],
+      ['Dịch vụ',      'Mua hộ từ Mỹ'],
+      ['Khách hàng',   info.customerName || '—'],
+      ['Địa chỉ nhận', info.receiverAddress || '—'],
+      ['Sản phẩm',     itemLines ? '<ul style="margin:4px 0;padding-left:20px">' + itemLines + '</ul>' : '—'],
+      ['Trạng thái',   '<span style="color:#fc4f08;font-weight:700">Đã tiếp nhận — Chờ báo giá</span>'],
+    ];
+  } else {
+    return;
+  }
+
+  // Build bảng thông tin
+  var tableRows = bodyRows.map(function(row) {
+    return '<tr>'
+      + '<td style="padding:10px 14px;background:#f8f8f8;font-weight:600;color:#555;width:150px;border-bottom:1px solid #eee;white-space:nowrap">' + row[0] + '</td>'
+      + '<td style="padding:10px 14px;color:#222;border-bottom:1px solid #eee">' + row[1] + '</td>'
+      + '</tr>';
+  }).join('');
+
+  var trackLink = TRACKING_URL + '?id=' + info.orderId;
+
+  var html = ''
+    + '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif">'
+    + '<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:30px 0">'
+    + '<tr><td align="center">'
+    + '<table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);max-width:600px">'
+
+    // Header
+    + '<tr><td style="background:#fc4f08;padding:28px 32px;text-align:center">'
+    + '<div style="font-size:26px;font-weight:900;color:#fff;letter-spacing:1px">🐦 CUCKOO CARGO</div>'
+    + '<div style="font-size:13px;color:rgba(255,255,255,0.85);margin-top:6px">Dịch vụ gửi hàng Mỹ ↔ Việt Nam</div>'
+    + '</td></tr>'
+
+    // Body
+    + '<tr><td style="padding:28px 32px">'
+    + '<p style="font-size:16px;color:#222;margin:0 0 6px 0">Xin chào <strong>' + (info.senderName || info.customerName || 'Quý khách') + '</strong>,</p>'
+    + '<p style="font-size:14px;color:#555;margin:0 0 20px 0">Cuckoo Cargo đã nhận được đơn hàng của bạn. Nhân viên sẽ liên hệ xác nhận trong thời gian sớm nhất.</p>'
+
+    + '<table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eee;border-radius:8px;overflow:hidden">'
+    + tableRows
+    + '</table>'
+
+    // CTA
+    + '<div style="text-align:center;margin:28px 0 10px">'
+    + '<a href="' + trackLink + '" style="display:inline-block;background:#fc4f08;color:#fff;text-decoration:none;padding:13px 32px;border-radius:8px;font-size:15px;font-weight:700">Theo dõi đơn hàng →</a>'
+    + '</div>'
+    + '<p style="font-size:12px;color:#999;text-align:center;margin:0">Mã đơn: ' + info.orderId + ' · Lưu email này để tra cứu sau</p>'
+    + '</td></tr>'
+
+    // Footer
+    + '<tr><td style="background:#f8f8f8;padding:20px 32px;text-align:center;border-top:1px solid #eee">'
+    + '<p style="font-size:13px;color:#888;margin:0 0 6px 0">Cần hỗ trợ? Liên hệ chúng tôi:</p>'
+    + '<p style="font-size:13px;color:#fc4f08;margin:0;font-weight:600">📧 cuckoocargo.us@gmail.com &nbsp;|&nbsp; 📱 Zalo / Messenger: Cuckoo Cargo</p>'
+    + '</td></tr>'
+
+    + '</table>'
+    + '</td></tr></table>'
+    + '</body></html>';
+
+  try {
+    GmailApp.sendEmail(toEmail, subject, '', {
+      from:     COMPANY_EMAIL,
+      name:     COMPANY_NAME,
+      htmlBody: html,
+      replyTo:  COMPANY_EMAIL,
+    });
+  } catch (e) {
+    // Log lỗi nhưng không dừng luồng xử lý đơn
+    Logger.log('sendConfirmationEmail error: ' + e.message);
+  }
 }
 
 function formatHeader(sheet) {

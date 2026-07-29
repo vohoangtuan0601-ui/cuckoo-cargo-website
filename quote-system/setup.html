@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Setup Admin — Cuckoo Cargo</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{background:#fff;border-radius:20px;padding:44px 40px;width:100%;max-width:440px;box-shadow:0 24px 80px rgba(0,0,0,.4);text-align:center}
+    .icon{font-size:56px;margin-bottom:16px}
+    h1{font-size:22px;font-weight:900;color:#1a1a2e;margin-bottom:8px}
+    .sub{font-size:13px;color:#6b7280;margin-bottom:28px;line-height:1.6}
+    .info-box{background:#f8fafc;border-radius:10px;padding:14px 18px;margin-bottom:20px;text-align:left;font-size:13px;color:#374151}
+    .info-box .label{font-weight:700;color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+    .info-box .value{font-weight:600;word-break:break-all}
+    .btn{width:100%;padding:13px;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;margin-bottom:10px}
+    .btn-primary{background:linear-gradient(135deg,#f97316,#ea6c0a);color:#fff}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(249,115,22,.4)}
+    .btn-primary:disabled{background:#d1d5db;color:#9ca3af;transform:none;box-shadow:none;cursor:not-allowed}
+    .btn-outline{background:#fff;border:2px solid #e5e7eb;color:#374151}
+    .btn-outline:hover{border-color:#f97316;color:#f97316}
+    .alert{padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:13px;font-weight:600}
+    .alert-success{background:#dcfce7;color:#166534;border-left:4px solid #16a34a}
+    .alert-danger{background:#fee2e2;color:#dc2626;border-left:4px solid #dc2626}
+    .alert-warning{background:#fef3c7;color:#92400e;border-left:4px solid #f59e0b}
+    .step{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:13px;text-align:left}
+    .step-num{width:26px;height:26px;border-radius:50%;background:#f97316;color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .done .step-num{background:#16a34a}
+    #setupSection{display:none}
+    #doneSection{display:none}
+    #blockedSection{display:none}
+    #loadingSection{display:block}
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- LOADING -->
+  <div id="loadingSection">
+    <div class="icon">⏳</div>
+    <h1>Đang kiểm tra...</h1>
+    <p class="sub">Vui lòng chờ trong giây lát</p>
+  </div>
+
+  <!-- NOT LOGGED IN -->
+  <div id="loginSection" style="display:none">
+    <div class="icon">🔐</div>
+    <h1>Cần đăng nhập trước</h1>
+    <p class="sub">Hãy đăng nhập vào hệ thống trước khi setup Admin.</p>
+    <button class="btn btn-primary" onclick="location.href='index.html'">→ Đăng nhập</button>
+  </div>
+
+  <!-- SETUP FORM -->
+  <div id="setupSection">
+    <div class="icon">🚀</div>
+    <h1>Thiết lập Admin lần đầu</h1>
+    <p class="sub">Hệ thống chưa có Admin. Click bên dưới để đặt tài khoản của bạn làm Admin.</p>
+
+    <div id="alertBox"></div>
+
+    <div id="userInfo" class="info-box" style="margin-bottom:20px">
+      <div class="label">Tài khoản hiện tại</div>
+      <div class="value" id="currentEmail">–</div>
+    </div>
+
+    <button class="btn btn-primary" id="btnSetAdmin" onclick="makeAdmin()">
+      👑 Đặt tôi là Admin
+    </button>
+    <button class="btn btn-outline" onclick="location.href='index.html'">← Về trang Login</button>
+  </div>
+
+  <!-- DONE -->
+  <div id="doneSection">
+    <div class="icon">✅</div>
+    <h1>Setup hoàn tất!</h1>
+    <p class="sub">Bạn đã là Admin. Hệ thống sẵn sàng sử dụng.</p>
+    <div style="margin:20px 0">
+      <div class="step done"><div class="step-num">✓</div><span>Tài khoản Admin đã được thiết lập</span></div>
+      <div class="step done"><div class="step-num">✓</div><span>Có thể thêm nhân viên tại Admin → Phân quyền</span></div>
+    </div>
+    <button class="btn btn-primary" onclick="location.href='dashboard.html'">→ Vào Dashboard</button>
+    <button class="btn btn-outline" onclick="location.href='admin.html'" style="margin-top:0">⚙️ Vào Admin</button>
+  </div>
+
+  <!-- BLOCKED (admins exist) -->
+  <div id="blockedSection">
+    <div class="icon">🔒</div>
+    <h1>Hệ thống đã có Admin</h1>
+    <p class="sub">Trang này chỉ dùng cho lần đầu setup. Hệ thống đã có Admin rồi.</p>
+    <button class="btn btn-primary" onclick="location.href='dashboard.html'">→ Vào Dashboard</button>
+  </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script>
+function show(id) {
+  ['loadingSection','loginSection','setupSection','doneSection','blockedSection']
+    .forEach(s => document.getElementById(s).style.display = s === id ? '' : 'none');
+}
+
+auth.onAuthStateChanged(async user => {
+  if (!user) { show('loginSection'); return; }
+
+  document.getElementById('currentEmail').textContent = user.email;
+
+  try {
+    // Check if this user is already admin
+    const myDoc = await db.collection('users').doc(user.uid).get();
+    if (myDoc.exists && myDoc.data().role === 'admin') {
+      show('doneSection');
+      return;
+    }
+
+    // Check if any admin exists
+    const adminSnap = await db.collection('users').where('role','==','admin').limit(1).get();
+    if (!adminSnap.empty) {
+      show('blockedSection');
+      return;
+    }
+
+    // No admin exists → show setup
+    show('setupSection');
+  } catch(e) {
+    show('setupSection'); // allow setup on error
+  }
+});
+
+async function makeAdmin() {
+  const user = auth.currentUser;
+  if (!user) return;
+  const btn = document.getElementById('btnSetAdmin');
+  btn.disabled = true;
+  btn.textContent = '⏳ Đang xử lý...';
+  try {
+    await db.collection('users').doc(user.uid).set({
+      email: user.email,
+      role: 'admin',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    }, { merge: true });
+    show('doneSection');
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = '👑 Đặt tôi là Admin';
+    const box = document.getElementById('alertBox');
+    box.innerHTML = `<div class="alert alert-danger">Lỗi: ${e.message}</div>`;
+  }
+}
+</script>
+</body>
+</html>

@@ -11,8 +11,12 @@
   <div class="navbar-brand">🐦 Cuckoo Cargo</div>
   <div class="navbar-nav">
     <a class="nav-link active" href="dashboard.html">Dashboard</a>
-    <a class="nav-link" href="quote-form.html">New Quote</a>
-    <a class="nav-link" href="admin.html">Admin</a>
+    <a class="nav-link" href="quote-form.html">+ New Quote</a>
+    <a class="nav-link nav-admin-only" href="reports.html">📊 Báo cáo</a>
+    <a class="nav-link nav-admin-only" href="crm.html">👥 CRM</a>
+    <a class="nav-link nav-admin-only" href="finance.html">💰 Tài chính</a>
+    <a class="nav-link nav-admin-only" href="admin.html">⚙️ Admin</a>
+    <span id="navRoleBadge"></span>
     <button class="btn-logout" onclick="auth.signOut().then(()=>location.href='index.html')">Logout</button>
   </div>
 </nav>
@@ -79,15 +83,22 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
 <script>
 let allQuotes = [];
 
-auth.onAuthStateChanged(async user => {
-  if (!user) { location.href = 'index.html'; return; }
-  loadQuotes();
+pageInit('any').then(({ user, role }) => {
+  // Staff: hide revenue stat and delete buttons
+  if (role !== 'admin') {
+    const rev = document.getElementById('st-revenue')?.closest('.stat-card');
+    if (rev) rev.style.display = 'none';
+  }
+  loadQuotes(role);
 });
 
-async function loadQuotes() {
+let _pageRole = 'staff';
+async function loadQuotes(role) {
+  _pageRole = role || 'staff';
   try {
     const snap = await db.collection('quotes').orderBy('createdAt','desc').limit(200).get();
     allQuotes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -150,7 +161,7 @@ function renderTable(list) {
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <a href="quote-form.html?id=${q.id}" class="btn btn-outline btn-sm">✏️ Edit</a>
           <a href="print.html?id=${q.id}" class="btn btn-primary btn-sm" target="_blank">📄 PDF</a>
-          <button class="btn btn-danger btn-sm" onclick="deleteQuote('${q.id}')">🗑️</button>
+          ${_pageRole === 'admin' ? `<button class="btn btn-danger btn-sm" onclick="deleteQuote('${q.id}')">🗑️</button>` : ''}
         </div>
       </td>
     </tr>

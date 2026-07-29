@@ -32,11 +32,12 @@
   <div class="navbar-brand">🐦 Cuckoo Cargo</div>
   <div class="navbar-nav">
     <a class="nav-link" href="dashboard.html">Dashboard</a>
-    <a class="nav-link" href="quote-form.html">New Quote</a>
-    <a class="nav-link active" href="reports.html">📊 Báo cáo</a>
-    <a class="nav-link" href="crm.html">👥 CRM</a>
-    <a class="nav-link" href="finance.html">💰 Tài chính</a>
-    <a class="nav-link" href="admin.html">Admin</a>
+    <a class="nav-link" href="quote-form.html">+ New Quote</a>
+    <a class="nav-link nav-admin-only" href="reports.html" class="active">📊 Báo cáo</a>
+    <a class="nav-link nav-admin-only" href="crm.html">👥 CRM</a>
+    <a class="nav-link nav-admin-only" href="finance.html">💰 Tài chính</a>
+    <a class="nav-link nav-admin-only" href="admin.html">⚙️ Admin</a>
+    <span id="navRoleBadge"></span>
     <button class="btn-logout" onclick="auth.signOut().then(()=>location.href='index.html')">Logout</button>
   </div>
 </nav>
@@ -172,6 +173,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
 <script>
 let allQuotes = [];
 let filteredQuotes = [];
@@ -181,8 +183,7 @@ const SVC_LABELS = { intl:'USA→VN', domestic:'Domestic', shopping:'Mua hộ' }
 const MONTH_NAMES = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
 const COLORS = ['#f97316','#3b82f6','#16a34a','#7c3aed','#dc2626','#0891b2','#d97706','#059669'];
 
-auth.onAuthStateChanged(async user => {
-  if (!user) { location.href = 'index.html'; return; }
+pageInit('admin').then(async ({ user }) => {
   await loadQuotes();
   loadRates();
   // populate year filter

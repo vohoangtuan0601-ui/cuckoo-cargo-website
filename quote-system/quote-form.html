@@ -13,8 +13,12 @@
   <div class="navbar-brand">🐦 Cuckoo Cargo</div>
   <div class="navbar-nav">
     <a class="nav-link" href="dashboard.html">Dashboard</a>
-    <a class="nav-link active" href="#">New Quote</a>
-    <a class="nav-link" href="admin.html">Admin</a>
+    <a class="nav-link active" href="#">+ New Quote</a>
+    <a class="nav-link nav-admin-only" href="reports.html">📊 Báo cáo</a>
+    <a class="nav-link nav-admin-only" href="crm.html">👥 CRM</a>
+    <a class="nav-link nav-admin-only" href="finance.html">💰 Tài chính</a>
+    <a class="nav-link nav-admin-only" href="admin.html">⚙️ Admin</a>
+    <span id="navRoleBadge"></span>
     <button class="btn-logout" onclick="auth.signOut().then(()=>location.href='index.html')">Logout</button>
   </div>
 </nav>
@@ -110,7 +114,6 @@
                   <th style="width:80px">Weight (lbs)</th>
                   <th style="width:80px">Rate ($/lb)</th>
                   <th style="width:95px">Charge ($)</th>
-                  <th style="width:95px">Packing ($)</th>
                   <th style="width:55px">Qty</th>
                   <th style="width:100px">Dims (in)</th>
                   <th style="width:36px"></th>
@@ -136,8 +139,8 @@
               <input type="number" id="serviceCharge" value="0" step="0.01" oninput="recalcCosts()"/>
             </div>
             <div class="form-group" style="margin:0">
-              <label>Packaging Fee ($) <span style="font-size:11px;color:#6b7280">(auto from rows)</span></label>
-              <input type="number" id="packagingFee" value="0" step="0.01" oninput="recalcCosts()" style="background:#f0fdf4;color:#166534;font-weight:700"/>
+              <label>Packing Fee ($)</label>
+              <input type="number" id="packagingFee" value="0" step="0.01" oninput="recalcCosts()"/>
             </div>
             <div class="form-group" style="margin:0">
               <label>Customs Tax / Insurance ($)</label>
@@ -254,15 +257,14 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
 <script>
 let quoteId = null;
 let rowCount = 0;
 let pricingTiers = [];
 let carriers = [];
 
-// ── AUTH GUARD ──
-auth.onAuthStateChanged(async user => {
-  if (!user) { location.href = 'index.html'; return; }
+pageInit('any').then(async ({ user }) => {
   const today = new Date();
   document.getElementById('quoteDate').value = today.toISOString().slice(0,10);
   try {
@@ -344,8 +346,7 @@ function refreshPriceHint() {
   const tier = getTierForWeight(totalWeight);
   const hint = document.getElementById('priceHint');
   if (tier && totalWeight > 0) {
-    const type = tier.pricingType === 'flat' ? 'flat rate' : `$${tier.price}/lb`;
-    hint.textContent = `✅ ${totalWeight.toFixed(1)} lbs → Tier: $${tier.price} (${type})`;
+    hint.textContent = `✅ ${totalWeight.toFixed(1)} lbs × $${tier.price}/lb = $${(totalWeight * tier.price).toFixed(2)}`;
     hint.style.color = '#166534';
     hint.style.background = '#dcfce7';
   } else {
@@ -371,8 +372,6 @@ function addOrderRow() {
     <td><input class="inp-charge" type="number" step="0.01" min="0" placeholder="0"
           id="charge-${id}" oninput="recalcCosts()"
           style="width:82px;background:#f0fdf4;color:#166534;font-weight:700"/></td>
-    <td><input class="inp-packing" type="number" step="0.01" min="0" placeholder="0"
-          oninput="recalcCosts()" style="width:82px"/></td>
     <td><input class="inp-qty" type="number" min="1" value="1" oninput="recalcCosts()" style="width:46px"/></td>
     <td><input class="inp-dims" type="text" placeholder="L×W×H" style="width:88px"/></td>
     <td>${id > 1 ? `<button class="btn-remove-row" onclick="removeRow(${id})">✕</button>` : ''}</td>
@@ -392,18 +391,17 @@ function onWeightChange(id) {
   document.querySelectorAll('.order-row').forEach(r => {
     totalWeight += parseFloat(r.querySelector('.inp-weight').value) || 0;
   });
-  const tier   = getTierForWeight(totalWeight);
-  const row    = document.getElementById('row-' + id);
+  const tier = getTierForWeight(totalWeight);
+  const row  = document.getElementById('row-' + id);
   if (!row) return;
-  const weight = parseFloat(row.querySelector('.inp-weight').value) || 0;
+  const weight      = parseFloat(row.querySelector('.inp-weight').value) || 0;
   const rateInput   = row.querySelector('.inp-rate');
   const chargeInput = document.getElementById('charge-' + id);
 
   if (tier && weight > 0) {
-    const rate   = tier.price;
-    const charge = tier.pricingType === 'flat' ? tier.price : weight * rate;
-    rateInput.value   = rate;
-    chargeInput.value = charge.toFixed(2);
+    // Always: charge = weight × rate ($/lb)
+    rateInput.value   = tier.price;
+    chargeInput.value = (weight * tier.price).toFixed(2);
   } else {
     rateInput.value   = '';
     chargeInput.value = '';
@@ -420,30 +418,22 @@ function recalcCosts() {
   });
   const tier = getTierForWeight(totalWeight);
 
-  let shipping = 0, rowPacking = 0;
+  // Sum charges: each row = weight × rate
+  let shipping = 0;
   document.querySelectorAll('.order-row').forEach(row => {
     const rowId     = row.id.replace('row-', '');
     const weight    = parseFloat(row.querySelector('.inp-weight').value) || 0;
     const chargeInp = document.getElementById('charge-' + rowId);
-    const packingInp= row.querySelector('.inp-packing');
+    const rateInp   = row.querySelector('.inp-rate');
 
-    // Auto-fill charge if blank and tier available
-    if (chargeInp && (!chargeInp.value || chargeInp.value === '0') && tier && weight > 0) {
-      const charge = tier.pricingType === 'flat' ? tier.price : weight * tier.price;
-      chargeInp.value = charge.toFixed(2);
-      row.querySelector('.inp-rate').value = tier.price;
+    if (tier && weight > 0 && chargeInp && (!chargeInp.value || parseFloat(chargeInp.value) === 0)) {
+      rateInp.value   = tier.price;
+      chargeInp.value = (weight * tier.price).toFixed(2);
     }
-    shipping    += parseFloat(chargeInp ? chargeInp.value : 0) || 0;
-    rowPacking  += parseFloat(packingInp ? packingInp.value : 0) || 0;
+    shipping += parseFloat(chargeInp ? chargeInp.value : 0) || 0;
   });
 
-  // For flat pricing: total shipping = flat rate (not sum of rows)
-  if (tier && tier.pricingType === 'flat' && totalWeight > 0) shipping = tier.price;
-
-  // Update packaging fee from row packing sum
-  document.getElementById('packagingFee').value = rowPacking.toFixed(2);
-
-  // Override serviceCharge
+  // Service charge = sum of all row charges
   const scEl = document.getElementById('serviceCharge');
   if (totalWeight > 0) scEl.value = shipping.toFixed(2);
 

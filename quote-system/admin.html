@@ -24,11 +24,12 @@
   <div class="navbar-brand">🐦 Cuckoo Cargo</div>
   <div class="navbar-nav">
     <a class="nav-link" href="dashboard.html">Dashboard</a>
-    <a class="nav-link" href="quote-form.html">New Quote</a>
-    <a class="nav-link" href="reports.html">📊 Báo cáo</a>
-    <a class="nav-link" href="crm.html">👥 CRM</a>
-    <a class="nav-link" href="finance.html">💰 Tài chính</a>
-    <a class="nav-link active" href="#">Admin</a>
+    <a class="nav-link" href="quote-form.html">+ New Quote</a>
+    <a class="nav-link nav-admin-only" href="reports.html">📊 Báo cáo</a>
+    <a class="nav-link nav-admin-only" href="crm.html">👥 CRM</a>
+    <a class="nav-link nav-admin-only" href="finance.html">💰 Tài chính</a>
+    <a class="nav-link nav-admin-only active" href="#">⚙️ Admin</a>
+    <span id="navRoleBadge"></span>
     <button class="btn-logout" onclick="auth.signOut().then(()=>location.href='index.html')">Logout</button>
   </div>
 </nav>
@@ -36,11 +37,19 @@
   <h1 class="page-title">⚙️ Admin Settings</h1>
   <div id="alertBox"></div>
 
+  <!-- BOOTSTRAP NOTICE — shown only when no admin exists yet -->
+  <div id="bootstrapNotice" style="display:none;background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;border-radius:12px;padding:18px 24px;margin-bottom:20px">
+    <div style="font-weight:800;font-size:15px;margin-bottom:6px">🚀 Thiết lập lần đầu</div>
+    <div style="font-size:13px;color:#78350f;margin-bottom:14px">Hệ thống chưa có Admin. Hãy đặt tài khoản của bạn làm Admin để bắt đầu.</div>
+    <button class="btn btn-primary" onclick="makeMyselfAdmin()">👑 Đặt tôi là Admin ngay</button>
+  </div>
+
   <!-- SECTION TABS -->
   <div class="section-tabs">
     <button class="section-tab active" onclick="switchSection('pricing')">💲 Bảng giá</button>
     <button class="section-tab" onclick="switchSection('carriers')">🚚 Carriers</button>
     <button class="section-tab" onclick="switchSection('customers')">👥 Khách hàng</button>
+    <button class="section-tab" onclick="switchSection('users')">🔐 Phân quyền</button>
   </div>
 
   <!-- ══ SECTION: PRICING ══ -->
@@ -169,6 +178,37 @@
     </div>
   </div>
 
+  <!-- ══ SECTION: USERS ══ -->
+  <div class="section-panel" id="section-users">
+    <div class="card" style="margin-bottom:16px;border-left:4px solid #f97316">
+      <div class="card-body" style="padding:14px 20px">
+        <div style="font-weight:700;margin-bottom:6px">⚠️ Lần đầu setup</div>
+        <div style="font-size:13px;color:#6b7280">Nhân viên cần đăng nhập ít nhất 1 lần để xuất hiện ở đây. Admin click <strong>"Nâng lên Admin"</strong> để cấp quyền.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
+        <span>👥 Quản lý người dùng & phân quyền</span>
+        <button class="btn btn-primary btn-sm" onclick="makeMyselfAdmin()">👑 Đặt tôi là Admin</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data-tbl">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Role hiện tại</th>
+              <th>Ngày tạo</th>
+              <th>Thay đổi</th>
+            </tr>
+          </thead>
+          <tbody id="usersBody">
+            <tr><td colspan="4" style="text-align:center;padding:20px;color:#6b7280">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <!-- ══ SECTION: CUSTOMERS ══ -->
   <div class="section-panel" id="section-customers">
     <div class="card">
@@ -204,13 +244,13 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
 <script>
-// ── AUTH ──
-auth.onAuthStateChanged(async user => {
-  if (!user) { location.href = 'index.html'; return; }
+pageInit('admin').then(async ({ user }) => {
   loadAllTiers();
   loadCarriers();
   loadCustomers();
+  loadUsers();
 });
 
 // ── SECTION TABS ──
@@ -529,6 +569,74 @@ function showAlert(msg, type) {
   const box = document.getElementById('alertBox');
   box.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
   setTimeout(() => box.innerHTML = '', 4000);
+}
+
+// ── USER MANAGEMENT ──
+async function loadUsers() {
+  try {
+    const snap = await db.collection('users').orderBy('createdAt','desc').get();
+    const users = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+    renderUsersTable(users);
+  } catch(e) {
+    document.getElementById('usersBody').innerHTML =
+      `<tr><td colspan="4" style="text-align:center;padding:20px;color:#dc2626">Lỗi: ${e.message}</td></tr>`;
+  }
+}
+
+function renderUsersTable(users) {
+  if (!users.length) {
+    document.getElementById('usersBody').innerHTML =
+      '<tr><td colspan="4" style="text-align:center;padding:20px;color:#6b7280">Chưa có user nào đăng nhập.</td></tr>';
+    return;
+  }
+  document.getElementById('usersBody').innerHTML = users.map(u => {
+    const isAdmin = u.role === 'admin';
+    const date = u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString('vi-VN') : '–';
+    return `<tr>
+      <td>
+        <div style="font-weight:600">${u.email || u.uid}</div>
+        <div style="font-size:11px;color:#9ca3af">${u.uid}</div>
+      </td>
+      <td>
+        <span style="display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;
+          background:${isAdmin ? '#fde68a' : '#e0e7ff'};color:${isAdmin ? '#92400e' : '#3730a3'}">
+          ${isAdmin ? '👑 Admin' : '👤 Staff'}
+        </span>
+      </td>
+      <td style="font-size:12px;color:#6b7280">${date}</td>
+      <td>
+        ${isAdmin
+          ? `<button class="btn btn-outline btn-sm" onclick="setUserRole('${u.uid}','staff')">⬇️ Hạ Staff</button>`
+          : `<button class="btn btn-primary btn-sm" onclick="setUserRole('${u.uid}','admin')">👑 Nâng Admin</button>`
+        }
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function setUserRole(uid, role) {
+  const label = role === 'admin' ? 'Admin' : 'Staff';
+  if (!confirm(`Đổi quyền user này thành ${label}?`)) return;
+  try {
+    await db.collection('users').doc(uid).update({ role });
+    showAlert(`Đã cập nhật thành ${label}!`, 'success');
+    loadUsers();
+  } catch(e) { showAlert('Lỗi: ' + e.message, 'danger'); }
+}
+
+async function makeMyselfAdmin() {
+  const user = auth.currentUser;
+  if (!user) return;
+  if (!confirm('Đặt tài khoản hiện tại của bạn làm Admin?')) return;
+  try {
+    await db.collection('users').doc(user.uid).set({
+      email: user.email,
+      role: 'admin',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    }, { merge: true });
+    showAlert('✅ Đã nâng lên Admin! Hãy refresh trang.', 'success');
+    loadUsers();
+  } catch(e) { showAlert('Lỗi: ' + e.message, 'danger'); }
 }
 </script>
 </body>
