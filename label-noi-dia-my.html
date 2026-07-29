@@ -1496,6 +1496,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3Xg4EjxfjIhsag350t
  signature: document.getElementById('f-signature').checked,
  estimatedFee: document.getElementById('pe-total-val').textContent,
  note: document.getElementById('f-note').value,
+ lang: window.currentLang || 'vi',
  };
  try {
  if (!SCRIPT_URL || SCRIPT_URL.includes('PASTE')) {

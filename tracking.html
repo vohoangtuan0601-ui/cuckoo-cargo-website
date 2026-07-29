@@ -492,7 +492,17 @@
  }
 
 
- // SEARCH 
+ // Auto-search nếu URL có ?id=HTS...
+ window.addEventListener('DOMContentLoaded', function() {
+   var params = new URLSearchParams(window.location.search);
+   var id = params.get('id') || params.get('orderId');
+   if (id) {
+     document.getElementById('tk-input').value = id.toUpperCase();
+     doSearch();
+   }
+ });
+
+ // SEARCH
  async function doSearch() {
  const raw = document.getElementById('tk-input').value.trim().toUpperCase();
  if (!raw) { showToast('error', ' Vui lòng nhập mã đơn hàng'); return; }

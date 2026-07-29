@@ -1063,6 +1063,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3Xg4EjxfjIhsag350t
  notes: document.getElementById('notes').value,
  referral: document.getElementById('referral').value,
  submittedAt: new Date().toISOString(),
+ lang: window.currentLang || 'vi',
  };
 
  try {

@@ -453,60 +453,118 @@ var TRACKING_URL  = "https://cuckoocargo23102025.github.io/cuckoocargo.com/track
  * Gửi email xác nhận đơn hàng cho khách.
  * @param {string} toEmail  - Email khách hàng
  * @param {string} type     - "mvv" | "label" | "shopping"
- * @param {Object} info     - Thông tin đơn hàng
+ * @param {Object} info     - Thông tin đơn hàng (bao gồm info.lang = 'vi' | 'en')
  */
 function sendConfirmationEmail(toEmail, type, info) {
   if (!toEmail || toEmail.trim() === '') return;
 
-  var subject, bodyRows;
+  var isEN = (info.lang || 'vi') === 'en';
+  var subject, bodyRows, greeting, intro, ctaText, saveNote, supportText;
+
+  if (isEN) {
+    greeting   = 'Dear <strong>' + (info.senderName || info.customerName || 'Valued Customer') + '</strong>,';
+    intro      = 'Cuckoo Cargo has received your order. Our team will contact you to confirm shortly.';
+    ctaText    = 'Track My Order →';
+    saveNote   = 'Order ID: ' + info.orderId + ' · Save this email for future reference';
+    supportText = 'Need help? Contact us: cuckoocargo.us@gmail.com | Zalo / Messenger: Cuckoo Cargo';
+  } else {
+    greeting   = 'Xin chào <strong>' + (info.senderName || info.customerName || 'Quý khách') + '</strong>,';
+    intro      = 'Cuckoo Cargo đã nhận được đơn hàng của bạn. Nhân viên sẽ liên hệ xác nhận trong thời gian sớm nhất.';
+    ctaText    = 'Theo dõi đơn hàng →';
+    saveNote   = 'Mã đơn: ' + info.orderId + ' · Lưu email này để tra cứu sau';
+    supportText = 'Cần hỗ trợ? Liên hệ: cuckoocargo.us@gmail.com | Zalo / Messenger: Cuckoo Cargo';
+  }
 
   if (type === 'mvv') {
-    subject = '[Cuckoo Cargo] Xác nhận đơn gửi hàng Mỹ → Việt #' + info.orderId;
-    bodyRows = [
-      ['Mã đơn hàng', '<strong>' + info.orderId + '</strong>'],
-      ['Dịch vụ',     'Gửi hàng Mỹ → Việt Nam'],
-      ['Người gửi',   info.senderName  || '—'],
-      ['Người nhận',  info.receiverName || '—'],
-      ['Địa chỉ nhận',info.receiverAddress || '—'],
-      ['Cân nặng',    info.weight ? info.weight + ' lbs' : '—'],
-      ['Phí ước tính', info.estimatedFee ? '$' + info.estimatedFee : 'Nhân viên sẽ báo giá'],
-      ['Trạng thái',   '<span style="color:#fc4f08;font-weight:700">Đã tiếp nhận — Đang xử lý</span>'],
-    ];
+    if (isEN) {
+      subject  = '[Cuckoo Cargo] Order Confirmation - US to Vietnam #' + info.orderId;
+      bodyRows = [
+        ['Order ID',       '<strong>' + info.orderId + '</strong>'],
+        ['Service',        'Shipping from US to Vietnam'],
+        ['Sender',         info.senderName  || '—'],
+        ['Recipient',      info.receiverName || '—'],
+        ['Delivery Address', info.receiverAddress || '—'],
+        ['Weight',         info.weight ? info.weight + ' lbs' : '—'],
+        ['Shipping Fee',   info.estimatedFee ? '$' + info.estimatedFee : 'Cuckoo Cargo will send a quote via email'],
+        ['Status',         '<span style="color:#fc4f08;font-weight:700">Received — Processing</span>'],
+      ];
+    } else {
+      subject  = '[Cuckoo Cargo] Xác nhận đơn gửi hàng từ Mỹ về Việt Nam #' + info.orderId;
+      bodyRows = [
+        ['Mã đơn hàng',   '<strong>' + info.orderId + '</strong>'],
+        ['Dịch vụ',       'Gửi hàng từ Mỹ về Việt Nam'],
+        ['Người gửi',     info.senderName  || '—'],
+        ['Người nhận',    info.receiverName || '—'],
+        ['Địa chỉ nhận',  info.receiverAddress || '—'],
+        ['Cân nặng',      info.weight ? info.weight + ' lbs' : '—'],
+        ['Phí cân nặng',  info.estimatedFee ? '$' + info.estimatedFee : 'Cuckoo Cargo gửi bảng báo giá qua gmail'],
+        ['Trạng thái',    '<span style="color:#fc4f08;font-weight:700">Đã tiếp nhận — Đang xử lý</span>'],
+      ];
+    }
+
   } else if (type === 'label') {
-    subject = '[Cuckoo Cargo] Xác nhận đặt label nội địa Mỹ #' + info.orderId;
-    bodyRows = [
-      ['Mã đơn hàng', '<strong>' + info.orderId + '</strong>'],
-      ['Dịch vụ',     'Label nội địa Mỹ — ' + (info.carrier || '') + ' ' + (info.service || '')],
-      ['Người gửi',   info.senderName || '—'],
-      ['Người nhận',  info.receiverName || '—'],
-      ['Địa chỉ nhận',info.receiverAddress || '—'],
-      ['Cân nặng',    info.weight ? info.weight + ' lbs' : '—'],
-      ['Hình thức',   info.pickupMode || '—'],
-      ['Phí ước tính', info.estimatedFee ? '$' + info.estimatedFee : '—'],
-      ['Trạng thái',   '<span style="color:#fc4f08;font-weight:700">Đã tiếp nhận — Chờ xử lý</span>'],
-    ];
+    if (isEN) {
+      subject  = '[Cuckoo Cargo] Domestic US Label Confirmation #' + info.orderId;
+      bodyRows = [
+        ['Order ID',       '<strong>' + info.orderId + '</strong>'],
+        ['Service',        'Domestic US Label — ' + (info.carrier || '') + ' ' + (info.service || '')],
+        ['Sender',         info.senderName || '—'],
+        ['Recipient',      info.receiverName || '—'],
+        ['Delivery Address', info.receiverAddress || '—'],
+        ['Weight',         info.weight ? info.weight + ' lbs' : '—'],
+        ['Pickup Method',  info.pickupMode || '—'],
+        ['Shipping Fee',   info.estimatedFee ? '$' + info.estimatedFee : 'Cuckoo Cargo will send a quote via email'],
+        ['Status',         '<span style="color:#fc4f08;font-weight:700">Received — Pending</span>'],
+      ];
+    } else {
+      subject  = '[Cuckoo Cargo] Xác nhận đặt label nội địa Mỹ #' + info.orderId;
+      bodyRows = [
+        ['Mã đơn hàng',   '<strong>' + info.orderId + '</strong>'],
+        ['Dịch vụ',       'Label nội địa Mỹ — ' + (info.carrier || '') + ' ' + (info.service || '')],
+        ['Người gửi',     info.senderName || '—'],
+        ['Người nhận',    info.receiverName || '—'],
+        ['Địa chỉ nhận',  info.receiverAddress || '—'],
+        ['Cân nặng',      info.weight ? info.weight + ' lbs' : '—'],
+        ['Hình thức',     info.pickupMode || '—'],
+        ['Phí cân nặng',  info.estimatedFee ? '$' + info.estimatedFee : 'Cuckoo Cargo gửi bảng báo giá qua gmail'],
+        ['Trạng thái',    '<span style="color:#fc4f08;font-weight:700">Đã tiếp nhận — Chờ xử lý</span>'],
+      ];
+    }
+
   } else if (type === 'shopping') {
-    subject = '[Cuckoo Cargo] Xác nhận đơn mua hộ #' + info.orderId;
     var itemLines = '';
     if (info.items && info.items.length > 0) {
       info.items.forEach(function(it, idx) {
         if (!it || !it.url) return;
         itemLines += '<li style="margin-bottom:6px">'
-          + 'SP' + (idx + 1) + ': <a href="' + it.url + '">' + it.url + '</a>'
-          + (it.qty   ? ' — SL: ' + it.qty   : '')
+          + (isEN ? 'Item' : 'SP') + (idx + 1) + ': <a href="' + it.url + '">' + it.url + '</a>'
+          + (it.qty   ? (isEN ? ' — Qty: '   : ' — SL: ')  + it.qty   : '')
           + (it.size  ? ', Size: ' + it.size  : '')
-          + (it.color ? ', Màu: '  + it.color  : '')
+          + (it.color ? (isEN ? ', Color: '  : ', Màu: ')   + it.color : '')
           + '</li>';
       });
     }
-    bodyRows = [
-      ['Mã đơn hàng',  '<strong>' + info.orderId + '</strong>'],
-      ['Dịch vụ',      'Mua hộ từ Mỹ'],
-      ['Khách hàng',   info.customerName || '—'],
-      ['Địa chỉ nhận', info.receiverAddress || '—'],
-      ['Sản phẩm',     itemLines ? '<ul style="margin:4px 0;padding-left:20px">' + itemLines + '</ul>' : '—'],
-      ['Trạng thái',   '<span style="color:#fc4f08;font-weight:700">Đã tiếp nhận — Chờ báo giá</span>'],
-    ];
+    if (isEN) {
+      subject  = '[Cuckoo Cargo] Shopping Order Confirmation #' + info.orderId;
+      bodyRows = [
+        ['Order ID',     '<strong>' + info.orderId + '</strong>'],
+        ['Service',      'Shopping Assistant from US'],
+        ['Customer',     info.customerName || '—'],
+        ['Delivery Address', info.receiverAddress || '—'],
+        ['Items',        itemLines ? '<ul style="margin:4px 0;padding-left:20px">' + itemLines + '</ul>' : '—'],
+        ['Status',       '<span style="color:#fc4f08;font-weight:700">Received — Awaiting Quote</span>'],
+      ];
+    } else {
+      subject  = '[Cuckoo Cargo] Xác nhận đơn mua hộ #' + info.orderId;
+      bodyRows = [
+        ['Mã đơn hàng',  '<strong>' + info.orderId + '</strong>'],
+        ['Dịch vụ',      'Mua hộ từ Mỹ'],
+        ['Khách hàng',   info.customerName || '—'],
+        ['Địa chỉ nhận', info.receiverAddress || '—'],
+        ['Sản phẩm',     itemLines ? '<ul style="margin:4px 0;padding-left:20px">' + itemLines + '</ul>' : '—'],
+        ['Trạng thái',   '<span style="color:#fc4f08;font-weight:700">Đã tiếp nhận — Chờ báo giá</span>'],
+      ];
+    }
   } else {
     return;
   }
@@ -514,7 +572,7 @@ function sendConfirmationEmail(toEmail, type, info) {
   // Build bảng thông tin
   var tableRows = bodyRows.map(function(row) {
     return '<tr>'
-      + '<td style="padding:10px 14px;background:#f8f8f8;font-weight:600;color:#555;width:150px;border-bottom:1px solid #eee;white-space:nowrap">' + row[0] + '</td>'
+      + '<td style="padding:10px 14px;background:#f8f8f8;font-weight:600;color:#555;width:160px;border-bottom:1px solid #eee;white-space:nowrap">' + row[0] + '</td>'
       + '<td style="padding:10px 14px;color:#222;border-bottom:1px solid #eee">' + row[1] + '</td>'
       + '</tr>';
   }).join('');
@@ -527,16 +585,16 @@ function sendConfirmationEmail(toEmail, type, info) {
     + '<tr><td align="center">'
     + '<table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);max-width:600px">'
 
-    // Header
+    // Header — không dùng emoji để tránh lỗi font
     + '<tr><td style="background:#fc4f08;padding:28px 32px;text-align:center">'
-    + '<div style="font-size:26px;font-weight:900;color:#fff;letter-spacing:1px">🐦 CUCKOO CARGO</div>'
-    + '<div style="font-size:13px;color:rgba(255,255,255,0.85);margin-top:6px">Dịch vụ gửi hàng Mỹ ↔ Việt Nam</div>'
+    + '<div style="font-size:28px;font-weight:900;color:#fff;letter-spacing:2px">CUCKOO CARGO</div>'
+    + '<div style="font-size:13px;color:rgba(255,255,255,0.85);margin-top:6px">Dich vu gui hang My - Viet</div>'
     + '</td></tr>'
 
     // Body
     + '<tr><td style="padding:28px 32px">'
-    + '<p style="font-size:16px;color:#222;margin:0 0 6px 0">Xin chào <strong>' + (info.senderName || info.customerName || 'Quý khách') + '</strong>,</p>'
-    + '<p style="font-size:14px;color:#555;margin:0 0 20px 0">Cuckoo Cargo đã nhận được đơn hàng của bạn. Nhân viên sẽ liên hệ xác nhận trong thời gian sớm nhất.</p>'
+    + '<p style="font-size:16px;color:#222;margin:0 0 6px 0">' + greeting + '</p>'
+    + '<p style="font-size:14px;color:#555;margin:0 0 20px 0">' + intro + '</p>'
 
     + '<table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eee;border-radius:8px;overflow:hidden">'
     + tableRows
@@ -544,15 +602,14 @@ function sendConfirmationEmail(toEmail, type, info) {
 
     // CTA
     + '<div style="text-align:center;margin:28px 0 10px">'
-    + '<a href="' + trackLink + '" style="display:inline-block;background:#fc4f08;color:#fff;text-decoration:none;padding:13px 32px;border-radius:8px;font-size:15px;font-weight:700">Theo dõi đơn hàng →</a>'
+    + '<a href="' + trackLink + '" style="display:inline-block;background:#fc4f08;color:#fff;text-decoration:none;padding:13px 32px;border-radius:8px;font-size:15px;font-weight:700">' + ctaText + '</a>'
     + '</div>'
-    + '<p style="font-size:12px;color:#999;text-align:center;margin:0">Mã đơn: ' + info.orderId + ' · Lưu email này để tra cứu sau</p>'
+    + '<p style="font-size:12px;color:#999;text-align:center;margin:0">' + saveNote + '</p>'
     + '</td></tr>'
 
     // Footer
     + '<tr><td style="background:#f8f8f8;padding:20px 32px;text-align:center;border-top:1px solid #eee">'
-    + '<p style="font-size:13px;color:#888;margin:0 0 6px 0">Cần hỗ trợ? Liên hệ chúng tôi:</p>'
-    + '<p style="font-size:13px;color:#fc4f08;margin:0;font-weight:600">📧 cuckoocargo.us@gmail.com &nbsp;|&nbsp; 📱 Zalo / Messenger: Cuckoo Cargo</p>'
+    + '<p style="font-size:13px;color:#fc4f08;margin:0;font-weight:600">' + supportText + '</p>'
     + '</td></tr>'
 
     + '</table>'
@@ -567,7 +624,6 @@ function sendConfirmationEmail(toEmail, type, info) {
       replyTo:  COMPANY_EMAIL,
     });
   } catch (e) {
-    // Log lỗi nhưng không dừng luồng xử lý đơn
     Logger.log('sendConfirmationEmail error: ' + e.message);
   }
 }
