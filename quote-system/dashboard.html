@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Dashboard — Cuckoo Cargo</title>
-  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/styles.css?v=3"/>
 </head>
 <body>
 <nav class="navbar">
@@ -56,15 +56,15 @@
   <div class="card">
     <div class="card-body" style="padding:0">
       <div class="table-wrap">
-        <table class="data-tbl">
+        <table class="data-tbl mob-cards">
           <thead>
             <tr>
-              <th>#</th>
+              <th class="mob-hide">#</th>
               <th>Date</th>
               <th>Customer</th>
               <th>Service</th>
-              <th>Carrier</th>
-              <th>Tracking</th>
+              <th class="mob-hide">Carrier</th>
+              <th class="mob-hide">Tracking</th>
               <th>Total</th>
               <th>Status</th>
               <th>Actions</th>
@@ -146,19 +146,19 @@ function renderTable(list) {
   }
   document.getElementById('quotesBody').innerHTML = list.map((q, i) => `
     <tr>
-      <td style="font-size:11px;color:#6b7280">${q.id.slice(-6).toUpperCase()}</td>
-      <td>${q.date || '–'}</td>
-      <td>
+      <td data-label="#" class="mob-hide" style="font-size:11px;color:#6b7280">${q.id.slice(-6).toUpperCase()}</td>
+      <td data-label="Date">${q.date || '–'}</td>
+      <td data-label="Khách">
         <div style="font-weight:600">${q.senderName || '–'}</div>
         <div style="font-size:11px;color:#6b7280">${q.customerCode || ''}</div>
       </td>
-      <td>${SVC_LABELS[q.serviceType] || q.serviceType || '–'}</td>
-      <td>${q.carrier || '–'}</td>
-      <td style="font-size:11px;color:#6b7280">${q.tracking || '–'}</td>
-      <td style="font-weight:700">$${(parseFloat(q.total)||0).toFixed(2)}</td>
-      <td><span class="badge ${q.paymentStatus==='paid'?'badge-green':'badge-orange'}">${q.paymentStatus==='paid'?'✅ Paid':'⏳ Unpaid'}</span></td>
+      <td data-label="Dịch vụ">${SVC_LABELS[q.serviceType] || q.serviceType || '–'}</td>
+      <td data-label="Carrier" class="mob-hide">${q.carrier || '–'}</td>
+      <td data-label="Tracking" class="mob-hide" style="font-size:11px;color:#6b7280">${q.tracking || '–'}</td>
+      <td data-label="Total" style="font-weight:700">$${(parseFloat(q.total)||0).toFixed(2)}</td>
+      <td data-label="Status"><span class="badge ${q.paymentStatus==='paid'?'badge-green':'badge-orange'}">${q.paymentStatus==='paid'?'✅ Paid':'⏳ Unpaid'}</span></td>
       <td>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
           <a href="quote-form.html?id=${q.id}" class="btn btn-outline btn-sm">✏️ Edit</a>
           <a href="print.html?id=${q.id}" class="btn btn-primary btn-sm" target="_blank">📄 PDF</a>
           ${_pageRole === 'admin' ? `<button class="btn btn-danger btn-sm" onclick="deleteQuote('${q.id}')">🗑️</button>` : ''}

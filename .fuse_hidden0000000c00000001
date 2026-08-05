@@ -1,0 +1,26 @@
+[debug] [2026-07-30T18:42:17.422Z] ----------------------------------------------------------------------
+[debug] [2026-07-30T18:42:17.427Z] Command:       /usr/bin/node /sessions/nifty-dazzling-carson/npm-global/bin/firebase deploy --only hosting --project cuckoo-cargo
+[debug] [2026-07-30T18:42:17.427Z] CLI Version:   15.25.0
+[debug] [2026-07-30T18:42:17.428Z] Platform:      linux
+[debug] [2026-07-30T18:42:17.428Z] Node Version:  v22.22.3
+[debug] [2026-07-30T18:42:17.428Z] Detected Agent: unknown
+[debug] [2026-07-30T18:42:17.428Z] Time:          Fri Jul 31 2026 01:42:17 GMT+0700 (Indochina Time)
+[debug] [2026-07-30T18:42:17.428Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-07-30T18:42:17.439Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-07-30T18:42:18.376Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-07-30T18:42:18.417Z] Error: Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.
+    at GoogleAuth.getApplicationDefaultAsync (/sessions/nifty-dazzling-carson/npm-global/lib/node_modules/firebase-tools/node_modules/google-auth-library/build/src/auth/googleauth.js:287:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async GoogleAuth._GoogleAuth_determineClient (/sessions/nifty-dazzling-carson/npm-global/lib/node_modules/firebase-tools/node_modules/google-auth-library/build/src/auth/googleauth.js:834:32)
+    at async GoogleAuth.getClient (/sessions/nifty-dazzling-carson/npm-global/lib/node_modules/firebase-tools/node_modules/google-auth-library/build/src/auth/googleauth.js:698:20)
+    at async GoogleAuth.getAccessToken (/sessions/nifty-dazzling-carson/npm-global/lib/node_modules/firebase-tools/node_modules/google-auth-library/build/src/auth/googleauth.js:722:24)
+    at async autoAuth (/sessions/nifty-dazzling-carson/npm-global/lib/node_modules/firebase-tools/lib/requireAuth.js:38:19)
+    at async requireAuth (/sessions/nifty-dazzling-carson/npm-global/lib/node_modules/firebase-tools/lib/requireAuth.js:100:20)
+    at async requirePermissions (/sessions/nifty-dazzling-carson/npm-global/lib/node_modules/firebase-tools/lib/requirePermissions.js:17:5)
+    at async /sessions/nifty-dazzling-carson/npm-global/lib/node_modules/firebase-tools/lib/command.js:275:17
+[error] 
+[error] Error: Failed to authenticate, have you run firebase login?
+[debug] [2026-07-30T18:42:18.426Z] *** [apiv2] error from fetch(https://firebase-public.firebaseio.com/cli.json, {"headers":{},"method":"GET","dispatcher":{"_events":{},"_eventsCount":0}}): Error: Request was cancelled.
+[warn] ⚠  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection. 
+[debug] [2026-07-30T18:42:18.426Z] Failed to fetch MOTD FirebaseError: Failed to make request to https://firebase-public.firebaseio.com/cli.json

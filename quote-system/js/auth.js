@@ -12,7 +12,7 @@ async function pageInit(requiredRole) {
       let role = 'staff';
       try {
         const ref  = db.collection('users').doc(user.uid);
-        const snap = await ref.get();
+        const snap = await ref.get({ source: 'server' });
         if (snap.exists) {
           role = snap.data().role || 'staff';
         } else {
@@ -68,6 +68,36 @@ function _applyNavbar(role, user) {
       background:${role === 'admin' ? '#fde68a' : '#e0e7ff'};
       color:${role === 'admin' ? '#92400e' : '#3730a3'};
     `;
+  }
+
+  // ── HAMBURGER MENU (mobile) ──
+  const navbar = document.querySelector('.navbar');
+  const navNav = document.querySelector('.navbar-nav');
+  if (navbar && navNav && !document.getElementById('navHamburger')) {
+    const ham = document.createElement('button');
+    ham.id = 'navHamburger';
+    ham.className = 'hamburger';
+    ham.setAttribute('aria-label', 'Menu');
+    ham.innerHTML = '<span></span><span></span><span></span>';
+    ham.addEventListener('click', () => {
+      navNav.classList.toggle('mob-open');
+      ham.classList.toggle('open');
+    });
+    // Close when any link or logout button is tapped
+    navNav.addEventListener('click', e => {
+      if (e.target.matches('.nav-link, .btn-logout')) {
+        navNav.classList.remove('mob-open');
+        ham.classList.remove('open');
+      }
+    });
+    // Close when tapping outside
+    document.addEventListener('click', e => {
+      if (!navbar.contains(e.target)) {
+        navNav.classList.remove('mob-open');
+        ham.classList.remove('open');
+      }
+    });
+    navbar.appendChild(ham);
   }
 }
 

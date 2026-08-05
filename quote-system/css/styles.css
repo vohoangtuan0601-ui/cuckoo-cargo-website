@@ -97,9 +97,127 @@ table.data-tbl tr:hover td{background:#fff8f4}
 .btn-remove-row{background:#fee2e2;color:#dc2626;border:none;width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
 .price-hint{font-size:11px;color:#6b7280;margin-top:6px;padding:6px 10px;background:#f8fafc;border-radius:6px}
 
+/* ── QUOTE FORM HEADER ── */
+.qf-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.qf-header-btns{display:flex;gap:10px;flex-wrap:wrap}
+
+/* ── HAMBURGER BUTTON ── */
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px 6px;flex-direction:column;gap:5px;margin-left:8px;flex-shrink:0}
+.hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .25s,opacity .25s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ── MOBILE STICKY COST BAR (quote-form only) ── */
+#mobileCostBar{
+  display:none;position:fixed;bottom:0;left:0;right:0;
+  background:linear-gradient(135deg,#1a1a2e,#16213e);
+  color:#fff;padding:10px 16px;
+  align-items:center;justify-content:space-between;
+  z-index:200;gap:12px;
+  box-shadow:0 -4px 16px rgba(0,0,0,.25);
+  border-top:1px solid rgba(255,255,255,.1)
+}
+
+/* ── MOBILE BREAKPOINT ── */
 @media(max-width:768px){
-  .quote-layout{grid-template-columns:1fr}
+
+  /* NAVBAR */
+  .navbar{padding:0 14px;position:sticky;top:0;z-index:100}
+  .navbar-brand{font-size:16px}
+  .hamburger{display:flex}
+  .navbar-nav{
+    position:fixed;top:56px;left:0;right:0;
+    background:linear-gradient(135deg,#1a1a2e,#16213e);
+    flex-direction:column;padding:10px 14px 16px;
+    gap:4px;display:none;z-index:99;
+    box-shadow:0 8px 24px rgba(0,0,0,.4);
+    border-top:1px solid rgba(255,255,255,.08)
+  }
+  .navbar-nav.mob-open{display:flex}
+  .nav-link{padding:11px 16px;font-size:14px;border-radius:8px;width:100%}
+  .btn-logout{width:100%;text-align:center;padding:11px;margin-top:6px;border-radius:8px}
+  #navRoleBadge{display:block;text-align:center;padding:4px 0;font-size:12px}
+
+  /* CONTAINER */
+  .container{padding:14px 12px}
+  .page-title{font-size:18px;margin-bottom:14px}
+
+  /* CARDS */
+  .card{border-radius:10px}
+  .card-header{padding:12px 16px;font-size:13px}
+  .card-body{padding:14px}
+
+  /* INPUTS — 16px prevents iOS auto-zoom */
+  .form-group input,.form-group select,.form-group textarea{
+    font-size:16px;padding:11px 12px;min-height:44px
+  }
+  .form-group label{font-size:13px}
+  .form-group{margin-bottom:12px}
+
+  /* BUTTONS */
+  .btn{min-height:40px;font-size:13px}
+  .btn-sm{min-height:34px;font-size:12px}
+
+  /* COLLAPSE ALL INLINE GRIDS — !important overrides inline styles */
+  div[style*="grid-template-columns"]{grid-template-columns:1fr!important}
+
+  /* STATS: 2×2 grid */
+  .stats-grid{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .stat-card{padding:14px}
+  .stat-card .value{font-size:22px}
+  .stat-card .sub{font-size:11px}
+
+  /* QUOTE FORM */
+  .quote-layout{grid-template-columns:1fr;gap:14px}
   .cost-card{position:static}
-  .navbar-nav{gap:2px}
-  .nav-link{padding:5px 8px;font-size:12px}
+  #mobileCostBar{display:flex}
+  body:has(#mobileCostBar){padding-bottom:72px}
+
+  /* ORDER TABLE: horizontal scroll + bigger touch targets */
+  .order-table input{font-size:14px;padding:8px 6px;min-height:38px}
+
+  /* ADMIN TABS */
+  .section-tabs,.carrier-tab-wrap,.service-tab-wrap{flex-wrap:wrap;gap:6px}
+  .section-tab,.carrier-tab{font-size:12px;padding:7px 12px}
+  .service-tab{font-size:11px;padding:4px 10px}
+
+  /* DATA TABLE → CARD VIEW (only tables with .mob-cards class) */
+  table.data-tbl.mob-cards thead{display:none}
+  table.data-tbl.mob-cards tbody{display:block}
+  table.data-tbl.mob-cards tr{
+    display:block;border-radius:10px;
+    margin-bottom:10px;padding:12px 14px;
+    background:#fff;
+    box-shadow:0 1px 4px rgba(0,0,0,.08);
+    border:1px solid #f1f5f9
+  }
+  table.data-tbl.mob-cards td{
+    display:flex;align-items:flex-start;
+    padding:5px 0;border:none;font-size:13px;gap:8px
+  }
+  table.data-tbl.mob-cards td[data-label]::before{
+    content:attr(data-label);font-weight:700;
+    color:#9ca3af;font-size:11px;text-transform:uppercase;
+    min-width:76px;flex-shrink:0;padding-top:2px
+  }
+  table.data-tbl.mob-cards td:last-child{
+    padding-top:10px;margin-top:6px;
+    border-top:1px solid #f1f5f9
+  }
+  table.data-tbl.mob-cards td.mob-hide{display:none}
+  table.data-tbl.mob-cards td[data-label="Total"]{
+    font-size:15px;font-weight:800;color:#f97316
+  }
+
+  /* QUOTE FORM HEADER: single row — title left, back btn right; save is in sticky bar */
+  .qf-header{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:8px;margin-bottom:12px}
+  .qf-header .page-title{font-size:16px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .qf-header-btns{flex-shrink:0;flex-wrap:nowrap;gap:6px}
+  .qf-header-btns .btn-primary,.qf-header-btns .btn-secondary{display:none}
+  .qf-header-btns .btn-outline{min-height:38px;padding:7px 12px;font-size:12px}
+
+  /* LOGIN */
+  .login-card{width:calc(100vw - 32px);padding:28px 20px;border-radius:14px}
+  .login-card .btn{min-height:48px;font-size:15px}
 }
