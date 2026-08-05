@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Admin — Cuckoo Cargo</title>
-  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/styles.css?v=3"/>
   <style>
     .section-tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
     .section-tab{padding:8px 18px;border-radius:8px;border:1.5px solid #e5e7eb;background:#f8fafc;color:#475569;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
@@ -87,6 +87,13 @@
         <button class="carrier-tab active" data-carrier="FedEx" onclick="selectCarrier('FedEx')">📦 FedEx</button>
         <button class="carrier-tab"        data-carrier="UPS"   onclick="selectCarrier('UPS')">🟤 UPS</button>
         <button class="carrier-tab"        data-carrier="USPS"  onclick="selectCarrier('USPS')">🔵 USPS</button>
+      </div>
+      <!-- Import button -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <button onclick="importDomesticPricing()" style="background:#ecfdf5;border:1.5px solid #059669;color:#065f46;font-weight:700;padding:6px 16px;border-radius:8px;cursor:pointer;font-size:13px">
+          📥 Import Bảng Giá từ Excel
+        </button>
+        <span style="font-size:11px;color:#9ca3af">Import toàn bộ bảng giá UPS/FedEx/USPS theo file Excel (75 tiers) — sẽ xóa bảng giá nội địa cũ</span>
       </div>
       <!-- Service sub-tabs -->
       <div class="service-tab-wrap" id="serviceTabs"></div>
@@ -280,9 +287,9 @@ function switchPricingService(svc) {
 
 // ── CARRIER / SERVICE STATE ──
 const CARRIER_SERVICES = {
-  FedEx: ['Ground','Express Saver','2Day','2Day A.M.','Overnight','Priority Overnight'],
-  UPS:   ['Ground','3 Day Select','2nd Day Air','2nd Day Air A.M.','Next Day Air Saver','Next Day Air'],
-  USPS:  ['Priority Mail','Priority Mail Express','First Class Package','Parcel Select Ground'],
+  UPS:   ['Ground','3 Day','2 Day','Overnight'],
+  FedEx: ['Ground','3 Day','2 Day','Overnight'],
+  USPS:  ['Ground','Priority','Express'],
 };
 let activeCarrier = 'FedEx';
 let activeService = CARRIER_SERVICES['FedEx'][0];
@@ -637,6 +644,119 @@ async function makeMyselfAdmin() {
     showAlert('✅ Đã nâng lên Admin! Hãy refresh trang.', 'success');
     loadUsers();
   } catch(e) { showAlert('Lỗi: ' + e.message, 'danger'); }
+}
+
+// ── IMPORT DOMESTIC PRICING FROM EXCEL TEMPLATE ──
+const DOMESTIC_PRICING_TEMPLATE = [
+  // ── UPS Ground ──
+  { carrier:'UPS', carrierService:'Ground', minWeight:1,  maxWeight:2,  price:25,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'Ground', minWeight:3,  maxWeight:3,  price:27,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'Ground', minWeight:4,  maxWeight:5,  price:30,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'Ground', minWeight:6,  maxWeight:50, price:1.99, pricingType:'perLbs', minBillLbs:10 },
+  // ── UPS 3 Day ──
+  { carrier:'UPS', carrierService:'3 Day', minWeight:1,  maxWeight:2,  price:30,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'3 Day', minWeight:3,  maxWeight:3,  price:37,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'3 Day', minWeight:4,  maxWeight:5,  price:47,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'3 Day', minWeight:6,  maxWeight:10, price:5.49, pricingType:'perLbs', minBillLbs:10 },
+  { carrier:'UPS', carrierService:'3 Day', minWeight:11, maxWeight:15, price:4.69, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'3 Day', minWeight:16, maxWeight:20, price:4.29, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'3 Day', minWeight:21, maxWeight:25, price:4.09, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'3 Day', minWeight:26, maxWeight:30, price:3.89, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'3 Day', minWeight:31, maxWeight:40, price:3.69, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'3 Day', minWeight:41, maxWeight:50, price:3.49, pricingType:'perLbs' },
+  // ── UPS 2 Day ──
+  { carrier:'UPS', carrierService:'2 Day', minWeight:1,  maxWeight:2,  price:31,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'2 Day', minWeight:3,  maxWeight:3,  price:44,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'2 Day', minWeight:4,  maxWeight:5,  price:56,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'2 Day', minWeight:6,  maxWeight:10, price:7.49, pricingType:'perLbs', minBillLbs:10 },
+  { carrier:'UPS', carrierService:'2 Day', minWeight:11, maxWeight:15, price:6.49, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'2 Day', minWeight:16, maxWeight:20, price:5.99, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'2 Day', minWeight:21, maxWeight:25, price:5.79, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'2 Day', minWeight:26, maxWeight:30, price:5.59, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'2 Day', minWeight:31, maxWeight:40, price:5.29, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'2 Day', minWeight:41, maxWeight:50, price:5.09, pricingType:'perLbs' },
+  // ── UPS Overnight ──
+  { carrier:'UPS', carrierService:'Overnight', minWeight:1,  maxWeight:2,  price:109,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'Overnight', minWeight:3,  maxWeight:3,  price:117,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'Overnight', minWeight:4,  maxWeight:5,  price:134,   pricingType:'flat' },
+  { carrier:'UPS', carrierService:'Overnight', minWeight:6,  maxWeight:10, price:12.99, pricingType:'perLbs', minBillLbs:10 },
+  { carrier:'UPS', carrierService:'Overnight', minWeight:11, maxWeight:15, price:10.69, pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'Overnight', minWeight:16, maxWeight:20, price:9.49,  pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'Overnight', minWeight:21, maxWeight:30, price:8.39,  pricingType:'perLbs' },
+  { carrier:'UPS', carrierService:'Overnight', minWeight:31, maxWeight:50, price:7.59,  pricingType:'perLbs' },
+  // ── FedEx Ground ──
+  { carrier:'FedEx', carrierService:'Ground', minWeight:1,  maxWeight:3,  price:32,   pricingType:'flat' },
+  { carrier:'FedEx', carrierService:'Ground', minWeight:4,  maxWeight:5,  price:33,   pricingType:'flat' },
+  { carrier:'FedEx', carrierService:'Ground', minWeight:6,  maxWeight:10, price:2.99, pricingType:'perLbs', minBillLbs:10 },
+  { carrier:'FedEx', carrierService:'Ground', minWeight:11, maxWeight:50, price:2.59, pricingType:'perLbs' },
+  // ── FedEx 3 Day ──
+  { carrier:'FedEx', carrierService:'3 Day', minWeight:1,  maxWeight:2,  price:79,    pricingType:'flat' },
+  { carrier:'FedEx', carrierService:'3 Day', minWeight:3,  maxWeight:5,  price:99,    pricingType:'flat' },
+  { carrier:'FedEx', carrierService:'3 Day', minWeight:6,  maxWeight:10, price:15.29, pricingType:'perLbs', minBillLbs:10 },
+  { carrier:'FedEx', carrierService:'3 Day', minWeight:11, maxWeight:15, price:12.79, pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'3 Day', minWeight:16, maxWeight:20, price:11.49, pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'3 Day', minWeight:21, maxWeight:25, price:9.79,  pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'3 Day', minWeight:26, maxWeight:30, price:9.49,  pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'3 Day', minWeight:31, maxWeight:40, price:8.99,  pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'3 Day', minWeight:41, maxWeight:50, price:8.59,  pricingType:'perLbs' },
+  // ── FedEx 2 Day ──
+  { carrier:'FedEx', carrierService:'2 Day', minWeight:1,  maxWeight:2,  price:89,    pricingType:'flat' },
+  { carrier:'FedEx', carrierService:'2 Day', minWeight:3,  maxWeight:5,  price:117,   pricingType:'flat' },
+  { carrier:'FedEx', carrierService:'2 Day', minWeight:6,  maxWeight:10, price:18.19, pricingType:'perLbs', minBillLbs:10 },
+  { carrier:'FedEx', carrierService:'2 Day', minWeight:11, maxWeight:15, price:15.19, pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'2 Day', minWeight:16, maxWeight:20, price:13.99, pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'2 Day', minWeight:21, maxWeight:25, price:12.19, pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'2 Day', minWeight:26, maxWeight:30, price:11.59, pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'2 Day', minWeight:31, maxWeight:40, price:11.09, pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'2 Day', minWeight:41, maxWeight:50, price:10.19, pricingType:'perLbs' },
+  // ── FedEx Overnight ──
+  { carrier:'FedEx', carrierService:'Overnight', minWeight:1,  maxWeight:2,  price:159,   pricingType:'flat' },
+  { carrier:'FedEx', carrierService:'Overnight', minWeight:3,  maxWeight:5,  price:176,   pricingType:'flat' },
+  { carrier:'FedEx', carrierService:'Overnight', minWeight:6,  maxWeight:10, price:23.99, pricingType:'perLbs', minBillLbs:10 },
+  { carrier:'FedEx', carrierService:'Overnight', minWeight:11, maxWeight:15, price:19.79, pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'Overnight', minWeight:16, maxWeight:20, price:16.49, pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'Overnight', minWeight:21, maxWeight:30, price:12.89, pricingType:'perLbs' },
+  { carrier:'FedEx', carrierService:'Overnight', minWeight:31, maxWeight:50, price:11.09, pricingType:'perLbs' },
+  // ── USPS Ground ──
+  { carrier:'USPS', carrierService:'Ground', minWeight:1,  maxWeight:1,  price:24,   pricingType:'flat' },
+  { carrier:'USPS', carrierService:'Ground', minWeight:2,  maxWeight:3,  price:27,   pricingType:'flat' },
+  { carrier:'USPS', carrierService:'Ground', minWeight:4,  maxWeight:5,  price:30,   pricingType:'flat' },
+  { carrier:'USPS', carrierService:'Ground', minWeight:6,  maxWeight:10, price:3.49, pricingType:'perLbs' },
+  { carrier:'USPS', carrierService:'Ground', minWeight:11, maxWeight:20, price:3.99, pricingType:'perLbs' },
+  // ── USPS Priority ──
+  { carrier:'USPS', carrierService:'Priority', minWeight:1,  maxWeight:1,  price:32,   pricingType:'flat' },
+  { carrier:'USPS', carrierService:'Priority', minWeight:2,  maxWeight:3,  price:49,   pricingType:'flat' },
+  { carrier:'USPS', carrierService:'Priority', minWeight:4,  maxWeight:5,  price:62,   pricingType:'flat' },
+  { carrier:'USPS', carrierService:'Priority', minWeight:6,  maxWeight:10, price:6.99, pricingType:'perLbs' },
+  { carrier:'USPS', carrierService:'Priority', minWeight:11, maxWeight:20, price:5.99, pricingType:'perLbs' },
+  // ── USPS Express ──
+  { carrier:'USPS', carrierService:'Express', minWeight:1,  maxWeight:1,  price:134,   pricingType:'flat' },
+  { carrier:'USPS', carrierService:'Express', minWeight:2,  maxWeight:3,  price:174,   pricingType:'flat' },
+  { carrier:'USPS', carrierService:'Express', minWeight:4,  maxWeight:5,  price:213,   pricingType:'flat' },
+  { carrier:'USPS', carrierService:'Express', minWeight:6,  maxWeight:10, price:21.99, pricingType:'perLbs' },
+];
+
+async function importDomesticPricing() {
+  if (!confirm('Sẽ xóa toàn bộ bảng giá nội địa hiện tại và import 77 tiers từ file Excel.\n\nTiếp tục?')) return;
+  showAlert('⏳ Đang import bảng giá...', 'info');
+  try {
+    // Delete existing domestic tiers in batch
+    const existing = tiers.filter(t => t.serviceType === 'domestic');
+    if (existing.length) {
+      const delBatch = db.batch();
+      existing.forEach(t => delBatch.delete(db.collection('pricingTiers').doc(t.id)));
+      await delBatch.commit();
+    }
+    // Write all new tiers (75 docs — well under 500 batch limit)
+    const newTiers = DOMESTIC_PRICING_TEMPLATE.map(t => ({ ...t, serviceType: 'domestic' }));
+    const addBatch = db.batch();
+    newTiers.forEach(t => addBatch.set(db.collection('pricingTiers').doc(), t));
+    await addBatch.commit();
+
+    showAlert(`✅ Import thành công ${newTiers.length} pricing tiers!`, 'success');
+    await loadAllTiers();
+    renderDomesticTable();
+  } catch(e) { showAlert('Lỗi import: ' + e.message, 'danger'); }
 }
 </script>
 </body>

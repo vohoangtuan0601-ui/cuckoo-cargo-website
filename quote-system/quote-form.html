@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Quote Form — Cuckoo Cargo</title>
-  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/styles.css?v=3"/>
 </head>
 <body>
 
@@ -26,9 +26,9 @@
 <div class="container">
   <div id="alertBox"></div>
 
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+  <div class="qf-header">
     <h1 class="page-title" style="margin:0">📋 Quote Form</h1>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <div class="qf-header-btns">
       <button class="btn btn-outline" onclick="history.back()">← Back</button>
       <button class="btn btn-secondary" onclick="generatePDF()" id="btnPDF" style="display:none">📄 Print PDF</button>
       <button class="btn btn-primary" onclick="saveQuote()">💾 Save Quote</button>
@@ -53,9 +53,15 @@
               </select>
             </div>
             <div class="form-group" style="margin:0">
-              <label>Carrier</label>
-              <select id="carrierSelect">
+              <label id="carrierLabel">Carrier</label>
+              <select id="carrierSelect" onchange="onCarrierChange()">
                 <option value="">-- Select carrier --</option>
+              </select>
+            </div>
+            <div class="form-group" id="carrierServiceGroup" style="margin:0;display:none">
+              <label>Service (Domestic)</label>
+              <select id="carrierServiceSelect" onchange="recalcCosts()">
+                <option value="">-- Select service --</option>
               </select>
             </div>
             <div class="form-group" style="margin:0">
@@ -253,6 +259,19 @@
   </div>
 </div>
 
+<!-- Mobile sticky cost bar -->
+<div id="mobileCostBar">
+  <div>
+    <div style="font-size:10px;color:rgba(255,255,255,.55);font-weight:600;text-transform:uppercase;letter-spacing:.5px">Total</div>
+    <div style="font-size:20px;font-weight:900;color:#f97316;line-height:1.1" id="mob-total">$0.00</div>
+  </div>
+  <div style="text-align:center">
+    <div style="font-size:10px;color:rgba(255,255,255,.55);font-weight:600;text-transform:uppercase;letter-spacing:.5px">Weight</div>
+    <div style="font-size:15px;font-weight:700" id="mob-weight">0 lbs</div>
+  </div>
+  <button class="btn btn-primary" onclick="saveQuote()" style="min-height:44px;padding:10px 18px;font-size:14px;flex-shrink:0">💾 Save</button>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -313,29 +332,99 @@ function lookupCustomer(code) {
   document.getElementById('senderAddress').value = c.address || '';
 }
 
+// ── DOMESTIC SERVICES (value = "Carrier|Service" for tier lookup) ──
+const DOMESTIC_SERVICES = [
+  { group:'UPS',   value:'UPS|Ground',    label:'UPS Ground' },
+  { group:'UPS',   value:'UPS|3 Day',     label:'UPS 3 Day' },
+  { group:'UPS',   value:'UPS|2 Day',     label:'UPS 2 Day' },
+  { group:'UPS',   value:'UPS|Overnight', label:'UPS Overnight' },
+  { group:'FedEx', value:'FedEx|Ground',    label:'FedEx Ground' },
+  { group:'FedEx', value:'FedEx|3 Day',     label:'FedEx 3 Day' },
+  { group:'FedEx', value:'FedEx|2 Day',     label:'FedEx 2 Day' },
+  { group:'FedEx', value:'FedEx|Overnight', label:'FedEx Overnight' },
+  { group:'USPS',  value:'USPS|Ground',    label:'USPS Ground' },
+  { group:'USPS',  value:'USPS|Priority',  label:'USPS Priority' },
+  { group:'USPS',  value:'USPS|Express',   label:'USPS Express' },
+];
+
 // ── SERVICE TYPE CHANGE ──
-function onServiceTypeChange() { recalcCosts(); }
+function onServiceTypeChange() {
+  const svc = document.getElementById('serviceType').value;
+  document.getElementById('carrierServiceGroup').style.display = 'none';
+
+  if (svc === 'domestic') {
+    document.getElementById('carrierLabel').textContent = 'Dịch vụ (Domestic)';
+    const sel = document.getElementById('carrierSelect');
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">-- Chọn dịch vụ --</option>';
+    const groups = {};
+    DOMESTIC_SERVICES.forEach(s => {
+      if (!groups[s.group]) {
+        groups[s.group] = document.createElement('optgroup');
+        groups[s.group].label = s.group;
+        sel.appendChild(groups[s.group]);
+      }
+      const opt = document.createElement('option');
+      opt.value = s.value;
+      opt.textContent = s.label;
+      if (s.value === prev) opt.selected = true;
+      groups[s.group].appendChild(opt);
+    });
+  } else {
+    document.getElementById('carrierLabel').textContent = 'Carrier';
+    restoreCarrierDropdown();
+  }
+  recalcCosts();
+}
+
+function restoreCarrierDropdown() {
+  const sel = document.getElementById('carrierSelect');
+  sel.innerHTML = '<option value="">-- Select carrier --</option>';
+  carriers.forEach(c => { sel.innerHTML += `<option value="${c}">${c}</option>`; });
+}
+
+function onCarrierChange() { recalcCosts(); }
 
 // ── PRICING TIER LOOKUP ──
 function getTierForWeight(totalWeight) {
   if (!pricingTiers.length || totalWeight <= 0) return null;
-  const svcType  = document.getElementById('serviceType').value;
-  const carrier  = document.getElementById('carrierSelect').value;
-  // Filter by service type if tiers have serviceType field
-  let tiers = pricingTiers.filter(t => {
-    if (t.serviceType && t.serviceType !== svcType) return false;
-    if (t.carrier && carrier && t.carrier !== carrier) return false;
+  const svcType = document.getElementById('serviceType').value;
+  let carrier = '', carrierService = '';
+
+  if (svcType === 'domestic') {
+    const raw = document.getElementById('carrierSelect').value; // e.g. "UPS|Ground"
+    if (raw.includes('|')) { [carrier, carrierService] = raw.split('|'); }
+    if (!carrier) return null; // no service selected
+  }
+
+  const filtered = pricingTiers.filter(t => {
+    const tSvc = t.serviceType || 'intl';
+    if (tSvc !== svcType) return false;
+    if (svcType === 'domestic') {
+      if (carrier && t.carrier !== carrier) return false;
+      if (carrierService && t.carrierService !== carrierService) return false;
+    }
     return true;
   });
-  if (!tiers.length) tiers = pricingTiers; // fallback to all tiers
+
+  // No fallback — wrong service type should show no price
+  if (!filtered.length) return null;
+
   let matched = null;
-  for (const t of tiers) {
+  for (const t of filtered) {
     const min = parseFloat(t.minWeight) || 0;
     const max = parseFloat(t.maxWeight) || Infinity;
     if (totalWeight >= min && totalWeight <= max) { matched = t; break; }
   }
-  if (!matched) matched = tiers[tiers.length - 1]; // use last tier if over max
+  if (!matched) matched = filtered[filtered.length - 1]; // heaviest tier if over max
   return matched;
+}
+
+function calcCharge(tier, weight) {
+  if (!tier || weight <= 0) return 0;
+  if (tier.pricingType === 'flat') return parseFloat(tier.price);
+  const billLbs = tier.minBillLbs ? Math.max(weight, parseFloat(tier.minBillLbs)) : weight;
+  return billLbs * parseFloat(tier.price);
 }
 
 function refreshPriceHint() {
@@ -346,11 +435,18 @@ function refreshPriceHint() {
   const tier = getTierForWeight(totalWeight);
   const hint = document.getElementById('priceHint');
   if (tier && totalWeight > 0) {
-    hint.textContent = `✅ ${totalWeight.toFixed(1)} lbs × $${tier.price}/lb = $${(totalWeight * tier.price).toFixed(2)}`;
+    if (tier.pricingType === 'flat') {
+      hint.textContent = `✅ Giá cố định: $${parseFloat(tier.price).toFixed(2)} (${totalWeight.toFixed(1)} lbs)`;
+    } else {
+      const billLbs = tier.minBillLbs ? Math.max(totalWeight, parseFloat(tier.minBillLbs)) : totalWeight;
+      const minNote = (tier.minBillLbs && totalWeight < parseFloat(tier.minBillLbs))
+        ? ` ⚠️ Tính tối thiểu ${tier.minBillLbs} lbs` : '';
+      hint.textContent = `✅ ${billLbs.toFixed(1)} lbs × $${tier.price}/lb = $${(billLbs * parseFloat(tier.price)).toFixed(2)}${minNote}`;
+    }
     hint.style.color = '#166534';
     hint.style.background = '#dcfce7';
   } else {
-    hint.textContent = 'Enter weight to auto-fill price from pricing table.';
+    hint.textContent = 'Nhập cân nặng để tự động tính giá từ bảng giá.';
     hint.style.color = '#6b7280';
     hint.style.background = '#f8fafc';
   }
@@ -399,9 +495,8 @@ function onWeightChange(id) {
   const chargeInput = document.getElementById('charge-' + id);
 
   if (tier && weight > 0) {
-    // Always: charge = weight × rate ($/lb)
     rateInput.value   = tier.price;
-    chargeInput.value = (weight * tier.price).toFixed(2);
+    chargeInput.value = calcCharge(tier, weight).toFixed(2);
   } else {
     rateInput.value   = '';
     chargeInput.value = '';
@@ -418,17 +513,26 @@ function recalcCosts() {
   });
   const tier = getTierForWeight(totalWeight);
 
-  // Sum charges: each row = weight × rate
+  // Sum charges — flat pricing: fixed fee for whole shipment; perLbs: per-row weight × rate
   let shipping = 0;
+  const isFlat = tier && tier.pricingType === 'flat';
+  let flatAssigned = false;
   document.querySelectorAll('.order-row').forEach(row => {
     const rowId     = row.id.replace('row-', '');
     const weight    = parseFloat(row.querySelector('.inp-weight').value) || 0;
     const chargeInp = document.getElementById('charge-' + rowId);
     const rateInp   = row.querySelector('.inp-rate');
 
-    if (tier && weight > 0 && chargeInp && (!chargeInp.value || parseFloat(chargeInp.value) === 0)) {
-      rateInp.value   = tier.price;
-      chargeInp.value = (weight * tier.price).toFixed(2);
+    if (tier && weight > 0) {
+      rateInp.value = tier.price;
+      if (isFlat) {
+        // Flat fee belongs to first weighted row only; rest = $0
+        const rowCharge = !flatAssigned ? parseFloat(tier.price) : 0;
+        chargeInp.value = rowCharge.toFixed(2);
+        flatAssigned = true;
+      } else if (!chargeInp.value || parseFloat(chargeInp.value) === 0) {
+        chargeInp.value = (weight * parseFloat(tier.price)).toFixed(2);
+      }
     }
     shipping += parseFloat(chargeInp ? chargeInp.value : 0) || 0;
   });
@@ -455,6 +559,11 @@ function recalcCosts() {
   document.getElementById('sum-discount').textContent  = '-$' + disc.toFixed(2);
   document.getElementById('sum-total').textContent     = '$' + total.toFixed(2);
   document.getElementById('sum-weight').textContent    = totalWeight.toFixed(1) + ' lbs';
+  // Sync mobile sticky bar
+  const mobTotal = document.getElementById('mob-total');
+  const mobWeight = document.getElementById('mob-weight');
+  if (mobTotal)  mobTotal.textContent  = '$' + total.toFixed(2);
+  if (mobWeight) mobWeight.textContent = totalWeight.toFixed(1) + ' lbs';
 
   // VND calc
   if (document.getElementById('showVND').checked) {
@@ -510,9 +619,17 @@ async function saveQuote() {
   if (!senderName) { showAlert('Please enter sender name.', 'danger'); return; }
 
   const showVND = document.getElementById('showVND').checked;
+  const _svcType = document.getElementById('serviceType').value;
+  const _carrierRaw = document.getElementById('carrierSelect').value;
+  let _carrier = _carrierRaw, _carrierService = '';
+  if (_svcType === 'domestic' && _carrierRaw.includes('|')) {
+    [_carrier, _carrierService] = _carrierRaw.split('|');
+  }
+
   const data = {
-    serviceType:     document.getElementById('serviceType').value,
-    carrier:         document.getElementById('carrierSelect').value,
+    serviceType:     _svcType,
+    carrier:         _carrier,
+    carrierService:  _carrierService,
     date:            document.getElementById('quoteDate').value,
     tracking:        document.getElementById('tracking').value.trim(),
     paymentStatus:   document.getElementById('paymentStatus').value,
@@ -565,6 +682,7 @@ async function loadExistingQuote(id) {
     if (!doc.exists) { showAlert('Quote not found.', 'danger'); return; }
     const d = doc.data();
     document.getElementById('serviceType').value    = d.serviceType || 'intl';
+    onServiceTypeChange(); // show/hide carrier service group
     document.getElementById('quoteDate').value      = d.date || '';
     document.getElementById('tracking').value       = d.tracking || '';
     document.getElementById('paymentStatus').value  = d.paymentStatus || 'unpaid';
@@ -594,7 +712,13 @@ async function loadExistingQuote(id) {
     }
 
     setTimeout(() => {
-      if (d.carrier) document.getElementById('carrierSelect').value = d.carrier;
+      if (d.serviceType === 'domestic' && d.carrier) {
+        // Restore combined "Carrier|Service" value in grouped dropdown
+        const combined = d.carrierService ? `${d.carrier}|${d.carrierService}` : d.carrier;
+        document.getElementById('carrierSelect').value = combined;
+      } else if (d.carrier) {
+        document.getElementById('carrierSelect').value = d.carrier;
+      }
       document.getElementById('orderRows').innerHTML = '';
       rowCount = 0;
       if (d.orderRows && d.orderRows.length) {

@@ -660,6 +660,23 @@
  }
  .success-modal-close:hover { background:#D4650E; }
 
+ /* PACKAGE TABLE */
+ .pkg-table-wrap{margin-bottom:6px}
+ .pkg-table{width:100%;border-collapse:collapse}
+ .pkg-table thead th{background:#f8fafc;padding:10px 12px;text-align:left;font-weight:700;font-size:12px;color:#6b7280;border-bottom:2px solid #e5e7eb;white-space:nowrap}
+ .pkg-table thead th:first-child{width:60px;text-align:center}
+ .pkg-table thead th:last-child{width:48px}
+ .pkg-table tbody tr{border-bottom:1px solid #f1f5f9}
+ .pkg-table td{padding:8px 6px;vertical-align:middle;text-align:center}
+ .pkg-table td:nth-child(2),.pkg-table td:nth-child(3){text-align:left}
+ .pkg-table input[type=number]{width:100%;padding:8px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+ .pkg-table input[type=number]:focus{border-color:var(--orange)}
+ .btn-remove-pkg{background:#fee2e2;color:#dc2626;border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:15px;line-height:1;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+ .btn-remove-pkg:disabled{opacity:.35;cursor:default}
+ .btn-add-pkg{width:100%;padding:12px;border:2px dashed #d1d5db;background:#f9fafb;border-radius:10px;font-size:14px;font-weight:600;color:#6b7280;cursor:pointer;margin-top:8px;transition:all .2s;font-family:inherit}
+ .btn-add-pkg:hover{border-color:var(--orange);color:var(--orange);background:#FFF3E8}
+ .pkg-num{display:inline-flex;width:32px;height:32px;border-radius:8px;background:#dbeafe;color:#1d4ed8;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+
  /* Footer */
  footer a { color:var(--orange); text-decoration:none; }
  </style>
@@ -931,8 +948,21 @@
  <textarea id="s3-items" placeholder="Ví dụ: Quần áo, giày thể thao, mỹ phẩm, đồ gia dụng..."></textarea>
  </div>
  <div class="form-group">
- <label data-vi="Cân nặng (lbs) <span class='req'>*</span> <span class='hint'>— 1 kg = 2.2 lbs</span>" data-en="Weight (lbs) <span class='req'>*</span> <span class='hint'>— 1 kg = 2.2 lbs</span>">Cân nặng (lbs) <span class="req">*</span> <span class="hint">— 1 kg = 2.2 lbs</span></label>
- <input type="number" id="s3-weight" placeholder="10" step="0.1" min="0.1" required />
+ <label data-vi="Kiện hàng <span class='req'>*</span> <span class='hint'>— Cân nặng &amp; giá trị từng kiện (1 kg = 2.2 lbs)</span>" data-en="Packages <span class='req'>*</span> <span class='hint'>— Weight &amp; value per package (1 kg = 2.2 lbs)</span>">Kiện hàng <span class="req">*</span> <span class="hint">— Cân nặng &amp; giá trị từng kiện (1 kg = 2.2 lbs)</span></label>
+ <div class="pkg-table-wrap">
+   <table class="pkg-table">
+     <thead>
+       <tr>
+         <th data-vi="Package" data-en="Package">Package</th>
+         <th data-vi="Cân nặng (lbs) *" data-en="Weight (lbs) *">Cân nặng (lbs) *</th>
+         <th data-vi="Giá trị ($)" data-en="Value ($)">Giá trị ($)</th>
+         <th></th>
+       </tr>
+     </thead>
+     <tbody id="pkg-rows"></tbody>
+   </table>
+   <button type="button" class="btn-add-pkg" onclick="addPackageRow()" data-vi="+ Thêm kiện hàng" data-en="+ Add package">+ Thêm kiện hàng</button>
+ </div>
  <div class="input-note" data-vi="Nhân viên sẽ cân lại chính xác tại kho. Nếu sai lệch, phí tính theo cân thực tế." data-en="Staff will reweigh at warehouse. If different, fee is based on actual weight.">Nhân viên sẽ cân lại chính xác tại kho. Nếu sai lệch, phí tính theo cân thực tế.</div>
  </div>
  <!-- Packaging & Shipping Guide (collapsible) -->
@@ -1460,14 +1490,10 @@
  }
 
  if(n===3){
- const wEl = document.getElementById('s3-weight');
- const wt = parseFloat(wEl.value);
- if(!wEl.value || isNaN(wt) || wt <= 0){
- wEl.focus();
- wEl.style.borderColor = '#EF4444';
- setTimeout(()=>{ wEl.style.borderColor=''; },2000);
- showToast('error',' Vui lòng nhập cân nặng kiện hàng.');
- return false;
+ const pkgs = getPackages();
+ if(pkgs.length === 0){
+   showToast('error',' Vui lòng nhập cân nặng ít nhất 1 kiện hàng.');
+   return false;
  }
  }
 
@@ -1683,7 +1709,13 @@
  [L.addrVN, [v('s2-street'),v('s2-ward'),v('s2-district'),v('s2-province')].filter(Boolean).join(', ')],
  ['—','—'],
  [L.items, v('s3-items') || L.noItems],
- [L.weight, v('s3-weight') ? v('s3-weight')+' lbs' : L.noWeight],
+ [L.weight, (()=>{
+   const pkgs = getPackages();
+   if(!pkgs.length) return L.noWeight;
+   const lines = pkgs.map((p,i)=>`Kiện ${i+1}: <strong>${p.weight} lbs</strong>${p.value>0?' — $'+p.value.toFixed(2):''}`).join('<br>');
+   const total = pkgs.reduce((s,p)=>s+p.weight,0);
+   return lines + (pkgs.length>1 ? `<br><em>Tổng: ${total.toFixed(1)} lbs</em>` : '');
+ })()],
  [L.delivFee, FREE_PROVINCES.includes(v('s2-province')) ? L.freeCity : ' +$0,99/lbs (' + (isEN ? 'province ' : 'tỉnh ') + v('s2-province') + ')'],
  ['—','—'],
  [L.insurance, insVal],
@@ -1698,8 +1730,8 @@
  document.getElementById('summary-content').innerHTML = html;
 
  // Cost estimate
- const wt = parseFloat(v('s3-weight'));
- if (!isNaN(wt) && wt > 0) {
+ const wt = getTotalWeight();
+ if (wt > 0) {
  const effW = wt < 10 ? 10 : wt;
  const shipping = calcShipping(wt);
  const pkgCost = pkgRate * effW;
@@ -1723,6 +1755,52 @@
  } else {
  document.getElementById('cost-estimate').style.display = 'none';
  }
+ }
+
+ // ── PACKAGE TABLE ──
+ let _pkgCount = 0;
+ function addPackageRow(wt, val) {
+   _pkgCount++;
+   const n = _pkgCount;
+   const tbody = document.getElementById('pkg-rows');
+   const idx = tbody.children.length + 1;
+   const tr = document.createElement('tr');
+   tr.id = 'pkg-row-' + n;
+   tr.innerHTML = `
+     <td><span class="pkg-num">${idx}</span></td>
+     <td><input type="number" id="pkg-w-${n}" placeholder="lbs" step="0.1" min="0.1" value="${wt||''}" /></td>
+     <td><input type="number" id="pkg-v-${n}" placeholder="$" step="0.01" min="0" value="${val||''}" /></td>
+     <td><button type="button" class="btn-remove-pkg" onclick="removePkgRow(${n})" title="Xóa kiện">🗑</button></td>
+   `;
+   tbody.appendChild(tr);
+   _reNumberPkgs();
+ }
+ function removePkgRow(n) {
+   const tbody = document.getElementById('pkg-rows');
+   if(tbody.children.length <= 1){ showToast('error',' Phải có ít nhất 1 kiện hàng.'); return; }
+   const tr = document.getElementById('pkg-row-' + n);
+   if(tr) tr.remove();
+   _reNumberPkgs();
+ }
+ function _reNumberPkgs() {
+   document.querySelectorAll('#pkg-rows tr').forEach((tr,i)=>{
+     const el = tr.querySelector('.pkg-num');
+     if(el) el.textContent = i+1;
+   });
+ }
+ function getPackages() {
+   const pkgs = [];
+   document.querySelectorAll('#pkg-rows tr').forEach(tr=>{
+     const wIn = tr.querySelector('input[id^="pkg-w-"]');
+     const vIn = tr.querySelector('input[id^="pkg-v-"]');
+     const w = wIn ? parseFloat(wIn.value) : NaN;
+     const val = vIn ? parseFloat(vIn.value) : NaN;
+     if(!isNaN(w) && w > 0) pkgs.push({ weight:w, value:isNaN(val)||val<0 ? 0 : val });
+   });
+   return pkgs;
+ }
+ function getTotalWeight() {
+   return getPackages().reduce((s,p)=>s+p.weight, 0);
  }
 
  function v(id){ const el=document.getElementById(id); return el?el.value.trim():''; }
@@ -1757,7 +1835,8 @@
  receiverPhone: v('s2-phone'),
  receiverAddress,
  items: v('s3-items'),
- weight: v('s3-weight'),
+ packages: getPackages(),
+ weight: getTotalWeight().toFixed(1),
  deliveryMode: delivMode,
  pickupDate: v('s3-pickup-date'),
  pickupTime: v('s3-pickup-time'),
@@ -1940,8 +2019,8 @@
    delivVN: isENr?'VN Delivery':'Giao hàng VN',
  };
  const isFree = FREE_PROVINCES.includes(v('s2-province'));
- const wt = parseFloat(v('s3-weight'));
- const effW = (!isNaN(wt) && wt > 0) ? (wt < 10 ? 10 : wt) : null;
+ const wt = getTotalWeight();
+ const effW = wt > 0 ? (wt < 10 ? 10 : wt) : null;
  const pkgRate = parseFloat(document.getElementById('f-pkg-rate')?.value) || 0;
 
  let costHTML = '';
@@ -1979,7 +2058,7 @@
  <div class="mvv-rrow"><span class="rk">${RL.addrVN}</span><span class="rv" style="max-width:280px;text-align:right;">${addr||'—'}</span></div>
  <div class="mvv-divider"></div>
  <div class="mvv-rrow"><span class="rk">${RL.items}</span><span class="rv">${v('s3-items')||RL.noItems}</span></div>
- <div class="mvv-rrow"><span class="rk">${RL.weight}</span><span class="rv">${v('s3-weight')} lbs</span></div>
+ <div class="mvv-rrow"><span class="rk">${RL.weight}</span><span class="rv" style="text-align:right">${(()=>{ const pkgs=getPackages(); if(!pkgs.length) return '—'; const lines=pkgs.map((p,i)=>`Kiện ${i+1}: ${p.weight} lbs${p.value>0?' ($'+p.value.toFixed(2)+')':''}`).join('<br>'); return lines + (pkgs.length>1 ? `<br><strong>Tổng: ${wt.toFixed(1)} lbs</strong>` : ''); })()}</span></div>
  <div class="mvv-rrow"><span class="rk">${RL.insurance}</span><span class="rv">${insVal}</span></div>
  <div class="mvv-rrow"><span class="rk">${RL.packaging}</span><span class="rv">${v('f-packaging')||RL.free}</span></div>
  <div class="mvv-rrow"><span class="rk">${RL.payment}</span><span class="rv">${payMeth==='USD'?' USD (Zelle)':(isENr?' VND (Bank transfer)':' VND (Chuyển khoản)')}</span></div>
@@ -1996,6 +2075,7 @@
 
  // INIT
  document.addEventListener('DOMContentLoaded', () => {
+ addPackageRow(); // default 1 package row
  onProvinceChange();
  initMVVPricing();
  // Show label popup after 800ms unless already dismissed this session

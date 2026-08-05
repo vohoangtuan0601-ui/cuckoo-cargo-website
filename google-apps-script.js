@@ -217,6 +217,19 @@ function handleOrder(data) {
     formatHeader(sheet);
   }
 
+  // Format packages array → sheet string + total declared value
+  var pkgStr = data.weight ? data.weight + ' lbs' : '';
+  var totalDeclaredValue = parseFloat(data.declaredValue) || 0;
+  if (data.packages && Array.isArray(data.packages) && data.packages.length > 0) {
+    pkgStr = data.packages.map(function(p, i) {
+      return 'Kiện ' + (i + 1) + ': ' + p.weight + ' lbs' + (p.value > 0 ? ' ($' + parseFloat(p.value).toFixed(2) + ')' : '');
+    }).join(' | ');
+    if (data.packages.length > 1) pkgStr += ' | Tổng: ' + data.weight + ' lbs';
+    if (!totalDeclaredValue) {
+      totalDeclaredValue = data.packages.reduce(function(s, p) { return s + (parseFloat(p.value) || 0); }, 0);
+    }
+  }
+
   sheet.appendRow([
     orderId,
     now,
@@ -230,8 +243,8 @@ function handleOrder(data) {
     data.receiverPhone|| "",
     data.receiverAddress || "",
     data.items        || "",
-    data.declaredValue|| "",
-    data.weight       || "",
+    totalDeclaredValue > 0 ? totalDeclaredValue.toFixed(2) : "",
+    pkgStr,
     data.insurance    || "Free",
     data.packaging    || "Tiêu chuẩn",
     data.estimatedFee || "",
@@ -250,9 +263,11 @@ function handleOrder(data) {
   // Gửi email xác nhận cho khách
   sendConfirmationEmail(data.email, 'mvv', {
     orderId:         orderId,
+    customerCode:    data.customerCode,
     senderName:      data.senderName,
     receiverName:    data.receiverName,
     receiverAddress: data.receiverAddress,
+    packages:        data.packages,
     weight:          data.weight,
     estimatedFee:    data.estimatedFee,
     lang:            data.lang || 'vi',
@@ -450,7 +465,7 @@ function formatDate(date) {
 // ─── GỬI EMAIL XÁC NHẬN ─────────────────────────────────────────────────────
 var COMPANY_EMAIL = "cuckoocargo.us@gmail.com";
 var COMPANY_NAME  = "Cuckoo Cargo";
-var TRACKING_URL  = "https://cuckoocargo23102025.github.io/cuckoocargo.com/tracking";
+var TRACKING_URL  = "https://cuckoocargous.com/tracking";
 
 /**
  * Gửi email xác nhận đơn hàng cho khách.
@@ -479,15 +494,34 @@ function sendConfirmationEmail(toEmail, type, info) {
   }
 
   if (type === 'mvv') {
+    // Build packages display for email
+    var pkgDisplayEN = '—', pkgDisplayVI = '—';
+    if (info.packages && info.packages.length > 0) {
+      pkgDisplayEN = info.packages.map(function(p, i) {
+        return 'Package ' + (i+1) + ': ' + p.weight + ' lbs' + (p.value > 0 ? ' ($' + parseFloat(p.value).toFixed(2) + ')' : '');
+      }).join('<br>');
+      pkgDisplayVI = info.packages.map(function(p, i) {
+        return 'Kiện ' + (i+1) + ': ' + p.weight + ' lbs' + (p.value > 0 ? ' ($' + parseFloat(p.value).toFixed(2) + ')' : '');
+      }).join('<br>');
+      if (info.packages.length > 1) {
+        pkgDisplayEN += '<br><strong>Total: ' + info.weight + ' lbs</strong>';
+        pkgDisplayVI += '<br><strong>Tổng: ' + info.weight + ' lbs</strong>';
+      }
+    } else if (info.weight) {
+      pkgDisplayEN = info.weight + ' lbs';
+      pkgDisplayVI = info.weight + ' lbs';
+    }
+
     if (isEN) {
       subject  = '[Cuckoo Cargo] Order Confirmation - US to Vietnam #' + info.orderId;
       bodyRows = [
         ['Order ID',       '<strong>' + info.orderId + '</strong>'],
+        ['Customer Code',  info.customerCode || '—'],
         ['Service',        'Shipping from US to Vietnam'],
         ['Sender',         info.senderName  || '—'],
         ['Recipient',      info.receiverName || '—'],
         ['Delivery Address', info.receiverAddress || '—'],
-        ['Weight',         info.weight ? info.weight + ' lbs' : '—'],
+        ['Packages',       pkgDisplayEN],
         ['Shipping Fee',   info.estimatedFee ? '$' + info.estimatedFee : 'Cuckoo Cargo will send a quote via email'],
         ['Status',         '<span style="color:#fc4f08;font-weight:700">Received — Processing</span>'],
       ];
@@ -495,11 +529,12 @@ function sendConfirmationEmail(toEmail, type, info) {
       subject  = '[Cuckoo Cargo] Xác nhận đơn gửi hàng từ Mỹ về Việt Nam #' + info.orderId;
       bodyRows = [
         ['Mã đơn hàng',   '<strong>' + info.orderId + '</strong>'],
+        ['Mã khách hàng', info.customerCode || '—'],
         ['Dịch vụ',       'Gửi hàng từ Mỹ về Việt Nam'],
         ['Người gửi',     info.senderName  || '—'],
         ['Người nhận',    info.receiverName || '—'],
         ['Địa chỉ nhận',  info.receiverAddress || '—'],
-        ['Cân nặng',      info.weight ? info.weight + ' lbs' : '—'],
+        ['Kiện hàng',     pkgDisplayVI],
         ['Phí cân nặng',  info.estimatedFee ? '$' + info.estimatedFee : 'Cuckoo Cargo gửi bảng báo giá qua gmail'],
         ['Trạng thái',    '<span style="color:#fc4f08;font-weight:700">Đã tiếp nhận — Đang xử lý</span>'],
       ];
