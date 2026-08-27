@@ -423,7 +423,11 @@ function getTierForWeight(totalWeight) {
 function calcCharge(tier, weight) {
   if (!tier || weight <= 0) return 0;
   if (tier.pricingType === 'flat') return parseFloat(tier.price);
-  const billLbs = tier.minBillLbs ? Math.max(weight, parseFloat(tier.minBillLbs)) : weight;
+  // intl (USA→VN) luôn tính tối thiểu 10 lbs
+  const svcType = (tier.serviceType || document.getElementById('serviceType').value || '');
+  const defaultMin = svcType === 'intl' ? 10 : 0;
+  const minBill = tier.minBillLbs ? parseFloat(tier.minBillLbs) : defaultMin;
+  const billLbs = minBill > 0 ? Math.max(weight, minBill) : weight;
   return billLbs * parseFloat(tier.price);
 }
 
@@ -438,9 +442,12 @@ function refreshPriceHint() {
     if (tier.pricingType === 'flat') {
       hint.textContent = `✅ Giá cố định: $${parseFloat(tier.price).toFixed(2)} (${totalWeight.toFixed(1)} lbs)`;
     } else {
-      const billLbs = tier.minBillLbs ? Math.max(totalWeight, parseFloat(tier.minBillLbs)) : totalWeight;
-      const minNote = (tier.minBillLbs && totalWeight < parseFloat(tier.minBillLbs))
-        ? ` ⚠️ Tính tối thiểu ${tier.minBillLbs} lbs` : '';
+      const _svcHint = (tier.serviceType || document.getElementById('serviceType').value || '');
+      const _defMin  = _svcHint === 'intl' ? 10 : 0;
+      const _minBill = tier.minBillLbs ? parseFloat(tier.minBillLbs) : _defMin;
+      const billLbs  = _minBill > 0 ? Math.max(totalWeight, _minBill) : totalWeight;
+      const minNote  = (_minBill > 0 && totalWeight < _minBill)
+        ? ` ⚠️ Tính tối thiểu ${_minBill} lbs` : '';
       hint.textContent = `✅ ${billLbs.toFixed(1)} lbs × $${tier.price}/lb = $${(billLbs * parseFloat(tier.price)).toFixed(2)}${minNote}`;
     }
     hint.style.color = '#166534';
