@@ -5,7 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>CRM Khách hàng — Cuckoo Cargo</title>
   <link rel="stylesheet" href="css/styles.css?v=3"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
+    .export-dropdown{position:relative;display:inline-block}
+    .export-menu{display:none;position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);min-width:220px;z-index:100;overflow:hidden}
+    .export-menu.open{display:block}
+    .export-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;color:#374151;border:none;background:none;width:100%;text-align:left}
+    .export-menu-item:hover{background:#fff7ed;color:#c2410c}
+    .export-menu-divider{height:1px;background:#f1f5f9;margin:4px 0}
+    .export-menu-label{padding:6px 14px;font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px}
     .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
     .kpi{background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-left:4px solid #f97316}
     .kpi.blue{border-color:#3b82f6}.kpi.green{border-color:#16a34a}.kpi.purple{border-color:#7c3aed}
@@ -59,7 +67,40 @@
 <div class="container">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
     <h1 class="page-title" style="margin:0">👥 Quản lý khách hàng</h1>
-    <button class="btn btn-primary" onclick="openAddCustomer()">+ Thêm khách hàng</button>
+    <div style="display:flex;gap:8px;align-items:center">
+      <!-- Export dropdown -->
+      <div class="export-dropdown" id="exportDropdown">
+        <button class="btn btn-outline" onclick="toggleExportMenu(event)" style="display:flex;align-items:center;gap:6px">
+          📥 Xuất Excel <span style="font-size:10px;opacity:.6">▼</span>
+        </button>
+        <div class="export-menu" id="exportMenu">
+          <div class="export-menu-label">Chọn phạm vi xuất</div>
+          <button class="export-menu-item" onclick="exportToExcel('filtered')">
+            <span style="font-size:16px">🔍</span>
+            <div>
+              <div>Xuất theo bộ lọc hiện tại</div>
+              <div style="font-size:11px;color:#9ca3af;font-weight:400">Xuất danh sách đang hiển thị</div>
+            </div>
+          </button>
+          <button class="export-menu-item" onclick="exportToExcel('all')">
+            <span style="font-size:16px">📋</span>
+            <div>
+              <div>Xuất tất cả khách hàng</div>
+              <div style="font-size:11px;color:#9ca3af;font-weight:400">Toàn bộ dữ liệu không lọc</div>
+            </div>
+          </button>
+          <div class="export-menu-divider"></div>
+          <button class="export-menu-item" onclick="exportToExcel('detail')">
+            <span style="font-size:16px">📊</span>
+            <div>
+              <div>Xuất kèm chi tiết đơn hàng</div>
+              <div style="font-size:11px;color:#9ca3af;font-weight:400">2 sheet: KH + Đơn hàng</div>
+            </div>
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="openAddCustomer()">+ Thêm khách hàng</button>
+    </div>
   </div>
 
   <!-- KPIs row 1 -->
@@ -541,6 +582,156 @@ function setCodeError(hasError, dup) {
     input.style.background  = '';
     errEl.style.display = 'none';
   }
+}
+
+// ── Excel Export ─────────────────────────────────────────────────────────────
+function toggleExportMenu(e) {
+  e.stopPropagation();
+  document.getElementById('exportMenu').classList.toggle('open');
+}
+document.addEventListener('click', () => {
+  document.getElementById('exportMenu')?.classList.remove('open');
+});
+
+const SEG_LABELS_VI = { new:'Mới', normal:'Bình thường', potential:'Tiềm năng', vip:'VIP' };
+const SVC_LABELS_VI = { intl:'USA→VN', domestic:'Nội địa Mỹ', shopping:'Mua hộ' };
+
+function getFilteredList() {
+  const q   = document.getElementById('searchInput').value.toLowerCase();
+  const seg = document.getElementById('segFilter').value;
+  const srt = document.getElementById('sortBy').value;
+  let list  = Object.values(customerMap).filter(c => {
+    if (q && ![(c.name||''),(c.code||''),(c.phone||''),(c.email||'')]
+              .some(v => v.toLowerCase().includes(q))) return false;
+    if (seg && getSegment(c) !== seg) return false;
+    return true;
+  });
+  list.sort((a,b) => {
+    if (srt==='totalSpent') return b.totalSpent - a.totalSpent;
+    if (srt==='orderCount') return b.orderCount - a.orderCount;
+    if (srt==='lastOrder')  return (b.lastOrder||'').localeCompare(a.lastOrder||'');
+    return (a.name||'').localeCompare(b.name||'');
+  });
+  return list;
+}
+
+function exportToExcel(mode) {
+  document.getElementById('exportMenu').classList.remove('open');
+
+  const list = (mode === 'filtered') ? getFilteredList()
+             : Object.values(customerMap).sort((a,b) => b.totalSpent - a.totalSpent);
+
+  if (!list.length) { alert('Không có khách hàng để xuất!'); return; }
+
+  const wb = XLSX.utils.book_new();
+  const dateStr = new Date().toLocaleDateString('vi-VN');
+
+  // ── Sheet 1: Danh sách khách hàng ─────────────────────────────────────────
+  const custHeaders = [
+    'STT','Mã KH','Họ tên','Điện thoại','Email','Địa chỉ',
+    'Phân loại','Tổng đơn','Đã thanh toán ($)','Còn nợ ($)',
+    'Đơn gần nhất','Ghi chú'
+  ];
+  const custRows = list.map((c, i) => [
+    i + 1,
+    c.code   || '',
+    c.name   || '',
+    c.phone  || '',
+    c.email  || '',
+    c.address|| '',
+    SEG_LABELS_VI[getSegment(c)] || '',
+    c.orderCount,
+    parseFloat(c.totalSpent.toFixed(2)),
+    parseFloat(c.totalDebt.toFixed(2)),
+    c.lastOrder || '',
+    c.notes  || ''
+  ]);
+
+  // Summary row at bottom
+  const totalSpent = list.reduce((s,c) => s + c.totalSpent, 0);
+  const totalDebt  = list.reduce((s,c) => s + c.totalDebt,  0);
+  custRows.push([]);
+  custRows.push([
+    '','','','','','','TỔNG CỘNG',
+    list.reduce((s,c) => s + c.orderCount, 0),
+    parseFloat(totalSpent.toFixed(2)),
+    parseFloat(totalDebt.toFixed(2)),
+    '', `Xuất ngày ${dateStr}`
+  ]);
+
+  const ws1 = XLSX.utils.aoa_to_sheet([custHeaders, ...custRows]);
+
+  // Column widths
+  ws1['!cols'] = [
+    {wch:5},{wch:10},{wch:26},{wch:16},{wch:28},
+    {wch:32},{wch:14},{wch:10},{wch:18},{wch:12},
+    {wch:14},{wch:30}
+  ];
+
+  // Style header row (bold) — basic XLSX style
+  const range = XLSX.utils.decode_range(ws1['!ref']);
+  for (let C = range.s.c; C <= range.e.c; C++) {
+    const addr = XLSX.utils.encode_cell({r:0, c:C});
+    if (!ws1[addr]) continue;
+    ws1[addr].s = {
+      font: {bold: true, color: {rgb: 'FFFFFF'}},
+      fill: {fgColor: {rgb: 'F5430A'}},
+      alignment: {horizontal: 'center'}
+    };
+  }
+
+  XLSX.utils.book_append_sheet(wb, ws1, 'Danh sách KH');
+
+  // ── Sheet 2: Chi tiết đơn hàng (chỉ khi mode='detail') ───────────────────
+  if (mode === 'detail') {
+    const orderHeaders = [
+      'STT','Ngày','Mã đơn','Khách hàng','Mã KH',
+      'Dịch vụ','Carrier','Tổng tiền ($)','Trạng thái TT','Trạng thái đơn'
+    ];
+    const orderRows = [];
+    let idx = 1;
+    list.forEach(c => {
+      (c.quotes||[])
+        .slice()
+        .sort((a,b) => (b.date||'').localeCompare(a.date||''))
+        .forEach(q => {
+          orderRows.push([
+            idx++,
+            q.date           || '',
+            q.id             || '',
+            c.name           || '',
+            c.code           || '',
+            SVC_LABELS_VI[q.serviceType] || q.serviceType || '',
+            q.carrier        || '',
+            parseFloat((parseFloat(q.total)||0).toFixed(2)),
+            q.paymentStatus === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán',
+            q.status         || ''
+          ]);
+        });
+    });
+
+    const ws2 = XLSX.utils.aoa_to_sheet([orderHeaders, ...orderRows]);
+    ws2['!cols'] = [
+      {wch:5},{wch:12},{wch:22},{wch:26},{wch:10},
+      {wch:14},{wch:10},{wch:14},{wch:18},{wch:16}
+    ];
+    // Header style
+    for (let C = 0; C <= 9; C++) {
+      const addr = XLSX.utils.encode_cell({r:0, c:C});
+      if (!ws2[addr]) continue;
+      ws2[addr].s = {
+        font: {bold: true, color: {rgb: 'FFFFFF'}},
+        fill: {fgColor: {rgb: '1A1A2E'}},
+        alignment: {horizontal: 'center'}
+      };
+    }
+    XLSX.utils.book_append_sheet(wb, ws2, 'Chi tiết đơn hàng');
+  }
+
+  // Write file
+  const label = mode === 'filtered' ? 'BoLoc' : mode === 'detail' ? 'ChiTiet' : 'TatCa';
+  const fname = `CuckooCargo_KhachHang_${label}_${new Date().toISOString().slice(0,10)}.xlsx`;
+  XLSX.writeFile(wb, fname);
 }
 
 async function saveCustomer() {

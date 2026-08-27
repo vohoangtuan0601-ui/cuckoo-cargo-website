@@ -531,7 +531,7 @@ function recalcCosts() {
         chargeInp.value = rowCharge.toFixed(2);
         flatAssigned = true;
       } else if (!chargeInp.value || parseFloat(chargeInp.value) === 0) {
-        chargeInp.value = (weight * parseFloat(tier.price)).toFixed(2);
+        chargeInp.value = calcCharge(tier, weight).toFixed(2);
       }
     }
     shipping += parseFloat(chargeInp ? chargeInp.value : 0) || 0;
