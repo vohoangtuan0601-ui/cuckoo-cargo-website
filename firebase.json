@@ -33,7 +33,10 @@
     "cleanUrls": true,
     "trailingSlash": false,
     "rewrites": [
-      { "source": "/quote-system", "destination": "/quote-system/index.html" }
+      { "source": "/quote-system", "destination": "/quote-system/index.html" },
+      { "source": "/dutinhchiphi/usvn", "destination": "/dutinhchiphi/usvn/index.html" },
+      { "source": "/dutinhchiphi/noidiamy", "destination": "/dutinhchiphi/noidiamy/index.html" },
+      { "source": "/dutinhchiphi/muaho", "destination": "/dutinhchiphi/muaho/index.html" }
     ],
     "redirects": [
       { "source": "/index.html", "destination": "/", "type": 301 },
