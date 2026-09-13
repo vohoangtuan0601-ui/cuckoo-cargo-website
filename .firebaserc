@@ -1,5 +1,13 @@
 {
   "projects": {
     "default": "cuckoo-cargo"
+  },
+  "targets": {
+    "cuckoo-cargo": {
+      "hosting": {
+        "main":     ["cuckoo-cargo"],
+        "tinhcuoc": ["tinhcuoc-cuckoocargo"]
+      }
+    }
   }
 }

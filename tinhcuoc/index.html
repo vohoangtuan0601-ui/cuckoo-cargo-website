@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Tính Cước Gửi Hàng Mỹ → Việt Nam | Cuckoo Cargo</title>
+  <meta name="description" content="Tính ngay chi phí gửi hàng từ Mỹ về Việt Nam. Giá từ $3.89/lbs, giao toàn quốc, không phát sinh."/>
+  <link rel="icon" type="image/png" href="/assets/images/favicon-main.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --orange:#F5430A;--orange-deep:#CC3200;--orange-bg:#FFF1EC;
+      --black:#0F0F10;--white:#fff;
+      --gray-light:#F5F5F7;--gray-border:#E5E5EA;--text-muted:#6b7280;
+      --radius:16px;--shadow:0 4px 24px rgba(0,0,0,.08);
+    }
+    body{font-family:'Inter',sans-serif;background:#f8f9fb;color:var(--black);min-height:100vh}
+
+    /* ── NAV ── */
+    .nav{background:var(--white);border-bottom:1px solid var(--gray-border);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+    .nav-logo{font-weight:900;font-size:17px;letter-spacing:.5px;color:var(--black);text-decoration:none}
+    .nav-logo span{color:var(--orange)}
+    .nav-cta{background:var(--orange);color:#fff;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:opacity .2s}
+    .nav-cta:hover{opacity:.88}
+
+    /* ── HERO STRIP ── */
+    .hero-strip{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-deep) 100%);padding:28px 20px 32px;text-align:center}
+    .route-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;color:#fff;letter-spacing:1px;margin-bottom:14px}
+    .hero-strip h1{font-size:clamp(22px,5vw,34px);font-weight:900;color:#fff;line-height:1.2;margin-bottom:8px}
+    .hero-strip p{font-size:14px;color:rgba(255,255,255,.85);line-height:1.6}
+
+    /* ── CARD ── */
+    .wrap{max-width:520px;margin:0 auto;padding:24px 16px 48px}
+    .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:16px}
+    .card-head{padding:16px 20px;border-bottom:1px solid var(--gray-border);display:flex;align-items:center;gap:10px}
+    .card-head .icon{width:34px;height:34px;border-radius:10px;background:var(--orange-bg);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+    .card-head h2{font-size:15px;font-weight:800;color:var(--black)}
+    .card-head p{font-size:12px;color:var(--text-muted);margin-top:1px}
+    .card-body{padding:20px}
+
+    /* ── INPUTS ── */
+    .field{margin-bottom:16px}
+    .field:last-child{margin-bottom:0}
+    .field label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+    .field input,.field select{width:100%;padding:12px 14px;border:1.5px solid var(--gray-border);border-radius:10px;font-size:15px;font-family:inherit;color:var(--black);outline:none;transition:border .2s,box-shadow .2s;background:var(--white)}
+    .field input:focus,.field select:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,67,10,.1)}
+    .unit-wrap{position:relative}
+    .unit-wrap input{padding-right:52px}
+    .unit-tag{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:700;color:var(--text-muted)}
+
+    /* ── TABS ── */
+    .tab-group{display:flex;gap:6px}
+    .tab{flex:1;padding:9px;border:1.5px solid var(--gray-border);border-radius:8px;background:var(--white);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;color:#374151;text-align:center;font-family:inherit}
+    .tab.active{background:var(--orange-bg);border-color:var(--orange);color:var(--orange)}
+
+    /* ── RESULT BOX ── */
+    .result-box{background:linear-gradient(135deg,var(--orange-bg) 0%,#fff 100%);border:2px solid var(--orange);border-radius:var(--radius);padding:22px 20px;margin-bottom:16px;text-align:center}
+    .result-label{font-size:12px;font-weight:700;color:var(--orange);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+    .result-price{font-size:clamp(40px,10vw,60px);font-weight:900;color:var(--black);line-height:1;letter-spacing:-1px}
+    .result-price sup{font-size:24px;vertical-align:super;letter-spacing:0}
+    .result-note{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.6}
+    .result-empty{font-size:15px;color:var(--text-muted);padding:16px 0}
+
+    /* ── BREAKDOWN ── */
+    .breakdown{margin-top:14px;border-top:1px solid var(--gray-border);padding-top:14px;display:none}
+    .breakdown.show{display:block}
+    .breakdown-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:4px 0}
+    .breakdown-row .k{color:var(--text-muted)}
+    .breakdown-row .v{font-weight:700;color:var(--black)}
+    .breakdown-row.total{border-top:1px dashed var(--gray-border);margin-top:6px;padding-top:10px;font-size:15px}
+    .breakdown-row.total .k{font-weight:700;color:var(--black)}
+    .breakdown-row.total .v{color:var(--orange);font-size:18px}
+    .min-tag{display:inline-block;background:#fff3cd;color:#856404;border:1px solid #ffc107;border-radius:20px;font-size:10px;font-weight:700;padding:2px 8px;margin-left:6px;vertical-align:middle}
+
+    /* ── CTA ── */
+    .btn-cta{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-deep) 100%);color:#fff;font-size:16px;font-weight:800;border:none;border-radius:12px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(245,67,10,.3)}
+    .btn-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,67,10,.4)}
+    .btn-cta:active{transform:translateY(0)}
+    .btn-secondary{display:block;width:100%;padding:13px;background:var(--white);color:var(--black);font-size:14px;font-weight:700;border:1.5px solid var(--gray-border);border-radius:12px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;margin-top:10px;transition:border-color .2s}
+    .btn-secondary:hover{border-color:var(--orange);color:var(--orange)}
+
+    /* ── RATE TABLE ── */
+    .rate-table{width:100%;border-collapse:collapse;font-size:13px}
+    .rate-table th{background:var(--gray-light);padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px}
+    .rate-table td{padding:9px 12px;border-bottom:1px solid var(--gray-border)}
+    .rate-table tr:last-child td{border-bottom:none}
+    .rate-table tr.highlight td{background:var(--orange-bg);font-weight:700;color:var(--orange)}
+    .rate-table .price{font-weight:800;color:var(--black)}
+
+    /* ── TRUST PILLS ── */
+    .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+    .pill{display:inline-flex;align-items:center;gap:5px;background:var(--gray-light);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:#374151}
+
+    /* ── FOOTER ── */
+    .page-footer{text-align:center;font-size:12px;color:var(--text-muted);padding:16px;line-height:1.8}
+    .page-footer a{color:var(--orange);text-decoration:none}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="/">🐦 CUCKOO <span>CARGO</span></a>
+  <a class="nav-cta" href="/gui-hang-my-ve-viet.html">Đặt đơn ngay →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero-strip">
+  <div class="route-badge">🇺🇸 MỸ &nbsp;→&nbsp; 🇻🇳 VIỆT NAM</div>
+  <h1>Tính Cước Gửi Hàng<br/>Mỹ Về Việt Nam</h1>
+  <p>Nhập cân nặng — xem giá ngay, không cần đăng ký</p>
+</div>
+
+<div class="wrap">
+
+  <!-- INPUT CARD -->
+  <div class="card">
+    <div class="card-head">
+      <div class="icon">⚖️</div>
+      <div><h2>Nhập thông tin gói hàng</h2><p>Kết quả hiển thị ngay tức thì</p></div>
+    </div>
+    <div class="card-body">
+
+      <div class="field">
+        <label>Tổng cân nặng</label>
+        <div class="unit-wrap">
+          <input type="number" id="weightInput" placeholder="Ví dụ: 5" min="0" step="0.1" oninput="calc()"/>
+          <span class="unit-tag">lbs</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Giao hàng đến</label>
+        <div class="tab-group">
+          <button class="tab active" onclick="setDelivery('sghn', this)">🏙️ HCM / Hà Nội</button>
+          <button class="tab" onclick="setDelivery('province', this)">🗺️ Tỉnh khác</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Đóng gói</label>
+        <select id="packSelect" onchange="calc()">
+          <option value="0">📦 Miễn phí — Cơ bản</option>
+          <option value="0.39">📦 Tiêu chuẩn — +$0.39/lbs</option>
+          <option value="0.69">📦 Nâng cao — +$0.69/lbs</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-box" id="resultBox">
+    <div class="result-label">Dự tính chi phí</div>
+    <div class="result-empty" id="resultEmpty">← Nhập số lbs để xem giá</div>
+    <div id="resultPrice" style="display:none">
+      <div class="result-price"><sup>$</sup><span id="priceVal">0</span></div>
+      <div class="result-note" id="resultNote"></div>
+    </div>
+    <!-- Breakdown -->
+    <div class="breakdown" id="breakdown">
+      <div class="breakdown-row"><span class="k" id="bk-weight-label">Cước vận chuyển</span><span class="v" id="bk-shipping">–</span></div>
+      <div class="breakdown-row" id="bk-delivery-row"><span class="k">Phí giao tỉnh</span><span class="v" id="bk-delivery">–</span></div>
+      <div class="breakdown-row" id="bk-pack-row" style="display:none"><span class="k">Phí đóng gói</span><span class="v" id="bk-pack">–</span></div>
+      <div class="breakdown-row total"><span class="k">Tổng ước tính</span><span class="v" id="bk-total">–</span></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <a href="/gui-hang-my-ve-viet.html" class="btn-cta" id="ctaBtn" style="display:none">
+    📦 Đặt đơn gửi hàng ngay →
+  </a>
+  <a href="https://zalo.me/0000000000" class="btn-secondary" id="ctaZalo" style="display:none">
+    💬 Hỏi báo giá qua Zalo
+  </a>
+
+  <!-- RATE TABLE -->
+  <div class="card" style="margin-top:8px">
+    <div class="card-head">
+      <div class="icon">📊</div>
+      <div><h2>Bảng cước tham khảo</h2><p>Tối thiểu tính 10 lbs · Chưa bao gồm thuế hải quan</p></div>
+    </div>
+    <div class="card-body" style="padding:0">
+      <table class="rate-table">
+        <thead>
+          <tr><th>Cân nặng (lbs)</th><th>Giá/lbs</th><th>Ví dụ</th></tr>
+        </thead>
+        <tbody id="rateBody">
+          <tr id="tier-1"><td>1 – 10 lbs <span class="min-tag">Min 10 lbs</span></td><td class="price">$3.89</td><td>10 lbs → $38.90</td></tr>
+          <tr id="tier-2"><td>10 – 50 lbs</td><td class="price">$3.89</td><td>30 lbs → $116.70</td></tr>
+          <tr id="tier-3"><td>50 – 90 lbs</td><td class="price">$3.79</td><td>70 lbs → $265.30</td></tr>
+          <tr id="tier-4"><td>90 – 150 lbs</td><td class="price">$3.65</td><td>120 lbs → $438.00</td></tr>
+          <tr id="tier-5"><td>150+ lbs</td><td class="price">$3.55</td><td>200 lbs → $710.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NOTES CARD -->
+  <div class="card">
+    <div class="card-head">
+      <div class="icon">ℹ️</div>
+      <div><h2>Lưu ý quan trọng</h2></div>
+    </div>
+    <div class="card-body" style="font-size:13px;line-height:1.8;color:#374151">
+      <p>✅ <b>Giá trên là ước tính</b> — báo giá chính xác sau khi nhận hàng thực tế tại kho.</p>
+      <p style="margin-top:8px">⚠️ <b>Thuế hải quan</b> (nếu có) tính riêng theo loại hàng — rượu, điện thoại, mỹ phẩm... có phụ phí.</p>
+      <p style="margin-top:8px">📦 <b>Tối thiểu 10 lbs</b> cho mỗi đơn hàng tuyến Mỹ → Việt Nam.</p>
+      <p style="margin-top:8px">🚚 <b>Thời gian</b>: 7–10 ngày làm việc từ khi hàng đến kho Houston TX.</p>
+      <div class="pills">
+        <span class="pill">✈️ Bay thẳng</span>
+        <span class="pill">📍 Kho Houston TX</span>
+        <span class="pill">🇻🇳 Giao toàn quốc</span>
+        <span class="pill">📞 Hỗ trợ 24/7</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <b>Cuckoo Cargo</b> · Dịch vụ gửi hàng Mỹ uy tín<br/>
+  <a href="/">Trang chủ</a> · <a href="/lien-he.html">Liên hệ</a> · <a href="/tracking.html">Tra cứu đơn</a>
+</div>
+
+<script>
+  // ── Pricing data ──────────────────────────────────────────────────────────
+  const TIERS = [
+    { from:0,  to:50,  price:3.89 },
+    { from:50, to:90,  price:3.79 },
+    { from:90, to:150, price:3.65 },
+    { from:150,to:9999,price:3.55 },
+  ];
+  const MIN_LBS    = 10;
+  const PROV_RATE  = 0.99; // $/lbs extra for province delivery
+
+  let deliveryMode = 'sghn'; // 'sghn' | 'province'
+
+  function setDelivery(mode, el) {
+    deliveryMode = mode;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    calc();
+  }
+
+  function getTier(lbs) {
+    return TIERS.find(t => lbs >= t.from && lbs < t.to) || TIERS[TIERS.length-1];
+  }
+
+  function highlightTier(lbs) {
+    ['tier-1','tier-2','tier-3','tier-4','tier-5'].forEach(id => {
+      document.getElementById(id)?.classList.remove('highlight');
+    });
+    if (lbs <= 0) return;
+    const bill = Math.max(lbs, MIN_LBS);
+    if (bill <= 10)       document.getElementById('tier-1')?.classList.add('highlight');
+    else if (bill <= 50)  document.getElementById('tier-2')?.classList.add('highlight');
+    else if (bill <= 90)  document.getElementById('tier-3')?.classList.add('highlight');
+    else if (bill <= 150) document.getElementById('tier-4')?.classList.add('highlight');
+    else                  document.getElementById('tier-5')?.classList.add('highlight');
+  }
+
+  function calc() {
+    const raw    = parseFloat(document.getElementById('weightInput').value) || 0;
+    const packR  = parseFloat(document.getElementById('packSelect').value)  || 0;
+
+    const empty  = document.getElementById('resultEmpty');
+    const priceEl= document.getElementById('resultPrice');
+    const bd     = document.getElementById('breakdown');
+
+    if (raw <= 0) {
+      empty.style.display  = '';
+      priceEl.style.display= 'none';
+      bd.classList.remove('show');
+      document.getElementById('ctaBtn').style.display  = 'none';
+      document.getElementById('ctaZalo').style.display = 'none';
+      highlightTier(0);
+      return;
+    }
+
+    const billLbs = Math.max(raw, MIN_LBS);
+    const tier    = getTier(billLbs);
+
+    const shipping = billLbs * tier.price;
+    const delivery = deliveryMode === 'province' ? billLbs * PROV_RATE : 0;
+    const packing  = packR > 0 ? billLbs * packR : 0;
+    const total    = shipping + delivery + packing;
+
+    // Show result
+    empty.style.display   = 'none';
+    priceEl.style.display = '';
+    document.getElementById('priceVal').textContent = total.toFixed(2);
+
+    const isMin = raw < MIN_LBS;
+    document.getElementById('resultNote').innerHTML =
+      `${billLbs.toFixed(1)} lbs × $${tier.price}/lbs` +
+      (isMin ? ` <b>(tối thiểu ${MIN_LBS} lbs)</b>` : '') +
+      (deliveryMode === 'province' ? ' · Giao tỉnh' : ' · HCM/HN') +
+      '<br/>Giá ước tính · chưa bao gồm thuế hải quan';
+
+    // Breakdown
+    bd.classList.add('show');
+    document.getElementById('bk-weight-label').textContent =
+      `Cước (${billLbs.toFixed(1)} lbs × $${tier.price})` + (isMin ? ' ⚡min' : '');
+    document.getElementById('bk-shipping').textContent = '$' + shipping.toFixed(2);
+
+    const delivRow = document.getElementById('bk-delivery-row');
+    delivRow.style.display = delivery > 0 ? '' : 'none';
+    if (delivery > 0) document.getElementById('bk-delivery').textContent = '+$' + delivery.toFixed(2);
+
+    const packRow = document.getElementById('bk-pack-row');
+    packRow.style.display = packing > 0 ? '' : 'none';
+    if (packing > 0) document.getElementById('bk-pack').textContent = '+$' + packing.toFixed(2);
+
+    document.getElementById('bk-total').textContent = '$' + total.toFixed(2);
+
+    document.getElementById('ctaBtn').style.display  = '';
+    document.getElementById('ctaZalo').style.display = '';
+
+    highlightTier(raw);
+  }
+</script>
+</body>
+</html>
