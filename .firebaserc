@@ -6,7 +6,7 @@
     "cuckoo-cargo": {
       "hosting": {
         "main":     ["cuckoo-cargo"],
-        "tinhcuoc": ["tinhcuoc-cuckoocargo"]
+        "tinhcuoc": ["dutinhchiphi-cuckoocargo"]
       }
     }
   }
