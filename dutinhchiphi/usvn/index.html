@@ -699,12 +699,12 @@ function updateCarrierHint() {
     hint.style.display='';
     hint.style.background='#EEF2FF';
     hint.style.color='#1a3065';
-    hint.innerHTML='UPS: Hỗ trợ <b>$9.85/lần pick-up</b> · Phí vận chuyển: <b>$'+fee+'</b>';
+    hint.innerHTML='UPS: <b>$1.99/lbs</b> · Pick-up: <b>+$9.65</b> · Tổng cước: <b>$'+fee+'</b>';
   } else {
     hint.style.display='';
     hint.style.background='#F0FDF4';
     hint.style.color='#166534';
-    hint.innerHTML='FedEx: <b>Miễn phí pick-up</b> · Phí vận chuyển: <b>$'+fee+'</b>';
+    hint.innerHTML='FedEx: <b>$2.99/lbs</b> · Pick-up: <b>miễn phí</b> · Tổng cước: <b>$'+fee+'</b>';
   }
 }
 
@@ -803,25 +803,35 @@ function calc(){
   const provFee  = delivery==='province' ? billLbs*PROV : 0;
   const sc       = calcSurcharges(billLbs);
 
-  // Pickup fee
+  // Carrier fee (luôn tính khi đã chọn hãng)
+  let carrierFee=0, carrierLine=null;
   let pickupFee=0, pickupLine=null;
-  if((method==='pickup'||method==='dropoff') && carrier){
-    pickupFee = Math.max(billLbs,MIN_LBS)*CARRIER_PRICE[carrier];
-    const label = carrier==='ups' ? 'UPS Pick-up ($1.99/lbs)' : 'FedEx Pick-up ($2.99/lbs)';
-    pickupLine = [label, '$'+pickupFee.toFixed(2)];
+  if(carrier){
+    carrierFee = billLbs * CARRIER_PRICE[carrier];
+    const rate = carrier==='ups' ? '$1.99' : '$2.99';
+    carrierLine = [
+      `${carrier==='ups'?'UPS':'FedEx'} (${billLbs.toFixed(1)} lbs × ${rate}/lbs)`,
+      '$'+carrierFee.toFixed(2)
+    ];
+    if(method==='pickup' && carrier==='ups'){
+      pickupFee = 9.65;
+      pickupLine = ['Phụ phí pick-up (UPS)', '$9.65'];
+    }
+    // FedEx pickup: miễn phí, không cộng thêm
   }
 
-  const total = shipping + provFee + pickupFee + sc.total;
+  const total = shipping + provFee + carrierFee + pickupFee + sc.total;
 
   document.getElementById('priceVal').textContent=total.toFixed(2);
   document.getElementById('resultNote').innerHTML=
     `${billLbs.toFixed(1)} lbs × $${tier.p}/lbs`+(isMin?` <b>(tối thiểu ${MIN_LBS} lbs)</b>`:'')+
     (delivery==='province'?' · Giao tỉnh':' · HCM / Hà Nội')+
-    '<br/>Giá ước tính · chưa bao gồm thuế hải quan bổ sung';
+    '<br/>Giá ước tính · <b>chưa bao gồm thuế/phụ thu hải quan</b>';
 
   // Breakdown
   let rows = [];
-  rows.push([`Cước (${billLbs.toFixed(1)} lbs × $${tier.p})`+(isMin?' ⚡':''), '$'+shipping.toFixed(2)]);
+  rows.push([`Cước vận chuyển (${billLbs.toFixed(1)} lbs × $${tier.p})`+(isMin?' ⚡':''), '$'+shipping.toFixed(2)]);
+  if(carrierLine) rows.push(carrierLine);
   if(pickupLine) rows.push(pickupLine);
   if(provFee>0) rows.push(['Phí giao tỉnh (+$0.99/lbs)', '+$'+provFee.toFixed(2)]);
   rows = rows.concat(sc.lines);
