@@ -267,9 +267,8 @@
             <span class="carrier-price">$2.99/lbs</span>
           </button>
         </div>
-        <p style="font-size:11px;color:var(--text-muted);margin-top:8px">
-          UPS: Hỗ trợ $9.65/lần pick-up · FedEx: Miễn phí pick-up · Tối thiểu 10 lbs
-        </p>
+        <div id="carrierHint" style="margin-top:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;display:none"></div>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:6px">Tối thiểu 10 lbs · Phí pick-up tính riêng</p>
       </div>
     </div>
   </div>
@@ -468,12 +467,33 @@
           </div>
         </div>
 
+        <!-- Body điện thoại -->
+        <div class="sc-item" id="sc-body" onclick="toggleSC('body',event)">
+          <div class="sc-header">
+            <div class="sc-check"><span class="sc-check-mark">✓</span></div>
+            <div class="sc-info">
+              <div class="sc-name">Body điện thoại (Mao mạch / Màn hình)</div>
+              <div class="sc-price">$8.00 / cụm</div>
+            </div>
+          </div>
+          <div class="sc-qty-wrap">
+            <div class="sc-qty-inner">
+              <span class="sc-qty-label">Số cụm:</span>
+              <div class="sc-qty-controls">
+                <button class="sc-qty-btn" onclick="adjQty('body',-1,event)" type="button">−</button>
+                <span class="sc-qty-val" id="qty-body">1</span>
+                <button class="sc-qty-btn" onclick="adjQty('body',1,event)" type="button">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Electronics khác -->
         <div class="sc-item" id="sc-elec" onclick="toggleSC('elec',event)">
           <div class="sc-header">
             <div class="sc-check"><span class="sc-check-mark">✓</span></div>
             <div class="sc-info">
-              <div class="sc-name">Điện tử khác (không liệt kê ở trên)</div>
+              <div class="sc-name">Hàng điện tử / mặt hàng có giá trị cao</div>
               <div class="sc-price">10% giá trị hàng</div>
             </div>
           </div>
@@ -506,23 +526,6 @@
           </div>
         </div>
 
-      </div>
-    </div>
-  </div>
-
-  <!-- CARD 6: Đóng gói -->
-  <div class="card" id="packCard">
-    <div class="card-head">
-      <div class="icon"></div>
-      <div><h2>Đóng gói</h2><p>Tùy chọn bảo vệ hàng hóa</p></div>
-    </div>
-    <div class="card-body">
-      <div class="field" style="margin-bottom:0">
-        <select id="packSelect" onchange="calc()">
-          <option value="0">📦 Miễn phí — Cơ bản</option>
-          <option value="0.39">📦 Tiêu chuẩn — +$0.39/lbs</option>
-          <option value="0.69">📦 Nâng cao — +$0.69/lbs</option>
-        </select>
       </div>
     </div>
   </div>
@@ -561,8 +564,8 @@
           <tr id="t1"><td>&lt; 10 lbs <span class="min-tag">Min 10 lbs</span></td><td class="price">$3.89</td><td>10 lbs → $38.90</td></tr>
           <tr id="t2"><td>10 – 50 lbs</td><td class="price">$3.89</td><td>30 lbs → $116.70</td></tr>
           <tr id="t3"><td>50.1 – 90 lbs</td><td class="price">$3.79</td><td>70 lbs → $265.30</td></tr>
-          <tr id="t4"><td>90.1 – 150 lbs</td><td class="price">$3.65</td><td>120 lbs → $438.00</td></tr>
-          <tr id="t5"><td>&gt; 150 lbs</td><td class="price">$3.55</td><td>200 lbs → $710.00</td></tr>
+          <tr id="t4"><td>90.1 – 150 lbs</td><td class="price">$3.59</td><td>120 lbs → $430.80</td></tr>
+          <tr id="t5"><td>&gt; 150 lbs</td><td class="price">$3.49</td><td>200 lbs → $698.00</td></tr>
         </tbody>
       </table>
     </div>
@@ -594,7 +597,7 @@
 
 <script>
 // ── PRICING ─────────────────────────────────────────────────────────────────
-const TIERS   = [{f:0,t:50,p:3.89},{f:50,t:90,p:3.79},{f:90,t:150,p:3.65},{f:150,t:9999,p:3.55}];
+const TIERS   = [{f:0,t:50,p:3.89},{f:50,t:90,p:3.79},{f:90,t:150,p:3.59},{f:150,t:9999,p:3.49}];
 const MIN_LBS = 10;
 const PROV    = 0.99;
 const CARRIER_PRICE = { ups:1.99, fedex:2.99 };
@@ -607,7 +610,7 @@ let delivery  = 'sghn';   // 'sghn'|'province'
 let pkgId     = 1;
 let pkgs      = [{id:1,w:'',v:''}];
 let scActive  = {};       // { ruou:true, ... }
-let scQty     = { ruou:1, cigar:1, perfume:1, phone:1, earphone:1 };
+let scQty     = { ruou:1, cigar:1, perfume:1, phone:1, earphone:1, body:1 };
 let phoneGen  = 'new';    // 'new'|'old'
 
 // ── DIRECTION ────────────────────────────────────────────────────────────────
@@ -656,6 +659,18 @@ function pickCarrier(c,el) {
   carrier=c;
   document.querySelectorAll('.carrier-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
+  const hint=document.getElementById('carrierHint');
+  if(c==='ups'){
+    hint.style.display='';
+    hint.style.background='#EEF2FF';
+    hint.style.color='#1a3065';
+    hint.innerHTML='ℹ️ UPS: Hỗ trợ <b>$9.85/lần pick-up</b> (thu tại kho)';
+  } else {
+    hint.style.display='';
+    hint.style.background='#F0FDF4';
+    hint.style.color='#166534';
+    hint.innerHTML='✅ FedEx: <b>Miễn phí pick-up</b>';
+  }
   calc();
 }
 
@@ -719,7 +734,8 @@ function calcSurcharges(billLbs){
     lines.push(['📱 Điện thoại '+(phoneGen==='new'?'mới':'cũ')+' ('+scQty.phone+' cái)','$'+c.toFixed(2)]);
     if(phoneGen==='old'){ const tax=c*0.2; s+=tax; lines.push(['  └ Thuế 20%','$'+tax.toFixed(2)]); }
   }
-  if(scActive.earphone){ const c=scQty.earphone*12; s+=c; lines.push(['🎧 Tai nghe/AirPod ('+scQty.earphone+' cái)','$'+c.toFixed(2)]); }
+  if(scActive.earphone){ const c=scQty.earphone*12; s+=c; lines.push(['Tai nghe/AirPod ('+scQty.earphone+' cái)','$'+c.toFixed(2)]); }
+  if(scActive.body){ const c=scQty.body*8; s+=c; lines.push(['Body ĐT/Màn hình ('+scQty.body+' cụm)','$'+c.toFixed(2)]); }
   if(scActive.elec){ const ev=parseFloat(document.getElementById('elec-val').value)||0; const c=ev*0.1; s+=c; lines.push(['🔌 Điện tử khác (10% giá trị)','$'+c.toFixed(2)]); }
   if(scActive.medical){ const mv=parseFloat(document.getElementById('medical-val').value)||0; const c=mv*0.2; s+=c; lines.push(['💉 Vacxin/Máy y tế (20% thuế)','$'+c.toFixed(2)]); }
   return { total:s, lines };
@@ -739,7 +755,7 @@ function hlTier(lbs){
 
 function calc(){
   if(direction!=='usvn') return;
-  const raw=totalW(), packR=parseFloat(document.getElementById('packSelect').value)||0;
+  const raw=totalW();
   const rb=document.getElementById('resultBox');
   if(raw<=0){ rb.style.display='none'; showEl('ctaBtn',false); showEl('ctaZalo',false); hlTier(0); return; }
 
@@ -750,7 +766,6 @@ function calc(){
 
   const shipping = billLbs * tier.price;
   const provFee  = delivery==='province' ? billLbs*PROV : 0;
-  const packFee  = packR>0 ? billLbs*packR : 0;
   const sc       = calcSurcharges(billLbs);
 
   // Pickup fee
@@ -761,7 +776,7 @@ function calc(){
     pickupLine = [label, '$'+pickupFee.toFixed(2)];
   }
 
-  const total = shipping + provFee + packFee + pickupFee + sc.total;
+  const total = shipping + provFee + pickupFee + sc.total;
 
   document.getElementById('priceVal').textContent=total.toFixed(2);
   document.getElementById('resultNote').innerHTML=
@@ -774,7 +789,6 @@ function calc(){
   rows.push([`Cước (${billLbs.toFixed(1)} lbs × $${tier.price})`+(isMin?' ⚡':''), '$'+shipping.toFixed(2)]);
   if(pickupLine) rows.push(pickupLine);
   if(provFee>0) rows.push(['Phí giao tỉnh (+$0.99/lbs)', '+$'+provFee.toFixed(2)]);
-  if(packFee>0) rows.push(['Phí đóng gói', '+$'+packFee.toFixed(2)]);
   rows = rows.concat(sc.lines);
 
   const bd=document.getElementById('breakdown');
