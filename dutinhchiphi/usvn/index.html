@@ -20,7 +20,8 @@
 
     /* NAV */
     .nav{background:var(--white);border-bottom:1px solid var(--gray-border);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-    .nav-logo{font-weight:900;font-size:17px;letter-spacing:.5px;color:var(--black);text-decoration:none}
+    .nav-logo{font-weight:900;font-size:17px;letter-spacing:.5px;color:var(--black);text-decoration:none;display:flex;align-items:center;gap:6px}
+    .nav-logo img{height:36px;width:36px;object-fit:contain}
     .nav-logo span{color:var(--orange)}
     .nav-cta{background:var(--orange);color:#fff;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none}
 
@@ -185,7 +186,7 @@
 <body>
 
 <nav class="nav">
-  <a class="nav-logo" href="/">🐦 CUCKOO <span>CARGO</span></a>
+  <a class="nav-logo" href="/"><img src="favicon.png" alt="Cuckoo Cargo"/>CUCKOO <span>CARGO</span></a>
   <a class="nav-cta" href="/gui-hang-my-ve-viet.html">Đặt đơn →</a>
 </nav>
 
@@ -679,10 +680,10 @@ function pickCarrier(c,el) {
   const note=document.getElementById('carrierPickupNote');
   if(c==='ups'){
     note.style.display=''; note.style.color='#1a3065';
-    note.textContent='🚚 $9.65/pick-up';
+    note.textContent='Hỗ trợ $9.65/pick-up';
   } else if(c==='fedex'){
     note.style.display=''; note.style.color='#166534';
-    note.textContent='✅ Miễn phí pick-up';
+    note.textContent='Miễn phí pick-up';
   } else {
     note.style.display='none';
   }
