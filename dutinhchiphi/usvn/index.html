@@ -559,32 +559,47 @@
     </div>
     <div class="card-body" style="padding:0">
       <table class="rate-table">
-        <thead><tr><th>Cân nặng (lbs)</th><th>Giá/lbs</th><th>Ví dụ</th></tr></thead>
+        <thead>
+          <tr>
+            <th style="text-align:center;background:#8B1A00;color:#fff;font-size:11px;letter-spacing:.5px">CÂN NẶNG</th>
+            <th style="text-align:center;background:#8B1A00;color:#fff;font-size:11px;letter-spacing:.5px">USD/LBS</th>
+          </tr>
+        </thead>
         <tbody>
-          <tr id="t1"><td>&lt; 10 lbs <span class="min-tag">Min 10 lbs</span></td><td class="price">$3.89</td><td>10 lbs → $38.90</td></tr>
-          <tr id="t2"><td>10 – 50 lbs</td><td class="price">$3.89</td><td>30 lbs → $116.70</td></tr>
-          <tr id="t3"><td>50.1 – 90 lbs</td><td class="price">$3.79</td><td>70 lbs → $265.30</td></tr>
-          <tr id="t4"><td>90.1 – 150 lbs</td><td class="price">$3.59</td><td>120 lbs → $430.80</td></tr>
-          <tr id="t5"><td>&gt; 150 lbs</td><td class="price">$3.49</td><td>200 lbs → $698.00</td></tr>
+          <tr id="t1">
+            <td style="font-style:italic;font-size:13px">&lt; 10 lbs <br/><span style="font-size:11px;color:var(--text-muted)">(dưới 10 lbs làm tròn thành 10 lbs)</span></td>
+            <td class="price" style="text-align:center;font-size:20px">3,89</td>
+          </tr>
+          <tr id="t2"><td>10 – 50 lbs</td><td class="price" style="text-align:center;font-size:20px">3,89</td></tr>
+          <tr id="t3"><td>50.1 – 90 lbs</td><td class="price" style="text-align:center;font-size:20px">3,79</td></tr>
+          <tr id="t4"><td>90.1 – 150 lbs</td><td class="price" style="text-align:center;font-size:20px">3,59</td></tr>
+          <tr id="t5"><td>&gt; 150 lbs</td><td class="price" style="text-align:center;font-size:20px">3,49</td></tr>
         </tbody>
       </table>
+      <!-- Delivery info highlight -->
+      <div style="background:#FFF8E7;border:1.5px solid #F5A60B;border-radius:10px;padding:14px 16px;margin-top:12px">
+        <div style="font-size:12px;font-weight:800;color:#92400E;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Khu vực giao hàng</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #F5A60B;font-size:13px">
+          <span style="font-weight:600;color:#374151">Khu vực TP.HCM &amp; Hà Nội</span>
+          <span style="font-weight:800;color:#16a34a;font-size:14px">Miễn phí</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:13px">
+          <span style="font-weight:600;color:#374151">Tỉnh / Thành phố khác</span>
+          <span style="font-weight:800;color:var(--orange);font-size:14px">+$0.99/lbs</span>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-head"><div class="icon"></div><div><h2>Lưu ý quan trọng</h2></div></div>
-    <div class="card-body" style="font-size:13px;line-height:1.8;color:#374151">
-      <p>✅ <b>Giá trên là ước tính</b> — báo giá chính xác sau khi nhận hàng tại kho.</p>
-      <p style="margin-top:8px">⚠️ <b>Thuế hải quan</b> tính riêng theo loại hàng.</p>
-      <p style="margin-top:8px">📦 <b>Tối thiểu 10 lbs</b> cho tuyến Mỹ → Việt Nam.</p>
-      <p style="margin-top:8px">🚚 <b>Bay Thứ 3 &amp; Thứ 6</b> · 7–14 ngày từ kho Houston TX.</p>
-      <p style="margin-top:8px">🛡️ <b>Miễn phí bảo hiểm</b> chống mất, thùng, khui hàng.</p>
-      <div class="pills">
-        <span class="pill">✈️ Bay thẳng</span>
-        <span class="pill">📍 Kho Houston TX</span>
-        <span class="pill">🇻🇳 Giao toàn quốc</span>
-        <span class="pill">📞 Hỗ trợ 24/7</span>
-      </div>
+    <div class="card-body" style="font-size:13px;line-height:1.9;color:#374151">
+      <p><b>Giá trên là ước tính</b> — báo giá chính xác sau khi nhận hàng tại kho.</p>
+      <p style="margin-top:6px"><b>Thuế hải quan</b> tính riêng theo loại hàng (xem phụ thu bên trên).</p>
+      <p style="margin-top:6px"><b>Tối thiểu 10 lbs</b> cho tuyến Mỹ → Việt Nam.</p>
+      <p style="margin-top:6px"><b>Bay Thứ 3 &amp; Thứ 6</b> · 7–14 ngày từ khi hàng đến kho Houston TX.</p>
+      <p style="margin-top:6px"><b>Miễn phí bảo hiểm</b> chống mất thùng và khui hàng.</p>
+      <p style="margin-top:6px"><b>Phí mua hộ</b>: 5% giá trị hàng.</p>
     </div>
   </div>
 
