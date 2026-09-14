@@ -764,7 +764,7 @@ function calc(){
   const tier=getTier(billLbs);
   const isMin=raw<MIN_LBS;
 
-  const shipping = billLbs * tier.price;
+  const shipping = billLbs * tier.p;
   const provFee  = delivery==='province' ? billLbs*PROV : 0;
   const sc       = calcSurcharges(billLbs);
 
@@ -780,13 +780,13 @@ function calc(){
 
   document.getElementById('priceVal').textContent=total.toFixed(2);
   document.getElementById('resultNote').innerHTML=
-    `${billLbs.toFixed(1)} lbs × $${tier.price}/lbs`+(isMin?` <b>(tối thiểu ${MIN_LBS} lbs)</b>`:'')+
+    `${billLbs.toFixed(1)} lbs × $${tier.p}/lbs`+(isMin?` <b>(tối thiểu ${MIN_LBS} lbs)</b>`:'')+
     (delivery==='province'?' · Giao tỉnh':' · HCM / Hà Nội')+
     '<br/>Giá ước tính · chưa bao gồm thuế hải quan bổ sung';
 
   // Breakdown
   let rows = [];
-  rows.push([`Cước (${billLbs.toFixed(1)} lbs × $${tier.price})`+(isMin?' ⚡':''), '$'+shipping.toFixed(2)]);
+  rows.push([`Cước (${billLbs.toFixed(1)} lbs × $${tier.p})`+(isMin?' ⚡':''), '$'+shipping.toFixed(2)]);
   if(pickupLine) rows.push(pickupLine);
   if(provFee>0) rows.push(['Phí giao tỉnh (+$0.99/lbs)', '+$'+provFee.toFixed(2)]);
   rows = rows.concat(sc.lines);
