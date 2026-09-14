@@ -224,7 +224,10 @@ function handleOrder(data) {
     pkgStr = data.packages.map(function(p, i) {
       return 'Kiện ' + (i + 1) + ': ' + p.weight + ' lbs' + (p.value > 0 ? ' ($' + parseFloat(p.value).toFixed(2) + ')' : '');
     }).join(' | ');
-    if (data.packages.length > 1) pkgStr += ' | Tổng: ' + data.weight + ' lbs';
+    if (data.packages.length > 1) {
+      var orderTotalW = data.packages.reduce(function(sum, p) { return sum + parseFloat(p.weight || 0); }, 0);
+      pkgStr += ' | Tổng: ' + orderTotalW + ' lbs';
+    }
     if (!totalDeclaredValue) {
       totalDeclaredValue = data.packages.reduce(function(s, p) { return s + (parseFloat(p.value) || 0); }, 0);
     }
@@ -296,6 +299,18 @@ function handleLabel(data) {
     formatHeader(sheet);
   }
 
+  // Format packages array → sheet string
+  var labelPkgStr = data.weight ? data.weight + ' lbs' : '';
+  if (data.packages && Array.isArray(data.packages) && data.packages.length > 0) {
+    labelPkgStr = data.packages.map(function(p, i) {
+      return 'Kiện ' + (i + 1) + ': ' + p.weight + ' lbs' + (p.value > 0 ? ' ($' + parseFloat(p.value).toFixed(2) + ')' : '');
+    }).join(' | ');
+    if (data.packages.length > 1) {
+      var labelTotalW = data.packages.reduce(function(sum, p) { return sum + parseFloat(p.weight || 0); }, 0);
+      labelPkgStr += ' | Tổng: ' + labelTotalW + ' lbs';
+    }
+  }
+
   sheet.appendRow([
     labelId,
     now,
@@ -313,7 +328,7 @@ function handleLabel(data) {
     data.receiverName || "",
     data.receiverPhone|| "",
     data.receiverAddress || "",
-    data.weight      || "",
+    labelPkgStr,
     data.insurance   || "Free",
     data.estimatedFee|| "",
     "Chờ xử lý",
@@ -656,7 +671,6 @@ function sendConfirmationEmail(toEmail, type, info) {
 
   try {
     GmailApp.sendEmail(toEmail, subject, '', {
-      from:     COMPANY_EMAIL,
       name:     COMPANY_NAME,
       htmlBody: html,
       replyTo:  COMPANY_EMAIL,

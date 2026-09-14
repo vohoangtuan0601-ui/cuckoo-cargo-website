@@ -6,7 +6,7 @@
 // CONFIG 
 const CC_CONFIG = {
  // Cập nhật sau khi deploy Google Apps Script
- SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzWC98zadzy6S1bi_C53kdguSGjFrD-ipJRTAlVJlCpq28_3C9ZoH5Mb-RBlKTP1lER/exec",
+ SCRIPT_URL: "https://script.google.com/macros/s/AKfycbx3Xg4EjxfjIhsag350t8abvDvVDfF_N7z8HGWSlN6DvvWtoOhqpuLYnM5CMjr66HBsmw/exec",
 
  // Thông tin liên hệ — cập nhật tại đây, tự động áp dụng toàn site
  PHONE: "+1 (714) 398-4817",

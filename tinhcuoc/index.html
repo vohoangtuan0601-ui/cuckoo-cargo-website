@@ -225,54 +225,6 @@
     </div>
   </div>
 
-  <!-- CARD 2: Lấy hàng (chỉ US→VN) -->
-  <div class="card" id="pickupCard">
-    <div class="card-head">
-      <div class="icon"></div>
-      <div><h2>Dịch vụ lấy hàng</h2><p>Khắp nước Mỹ</p></div>
-    </div>
-    <div class="card-body">
-      <div class="method-grid">
-        <button class="method-btn" id="m-pickup" onclick="setMethod('pickup',this)" type="button">
-          <div class="m-title">Pick-up</div>
-          <div class="m-sub">Lấy tận nhà</div>
-        </button>
-        <button class="method-btn" id="m-dropoff" onclick="setMethod('dropoff',this)" type="button">
-          <div class="m-title">Drop-off</div>
-          <div class="m-sub">Tự đem ra bưu cục</div>
-        </button>
-        <button class="method-btn active" id="m-self" onclick="setMethod('self',this)" type="button">
-          <div class="m-title">Tự gửi</div>
-          <div class="m-sub">Gửi thẳng về kho</div>
-        </button>
-      </div>
-
-      <!-- Carrier selection -->
-      <div class="carrier-wrap" id="carrierWrap">
-        <div class="field-label" style="margin-top:14px;margin-bottom:10px">Chọn hãng vận chuyển</div>
-        <div class="carrier-grid">
-          <button class="carrier-btn carrier-ups" id="c-ups" onclick="pickCarrier('ups',this)" type="button">
-            <svg width="38" height="42" viewBox="0 0 40 46" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 2 L38 9 L38 28 C38 38 20 44 20 44 C20 44 2 38 2 28 L2 9 Z" fill="#FFB500"/>
-              <path d="M20 5.5 L35 11.5 L35 28 C35 36.5 20 41.5 20 41.5 C20 41.5 5 36.5 5 28 L5 11.5 Z" fill="#3D1F07"/>
-              <text x="20" y="31" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="13.5" fill="#FFB500" letter-spacing="1.5">UPS</text>
-            </svg>
-            <span class="ups-text" style="color:#fff;font-size:18px;font-weight:900;letter-spacing:1px">UPS</span>
-            <span class="carrier-price">$1.99/lbs</span>
-          </button>
-          <button class="carrier-btn" id="c-fedex" onclick="pickCarrier('fedex',this)" type="button">
-            <div class="fedex-logo">
-              <span class="fedex-fed">Fed</span><span class="fedex-ex">Ex</span>
-            </div>
-            <span class="carrier-price">$2.99/lbs</span>
-          </button>
-        </div>
-        <div id="carrierHint" style="margin-top:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;display:none"></div>
-        <p style="font-size:11px;color:var(--text-muted);margin-top:6px">Tối thiểu 10 lbs · Phí pick-up tính riêng</p>
-      </div>
-    </div>
-  </div>
-
   <!-- CARD 3: Kiện hàng -->
   <div class="card" id="pkgCard">
     <div class="card-head">
@@ -330,6 +282,57 @@
           <option>Thanh Hóa</option><option>Thái Nguyên</option><option>Tuyên Quang</option>
           <option>Vĩnh Long</option>
         </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2: Lấy hàng (chỉ US→VN) -->
+  <div class="card" id="pickupCard">
+    <div class="card-head">
+      <div class="icon"></div>
+      <div><h2>Dịch vụ lấy hàng</h2><p>Khắp nước Mỹ</p></div>
+    </div>
+    <div class="card-body">
+      <div class="method-grid">
+        <button class="method-btn" id="m-pickup" onclick="setMethod('pickup',this)" type="button">
+          <div class="m-title">Pick-up</div>
+          <div class="m-sub">Lấy tận nhà</div>
+        </button>
+        <button class="method-btn" id="m-dropoff" onclick="setMethod('dropoff',this)" type="button">
+          <div class="m-title">Drop-off</div>
+          <div class="m-sub">Tự đem ra bưu cục</div>
+        </button>
+        <button class="method-btn active" id="m-self" onclick="setMethod('self',this)" type="button">
+          <div class="m-title">Tự gửi</div>
+          <div class="m-sub">Gửi thẳng về kho</div>
+        </button>
+      </div>
+
+      <!-- Carrier selection -->
+      <div class="carrier-wrap" id="carrierWrap">
+        <div class="field-label" style="margin-top:14px;margin-bottom:10px">Chọn hãng vận chuyển</div>
+        <div class="carrier-grid">
+          <button class="carrier-btn carrier-ups" id="c-ups" onclick="pickCarrier('ups',this)" type="button">
+            <svg width="44" height="52" viewBox="0 0 100 116" xmlns="http://www.w3.org/2000/svg">
+              <!-- Outer gold shield -->
+              <path d="M10,4 L90,4 Q96,4 96,10 L96,58 Q96,90 50,113 Q4,90 4,58 L4,10 Q4,4 10,4 Z" fill="#FFB500"/>
+              <!-- Inner brown shield -->
+              <path d="M15,11 L85,11 Q90,11 90,17 L90,58 Q90,86 50,106 Q10,86 10,58 L10,17 Q10,11 15,11 Z" fill="#3B1C09"/>
+              <!-- UPS text -->
+              <text x="50" y="76" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',sans-serif" font-weight="900" font-size="32" fill="#FFB500" letter-spacing="4">UPS</text>
+            </svg>
+            <span class="ups-text" style="color:#fff;font-size:18px;font-weight:900;letter-spacing:1px">UPS</span>
+            <span class="carrier-price">$1.99/lbs</span>
+          </button>
+          <button class="carrier-btn" id="c-fedex" onclick="pickCarrier('fedex',this)" type="button">
+            <div class="fedex-logo">
+              <span class="fedex-fed">Fed</span><span class="fedex-ex">Ex</span>
+            </div>
+            <span class="carrier-price">$2.99/lbs</span>
+          </button>
+        </div>
+        <div id="carrierHint" style="margin-top:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;display:none"></div>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:6px">Tối thiểu 10 lbs · Phí pick-up tính riêng</p>
       </div>
     </div>
   </div>
@@ -674,19 +677,25 @@ function pickCarrier(c,el) {
   carrier=c;
   document.querySelectorAll('.carrier-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
+  updateCarrierHint();
+  calc();
+}
+function updateCarrierHint() {
   const hint=document.getElementById('carrierHint');
-  if(c==='ups'){
+  if(!carrier){ hint.style.display='none'; return; }
+  const billLbs=Math.max(getTotalWeight(),MIN_LBS);
+  const fee=(billLbs*CARRIER_PRICE[carrier]).toFixed(2);
+  if(carrier==='ups'){
     hint.style.display='';
     hint.style.background='#EEF2FF';
     hint.style.color='#1a3065';
-    hint.innerHTML='ℹ️ UPS: Hỗ trợ <b>$9.85/lần pick-up</b> (thu tại kho)';
+    hint.innerHTML='UPS: Hỗ trợ <b>$9.85/lần pick-up</b> · Phí vận chuyển: <b>$'+fee+'</b>';
   } else {
     hint.style.display='';
     hint.style.background='#F0FDF4';
     hint.style.color='#166534';
-    hint.innerHTML='✅ FedEx: <b>Miễn phí pick-up</b>';
+    hint.innerHTML='FedEx: <b>Miễn phí pick-up</b> · Phí vận chuyển: <b>$'+fee+'</b>';
   }
-  calc();
 }
 
 // ── DELIVERY ─────────────────────────────────────────────────────────────────
@@ -770,6 +779,7 @@ function hlTier(lbs){
 
 function calc(){
   if(direction!=='usvn') return;
+  updateCarrierHint();
   const raw=totalW();
   const rb=document.getElementById('resultBox');
   if(raw<=0){ rb.style.display='none'; showEl('ctaBtn',false); showEl('ctaZalo',false); hlTier(0); return; }
