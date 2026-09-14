@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Tính Cước Gửi Hàng | Cuckoo Cargo</title>
   <meta name="description" content="Tính ngay chi phí gửi hàng từ Mỹ về Việt Nam. Giá từ $3.89/lbs, giao toàn quốc."/>
-  <link rel="icon" type="image/png" href="/assets/images/favicon-main.png"/>
+  <link rel="icon" type="image/png" href="https://cuckoocargous.com/assets/images/favicon-main.png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
@@ -321,7 +321,6 @@
               <!-- UPS text -->
               <text x="50" y="76" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',sans-serif" font-weight="900" font-size="32" fill="#FFB500" letter-spacing="4">UPS</text>
             </svg>
-            <span class="ups-text" style="color:#fff;font-size:18px;font-weight:900;letter-spacing:1px">UPS</span>
             <span class="carrier-price">$1.99/lbs</span>
           </button>
           <button class="carrier-btn" id="c-fedex" onclick="pickCarrier('fedex',this)" type="button">
@@ -332,7 +331,7 @@
           </button>
         </div>
         <div id="carrierHint" style="margin-top:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;display:none"></div>
-        <p style="font-size:11px;color:var(--text-muted);margin-top:6px">Tối thiểu 10 lbs · Phí pick-up tính riêng</p>
+        <p id="carrierPickupNote" style="font-size:12px;font-weight:700;margin-top:6px;display:none"></p>
       </div>
     </div>
   </div>
@@ -600,7 +599,7 @@
       <p><b>Giá trên là ước tính</b> — báo giá chính xác sau khi nhận hàng tại kho.</p>
       <p style="margin-top:6px"><b>Thuế hải quan</b> tính riêng theo loại hàng (xem phụ thu bên trên).</p>
       <p style="margin-top:6px"><b>Tối thiểu 10 lbs</b> cho tuyến Mỹ → Việt Nam.</p>
-      <p style="margin-top:6px"><b>Bay Thứ 3 &amp; Thứ 6</b> · 7–14 ngày từ khi hàng đến kho Houston TX.</p>
+      <p style="margin-top:6px"><b>Bay Thứ 3 &amp; Thứ 6</b> · 7–14 ngày từ khi hàng đến kho Cuckoo Cargo.</p>
       <p style="margin-top:6px"><b>Miễn phí bảo hiểm</b> chống mất thùng và khui hàng.</p>
       <p style="margin-top:6px"><b>Phí mua hộ</b>: 5% giá trị hàng.</p>
     </div>
@@ -677,6 +676,16 @@ function pickCarrier(c,el) {
   carrier=c;
   document.querySelectorAll('.carrier-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
+  const note=document.getElementById('carrierPickupNote');
+  if(c==='ups'){
+    note.style.display=''; note.style.color='#1a3065';
+    note.textContent='🚚 $9.65/pick-up';
+  } else if(c==='fedex'){
+    note.style.display=''; note.style.color='#166534';
+    note.textContent='✅ Miễn phí pick-up';
+  } else {
+    note.style.display='none';
+  }
   updateCarrierHint();
   calc();
 }
