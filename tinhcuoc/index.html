@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Tính Cước Gửi Hàng | Cuckoo Cargo</title>
-  <meta name="description" content="Tính ngay chi phí gửi hàng từ Mỹ về Việt Nam hoặc nội địa Mỹ. Giá từ $3.89/lbs, giao toàn quốc, không phát sinh."/>
+  <meta name="description" content="Tính ngay chi phí gửi hàng từ Mỹ về Việt Nam. Giá từ $3.89/lbs, giao toàn quốc."/>
   <link rel="icon" type="image/png" href="/assets/images/favicon-main.png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -22,16 +22,15 @@
     .nav{background:var(--white);border-bottom:1px solid var(--gray-border);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
     .nav-logo{font-weight:900;font-size:17px;letter-spacing:.5px;color:var(--black);text-decoration:none}
     .nav-logo span{color:var(--orange)}
-    .nav-cta{background:var(--orange);color:#fff;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:opacity .2s}
-    .nav-cta:hover{opacity:.88}
+    .nav-cta{background:var(--orange);color:#fff;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none}
 
     /* HERO */
     .hero-strip{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-deep) 100%);padding:28px 20px 32px;text-align:center}
     .hero-strip h1{font-size:clamp(20px,5vw,32px);font-weight:900;color:#fff;line-height:1.2;margin-bottom:8px}
     .hero-strip p{font-size:14px;color:rgba(255,255,255,.85)}
 
-    /* CARD */
-    .wrap{max-width:520px;margin:0 auto;padding:24px 16px 48px}
+    /* LAYOUT */
+    .wrap{max-width:540px;margin:0 auto;padding:24px 16px 56px}
     .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:16px}
     .card-head{padding:16px 20px;border-bottom:1px solid var(--gray-border);display:flex;align-items:center;gap:10px}
     .card-head .icon{width:34px;height:34px;border-radius:10px;background:var(--orange-bg);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
@@ -42,109 +41,152 @@
     /* FIELD */
     .field{margin-bottom:16px}
     .field:last-child{margin-bottom:0}
-    .field label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
-    .field select,.field input[type=number]{width:100%;padding:12px 14px;border:1.5px solid var(--gray-border);border-radius:10px;font-size:15px;font-family:inherit;color:var(--black);outline:none;transition:border .2s,box-shadow .2s;background:var(--white)}
-    .field select:focus,.field input[type=number]:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,67,10,.1)}
+    .field label,.field-label{display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+    .field select{width:100%;padding:12px 14px;border:1.5px solid var(--gray-border);border-radius:10px;font-size:15px;font-family:inherit;color:var(--black);outline:none;background:var(--white)}
+    .field select:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,67,10,.1)}
 
-    /* DIRECTION SELECTOR */
+    /* DIRECTION DROPDOWN */
     .dir-wrap{position:relative}
     .dir-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border:1.5px solid var(--gray-border);border-radius:40px;background:var(--white);cursor:pointer;font-family:inherit;font-size:15px;font-weight:700;color:var(--black);transition:border-color .2s}
-    .dir-btn:hover{border-color:var(--orange)}
-    .dir-btn.open{border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,67,10,.1)}
+    .dir-btn:hover,.dir-btn.open{border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,67,10,.1)}
     .dir-btn-left{display:flex;align-items:center;gap:10px}
-    .dir-flag{width:26px;height:26px;border-radius:50%;object-fit:cover;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--gray-light)}
-    .dir-chevron{color:var(--text-muted);transition:transform .2s;font-size:18px}
+    .dir-chevron{color:var(--text-muted);font-size:18px;transition:transform .2s;line-height:1}
     .dir-chevron.open{transform:rotate(180deg)}
     .dir-dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--white);border:1.5px solid var(--gray-border);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:100;overflow:hidden;display:none}
     .dir-dropdown.open{display:block}
-    .dir-option{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;font-size:14px;font-weight:600;color:var(--black);transition:background .15s}
+    .dir-option{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;font-size:14px;font-weight:600;color:var(--black);transition:background .15s}
     .dir-option:hover{background:var(--orange-bg)}
     .dir-option.selected{background:var(--orange-bg);color:var(--orange)}
-    .dir-option-sub{font-size:11px;color:var(--text-muted);font-weight:400;margin-top:1px}
+    .dir-option-sub{font-size:11px;color:var(--text-muted);font-weight:400;margin-top:2px}
+
+    /* PICKUP METHOD */
+    .method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .method-btn{border:1.5px solid var(--gray-border);border-radius:12px;background:var(--white);padding:12px 8px;text-align:center;cursor:pointer;font-family:inherit;transition:all .15s}
+    .method-btn:hover{border-color:var(--orange)}
+    .method-btn.active{border-color:var(--orange);background:var(--orange-bg)}
+    .method-btn .m-icon{font-size:22px;margin-bottom:5px}
+    .method-btn .m-title{font-size:12px;font-weight:700;color:var(--black);line-height:1.3}
+    .method-btn .m-sub{font-size:10px;color:var(--text-muted);margin-top:2px}
+    .method-btn.active .m-title{color:var(--orange)}
+
+    /* CARRIER */
+    .carrier-wrap{margin-top:12px;display:none}
+    .carrier-wrap.show{display:block}
+    .carrier-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .carrier-btn{border:2px solid var(--gray-border);border-radius:12px;background:var(--white);padding:14px 12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:10px;transition:all .15s;position:relative}
+    .carrier-btn:hover{border-color:var(--orange)}
+    .carrier-btn.active{border-color:var(--orange);background:var(--orange-bg)}
+    .carrier-ups{background:#1a3065}
+    .carrier-ups.active,.carrier-ups:hover{background:#1a3065;border-color:#1a3065;box-shadow:0 0 0 3px rgba(26,48,101,.2)}
+    .ups-logo{display:flex;align-items:center;gap:8px}
+    .ups-shield{width:28px;height:28px;background:#c8a826;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#1a3065;flex-shrink:0}
+    .ups-text{font-size:17px;font-weight:900;color:#fff;letter-spacing:1px}
+    .fedex-logo{display:flex;align-items:center;gap:2px;font-size:17px;font-weight:900}
+    .fedex-fed{color:#4d148c}
+    .fedex-ex{color:var(--orange)}
+    .carrier-price{font-size:11px;font-weight:700;position:absolute;top:8px;right:10px;color:var(--text-muted)}
+    .carrier-ups .carrier-price{color:rgba(255,255,255,.7)}
+    .carrier-ups.active .carrier-price{color:rgba(255,255,255,.85)}
 
     /* TABS */
     .tab-group{display:flex;gap:6px}
     .tab{flex:1;padding:9px;border:1.5px solid var(--gray-border);border-radius:8px;background:var(--white);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;color:#374151;text-align:center;font-family:inherit}
     .tab.active{background:var(--orange-bg);border-color:var(--orange);color:var(--orange)}
-
-    /* PROVINCE SELECT */
     .province-wrap{margin-top:12px;display:none}
     .province-wrap.show{display:block}
+    .province-wrap select{width:100%;padding:12px 14px;border:1.5px solid var(--gray-border);border-radius:10px;font-size:15px;font-family:inherit;color:var(--black);outline:none;background:var(--white)}
 
     /* PACKAGE TABLE */
-    .pkg-table{width:100%;border-collapse:collapse;margin-bottom:4px}
-    .pkg-table th{background:var(--gray-light);padding:8px 10px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px}
-    .pkg-table th:first-child{width:40px;text-align:center}
-    .pkg-table th:last-child{width:44px}
+    .pkg-table{width:100%;border-collapse:collapse}
+    .pkg-table th{background:var(--gray-light);padding:8px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}
+    .pkg-table th:first-child{width:42px;text-align:center}
+    .pkg-table th:last-child{width:44px;text-align:center}
     .pkg-row td{padding:6px 6px;border-bottom:1px solid var(--gray-border);vertical-align:middle}
     .pkg-row:last-child td{border-bottom:none}
     .pkg-num{width:32px;height:32px;border-radius:8px;background:var(--orange);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto}
-    .pkg-input{width:100%;padding:9px 10px;border:1.5px solid var(--gray-border);border-radius:8px;font-size:14px;font-family:inherit;color:var(--black);outline:none;transition:border .15s;background:var(--white);-moz-appearance:textfield}
+    .pkg-input{width:100%;padding:9px 10px;border:1.5px solid var(--gray-border);border-radius:8px;font-size:14px;font-family:inherit;color:var(--black);outline:none;background:var(--white);-moz-appearance:textfield}
     .pkg-input::-webkit-outer-spin-button,.pkg-input::-webkit-inner-spin-button{-webkit-appearance:none}
     .pkg-input:focus{border-color:var(--orange);box-shadow:0 0 0 2px rgba(245,67,10,.1)}
-    .pkg-val-wrap{position:relative}
-    .pkg-val-wrap .pkg-dollar{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:700;color:var(--text-muted)}
-    .pkg-val-wrap .pkg-input{padding-left:22px}
-    .pkg-trash{background:#FFF1EC;border:1.5px solid #FECDC3;color:var(--orange);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:background .15s;padding:0;margin:0 auto}
+    .pkg-dollar-wrap{position:relative}
+    .pkg-dollar-wrap .sym{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:700;color:var(--text-muted)}
+    .pkg-dollar-wrap .pkg-input{padding-left:20px}
+    .pkg-trash{background:#FFF1EC;border:1.5px solid #FECDC3;color:var(--orange);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:background .15s;margin:0 auto}
     .pkg-trash:hover{background:#FECDC3}
     .pkg-trash:disabled{opacity:.3;cursor:default}
     .btn-add-pkg{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;border:1.5px dashed var(--gray-border);border-radius:10px;background:transparent;font-size:13px;font-weight:700;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all .15s;margin-top:8px}
     .btn-add-pkg:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-bg)}
+    .total-badge{display:flex;align-items:center;justify-content:space-between;background:var(--gray-light);border:1px solid var(--gray-border);border-radius:10px;padding:10px 14px;margin-top:12px}
+    .total-badge .lbl{font-size:13px;font-weight:600;color:var(--text-muted)}
+    .total-badge .val{font-size:15px;font-weight:800;color:var(--black)}
 
-    /* TOTAL WEIGHT BADGE */
-    .total-weight-badge{display:flex;align-items:center;justify-content:space-between;background:var(--gray-light);border:1px solid var(--gray-border);border-radius:10px;padding:10px 14px;margin-top:12px;font-size:13px}
-    .total-weight-badge .label{font-weight:600;color:var(--text-muted)}
-    .total-weight-badge .val{font-weight:800;color:var(--black);font-size:15px}
+    /* SURCHARGES */
+    .surcharge-list{display:flex;flex-direction:column;gap:8px}
+    .sc-item{border:1.5px solid var(--gray-border);border-radius:10px;overflow:hidden;transition:border-color .15s}
+    .sc-item.active{border-color:var(--orange);background:var(--orange-bg)}
+    .sc-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none}
+    .sc-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--gray-border);background:var(--white);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+    .sc-item.active .sc-check{background:var(--orange);border-color:var(--orange)}
+    .sc-check-mark{color:#fff;font-size:13px;font-weight:900;display:none}
+    .sc-item.active .sc-check-mark{display:block}
+    .sc-info{flex:1}
+    .sc-name{font-size:13px;font-weight:700;color:var(--black)}
+    .sc-price{font-size:11px;color:var(--text-muted);margin-top:1px}
+    .sc-item.active .sc-name{color:var(--orange)}
+    .sc-qty-wrap{padding:0 14px 11px;display:none}
+    .sc-item.active .sc-qty-wrap{display:block}
+    .sc-qty-inner{display:flex;align-items:center;gap:10px}
+    .sc-qty-label{font-size:12px;font-weight:600;color:var(--text-muted);white-space:nowrap}
+    .sc-qty-controls{display:flex;align-items:center;gap:6px}
+    .sc-qty-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--gray-border);background:var(--white);font-size:17px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--black);transition:all .15s;line-height:1}
+    .sc-qty-btn:hover{border-color:var(--orange);color:var(--orange)}
+    .sc-qty-val{min-width:32px;text-align:center;font-size:15px;font-weight:800;color:var(--black)}
+    .sc-sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+    .sc-sub-opt{border:1.5px solid var(--gray-border);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:12px;font-weight:700;color:var(--black);text-align:center;transition:all .15s;background:var(--white)}
+    .sc-sub-opt.selected{border-color:var(--orange);background:var(--orange-bg);color:var(--orange)}
 
-    /* RESULT BOX */
+    /* RESULT */
     .result-box{background:linear-gradient(135deg,var(--orange-bg) 0%,#fff 100%);border:2px solid var(--orange);border-radius:var(--radius);padding:22px 20px;margin-bottom:16px;text-align:center}
     .result-label{font-size:12px;font-weight:700;color:var(--orange);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
-    .result-price{font-size:clamp(40px,10vw,60px);font-weight:900;color:var(--black);line-height:1;letter-spacing:-1px}
-    .result-price sup{font-size:24px;vertical-align:super;letter-spacing:0}
+    .result-price{font-size:clamp(36px,10vw,58px);font-weight:900;color:var(--black);line-height:1;letter-spacing:-1px}
+    .result-price sup{font-size:22px;vertical-align:super}
     .result-note{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.6}
-    .result-empty{font-size:15px;color:var(--text-muted);padding:16px 0}
-    .breakdown{margin-top:14px;border-top:1px solid var(--gray-border);padding-top:14px;display:none}
-    .breakdown.show{display:block}
-    .breakdown-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:4px 0}
-    .breakdown-row .k{color:var(--text-muted)}
-    .breakdown-row .v{font-weight:700;color:var(--black)}
-    .breakdown-row.total{border-top:1px dashed var(--gray-border);margin-top:6px;padding-top:10px;font-size:15px}
-    .breakdown-row.total .k{font-weight:700;color:var(--black)}
-    .breakdown-row.total .v{color:var(--orange);font-size:18px}
-    .min-tag{display:inline-block;background:#fff3cd;color:#856404;border:1px solid #ffc107;border-radius:20px;font-size:10px;font-weight:700;padding:2px 8px;margin-left:6px;vertical-align:middle}
+    .breakdown{margin-top:14px;border-top:1px solid var(--gray-border);padding-top:14px}
+    .br-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:3px 0}
+    .br-row .k{color:var(--text-muted)}
+    .br-row .v{font-weight:700;color:var(--black)}
+    .br-row.total{border-top:1px dashed var(--gray-border);margin-top:6px;padding-top:10px}
+    .br-row.total .k{font-weight:700;color:var(--black);font-size:15px}
+    .br-row.total .v{color:var(--orange);font-size:18px}
 
     /* CTA */
-    .btn-cta{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-deep) 100%);color:#fff;font-size:16px;font-weight:800;border:none;border-radius:12px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(245,67,10,.3)}
-    .btn-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,67,10,.4)}
-    .btn-secondary{display:block;width:100%;padding:13px;background:var(--white);color:var(--black);font-size:14px;font-weight:700;border:1.5px solid var(--gray-border);border-radius:12px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;margin-top:10px;transition:border-color .2s}
+    .btn-cta{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-deep) 100%);color:#fff;font-size:16px;font-weight:800;border:none;border-radius:12px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;box-shadow:0 4px 16px rgba(245,67,10,.3);transition:transform .2s}
+    .btn-cta:hover{transform:translateY(-2px)}
+    .btn-secondary{display:block;width:100%;padding:13px;background:var(--white);color:var(--black);font-size:14px;font-weight:700;border:1.5px solid var(--gray-border);border-radius:12px;text-decoration:none;text-align:center;margin-top:10px;transition:border-color .2s}
     .btn-secondary:hover{border-color:var(--orange);color:var(--orange)}
 
     /* RATE TABLE */
     .rate-table{width:100%;border-collapse:collapse;font-size:13px}
-    .rate-table th{background:var(--gray-light);padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px}
+    .rate-table th{background:var(--gray-light);padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}
     .rate-table td{padding:9px 12px;border-bottom:1px solid var(--gray-border)}
     .rate-table tr:last-child td{border-bottom:none}
-    .rate-table tr.highlight td{background:var(--orange-bg);font-weight:700;color:var(--orange)}
+    .rate-table tr.hl td{background:var(--orange-bg);font-weight:700;color:var(--orange)}
     .rate-table .price{font-weight:800;color:var(--black)}
+    .min-tag{display:inline-block;background:#fff3cd;color:#856404;border:1px solid #ffc107;border-radius:20px;font-size:10px;font-weight:700;padding:2px 7px;margin-left:5px;vertical-align:middle}
 
     /* PILLS */
     .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
     .pill{display:inline-flex;align-items:center;gap:5px;background:var(--gray-light);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:#374151}
 
-    /* FOOTER */
-    .page-footer{text-align:center;font-size:12px;color:var(--text-muted);padding:16px;line-height:1.8}
+    .page-footer{text-align:center;font-size:12px;color:var(--text-muted);padding:20px;line-height:1.8}
     .page-footer a{color:var(--orange);text-decoration:none}
-
-    /* DOMESTIC PLACEHOLDER */
-    .domestic-msg{background:var(--gray-light);border:1px solid var(--gray-border);border-radius:12px;padding:24px 20px;text-align:center;color:var(--text-muted);font-size:14px;line-height:1.7;display:none}
-    .domestic-msg b{color:var(--black)}
+    .hidden{display:none!important}
   </style>
 </head>
 <body>
 
 <nav class="nav">
   <a class="nav-logo" href="/">🐦 CUCKOO <span>CARGO</span></a>
-  <a class="nav-cta" href="/gui-hang-my-ve-viet.html">Đặt đơn ngay →</a>
+  <a class="nav-cta" href="/gui-hang-my-ve-viet.html">Đặt đơn →</a>
 </nav>
 
 <div class="hero-strip">
@@ -154,194 +196,387 @@
 
 <div class="wrap">
 
-  <!-- INPUT CARD -->
+  <!-- CARD 1: Chiều vận chuyển -->
   <div class="card">
     <div class="card-head">
-      <div class="icon">📦</div>
-      <div><h2>Nhập thông tin kiện hàng</h2><p>Kết quả hiển thị ngay tức thì</p></div>
+      <div class="icon">🗺️</div>
+      <div><h2>Chiều vận chuyển</h2><p>Chọn tuyến dịch vụ</p></div>
     </div>
     <div class="card-body">
+      <div class="dir-wrap">
+        <button class="dir-btn" id="dirBtn" onclick="toggleDir(event)" type="button">
+          <div class="dir-btn-left">
+            <span id="dirIcon" style="font-size:20px">🇺🇸</span>
+            <span id="dirLabel">Mỹ → Việt Nam</span>
+          </div>
+          <span class="dir-chevron" id="dirChev">⌄</span>
+        </button>
+        <div class="dir-dropdown" id="dirDD">
+          <div class="dir-option selected" onclick="pickDir('usvn',this)">
+            <span style="font-size:20px">🇺🇸→🇻🇳</span>
+            <div><div>Mỹ → Việt Nam</div><div class="dir-option-sub">Từ $3.89/lbs · Tối thiểu 10 lbs</div></div>
+          </div>
+          <div class="dir-option" onclick="pickDir('domestic',this)">
+            <span style="font-size:20px">🇺🇸</span>
+            <div><div>Nội địa Mỹ</div><div class="dir-option-sub">Liên hệ để được báo giá</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <!-- DIRECTION SELECTOR -->
-      <div class="field">
-        <label>Chiều vận chuyển</label>
-        <div class="dir-wrap">
-          <button class="dir-btn" id="dirBtn" onclick="toggleDirDropdown(event)" type="button">
-            <div class="dir-btn-left">
-              <div class="dir-flag" id="dirFlagIcon">🇺🇸</div>
-              <span id="dirLabel">Mỹ → Việt Nam</span>
+  <!-- CARD 2: Lấy hàng (chỉ US→VN) -->
+  <div class="card" id="pickupCard">
+    <div class="card-head">
+      <div class="icon">🚐</div>
+      <div><h2>Dịch vụ lấy hàng</h2><p>Khắp nước Mỹ</p></div>
+    </div>
+    <div class="card-body">
+      <div class="method-grid">
+        <button class="method-btn" id="m-pickup" onclick="setMethod('pickup',this)" type="button">
+          <div class="m-icon">🏠</div>
+          <div class="m-title">Pick-up</div>
+          <div class="m-sub">Lấy tận nhà</div>
+        </button>
+        <button class="method-btn" id="m-dropoff" onclick="setMethod('dropoff',this)" type="button">
+          <div class="m-icon">📮</div>
+          <div class="m-title">Drop-off</div>
+          <div class="m-sub">Tự đem ra bưu cục</div>
+        </button>
+        <button class="method-btn active" id="m-self" onclick="setMethod('self',this)" type="button">
+          <div class="m-icon">📦</div>
+          <div class="m-title">Tự gửi</div>
+          <div class="m-sub">Gửi thẳng về kho</div>
+        </button>
+      </div>
+
+      <!-- Carrier selection -->
+      <div class="carrier-wrap" id="carrierWrap">
+        <div class="field-label" style="margin-top:14px;margin-bottom:10px">Chọn hãng vận chuyển</div>
+        <div class="carrier-grid">
+          <button class="carrier-btn carrier-ups" id="c-ups" onclick="pickCarrier('ups',this)" type="button">
+            <div class="ups-logo">
+              <div class="ups-shield">UPS</div>
+              <span class="ups-text">UPS</span>
             </div>
-            <span class="dir-chevron" id="dirChevron">⌄</span>
+            <span class="carrier-price">$1.99/lbs</span>
           </button>
-          <div class="dir-dropdown" id="dirDropdown">
-            <div class="dir-option selected" onclick="selectDir('usvn', this)">
-              <div class="dir-flag">🇺🇸→🇻🇳</div>
-              <div>
-                <div>Mỹ → Việt Nam</div>
-                <div class="dir-option-sub">Từ $3.89/lbs · Tối thiểu 10 lbs</div>
-              </div>
+          <button class="carrier-btn" id="c-fedex" onclick="pickCarrier('fedex',this)" type="button">
+            <div class="fedex-logo">
+              <span class="fedex-fed">Fed</span><span class="fedex-ex">Ex</span>
             </div>
-            <div class="dir-option" onclick="selectDir('domestic', this)">
-              <div class="dir-flag">🇺🇸</div>
-              <div>
-                <div>Nội địa Mỹ</div>
-                <div class="dir-option-sub">UPS / FedEx · Theo zone</div>
+            <span class="carrier-price">$2.99/lbs</span>
+          </button>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:8px">
+          UPS: Hỗ trợ $9.65/lần pick-up · FedEx: Miễn phí pick-up · Tối thiểu 10 lbs
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: Kiện hàng -->
+  <div class="card" id="pkgCard">
+    <div class="card-head">
+      <div class="icon">⚖️</div>
+      <div><h2>Kiện hàng</h2><p>Cân nặng & giá trị từng kiện · 1 kg = 2.2 lbs</p></div>
+    </div>
+    <div class="card-body">
+      <table class="pkg-table">
+        <thead>
+          <tr>
+            <th style="text-align:center">Package</th>
+            <th>Cân nặng (lbs) *</th>
+            <th>Giá trị ($)</th>
+            <th style="text-align:center"></th>
+          </tr>
+        </thead>
+        <tbody id="pkgBody"></tbody>
+      </table>
+      <p style="font-size:11px;color:var(--text-muted);margin-top:8px">Nhân viên sẽ cân lại chính xác tại kho. Nếu sai lệch, phí tính theo cân thực tế.</p>
+      <button class="btn-add-pkg" onclick="addPkg()" type="button">
+        <span style="font-size:18px">+</span> Thêm kiện hàng
+      </button>
+      <div class="total-badge" id="totalBadge" style="display:none">
+        <span class="lbl">Tổng cân nặng</span>
+        <span class="val" id="totalLbs">0 lbs</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 4: Giao đến (VN) -->
+  <div class="card" id="delivCard">
+    <div class="card-head">
+      <div class="icon">📍</div>
+      <div><h2>Giao hàng đến</h2><p>Trong nước Việt Nam</p></div>
+    </div>
+    <div class="card-body">
+      <div class="tab-group">
+        <button class="tab active" onclick="setDeliv('sghn',this)" type="button">🏙️ Hồ Chí Minh / Hà Nội</button>
+        <button class="tab" onclick="setDeliv('province',this)" type="button">🗺️ Tỉnh khác</button>
+      </div>
+      <div class="province-wrap" id="provWrap">
+        <div class="field-label" style="margin-top:12px">Chọn tỉnh / thành phố</div>
+        <select id="provSel" onchange="calc()">
+          <option value="">-- Chọn tỉnh thành --</option>
+          <option>An Giang</option><option>Bắc Ninh</option><option>Cao Bằng</option>
+          <option>Cà Mau</option><option>Cần Thơ</option><option>Điện Biên</option>
+          <option>Đà Nẵng</option><option>Đắk Lắk</option><option>Đồng Nai</option>
+          <option>Đồng Tháp</option><option>Gia Lai</option><option>Hà Nội</option>
+          <option>Hà Tĩnh</option><option>Hải Phòng</option><option>Hồ Chí Minh</option>
+          <option>Huế</option><option>Hưng Yên</option><option>Khánh Hòa</option>
+          <option>Lai Châu</option><option>Lào Cai</option><option>Lâm Đồng</option>
+          <option>Lạng Sơn</option><option>Nghệ An</option><option>Ninh Bình</option>
+          <option>Phú Thọ</option><option>Quảng Ngãi</option><option>Quảng Ninh</option>
+          <option>Quảng Trị</option><option>Sơn La</option><option>Tây Ninh</option>
+          <option>Thanh Hóa</option><option>Thái Nguyên</option><option>Tuyên Quang</option>
+          <option>Vĩnh Long</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 5: Phụ thu hải quan -->
+  <div class="card" id="surCard">
+    <div class="card-head">
+      <div class="icon">🛃</div>
+      <div><h2>Phụ thu hải quan</h2><p>Click chọn mặt hàng — nhập số lượng</p></div>
+    </div>
+    <div class="card-body">
+      <div class="surcharge-list" id="scList">
+
+        <!-- Rượu -->
+        <div class="sc-item" id="sc-ruou" onclick="toggleSC('ruou',event)">
+          <div class="sc-header">
+            <div class="sc-check"><span class="sc-check-mark">✓</span></div>
+            <div class="sc-info">
+              <div class="sc-name">🍷 Rượu (Wine / Spirits)</div>
+              <div class="sc-price">$14.00 / chai</div>
+            </div>
+          </div>
+          <div class="sc-qty-wrap">
+            <div class="sc-qty-inner">
+              <span class="sc-qty-label">Số chai:</span>
+              <div class="sc-qty-controls">
+                <button class="sc-qty-btn" onclick="adjQty('ruou',-1,event)" type="button">−</button>
+                <span class="sc-qty-val" id="qty-ruou">1</span>
+                <button class="sc-qty-btn" onclick="adjQty('ruou',1,event)" type="button">+</button>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- PACKAGES -->
-      <div class="field" id="pkgSection">
-        <label>Kiện hàng <span style="color:var(--orange)">*</span> <span style="font-weight:400;color:var(--text-muted);text-transform:none;font-size:11px">— Cân nặng &amp; giá trị từng kiện (1 kg = 2.2 lbs)</span></label>
-        <table class="pkg-table">
-          <thead>
-            <tr>
-              <th>Package</th>
-              <th>Cân nặng (lbs) *</th>
-              <th>Giá trị ($)</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="pkgBody"></tbody>
-        </table>
-        <p style="font-size:11px;color:var(--text-muted);margin-top:6px">Nhân viên sẽ cân lại chính xác tại kho. Nếu sai lệch, phí tính theo cân thực tế.</p>
-        <button class="btn-add-pkg" onclick="addPackage()" type="button">
-          <span style="font-size:18px">+</span> Thêm kiện hàng
-        </button>
-
-        <!-- TOTAL WEIGHT BADGE -->
-        <div class="total-weight-badge" id="totalBadge" style="display:none">
-          <span class="label">Tổng cân nặng</span>
-          <span class="val" id="totalWeightVal">0 lbs</span>
+        <!-- Cigar -->
+        <div class="sc-item" id="sc-cigar" onclick="toggleSC('cigar',event)">
+          <div class="sc-header">
+            <div class="sc-check"><span class="sc-check-mark">✓</span></div>
+            <div class="sc-info">
+              <div class="sc-name">🚬 Cigar</div>
+              <div class="sc-price">$20.00 / hộp</div>
+            </div>
+          </div>
+          <div class="sc-qty-wrap">
+            <div class="sc-qty-inner">
+              <span class="sc-qty-label">Số hộp:</span>
+              <div class="sc-qty-controls">
+                <button class="sc-qty-btn" onclick="adjQty('cigar',-1,event)" type="button">−</button>
+                <span class="sc-qty-val" id="qty-cigar">1</span>
+                <button class="sc-qty-btn" onclick="adjQty('cigar',1,event)" type="button">+</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- DOMESTIC PLACEHOLDER -->
-      <div class="domestic-msg" id="domesticMsg">
-        <b>🇺🇸 Nội địa Mỹ</b><br/>
-        Dịch vụ giao hàng nội địa Mỹ (UPS / FedEx / USPS).<br/>
-        Vui lòng liên hệ để được báo giá chính xác theo zone &amp; trọng lượng.
-        <br/><br/>
-        <a href="https://zalo.me/0000000000" style="color:var(--orange);font-weight:700;text-decoration:none">💬 Liên hệ báo giá qua Zalo →</a>
-      </div>
-
-      <!-- DELIVERY MODE (only for US→VN) -->
-      <div class="field" id="deliverySection">
-        <label>Giao hàng đến</label>
-        <div class="tab-group">
-          <button class="tab active" onclick="setDelivery('sghn', this)" type="button">🏙️ Hồ Chí Minh / Hà Nội</button>
-          <button class="tab" onclick="setDelivery('province', this)" type="button">🗺️ Tỉnh khác</button>
+        <!-- Nước hoa -->
+        <div class="sc-item" id="sc-perfume" onclick="toggleSC('perfume',event)">
+          <div class="sc-header">
+            <div class="sc-check"><span class="sc-check-mark">✓</span></div>
+            <div class="sc-info">
+              <div class="sc-name">🌸 Nước hoa (Perfume)</div>
+              <div class="sc-price">$7.00 / chai</div>
+            </div>
+          </div>
+          <div class="sc-qty-wrap">
+            <div class="sc-qty-inner">
+              <span class="sc-qty-label">Số chai:</span>
+              <div class="sc-qty-controls">
+                <button class="sc-qty-btn" onclick="adjQty('perfume',-1,event)" type="button">−</button>
+                <span class="sc-qty-val" id="qty-perfume">1</span>
+                <button class="sc-qty-btn" onclick="adjQty('perfume',1,event)" type="button">+</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="province-wrap" id="provinceWrap">
-          <label style="display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;margin-top:12px">Chọn tỉnh / thành phố</label>
-          <select id="provinceSelect" onchange="calc()" style="width:100%;padding:12px 14px;border:1.5px solid var(--gray-border);border-radius:10px;font-size:15px;font-family:inherit;color:var(--black);outline:none;background:var(--white)">
-            <option value="">-- Chọn tỉnh thành --</option>
-            <option>An Giang</option>
-            <option>Bắc Ninh</option>
-            <option>Cao Bằng</option>
-            <option>Cà Mau</option>
-            <option>Cần Thơ</option>
-            <option>Điện Biên</option>
-            <option>Đà Nẵng</option>
-            <option>Đắk Lắk</option>
-            <option>Đồng Nai</option>
-            <option>Đồng Tháp</option>
-            <option>Gia Lai</option>
-            <option>Hà Nội</option>
-            <option>Hà Tĩnh</option>
-            <option>Hải Phòng</option>
-            <option>Hồ Chí Minh</option>
-            <option>Huế</option>
-            <option>Hưng Yên</option>
-            <option>Khánh Hòa</option>
-            <option>Lai Châu</option>
-            <option>Lào Cai</option>
-            <option>Lâm Đồng</option>
-            <option>Lạng Sơn</option>
-            <option>Nghệ An</option>
-            <option>Ninh Bình</option>
-            <option>Phú Thọ</option>
-            <option>Quảng Ngãi</option>
-            <option>Quảng Ninh</option>
-            <option>Quảng Trị</option>
-            <option>Sơn La</option>
-            <option>Tây Ninh</option>
-            <option>Thanh Hóa</option>
-            <option>Thái Nguyên</option>
-            <option>Tuyên Quang</option>
-            <option>Vĩnh Long</option>
-          </select>
-        </div>
-      </div>
 
-      <!-- PACKING (US→VN only) -->
-      <div class="field" id="packSection">
-        <label>Đóng gói</label>
+        <!-- Vitamin / Mỹ phẩm -->
+        <div class="sc-item" id="sc-vitamin" onclick="toggleSC('vitamin',event)">
+          <div class="sc-header">
+            <div class="sc-check"><span class="sc-check-mark">✓</span></div>
+            <div class="sc-info">
+              <div class="sc-name">💊 Vitamin / Mỹ phẩm (>50% kiện)</div>
+              <div class="sc-price">+$0.99 / lbs (tính theo tổng cân)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Điện thoại / Tablet / MacBook -->
+        <div class="sc-item" id="sc-phone" onclick="toggleSC('phone',event)">
+          <div class="sc-header">
+            <div class="sc-check"><span class="sc-check-mark">✓</span></div>
+            <div class="sc-info">
+              <div class="sc-name">📱 Điện thoại / Tablet / iPhone / MacBook</div>
+              <div class="sc-price">Thế hệ mới: $90/cái · Thế hệ cũ: $60/cái + 20% thuế</div>
+            </div>
+          </div>
+          <div class="sc-qty-wrap">
+            <div class="sc-sub-grid">
+              <div class="sc-sub-opt selected" id="phone-new" onclick="pickPhoneGen('new',event)">
+                🆕 Thế hệ mới<br/><span style="font-size:11px;font-weight:400">$90/cái</span>
+              </div>
+              <div class="sc-sub-opt" id="phone-old" onclick="pickPhoneGen('old',event)">
+                📦 Thế hệ cũ<br/><span style="font-size:11px;font-weight:400">$60/cái + 20% thuế</span>
+              </div>
+            </div>
+            <div class="sc-qty-inner" style="margin-top:10px">
+              <span class="sc-qty-label">Số cái:</span>
+              <div class="sc-qty-controls">
+                <button class="sc-qty-btn" onclick="adjQty('phone',-1,event)" type="button">−</button>
+                <span class="sc-qty-val" id="qty-phone">1</span>
+                <button class="sc-qty-btn" onclick="adjQty('phone',1,event)" type="button">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tai nghe / AirPod / Apple Watch -->
+        <div class="sc-item" id="sc-earphone" onclick="toggleSC('earphone',event)">
+          <div class="sc-header">
+            <div class="sc-check"><span class="sc-check-mark">✓</span></div>
+            <div class="sc-info">
+              <div class="sc-name">🎧 Tai nghe / AirPod / Apple Watch</div>
+              <div class="sc-price">$12.00 / cái</div>
+            </div>
+          </div>
+          <div class="sc-qty-wrap">
+            <div class="sc-qty-inner">
+              <span class="sc-qty-label">Số cái:</span>
+              <div class="sc-qty-controls">
+                <button class="sc-qty-btn" onclick="adjQty('earphone',-1,event)" type="button">−</button>
+                <span class="sc-qty-val" id="qty-earphone">1</span>
+                <button class="sc-qty-btn" onclick="adjQty('earphone',1,event)" type="button">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Electronics khác -->
+        <div class="sc-item" id="sc-elec" onclick="toggleSC('elec',event)">
+          <div class="sc-header">
+            <div class="sc-check"><span class="sc-check-mark">✓</span></div>
+            <div class="sc-info">
+              <div class="sc-name">🔌 Điện tử khác (không liệt kê ở trên)</div>
+              <div class="sc-price">10% giá trị hàng</div>
+            </div>
+          </div>
+          <div class="sc-qty-wrap">
+            <div class="sc-qty-inner">
+              <span class="sc-qty-label">Giá trị ($):</span>
+              <input type="number" class="pkg-input" id="elec-val" placeholder="0" min="0"
+                oninput="calc()" onclick="event.stopPropagation()"
+                style="max-width:120px;padding:7px 10px"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vacxin / Máy y tế / Xe máy -->
+        <div class="sc-item" id="sc-medical" onclick="toggleSC('medical',event)">
+          <div class="sc-header">
+            <div class="sc-check"><span class="sc-check-mark">✓</span></div>
+            <div class="sc-info">
+              <div class="sc-name">💉 Vacxin / Máy y tế / Xe máy</div>
+              <div class="sc-price">+20% thuế theo giá trị khai báo</div>
+            </div>
+          </div>
+          <div class="sc-qty-wrap">
+            <div class="sc-qty-inner">
+              <span class="sc-qty-label">Giá trị ($):</span>
+              <input type="number" class="pkg-input" id="medical-val" placeholder="0" min="0"
+                oninput="calc()" onclick="event.stopPropagation()"
+                style="max-width:120px;padding:7px 10px"/>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 6: Đóng gói -->
+  <div class="card" id="packCard">
+    <div class="card-head">
+      <div class="icon">📫</div>
+      <div><h2>Đóng gói</h2><p>Tùy chọn bảo vệ hàng hóa</p></div>
+    </div>
+    <div class="card-body">
+      <div class="field" style="margin-bottom:0">
         <select id="packSelect" onchange="calc()">
           <option value="0">📦 Miễn phí — Cơ bản</option>
           <option value="0.39">📦 Tiêu chuẩn — +$0.39/lbs</option>
           <option value="0.69">📦 Nâng cao — +$0.69/lbs</option>
         </select>
       </div>
-
     </div>
   </div>
 
   <!-- RESULT -->
   <div class="result-box" id="resultBox" style="display:none">
     <div class="result-label">Dự tính chi phí</div>
-    <div class="result-empty" id="resultEmpty" style="display:none">← Nhập số lbs để xem giá</div>
     <div id="resultPrice">
       <div class="result-price"><sup>$</sup><span id="priceVal">0</span></div>
       <div class="result-note" id="resultNote"></div>
     </div>
-    <div class="breakdown" id="breakdown">
-      <div class="breakdown-row"><span class="k" id="bk-weight-label">Cước vận chuyển</span><span class="v" id="bk-shipping">–</span></div>
-      <div class="breakdown-row" id="bk-delivery-row" style="display:none"><span class="k">Phí giao tỉnh</span><span class="v" id="bk-delivery">–</span></div>
-      <div class="breakdown-row" id="bk-pack-row" style="display:none"><span class="k">Phí đóng gói</span><span class="v" id="bk-pack">–</span></div>
-      <div class="breakdown-row total"><span class="k">Tổng ước tính</span><span class="v" id="bk-total">–</span></div>
-    </div>
+    <div class="breakdown" id="breakdown"></div>
   </div>
 
-  <!-- CTA -->
   <a href="/gui-hang-my-ve-viet.html" class="btn-cta" id="ctaBtn" style="display:none">📦 Đặt đơn gửi hàng ngay →</a>
   <a href="https://zalo.me/0000000000" class="btn-secondary" id="ctaZalo" style="display:none">💬 Hỏi báo giá qua Zalo</a>
+
+  <!-- Domestic placeholder -->
+  <div id="domesticMsg" style="display:none;background:var(--gray-light);border:1px solid var(--gray-border);border-radius:12px;padding:28px 20px;text-align:center;color:var(--text-muted);font-size:14px;line-height:1.8">
+    <b style="color:var(--black)">🇺🇸 Nội địa Mỹ</b><br/>
+    Dịch vụ giao hàng nội địa Mỹ qua UPS / FedEx / USPS.<br/>
+    Liên hệ để được báo giá chính xác theo zone &amp; trọng lượng.<br/><br/>
+    <a href="https://zalo.me/0000000000" style="color:var(--orange);font-weight:700;text-decoration:none">💬 Liên hệ qua Zalo →</a>
+  </div>
 
   <!-- RATE TABLE -->
   <div class="card" id="rateCard" style="margin-top:8px">
     <div class="card-head">
       <div class="icon">📊</div>
-      <div><h2>Bảng cước tham khảo</h2><p>Tối thiểu tính 10 lbs · Chưa bao gồm thuế hải quan</p></div>
+      <div><h2>Bảng cước tham khảo</h2><p>Mỹ → Việt Nam · Tối thiểu 10 lbs</p></div>
     </div>
     <div class="card-body" style="padding:0">
       <table class="rate-table">
-        <thead>
-          <tr><th>Cân nặng (lbs)</th><th>Giá/lbs</th><th>Ví dụ</th></tr>
-        </thead>
+        <thead><tr><th>Cân nặng (lbs)</th><th>Giá/lbs</th><th>Ví dụ</th></tr></thead>
         <tbody>
-          <tr id="tier-1"><td>1 – 10 lbs <span class="min-tag">Min 10 lbs</span></td><td class="price">$3.89</td><td>10 lbs → $38.90</td></tr>
-          <tr id="tier-2"><td>10 – 50 lbs</td><td class="price">$3.89</td><td>30 lbs → $116.70</td></tr>
-          <tr id="tier-3"><td>50 – 90 lbs</td><td class="price">$3.79</td><td>70 lbs → $265.30</td></tr>
-          <tr id="tier-4"><td>90 – 150 lbs</td><td class="price">$3.65</td><td>120 lbs → $438.00</td></tr>
-          <tr id="tier-5"><td>150+ lbs</td><td class="price">$3.55</td><td>200 lbs → $710.00</td></tr>
+          <tr id="t1"><td>&lt; 10 lbs <span class="min-tag">Min 10 lbs</span></td><td class="price">$3.89</td><td>10 lbs → $38.90</td></tr>
+          <tr id="t2"><td>10 – 50 lbs</td><td class="price">$3.89</td><td>30 lbs → $116.70</td></tr>
+          <tr id="t3"><td>50.1 – 90 lbs</td><td class="price">$3.79</td><td>70 lbs → $265.30</td></tr>
+          <tr id="t4"><td>90.1 – 150 lbs</td><td class="price">$3.65</td><td>120 lbs → $438.00</td></tr>
+          <tr id="t5"><td>&gt; 150 lbs</td><td class="price">$3.55</td><td>200 lbs → $710.00</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- NOTES -->
   <div class="card">
-    <div class="card-head">
-      <div class="icon">ℹ️</div>
-      <div><h2>Lưu ý quan trọng</h2></div>
-    </div>
+    <div class="card-head"><div class="icon">ℹ️</div><div><h2>Lưu ý quan trọng</h2></div></div>
     <div class="card-body" style="font-size:13px;line-height:1.8;color:#374151">
-      <p>✅ <b>Giá trên là ước tính</b> — báo giá chính xác sau khi nhận hàng thực tế tại kho.</p>
-      <p style="margin-top:8px">⚠️ <b>Thuế hải quan</b> (nếu có) tính riêng theo loại hàng.</p>
-      <p style="margin-top:8px">📦 <b>Tối thiểu 10 lbs</b> cho mỗi đơn hàng tuyến Mỹ → Việt Nam.</p>
-      <p style="margin-top:8px">🚚 <b>Thời gian</b>: 7–10 ngày làm việc từ khi hàng đến kho Houston TX.</p>
+      <p>✅ <b>Giá trên là ước tính</b> — báo giá chính xác sau khi nhận hàng tại kho.</p>
+      <p style="margin-top:8px">⚠️ <b>Thuế hải quan</b> tính riêng theo loại hàng.</p>
+      <p style="margin-top:8px">📦 <b>Tối thiểu 10 lbs</b> cho tuyến Mỹ → Việt Nam.</p>
+      <p style="margin-top:8px">🚚 <b>Bay Thứ 3 &amp; Thứ 6</b> · 7–14 ngày từ kho Houston TX.</p>
+      <p style="margin-top:8px">🛡️ <b>Miễn phí bảo hiểm</b> chống mất, thùng, khui hàng.</p>
       <div class="pills">
         <span class="pill">✈️ Bay thẳng</span>
         <span class="pill">📍 Kho Houston TX</span>
@@ -359,212 +594,200 @@
 </div>
 
 <script>
-  // ── Pricing ──────────────────────────────────────────────────────────────
-  const TIERS    = [{from:0,to:50,price:3.89},{from:50,to:90,price:3.79},{from:90,to:150,price:3.65},{from:150,to:9999,price:3.55}];
-  const MIN_LBS  = 10;
-  const PROV_RATE= 0.99;
+// ── PRICING ─────────────────────────────────────────────────────────────────
+const TIERS   = [{f:0,t:50,p:3.89},{f:50,t:90,p:3.79},{f:90,t:150,p:3.65},{f:150,t:9999,p:3.55}];
+const MIN_LBS = 10;
+const PROV    = 0.99;
+const CARRIER_PRICE = { ups:1.99, fedex:2.99 };
 
-  // ── State ─────────────────────────────────────────────────────────────────
-  let direction    = 'usvn';   // 'usvn' | 'domestic'
-  let deliveryMode = 'sghn';   // 'sghn' | 'province'
-  let pkgCounter   = 1;
-  let packages     = [{ id: 1, weight: '', value: '' }];
+// ── STATE ────────────────────────────────────────────────────────────────────
+let direction = 'usvn';
+let method    = 'self';   // 'pickup'|'dropoff'|'self'
+let carrier   = null;     // 'ups'|'fedex'
+let delivery  = 'sghn';   // 'sghn'|'province'
+let pkgId     = 1;
+let pkgs      = [{id:1,w:'',v:''}];
+let scActive  = {};       // { ruou:true, ... }
+let scQty     = { ruou:1, cigar:1, perfume:1, phone:1, earphone:1 };
+let phoneGen  = 'new';    // 'new'|'old'
 
-  // ── Direction dropdown ────────────────────────────────────────────────────
-  function toggleDirDropdown(e) {
-    e.stopPropagation();
-    const dd  = document.getElementById('dirDropdown');
-    const btn = document.getElementById('dirBtn');
-    const ch  = document.getElementById('dirChevron');
-    const open= dd.classList.toggle('open');
-    btn.classList.toggle('open', open);
-    ch.classList.toggle('open', open);
+// ── DIRECTION ────────────────────────────────────────────────────────────────
+function toggleDir(e) {
+  e.stopPropagation();
+  const dd=document.getElementById('dirDD'), btn=document.getElementById('dirBtn'), ch=document.getElementById('dirChev');
+  const o=dd.classList.toggle('open'); btn.classList.toggle('open',o); ch.classList.toggle('open',o);
+}
+document.addEventListener('click',()=>{
+  document.getElementById('dirDD').classList.remove('open');
+  document.getElementById('dirBtn').classList.remove('open');
+  document.getElementById('dirChev').classList.remove('open');
+});
+function pickDir(d,el) {
+  direction=d;
+  document.querySelectorAll('.dir-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('dirDD').classList.remove('open');
+  document.getElementById('dirBtn').classList.remove('open');
+  document.getElementById('dirChev').classList.remove('open');
+  if(d==='usvn'){
+    document.getElementById('dirIcon').textContent='🇺🇸';
+    document.getElementById('dirLabel').textContent='Mỹ → Việt Nam';
+    ['pickupCard','pkgCard','delivCard','surCard','packCard','rateCard'].forEach(id=>showEl(id,true));
+    showEl('domesticMsg',false); showEl('resultBox',false); showEl('ctaBtn',false); showEl('ctaZalo',false);
+  } else {
+    document.getElementById('dirIcon').textContent='🇺🇸';
+    document.getElementById('dirLabel').textContent='Nội địa Mỹ';
+    ['pickupCard','pkgCard','delivCard','surCard','packCard','rateCard','resultBox','ctaBtn','ctaZalo'].forEach(id=>showEl(id,false));
+    showEl('domesticMsg',true);
   }
-  document.addEventListener('click', () => {
-    document.getElementById('dirDropdown')?.classList.remove('open');
-    document.getElementById('dirBtn')?.classList.remove('open');
-    document.getElementById('dirChevron')?.classList.remove('open');
+}
+function showEl(id,show){const el=document.getElementById(id);if(el)el.style.display=show?'':'none';}
+
+// ── METHOD ───────────────────────────────────────────────────────────────────
+function setMethod(m,el) {
+  method=m; carrier=null;
+  document.querySelectorAll('.method-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.carrier-btn').forEach(b=>b.classList.remove('active'));
+  const cw=document.getElementById('carrierWrap');
+  cw.classList.toggle('show', m==='pickup'||m==='dropoff');
+  calc();
+}
+function pickCarrier(c,el) {
+  carrier=c;
+  document.querySelectorAll('.carrier-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  calc();
+}
+
+// ── DELIVERY ─────────────────────────────────────────────────────────────────
+function setDeliv(mode,el){
+  delivery=mode;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('provWrap').classList.toggle('show',mode==='province');
+  calc();
+}
+
+// ── PACKAGES ─────────────────────────────────────────────────────────────────
+function renderPkgs(){
+  const tb=document.getElementById('pkgBody'); tb.innerHTML='';
+  pkgs.forEach((p,i)=>{
+    const tr=document.createElement('tr'); tr.className='pkg-row';
+    tr.innerHTML=`
+      <td style="text-align:center"><div class="pkg-num">${i+1}</div></td>
+      <td><input class="pkg-input" type="number" placeholder="lbs" min="0" step="0.1"
+          value="${p.w}" oninput="updPkg(${p.id},'w',this.value)"/></td>
+      <td><div class="pkg-dollar-wrap"><span class="sym">$</span>
+          <input class="pkg-input" type="number" placeholder="0" min="0" step="0.01"
+          value="${p.v}" oninput="updPkg(${p.id},'v',this.value)"/></div></td>
+      <td style="text-align:center"><button class="pkg-trash" onclick="delPkg(${p.id})"
+          ${pkgs.length===1?'disabled':''} type="button">🗑</button></td>`;
+    tb.appendChild(tr);
   });
+  updTotalBadge(); calc();
+}
+function addPkg(){ pkgId++; pkgs.push({id:pkgId,w:'',v:''}); renderPkgs(); }
+function delPkg(id){ if(pkgs.length<2)return; pkgs=pkgs.filter(p=>p.id!==id); renderPkgs(); }
+function updPkg(id,f,v){ const p=pkgs.find(x=>x.id===id); if(p)p[f]=v; updTotalBadge(); calc(); }
+function totalW(){ return pkgs.reduce((s,p)=>s+(parseFloat(p.w)||0),0); }
+function updTotalBadge(){
+  const t=totalW(), badge=document.getElementById('totalBadge');
+  if(t>0&&pkgs.length>1){ badge.style.display=''; document.getElementById('totalLbs').textContent=t.toFixed(1)+' lbs'; }
+  else badge.style.display='none';
+}
 
-  function selectDir(dir, el) {
-    direction = dir;
-    document.querySelectorAll('.dir-option').forEach(o => o.classList.remove('selected'));
-    el.classList.add('selected');
-    document.getElementById('dirDropdown').classList.remove('open');
-    document.getElementById('dirBtn').classList.remove('open');
-    document.getElementById('dirChevron').classList.remove('open');
+// ── SURCHARGES ───────────────────────────────────────────────────────────────
+function toggleSC(id,e){
+  if(e&&(e.target.classList.contains('sc-qty-btn')||e.target.classList.contains('sc-qty-val')||
+     e.target.tagName==='INPUT'||e.target.classList.contains('sc-sub-opt'))) return;
+  const el=document.getElementById('sc-'+id);
+  scActive[id]=!scActive[id];
+  el.classList.toggle('active',scActive[id]);
+  calc();
+}
+function adjQty(id,d,e){ e.stopPropagation(); scQty[id]=Math.max(1,(scQty[id]||1)+d); document.getElementById('qty-'+id).textContent=scQty[id]; calc(); }
+function pickPhoneGen(g,e){ e.stopPropagation(); phoneGen=g; document.getElementById('phone-new').classList.toggle('selected',g==='new'); document.getElementById('phone-old').classList.toggle('selected',g==='old'); calc(); }
 
-    if (dir === 'usvn') {
-      document.getElementById('dirFlagIcon').textContent = '🇺🇸';
-      document.getElementById('dirLabel').textContent    = 'Mỹ → Việt Nam';
-      document.getElementById('domesticMsg').style.display   = 'none';
-      document.getElementById('pkgSection').style.display    = '';
-      document.getElementById('deliverySection').style.display = '';
-      document.getElementById('packSection').style.display   = '';
-      document.getElementById('rateCard').style.display      = '';
-    } else {
-      document.getElementById('dirFlagIcon').textContent = '🇺🇸';
-      document.getElementById('dirLabel').textContent    = 'Nội địa Mỹ';
-      document.getElementById('domesticMsg').style.display   = '';
-      document.getElementById('pkgSection').style.display    = 'none';
-      document.getElementById('deliverySection').style.display = 'none';
-      document.getElementById('packSection').style.display   = 'none';
-      document.getElementById('rateCard').style.display      = 'none';
-      document.getElementById('resultBox').style.display     = 'none';
-      document.getElementById('ctaBtn').style.display        = 'none';
-      document.getElementById('ctaZalo').style.display       = 'none';
-    }
+function calcSurcharges(billLbs){
+  let s=0, lines=[];
+  if(scActive.ruou){ const c=scQty.ruou*14; s+=c; lines.push(['🍷 Rượu ('+scQty.ruou+' chai)','$'+c.toFixed(2)]); }
+  if(scActive.cigar){ const c=scQty.cigar*20; s+=c; lines.push(['🚬 Cigar ('+scQty.cigar+' hộp)','$'+c.toFixed(2)]); }
+  if(scActive.perfume){ const c=scQty.perfume*7; s+=c; lines.push(['🌸 Nước hoa ('+scQty.perfume+' chai)','$'+c.toFixed(2)]); }
+  if(scActive.vitamin){ const c=billLbs*0.99; s+=c; lines.push(['💊 Vitamin/Mỹ phẩm (+$0.99/lbs)','$'+c.toFixed(2)]); }
+  if(scActive.phone){
+    const price=phoneGen==='new'?90:60; const c=scQty.phone*price; s+=c;
+    lines.push(['📱 Điện thoại '+(phoneGen==='new'?'mới':'cũ')+' ('+scQty.phone+' cái)','$'+c.toFixed(2)]);
+    if(phoneGen==='old'){ const tax=c*0.2; s+=tax; lines.push(['  └ Thuế 20%','$'+tax.toFixed(2)]); }
+  }
+  if(scActive.earphone){ const c=scQty.earphone*12; s+=c; lines.push(['🎧 Tai nghe/AirPod ('+scQty.earphone+' cái)','$'+c.toFixed(2)]); }
+  if(scActive.elec){ const ev=parseFloat(document.getElementById('elec-val').value)||0; const c=ev*0.1; s+=c; lines.push(['🔌 Điện tử khác (10% giá trị)','$'+c.toFixed(2)]); }
+  if(scActive.medical){ const mv=parseFloat(document.getElementById('medical-val').value)||0; const c=mv*0.2; s+=c; lines.push(['💉 Vacxin/Máy y tế (20% thuế)','$'+c.toFixed(2)]); }
+  return { total:s, lines };
+}
+
+// ── CALC ─────────────────────────────────────────────────────────────────────
+function getTier(lbs){ return TIERS.find(t=>lbs>=t.f&&lbs<t.t)||TIERS[TIERS.length-1]; }
+function hlTier(lbs){
+  ['t1','t2','t3','t4','t5'].forEach(id=>document.getElementById(id)?.classList.remove('hl'));
+  if(lbs<=0)return; const b=Math.max(lbs,MIN_LBS);
+  if(b<=10) document.getElementById('t1')?.classList.add('hl');
+  else if(b<=50)  document.getElementById('t2')?.classList.add('hl');
+  else if(b<=90)  document.getElementById('t3')?.classList.add('hl');
+  else if(b<=150) document.getElementById('t4')?.classList.add('hl');
+  else            document.getElementById('t5')?.classList.add('hl');
+}
+
+function calc(){
+  if(direction!=='usvn') return;
+  const raw=totalW(), packR=parseFloat(document.getElementById('packSelect').value)||0;
+  const rb=document.getElementById('resultBox');
+  if(raw<=0){ rb.style.display='none'; showEl('ctaBtn',false); showEl('ctaZalo',false); hlTier(0); return; }
+
+  rb.style.display='';
+  const billLbs=Math.max(raw,MIN_LBS);
+  const tier=getTier(billLbs);
+  const isMin=raw<MIN_LBS;
+
+  const shipping = billLbs * tier.price;
+  const provFee  = delivery==='province' ? billLbs*PROV : 0;
+  const packFee  = packR>0 ? billLbs*packR : 0;
+  const sc       = calcSurcharges(billLbs);
+
+  // Pickup fee
+  let pickupFee=0, pickupLine=null;
+  if((method==='pickup'||method==='dropoff') && carrier){
+    pickupFee = Math.max(billLbs,MIN_LBS)*CARRIER_PRICE[carrier];
+    const label = carrier==='ups' ? 'UPS Pick-up ($1.99/lbs)' : 'FedEx Pick-up ($2.99/lbs)';
+    pickupLine = [label, '$'+pickupFee.toFixed(2)];
   }
 
-  // ── Delivery tabs ─────────────────────────────────────────────────────────
-  function setDelivery(mode, el) {
-    deliveryMode = mode;
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    const pw = document.getElementById('provinceWrap');
-    pw.classList.toggle('show', mode === 'province');
-    calc();
-  }
+  const total = shipping + provFee + packFee + pickupFee + sc.total;
 
-  // ── Packages ──────────────────────────────────────────────────────────────
-  function renderPackages() {
-    const tbody = document.getElementById('pkgBody');
-    tbody.innerHTML = '';
-    packages.forEach((pkg, idx) => {
-      const tr = document.createElement('tr');
-      tr.className = 'pkg-row';
-      tr.id = 'pkgRow-' + pkg.id;
-      tr.innerHTML = `
-        <td style="text-align:center">
-          <div class="pkg-num">${idx + 1}</div>
-        </td>
-        <td>
-          <input class="pkg-input" type="number" placeholder="lbs" min="0" step="0.1"
-            value="${pkg.weight}"
-            oninput="updatePkg(${pkg.id},'weight',this.value)"/>
-        </td>
-        <td>
-          <div class="pkg-val-wrap">
-            <span class="pkg-dollar">$</span>
-            <input class="pkg-input" type="number" placeholder="0" min="0" step="0.01"
-              value="${pkg.value}"
-              oninput="updatePkg(${pkg.id},'value',this.value)"/>
-          </div>
-        </td>
-        <td style="text-align:center">
-          <button class="pkg-trash" onclick="removePackage(${pkg.id})" type="button"
-            ${packages.length === 1 ? 'disabled' : ''}>🗑</button>
-        </td>`;
-      tbody.appendChild(tr);
-    });
-    updateTotalBadge();
-    calc();
-  }
+  document.getElementById('priceVal').textContent=total.toFixed(2);
+  document.getElementById('resultNote').innerHTML=
+    `${billLbs.toFixed(1)} lbs × $${tier.price}/lbs`+(isMin?` <b>(tối thiểu ${MIN_LBS} lbs)</b>`:'')+
+    (delivery==='province'?' · Giao tỉnh':' · HCM / Hà Nội')+
+    '<br/>Giá ước tính · chưa bao gồm thuế hải quan bổ sung';
 
-  function addPackage() {
-    pkgCounter++;
-    packages.push({ id: pkgCounter, weight: '', value: '' });
-    renderPackages();
-  }
+  // Breakdown
+  let rows = [];
+  rows.push([`Cước (${billLbs.toFixed(1)} lbs × $${tier.price})`+(isMin?' ⚡':''), '$'+shipping.toFixed(2)]);
+  if(pickupLine) rows.push(pickupLine);
+  if(provFee>0) rows.push(['Phí giao tỉnh (+$0.99/lbs)', '+$'+provFee.toFixed(2)]);
+  if(packFee>0) rows.push(['Phí đóng gói', '+$'+packFee.toFixed(2)]);
+  rows = rows.concat(sc.lines);
 
-  function removePackage(id) {
-    if (packages.length <= 1) return;
-    packages = packages.filter(p => p.id !== id);
-    renderPackages();
-  }
+  const bd=document.getElementById('breakdown');
+  bd.innerHTML = rows.map(r=>`<div class="br-row"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('') +
+    `<div class="br-row total"><span class="k">Tổng ước tính</span><span class="v">$${total.toFixed(2)}</span></div>`;
 
-  function updatePkg(id, field, val) {
-    const pkg = packages.find(p => p.id === id);
-    if (pkg) pkg[field] = val;
-    updateTotalBadge();
-    calc();
-  }
+  showEl('ctaBtn',true); showEl('ctaZalo',true);
+  hlTier(raw);
+}
 
-  function getTotalWeight() {
-    return packages.reduce((sum, p) => sum + (parseFloat(p.weight) || 0), 0);
-  }
-
-  function updateTotalBadge() {
-    const total = getTotalWeight();
-    const badge = document.getElementById('totalBadge');
-    if (total > 0 && packages.length > 1) {
-      badge.style.display = '';
-      document.getElementById('totalWeightVal').textContent = total.toFixed(1) + ' lbs';
-    } else {
-      badge.style.display = 'none';
-    }
-  }
-
-  // ── Pricing ───────────────────────────────────────────────────────────────
-  function getTier(lbs) {
-    return TIERS.find(t => lbs >= t.from && lbs < t.to) || TIERS[TIERS.length - 1];
-  }
-
-  function highlightTier(lbs) {
-    ['tier-1','tier-2','tier-3','tier-4','tier-5'].forEach(id => {
-      document.getElementById(id)?.classList.remove('highlight');
-    });
-    if (lbs <= 0) return;
-    const bill = Math.max(lbs, MIN_LBS);
-    if      (bill <= 10)  document.getElementById('tier-1')?.classList.add('highlight');
-    else if (bill <= 50)  document.getElementById('tier-2')?.classList.add('highlight');
-    else if (bill <= 90)  document.getElementById('tier-3')?.classList.add('highlight');
-    else if (bill <= 150) document.getElementById('tier-4')?.classList.add('highlight');
-    else                  document.getElementById('tier-5')?.classList.add('highlight');
-  }
-
-  function calc() {
-    if (direction === 'domestic') return;
-    const raw    = getTotalWeight();
-    const packR  = parseFloat(document.getElementById('packSelect').value) || 0;
-    const rb     = document.getElementById('resultBox');
-    const bd     = document.getElementById('breakdown');
-
-    if (raw <= 0) {
-      rb.style.display = 'none';
-      document.getElementById('ctaBtn').style.display  = 'none';
-      document.getElementById('ctaZalo').style.display = 'none';
-      highlightTier(0);
-      return;
-    }
-
-    rb.style.display = '';
-    const billLbs  = Math.max(raw, MIN_LBS);
-    const tier     = getTier(billLbs);
-    const shipping = billLbs * tier.price;
-    const delivery = deliveryMode === 'province' ? billLbs * PROV_RATE : 0;
-    const packing  = packR > 0 ? billLbs * packR : 0;
-    const total    = shipping + delivery + packing;
-    const isMin    = raw < MIN_LBS;
-
-    document.getElementById('priceVal').textContent = total.toFixed(2);
-    document.getElementById('resultNote').innerHTML =
-      `${billLbs.toFixed(1)} lbs × $${tier.price}/lbs` +
-      (isMin ? ` <b>(tối thiểu ${MIN_LBS} lbs)</b>` : '') +
-      (deliveryMode === 'province' ? ' · Giao tỉnh' : ' · HCM / Hà Nội') +
-      '<br/>Giá ước tính · chưa bao gồm thuế hải quan';
-
-    bd.classList.add('show');
-    document.getElementById('bk-weight-label').textContent =
-      `Cước (${billLbs.toFixed(1)} lbs × $${tier.price})` + (isMin ? ' ⚡min' : '');
-    document.getElementById('bk-shipping').textContent = '$' + shipping.toFixed(2);
-
-    const delivRow = document.getElementById('bk-delivery-row');
-    delivRow.style.display = delivery > 0 ? '' : 'none';
-    if (delivery > 0) document.getElementById('bk-delivery').textContent = '+$' + delivery.toFixed(2);
-
-    const packRow = document.getElementById('bk-pack-row');
-    packRow.style.display = packing > 0 ? '' : 'none';
-    if (packing > 0) document.getElementById('bk-pack').textContent = '+$' + packing.toFixed(2);
-
-    document.getElementById('bk-total').textContent = '$' + total.toFixed(2);
-    document.getElementById('ctaBtn').style.display  = '';
-    document.getElementById('ctaZalo').style.display = '';
-    highlightTier(raw);
-  }
-
-  // ── Init ──────────────────────────────────────────────────────────────────
-  renderPackages();
+// ── INIT ─────────────────────────────────────────────────────────────────────
+renderPkgs();
 </script>
 </body>
 </html>
