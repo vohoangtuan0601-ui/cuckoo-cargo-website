@@ -207,14 +207,14 @@
         <button class="dir-btn" id="dirBtn" onclick="toggleDir(event)" type="button">
           <div class="dir-btn-left">
             <span id="dirIcon" style="font-size:20px">🇺🇸</span>
-            <span id="dirLabel">Mỹ → Việt Nam</span>
+            <span id="dirLabel">Mỹ → 🇻🇳 Việt Nam</span>
           </div>
           <span class="dir-chevron" id="dirChev">⌄</span>
         </button>
         <div class="dir-dropdown" id="dirDD">
           <div class="dir-option selected" onclick="pickDir('usvn',this)">
             <span style="font-size:20px">🇺🇸→🇻🇳</span>
-            <div><div>Mỹ → Việt Nam</div><div class="dir-option-sub">Từ $3.89/lbs · Tối thiểu 10 lbs</div></div>
+            <div><div>🇺🇸 Mỹ → 🇻🇳 Việt Nam</div><div class="dir-option-sub">Từ $3.89/lbs · Tối thiểu 10 lbs</div></div>
           </div>
           <div class="dir-option" onclick="pickDir('domestic',this)">
             <span style="font-size:20px">🇺🇸</span>
@@ -612,7 +612,7 @@
 
 <script>
 // ── PRICING ─────────────────────────────────────────────────────────────────
-const TIERS   = [{f:0,t:50,p:3.89},{f:50,t:90,p:3.79},{f:90,t:150,p:3.59},{f:150,t:9999,p:3.49}];
+const TIERS   = [{f:0,t:50,p:3.89},{f:50.1,t:90,p:3.79},{f:90.1,t:150,p:3.59},{f:150.1,t:9999,p:3.49}];
 const MIN_LBS = 10;
 const PROV    = 0.99;
 const CARRIER_PRICE = { ups:1.99, fedex:2.99 };
@@ -648,7 +648,7 @@ function pickDir(d,el) {
   document.getElementById('dirChev').classList.remove('open');
   if(d==='usvn'){
     document.getElementById('dirIcon').textContent='🇺🇸';
-    document.getElementById('dirLabel').textContent='Mỹ → Việt Nam';
+    document.getElementById('dirLabel').textContent='Mỹ → 🇻🇳 Việt Nam';
     ['pickupCard','pkgCard','delivCard','surCard','packCard','rateCard'].forEach(id=>showEl(id,true));
     showEl('domesticMsg',false); showEl('resultBox',false); showEl('ctaBtn',false); showEl('ctaZalo',false);
   } else {
@@ -757,7 +757,7 @@ function calcSurcharges(billLbs){
 }
 
 // ── CALC ─────────────────────────────────────────────────────────────────────
-function getTier(lbs){ return TIERS.find(t=>lbs>=t.f&&lbs<t.t)||TIERS[TIERS.length-1]; }
+function getTier(lbs){ return TIERS.find(t=>lbs>=t.f&&lbs<=t.t)||TIERS[TIERS.length-1]; }
 function hlTier(lbs){
   ['t1','t2','t3','t4','t5'].forEach(id=>document.getElementById(id)?.classList.remove('hl'));
   if(lbs<=0)return; const b=Math.max(lbs,MIN_LBS);
