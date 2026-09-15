@@ -153,18 +153,19 @@
     .result-price sup{font-size:22px;vertical-align:super}
     .result-note{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.6}
     .breakdown{margin-top:14px;border-top:1px solid var(--gray-border);padding-top:14px}
-    .br-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:3px 0}
+    .br-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:7px 0;border-bottom:1px dashed rgba(0,0,0,.07)}
+    .br-row:last-child{border-bottom:none}
     .br-row .k{color:var(--text-muted)}
     .br-row .v{font-weight:700;color:var(--black)}
-    .br-row.total{border-top:1px dashed var(--gray-border);margin-top:6px;padding-top:10px}
+    .br-row.total{border-top:1px dashed var(--gray-border);border-bottom:none;margin-top:4px;padding-top:10px}
     .br-row.total .k{font-weight:700;color:var(--black);font-size:15px}
     .br-row.total .v{color:var(--orange);font-size:18px}
 
     /* CTA */
     .btn-cta{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-deep) 100%);color:#fff;font-size:16px;font-weight:800;border:none;border-radius:12px;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;box-shadow:0 4px 16px rgba(245,67,10,.3);transition:transform .2s}
     .btn-cta:hover{transform:translateY(-2px)}
-    .btn-secondary{display:block;width:100%;padding:13px;background:var(--white);color:var(--black);font-size:14px;font-weight:700;border:1.5px solid var(--gray-border);border-radius:12px;text-decoration:none;text-align:center;margin-top:10px;transition:border-color .2s}
-    .btn-secondary:hover{border-color:var(--orange);color:var(--orange)}
+    .btn-secondary{display:block;width:100%;padding:13px;background:linear-gradient(135deg,#1877F2 0%,#0a5fd4 100%);color:#fff;font-size:14px;font-weight:700;border:none;border-radius:12px;text-decoration:none;text-align:center;margin-top:10px;box-shadow:0 4px 14px rgba(24,119,242,.3);transition:transform .2s,box-shadow .2s}
+    .btn-secondary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(24,119,242,.4)}
 
     /* RATE TABLE */
     .rate-table{width:100%;border-collapse:collapse;font-size:13px}
@@ -541,7 +542,7 @@
   </div>
 
   <a href="https://cuckoocargous.com/my-ve-viet" class="btn-cta" id="ctaBtn" style="display:none">Đặt đơn gửi hàng ngay →</a>
-  <a href="https://www.facebook.com/share/19iyk7joN5/?mibextid=wwXIfr" class="btn-secondary" id="ctaZalo" style="display:none">Tư vấn và báo giá chi tiết qua Facebook</a>
+  <a href="https://www.facebook.com/share/19iyk7joN5/?mibextid=wwXIfr" class="btn-secondary" id="ctaZalo" style="display:none">Hỗ trợ tư vấn</a>
 
   <!-- Domestic placeholder -->
   <div id="domesticMsg" style="display:none;background:var(--gray-light);border:1px solid var(--gray-border);border-radius:12px;padding:28px 20px;text-align:center;color:var(--text-muted);font-size:14px;line-height:1.8">
