@@ -816,14 +816,11 @@ function calc(){
   const total = shipping + provFee + carrierFee + pickupFee + sc.total;
 
   document.getElementById('priceVal').textContent=total.toFixed(2);
-  document.getElementById('resultNote').innerHTML=
-    `${billLbs.toFixed(1)} lbs × $${tier.p}/lbs`+(isMin?` <b>(tối thiểu ${MIN_LBS} lbs)</b>`:'')+
-    (delivery==='province'?' · Giao tỉnh':' · HCM / Hà Nội')+
-    '<br/>Giá ước tính · <b>chưa bao gồm thuế/phụ thu hải quan</b>';
+  document.getElementById('resultNote').innerHTML='';
 
   // Breakdown
   let rows = [];
-  rows.push([`Cước vận chuyển (${billLbs.toFixed(1)} lbs × $${tier.p})`+(isMin?' ⚡':''), '$'+shipping.toFixed(2)]);
+  rows.push([`Cước vận chuyển (${billLbs.toFixed(1)} lbs × $${tier.p})`, '$'+shipping.toFixed(2)]);
   if(carrierLine) rows.push(carrierLine);
   if(pickupLine) rows.push(pickupLine);
   if(provFee>0) rows.push(['Phí giao tỉnh (+$0.99/lbs)', '+$'+provFee.toFixed(2)]);
