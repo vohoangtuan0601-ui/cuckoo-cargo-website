@@ -326,6 +326,7 @@
         </div>
         <div id="carrierHint" style="margin-top:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;display:none"></div>
         <p id="carrierPickupNote" style="font-size:12px;font-weight:700;margin-top:6px;display:none"></p>
+        <p id="heavyNote" style="font-size:12px;font-weight:600;color:#e53e3e;margin-top:6px;display:none">Mỗi kiện hàng có trọng lượng &gt; 50 lbs sẽ có phụ thu phí nặng $19.25 theo chính sách UPS/FedEx</p>
       </div>
     </div>
   </div>
@@ -798,24 +799,35 @@ function calc(){
   const provFee  = delivery==='province' ? billLbs*PROV : 0;
   const sc       = calcSurcharges(billLbs);
 
-  // Carrier fee (luôn tính khi đã chọn hãng)
+  // Carrier fee (UPS $1.99/lbs, FedEx $2.99/lbs — tính khi đã chọn hãng)
   let carrierFee=0, carrierLine=null;
   let pickupFee=0, pickupLine=null;
   if(carrier){
     carrierFee = billLbs * CARRIER_PRICE[carrier];
     const rate = carrier==='ups' ? '$1.99' : '$2.99';
+    const svcLabel = method==='pickup' ? 'Pick-up' : 'Drop-off';
     carrierLine = [
-      `${carrier==='ups'?'UPS':'FedEx'} (${billLbs.toFixed(1)} lbs × ${rate}/lbs)`,
+      `${carrier==='ups'?'UPS':'FedEx'} ${svcLabel} (${billLbs.toFixed(1)} lbs × ${rate}/lbs)`,
       '$'+carrierFee.toFixed(2)
     ];
     if(method==='pickup' && carrier==='ups'){
       pickupFee = 9.65;
-      pickupLine = ['Phụ phí pick-up (UPS)', '$9.65'];
+      pickupLine = ['Phụ phí lấy hàng tận nhà (UPS)', '$9.65'];
     }
-    // FedEx pickup: miễn phí, không cộng thêm
+    // FedEx pickup: miễn phí
   }
 
-  const total = shipping + provFee + carrierFee + pickupFee + sc.total;
+  // Heavy package fee ($19.25/kiện > 50 lbs, chỉ pick-up & drop-off)
+  const heavyCount = (method==='pickup'||method==='dropoff')
+    ? pkgs.filter(p=>(parseFloat(p.w)||0)>50).length : 0;
+  const heavyFee = heavyCount * 19.25;
+  const heavyLine = heavyCount>0
+    ? [`Phụ thu kiện nặng >50 lbs (${heavyCount} kiện × $19.25)`, '$'+heavyFee.toFixed(2)]
+    : null;
+  const hn = document.getElementById('heavyNote');
+  if(hn) hn.style.display = heavyCount>0 ? '' : 'none';
+
+  const total = shipping + provFee + carrierFee + pickupFee + heavyFee + sc.total;
 
   document.getElementById('priceVal').textContent=total.toFixed(2);
   document.getElementById('resultNote').innerHTML='';
@@ -825,6 +837,7 @@ function calc(){
   rows.push([`Cước vận chuyển (${billLbs.toFixed(1)} lbs × $${tier.p})`, '$'+shipping.toFixed(2)]);
   if(carrierLine) rows.push(carrierLine);
   if(pickupLine) rows.push(pickupLine);
+  if(heavyLine) rows.push(heavyLine);
   if(provFee>0) rows.push(['Phí giao tỉnh (+$0.99/lbs)', '+$'+provFee.toFixed(2)]);
   rows = rows.concat(sc.lines);
 
