@@ -328,8 +328,8 @@
         </div>
         <p class="field-error" id="carrierError">Vui lòng chọn hãng vận chuyển (UPS hoặc FedEx)</p>
         <div id="carrierHint" style="margin-top:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;display:none"></div>
-        <p id="carrierPickupNote" style="font-size:12px;font-weight:700;margin-top:6px;display:none"></p>
-        <p id="heavyNote" style="font-size:12px;font-weight:600;color:#e53e3e;margin-top:6px;display:none">Mỗi kiện hàng có trọng lượng &gt; 50 lbs sẽ có phụ thu phí nặng $19.25 theo chính sách UPS/FedEx</p>
+        <div id="carrierPickupNote" style="display:none;margin-top:10px;padding:10px 14px;border-radius:10px;border:1px solid #e5e5ea;border-left:4px solid #1a3065;background:#f0f4ff;font-size:12px;font-weight:700;color:#1a3065;line-height:1.5"></div>
+        <div id="heavyNote" style="display:none;margin-top:10px;padding:10px 14px;border-radius:10px;border:1px solid #fecaca;border-left:4px solid #e53e3e;background:#fff5f5;font-size:12px;font-weight:600;color:#c53030;line-height:1.5">Lưu ý: Mỗi kiện hàng có trọng lượng &gt; 50 lbs sẽ có phụ thu phí nặng <strong>$19.25</strong> theo chính sách UPS/FedEx</div>
       </div>
     </div>
   </div>
@@ -678,10 +678,10 @@ function pickCarrier(c,el) {
   el.classList.add('active');
   const note=document.getElementById('carrierPickupNote');
   if(c==='ups'){
-    note.style.display=''; note.style.color='#1a3065';
+    note.style.display=''; note.style.color='#1a3065'; note.style.borderLeftColor='#1a3065'; note.style.background='#f0f4ff'; note.style.borderColor='#c7d2fe';
     note.textContent=method==='pickup'?'UPS hỗ trợ $9.65/pick-up':'UPS phù hợp mọi loại hàng hóa';
   } else if(c==='fedex'){
-    note.style.display=''; note.style.color='#166534';
+    note.style.display=''; note.style.color='#166534'; note.style.borderLeftColor='#4d7c0f'; note.style.background='#f0fdf4'; note.style.borderColor='#bbf7d0';
     note.textContent=method==='pickup'?'FedEx miễn phí pick-up':'Phù hợp với các mặt hàng giá trị cao, gửi nhanh, an toàn';
   } else {
     note.style.display='none';
