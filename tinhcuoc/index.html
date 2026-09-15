@@ -63,6 +63,7 @@
     /* PICKUP METHOD */
     .method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
     .method-btn{border:1.5px solid var(--gray-border);border-radius:12px;background:var(--white);padding:12px 8px;text-align:center;cursor:pointer;font-family:inherit;transition:all .15s}
+    .field-error{color:#e53e3e;font-size:12px;font-weight:600;margin-top:6px;display:none}
     .method-btn:hover{border-color:var(--orange)}
     .method-btn.active{border-color:var(--orange);background:var(--orange-bg)}
     .method-btn .m-icon{font-size:22px;margin-bottom:5px}
@@ -303,11 +304,12 @@
           <div class="m-title">Drop-off</div>
           <div class="m-sub">Tự đem ra bưu cục</div>
         </button>
-        <button class="method-btn active" id="m-self" onclick="setMethod('self',this)" type="button">
+        <button class="method-btn" id="m-self" onclick="setMethod('self',this)" type="button">
           <div class="m-title">Tự gửi</div>
           <div class="m-sub">Gửi thẳng về kho</div>
         </button>
       </div>
+      <p class="field-error" id="methodError">Vui lòng chọn dịch vụ lấy hàng</p>
 
       <!-- Carrier selection -->
       <div class="carrier-wrap" id="carrierWrap">
@@ -324,6 +326,7 @@
             <span class="carrier-price">$2.99/lbs</span>
           </button>
         </div>
+        <p class="field-error" id="carrierError">Vui lòng chọn hãng vận chuyển (UPS hoặc FedEx)</p>
         <div id="carrierHint" style="margin-top:8px;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;display:none"></div>
         <p id="carrierPickupNote" style="font-size:12px;font-weight:700;margin-top:6px;display:none"></p>
         <p id="heavyNote" style="font-size:12px;font-weight:600;color:#e53e3e;margin-top:6px;display:none">Mỗi kiện hàng có trọng lượng &gt; 50 lbs sẽ có phụ thu phí nặng $19.25 theo chính sách UPS/FedEx</p>
@@ -616,7 +619,7 @@ const CARRIER_PRICE = { ups:1.99, fedex:2.99 };
 
 // ── STATE ────────────────────────────────────────────────────────────────────
 let direction = 'usvn';
-let method    = 'self';   // 'pickup'|'dropoff'|'self'
+let method    = '';       // 'pickup'|'dropoff'|'self'|''
 let carrier   = null;     // 'ups'|'fedex'
 let delivery  = 'sghn';   // 'sghn'|'province'
 let pkgId     = 1;
@@ -785,10 +788,25 @@ function hlTier(lbs){
 
 function calc(){
   if(direction!=='usvn') return;
-  updateCarrierHint();
   const raw=totalW();
   const rb=document.getElementById('resultBox');
+  const methodErr=document.getElementById('methodError');
+  const carrierErr=document.getElementById('carrierError');
+
+  // Validation
   if(raw<=0){ rb.style.display='none'; showEl('ctaBtn',false); showEl('ctaZalo',false); hlTier(0); return; }
+  if(!method){
+    if(methodErr) methodErr.style.display='';
+    rb.style.display='none'; showEl('ctaBtn',false); showEl('ctaZalo',false); return;
+  }
+  if(methodErr) methodErr.style.display='none';
+  if((method==='pickup'||method==='dropoff') && !carrier){
+    if(carrierErr) carrierErr.style.display='';
+    rb.style.display='none'; showEl('ctaBtn',false); showEl('ctaZalo',false); return;
+  }
+  if(carrierErr) carrierErr.style.display='none';
+
+  updateCarrierHint();
 
   rb.style.display='';
   const billLbs=Math.max(raw,MIN_LBS);
