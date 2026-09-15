@@ -689,7 +689,7 @@ function pickCarrier(c,el) {
 function updateCarrierHint() {
   const hint=document.getElementById('carrierHint');
   if(!carrier){ hint.style.display='none'; return; }
-  const billLbs=Math.max(getTotalWeight(),MIN_LBS);
+  const billLbs=Math.max(totalW(),MIN_LBS);
   const fee=(billLbs*CARRIER_PRICE[carrier]).toFixed(2);
   if(carrier==='ups'){
     hint.style.display='';
