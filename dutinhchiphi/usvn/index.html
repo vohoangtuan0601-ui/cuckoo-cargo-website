@@ -187,7 +187,7 @@
 
 <nav class="nav">
   <a class="nav-logo" href="/"><img src="favicon.png" alt="Cuckoo Cargo"/>CUCKOO <span>CARGO</span></a>
-  <a class="nav-cta" href="/gui-hang-my-ve-viet.html">Đặt đơn →</a>
+  <a class="nav-cta" href="https://cuckoocargous.com">Đặt đơn →</a>
 </nav>
 
 <div class="hero-strip">
@@ -420,7 +420,7 @@
             <div class="sc-check"><span class="sc-check-mark">✓</span></div>
             <div class="sc-info">
               <div class="sc-name">Điện thoại / Tablet / iPhone / MacBook</div>
-              <div class="sc-price">Thế hệ mới: $90/cái · Thế hệ cũ: $60/cái + 20% thuế</div>
+              <div class="sc-price">Thế hệ mới: $90/cái · Thế hệ cũ: $60/cái</div>
             </div>
           </div>
           <div class="sc-qty-wrap">
@@ -429,7 +429,7 @@
                 Thế hệ mới<br/><span style="font-size:11px;font-weight:400">$90/cái</span>
               </div>
               <div class="sc-sub-opt" id="phone-old" onclick="pickPhoneGen('old',event)">
-                Thế hệ cũ<br/><span style="font-size:11px;font-weight:400">$60/cái + 20% thuế</span>
+                Thế hệ cũ<br/><span style="font-size:11px;font-weight:400">$60/cái</span>
               </div>
             </div>
             <div class="sc-qty-inner" style="margin-top:10px">
@@ -537,8 +537,8 @@
     <div class="breakdown" id="breakdown"></div>
   </div>
 
-  <a href="/gui-hang-my-ve-viet.html" class="btn-cta" id="ctaBtn" style="display:none">📦 Đặt đơn gửi hàng ngay →</a>
-  <a href="https://zalo.me/0000000000" class="btn-secondary" id="ctaZalo" style="display:none">💬 Hỏi báo giá qua Zalo</a>
+  <a href="https://cuckoocargous.com/my-ve-viet" class="btn-cta" id="ctaBtn" style="display:none">Đặt đơn gửi hàng ngay →</a>
+  <a href="https://www.facebook.com/share/19iyk7joN5/?mibextid=wwXIfr" class="btn-secondary" id="ctaZalo" style="display:none">Tư vấn và báo giá chi tiết qua Facebook</a>
 
   <!-- Domestic placeholder -->
   <div id="domesticMsg" style="display:none;background:var(--gray-light);border:1px solid var(--gray-border);border-radius:12px;padding:28px 20px;text-align:center;color:var(--text-muted);font-size:14px;line-height:1.8">
@@ -762,7 +762,7 @@ function calcSurcharges(billLbs){
   if(scActive.phone){
     const price=phoneGen==='new'?90:60; const c=scQty.phone*price; s+=c;
     lines.push(['Điện thoại '+(phoneGen==='new'?'mới':'cũ')+' ('+scQty.phone+' cái)','$'+c.toFixed(2)]);
-    if(phoneGen==='old'){ const tax=c*0.2; s+=tax; lines.push(['  └ Thuế 20%','$'+tax.toFixed(2)]); }
+    // Thế hệ cũ: không tính thêm 20% thuế
   }
   if(scActive.earphone){ const c=scQty.earphone*12; s+=c; lines.push(['Tai nghe/AirPod ('+scQty.earphone+' cái)','$'+c.toFixed(2)]); }
   if(scActive.body){ const c=scQty.body*8; s+=c; lines.push(['Body ĐT/Màn hình ('+scQty.body+' cụm)','$'+c.toFixed(2)]); }
