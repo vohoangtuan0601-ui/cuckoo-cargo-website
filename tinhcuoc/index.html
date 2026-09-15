@@ -77,8 +77,8 @@
     .carrier-btn{border:2px solid var(--gray-border);border-radius:12px;background:var(--white);padding:14px 12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:10px;transition:all .15s;position:relative}
     .carrier-btn:hover{border-color:var(--orange)}
     .carrier-btn.active{border-color:var(--orange);background:var(--orange-bg)}
-    .carrier-ups{background:#1a3065}
-    .carrier-ups.active,.carrier-ups:hover{background:#1a3065;border-color:#1a3065;box-shadow:0 0 0 3px rgba(26,48,101,.2)}
+    .carrier-ups{background:var(--white)}
+    .carrier-ups.active,.carrier-ups:hover{background:var(--white);border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,107,0,.15)}
     .ups-logo{display:flex;align-items:center;gap:8px}
     .ups-shield{width:28px;height:28px;background:#c8a826;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#1a3065;flex-shrink:0}
     .ups-text{font-size:17px;font-weight:900;color:#fff;letter-spacing:1px}
@@ -86,8 +86,8 @@
     .fedex-fed{color:#4d148c}
     .fedex-ex{color:var(--orange)}
     .carrier-price{font-size:11px;font-weight:700;position:absolute;top:8px;right:10px;color:var(--text-muted)}
-    .carrier-ups .carrier-price{color:rgba(255,255,255,.7)}
-    .carrier-ups.active .carrier-price{color:rgba(255,255,255,.85)}
+    .carrier-ups .carrier-price{color:var(--text-muted)}
+    .carrier-ups.active .carrier-price{color:var(--text-muted)}
 
     /* TABS */
     .tab-group{display:flex;gap:6px}
@@ -314,14 +314,7 @@
         <div class="field-label" style="margin-top:14px;margin-bottom:10px">Chọn hãng vận chuyển</div>
         <div class="carrier-grid">
           <button class="carrier-btn carrier-ups" id="c-ups" onclick="pickCarrier('ups',this)" type="button">
-            <svg width="44" height="52" viewBox="0 0 100 116" xmlns="http://www.w3.org/2000/svg">
-              <!-- Outer gold shield -->
-              <path d="M10,4 L90,4 Q96,4 96,10 L96,58 Q96,90 50,113 Q4,90 4,58 L4,10 Q4,4 10,4 Z" fill="#FFB500"/>
-              <!-- Inner brown shield -->
-              <path d="M15,11 L85,11 Q90,11 90,17 L90,58 Q90,86 50,106 Q10,86 10,58 L10,17 Q10,11 15,11 Z" fill="#3B1C09"/>
-              <!-- UPS text -->
-              <text x="50" y="76" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',sans-serif" font-weight="900" font-size="32" fill="#FFB500" letter-spacing="4">UPS</text>
-            </svg>
+            <img src="ups-logo.png" alt="UPS" style="height:44px;width:auto;object-fit:contain"/>
             <span class="carrier-price">$1.99/lbs</span>
           </button>
           <button class="carrier-btn" id="c-fedex" onclick="pickCarrier('fedex',this)" type="button">
@@ -432,10 +425,10 @@
           <div class="sc-qty-wrap">
             <div class="sc-sub-grid">
               <div class="sc-sub-opt selected" id="phone-new" onclick="pickPhoneGen('new',event)">
-                🆕 Thế hệ mới<br/><span style="font-size:11px;font-weight:400">$90/cái</span>
+                Thế hệ mới<br/><span style="font-size:11px;font-weight:400">$90/cái</span>
               </div>
               <div class="sc-sub-opt" id="phone-old" onclick="pickPhoneGen('old',event)">
-                📦 Thế hệ cũ<br/><span style="font-size:11px;font-weight:400">$60/cái + 20% thuế</span>
+                Thế hệ cũ<br/><span style="font-size:11px;font-weight:400">$60/cái + 20% thuế</span>
               </div>
             </div>
             <div class="sc-qty-inner" style="margin-top:10px">
@@ -570,7 +563,7 @@
         </thead>
         <tbody>
           <tr id="t1">
-            <td style="font-style:italic;font-size:13px">&lt; 10 lbs <br/><span style="font-size:11px;color:var(--text-muted)">(dưới 10 lbs làm tròn thành 10 lbs)</span></td>
+            <td style="font-style:italic;font-size:13px">&lt; 10 lbs <br/><span style="font-size:11px;color:#e53e3e;font-weight:700">(dưới 10 lbs làm tròn thành 10 lbs)</span></td>
             <td class="price" style="text-align:center;font-size:20px">3,89</td>
           </tr>
           <tr id="t2"><td>10 – 50 lbs</td><td class="price" style="text-align:center;font-size:20px">3,89</td></tr>
@@ -759,19 +752,19 @@ function pickPhoneGen(g,e){ e.stopPropagation(); phoneGen=g; document.getElement
 
 function calcSurcharges(billLbs){
   let s=0, lines=[];
-  if(scActive.ruou){ const c=scQty.ruou*14; s+=c; lines.push(['🍷 Rượu ('+scQty.ruou+' chai)','$'+c.toFixed(2)]); }
-  if(scActive.cigar){ const c=scQty.cigar*20; s+=c; lines.push(['🚬 Cigar ('+scQty.cigar+' hộp)','$'+c.toFixed(2)]); }
-  if(scActive.perfume){ const c=scQty.perfume*7; s+=c; lines.push(['🌸 Nước hoa ('+scQty.perfume+' chai)','$'+c.toFixed(2)]); }
-  if(scActive.vitamin){ const c=billLbs*0.99; s+=c; lines.push(['💊 Vitamin/Mỹ phẩm (+$0.99/lbs)','$'+c.toFixed(2)]); }
+  if(scActive.ruou){ const c=scQty.ruou*14; s+=c; lines.push(['Rượu ('+scQty.ruou+' chai)','$'+c.toFixed(2)]); }
+  if(scActive.cigar){ const c=scQty.cigar*20; s+=c; lines.push(['Cigar ('+scQty.cigar+' hộp)','$'+c.toFixed(2)]); }
+  if(scActive.perfume){ const c=scQty.perfume*7; s+=c; lines.push(['Nước hoa ('+scQty.perfume+' chai)','$'+c.toFixed(2)]); }
+  if(scActive.vitamin){ const c=billLbs*0.99; s+=c; lines.push(['Vitamin/Mỹ phẩm (+$0.99/lbs)','$'+c.toFixed(2)]); }
   if(scActive.phone){
     const price=phoneGen==='new'?90:60; const c=scQty.phone*price; s+=c;
-    lines.push(['📱 Điện thoại '+(phoneGen==='new'?'mới':'cũ')+' ('+scQty.phone+' cái)','$'+c.toFixed(2)]);
+    lines.push(['Điện thoại '+(phoneGen==='new'?'mới':'cũ')+' ('+scQty.phone+' cái)','$'+c.toFixed(2)]);
     if(phoneGen==='old'){ const tax=c*0.2; s+=tax; lines.push(['  └ Thuế 20%','$'+tax.toFixed(2)]); }
   }
   if(scActive.earphone){ const c=scQty.earphone*12; s+=c; lines.push(['Tai nghe/AirPod ('+scQty.earphone+' cái)','$'+c.toFixed(2)]); }
   if(scActive.body){ const c=scQty.body*8; s+=c; lines.push(['Body ĐT/Màn hình ('+scQty.body+' cụm)','$'+c.toFixed(2)]); }
-  if(scActive.elec){ const ev=parseFloat(document.getElementById('elec-val').value)||0; const c=ev*0.1; s+=c; lines.push(['🔌 Điện tử khác (10% giá trị)','$'+c.toFixed(2)]); }
-  if(scActive.medical){ const mv=parseFloat(document.getElementById('medical-val').value)||0; const c=mv*0.2; s+=c; lines.push(['💉 Vacxin/Máy y tế (20% thuế)','$'+c.toFixed(2)]); }
+  if(scActive.elec){ const ev=parseFloat(document.getElementById('elec-val').value)||0; const c=ev*0.1; s+=c; lines.push(['Điện tử khác (10% giá trị)','$'+c.toFixed(2)]); }
+  if(scActive.medical){ const mv=parseFloat(document.getElementById('medical-val').value)||0; const c=mv*0.2; s+=c; lines.push(['Vacxin/Máy y tế (20% thuế)','$'+c.toFixed(2)]); }
   return { total:s, lines };
 }
 
