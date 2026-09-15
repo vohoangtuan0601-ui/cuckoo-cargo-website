@@ -664,6 +664,8 @@ function setMethod(m,el) {
   document.querySelectorAll('.carrier-btn').forEach(b=>b.classList.remove('active'));
   const cw=document.getElementById('carrierWrap');
   cw.classList.toggle('show', m==='pickup'||m==='dropoff');
+  document.getElementById('carrierPickupNote').style.display='none';
+  document.getElementById('carrierHint').style.display='none';
   calc();
 }
 function pickCarrier(c,el) {
