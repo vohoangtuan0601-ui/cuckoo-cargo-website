@@ -854,7 +854,7 @@
  </div>
  <div class="form-group">
  <label data-vi="Địa chỉ tại Mỹ <span class='hint'>(địa chỉ kho hoặc nhà)</span>" data-en="US Address <span class='hint'>(warehouse or home address)</span>">Địa chỉ tại Mỹ <span class="hint">(địa chỉ kho hoặc nhà)</span></label>
- <input type="text" id="s1-addr" placeholder="123 Main St, Los Angeles, CA 90001" />
+ <input type="text" id="s1-addr" placeholder="123 Main St, Los Angeles, CA 90001" required />
  </div>
  <div class="wizard-nav">
  <button class="btn-next" onclick="nextStep(1)" data-vi="Tiếp theo — Thông tin người nhận →" data-en="Next — Receiver Information →">Tiếp theo — Thông tin người nhận →</button>
@@ -1475,7 +1475,7 @@
  // VALIDATION 
  function validateStep(n) {
  const required = {
- 1: ['s1-name','s1-phone','s1-email'],
+ 1: ['s1-name','s1-phone','s1-email','s1-addr'],
  2: ['s2-name','s2-phone','s2-province','s2-ward','s2-street'],
  3: [],
  4: [],

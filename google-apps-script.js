@@ -207,7 +207,7 @@ function handleOrder(data) {
     sheet.appendRow([
       "Order ID", "Ngày tạo", "Loại dịch vụ",
       "Tên Facebook", "Họ tên người gửi", "Mã KH",
-      "Email", "SĐT Mỹ",
+      "Email", "SĐT Mỹ", "Địa chỉ Mỹ",
       "Tên người nhận", "SĐT người nhận", "Địa chỉ VN",
       "Mặt hàng", "Giá trị khai báo ($)",
       "Cân nặng (lbs)", "Bảo hiểm", "Đóng gói",
@@ -242,6 +242,7 @@ function handleOrder(data) {
     data.customerCode || "",
     data.email        || "",
     data.phoneUS      || "",
+    data.senderAddress|| "",
     data.receiverName || "",
     data.receiverPhone|| "",
     data.receiverAddress || "",
