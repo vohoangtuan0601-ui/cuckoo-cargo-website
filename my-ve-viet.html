@@ -825,7 +825,7 @@
  <!-- STEP 1: Người gửi -->
  <div class="step-panel active" id="step-1">
  <div class="step-heading">
- <div class="step-badge" data-vi=" Bước 1 / 7" data-en=" Step 1 / 7"> Bước 1 / 7</div>
+ <div class="step-badge" data-vi="Bước 1 / 7" data-en="Step 1 / 7">Bước 1 / 7</div>
  <h2 data-vi="Thông tin người gửi" data-en="Sender Information">Thông tin người gửi</h2>
  <p data-vi="Điền đầy đủ để Cuckoo Cargo liên hệ xác nhận và gửi thông tin vận đơn." data-en="Fill in your details so Cuckoo Cargo can confirm and send shipment info.">Điền đầy đủ để Cuckoo Cargo liên hệ xác nhận và gửi thông tin vận đơn.</p>
  </div>
@@ -864,7 +864,7 @@
  <!-- STEP 2: Người nhận -->
  <div class="step-panel" id="step-2">
  <div class="step-heading">
- <div class="step-badge" data-vi=" Bước 2 / 7" data-en=" Step 2 / 7"> Bước 2 / 7</div>
+ <div class="step-badge" data-vi="Bước 2 / 7" data-en="Step 2 / 7">Bước 2 / 7</div>
  <h2 data-vi="Thông tin người nhận tại Việt Nam" data-en="Receiver Information in Vietnam">Thông tin người nhận tại Việt Nam</h2>
  <p data-vi="Địa chỉ người nhận phải chính xác. Cuckoo Cargo sẽ liên hệ người nhận trước khi giao hàng." data-en="Receiver address must be accurate. Cuckoo Cargo will contact the receiver before delivery.">Địa chỉ người nhận phải chính xác. Cuckoo Cargo sẽ liên hệ người nhận trước khi giao hàng.</p>
  </div>
@@ -939,7 +939,7 @@
  <!-- STEP 3: Hàng hóa & thời gian -->
  <div class="step-panel" id="step-3">
  <div class="step-heading">
- <div class="step-badge" data-vi=" Bước 3 / 7" data-en=" Step 3 / 7"> Bước 3 / 7</div>
+ <div class="step-badge" data-vi="Bước 3 / 7" data-en="Step 3 / 7">Bước 3 / 7</div>
  <h2 data-vi="Thông tin hàng hóa" data-en="Package Information">Thông tin hàng hóa</h2>
  <p data-vi="Khai báo trung thực để tránh vấn đề thông quan. Không cần chính xác tuyệt đối." data-en="Declare honestly to avoid customs issues. No need to be exact.">Khai báo trung thực để tránh vấn đề thông quan. Không cần chính xác tuyệt đối.</p>
  </div>
@@ -1026,12 +1026,12 @@
  <!-- STEP 4: Chính sách -->
  <div class="step-panel" id="step-4">
  <div class="step-heading">
- <div class="step-badge" data-vi=" Bước 4 / 7" data-en=" Step 4 / 7"> Bước 4 / 7</div>
+ <div class="step-badge" data-vi="Bước 4 / 7" data-en="Step 4 / 7">Bước 4 / 7</div>
  <h2 data-vi="Xác nhận chính sách" data-en="Confirm Policies">Xác nhận chính sách</h2>
  <p data-vi="Vui lòng đọc kỹ và tick vào tất cả các mục bên dưới để tiếp tục." data-en="Please read carefully and check all boxes below to continue.">Vui lòng đọc kỹ và tick vào tất cả các mục bên dưới để tiếp tục.</p>
  </div>
  <div class="policy-box">
- <div class="policy-title" data-vi=" Điều khoản gửi hàng Cuckoo Cargo" data-en=" Cuckoo Cargo Shipping Terms"> Điều khoản gửi hàng Cuckoo Cargo</div>
+ <div class="policy-title" data-vi="Điều khoản gửi hàng Cuckoo Cargo" data-en="Cuckoo Cargo Shipping Terms">Điều khoản gửi hàng Cuckoo Cargo</div>
 
  <div class="prohibited-toggle" onclick="toggleProhibited(this)">
  <span class="arr"></span> <span data-vi="Xem danh sách hàng hóa bị cấm vận chuyển" data-en="View list of prohibited items">Xem danh sách hàng hóa bị cấm vận chuyển</span>
@@ -1045,6 +1045,10 @@
  </ul>
  </div>
 
+ <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;padding:10px 14px;background:#fff7ed;border-radius:10px;border:1.5px solid #fed7aa">
+ <input type="checkbox" id="pc-all" style="width:18px;height:18px;accent-color:#f97316;cursor:pointer;flex-shrink:0" />
+ <label for="pc-all" style="font-size:13px;font-weight:700;cursor:pointer;color:#c2410c;margin:0">Chọn tất cả điều khoản</label>
+ </div>
  <div class="policy-checks" style="margin-top:14px;">
  <div class="pcheck">
  <input type="checkbox" id="pc1" />
@@ -1085,7 +1089,7 @@
  <!-- STEP 5: Bảo hiểm -->
  <div class="step-panel" id="step-5">
  <div class="step-heading">
- <div class="step-badge" data-vi=" Bước 5 / 7" data-en=" Step 5 / 7"> Bước 5 / 7</div>
+ <div class="step-badge" data-vi="Bước 5 / 7" data-en="Step 5 / 7">Bước 5 / 7</div>
  <h2 data-vi="Chọn gói bảo hiểm" data-en="Choose Insurance Plan">Chọn gói bảo hiểm</h2>
  <p data-vi="Bảo hiểm bảo vệ hàng hóa trong trường hợp mất, hư hỏng do lỗi vận chuyển." data-en="Insurance protects your goods against loss or shipping damage.">Bảo hiểm bảo vệ hàng hóa trong trường hợp mất, hư hỏng do lỗi vận chuyển.</p>
  </div>
@@ -1145,7 +1149,7 @@
  <!-- STEP 6: Đóng gói -->
  <div class="step-panel" id="step-6">
  <div class="step-heading">
- <div class="step-badge" data-vi=" Bước 6 / 7" data-en=" Step 6 / 7"> Bước 6 / 7</div>
+ <div class="step-badge" data-vi="Bước 6 / 7" data-en="Step 6 / 7">Bước 6 / 7</div>
  <h2 data-vi="Chọn cách đóng gói" data-en="Choose Packaging">Chọn cách đóng gói</h2>
  <p data-vi="Đóng gói kỹ giúp bảo vệ hàng trong suốt hành trình dài từ Mỹ về Việt Nam." data-en="Careful packaging protects your goods throughout the long journey from the US to Vietnam.">Đóng gói kỹ giúp bảo vệ hàng trong suốt hành trình dài từ Mỹ về Việt Nam.</p>
  </div>
@@ -1186,7 +1190,7 @@
  <!-- STEP 7: Xác nhận -->
  <div class="step-panel" id="step-7">
  <div class="step-heading">
- <div class="step-badge" data-vi=" Bước 7 / 7" data-en=" Step 7 / 7"> Bước 7 / 7</div>
+ <div class="step-badge" data-vi="Bước 7 / 7" data-en="Step 7 / 7">Bước 7 / 7</div>
  <h2 data-vi="Xác nhận & Gửi đơn" data-en="Confirm & Submit Order">Xác nhận & Gửi đơn</h2>
  <p data-vi="Kiểm tra lại thông tin và nhấn xác nhận." data-en="Review your information and click confirm.">Kiểm tra lại thông tin và nhấn xác nhận. Cuckoo Cargo sẽ liên hệ &amp; gửi QR thanh toán qua Zelle.</p>
  </div>
@@ -1508,11 +1512,20 @@
  }
 
  // POLICY AUTO-ENABLE BTN 
- document.addEventListener('change', function(e){
- if(['pc1','pc2','pc3','pc4','pc5','pc6','pc7'].includes(e.target.id)){
- const all = ['pc1','pc2','pc3','pc4','pc5','pc6','pc7'].every(id=>document.getElementById(id).checked);
- document.getElementById('btn-next-4').disabled = !all;
+ const PC_IDS = ['pc1','pc2','pc3','pc4','pc5','pc6','pc7'];
+ function syncPolicyBtn(){
+   const all = PC_IDS.every(id=>document.getElementById(id).checked);
+   document.getElementById('btn-next-4').disabled = !all;
+   const pcAll = document.getElementById('pc-all');
+   if(pcAll) pcAll.checked = all;
  }
+ document.addEventListener('change', function(e){
+   if(e.target.id === 'pc-all'){
+     PC_IDS.forEach(id=>{ document.getElementById(id).checked = e.target.checked; });
+     document.getElementById('btn-next-4').disabled = !e.target.checked;
+   } else if(PC_IDS.includes(e.target.id)){
+     syncPolicyBtn();
+   }
  });
 
  // PROVINCE DELIVERY FEE 
