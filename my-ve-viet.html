@@ -843,7 +843,7 @@
  </div>
  <div class="form-group">
  <label data-vi="SĐT tại Mỹ <span class='req'>*</span>" data-en="US Phone <span class='req'>*</span>">SĐT tại Mỹ <span class="req">*</span></label>
- <input type="tel" id="s1-phone" placeholder="+1 213 xxx xxxx" required oninput="validatePhone(this,'us')" />
+ <input type="tel" id="s1-phone" placeholder="2133456789" required oninput="validatePhone(this,'us')" />
  <div class="phone-err" id="s1-phone-err"></div>
  </div>
  </div>
@@ -1903,7 +1903,7 @@
  if (type === 'us') {
  // 10 digits, or 11 starting with 1
  const ok = digits.length === 10 || (digits.length === 11 && digits[0] === '1');
- errEl.textContent = ok ? '' : ' Số điện thoại Mỹ cần 10 chữ số (hoặc 11 nếu có mã +1)';
+ errEl.textContent = ok ? '' : 'Vui lòng nhập đúng 10 chữ số của số điện thoại Mỹ';
  } else {
  // VN: 10 digits starting with 0
  const ok = digits.length === 10 && digits[0] === '0';
